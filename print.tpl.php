@@ -6,10 +6,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <base href="<?php print $base_url ?>/" />
     <style type="text/css">
-      @import url "<?php print $node->printcss; ?>";
+      @import url(<?php print $node->printcss; ?>);
     </style>
   </head>
   <body>
+
+    <img src="<?php print theme_get_setting('logo'); ?>" alt="logo" border="0" />
 
     <h1 class="title">
       <?php print $node->title; ?>
