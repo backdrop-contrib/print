@@ -1,0 +1,7 @@
+Print Module Changelog
+
+October 27, 2004
+  * Updated to work with Drupal 4.5
+
+October 15, 2004
+  * Initial Release by Matt Westgate <drupal at asitis dot org>
