@@ -1,0 +1,2 @@
+This module was made by Matt Westgate <drupal at asitis dot org>
+and is currently maintained by Karsten Mueller <kmue at mac dot com>.
