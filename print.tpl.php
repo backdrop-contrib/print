@@ -11,32 +11,37 @@
   </head>
   <body>
 
-    <img src="<?php print theme_get_setting('logo'); ?>" alt="logo" border="0" />
+    <?php theme_get_setting('logo') ? print '<img src="'.theme_get_setting('logo').'" alt="logo" border="0" />' : '';?>
 
-    <h1 class="title">
+    <div class="source_url">
+    <?php variable_get('site_name', 0) && print t('Published on').' '.variable_get('site_name', 0).' ('.l($base_url,'').')'; ?>
+    </div>
+
+    <h2 class="title">
       <?php print $node->title; ?>
-    </h1>
+    </h2>
 
     <div class="submitted">
-      <?php print theme_get_setting("toggle_node_info_$node->type") ? 'By '.$node->name : ''; ?>
+      <?php print theme_get_setting("toggle_node_info_$node->type") ? t('By').' '.$node->name : ''; ?>
     </div>
 
     <div class="created">
-      <?php print theme_get_setting("toggle_node_info_$node->type") ? 'Created '.format_date($node->created, 'small') : '' ?>
+      <?php print theme_get_setting("toggle_node_info_$node->type") ? t('Created').' '.format_date($node->created, 'small') : '' ?>
     </div>
 
     <div class="content">
       <?php print $node->body; ?>
     </div>
 
-    <div class="pfp-links">
-      <!-- Output printer friendly links -->
-      <h2 class="links">Links</h2>
-      <?php print $node->pfp_links; ?>
-    </div>
+    <hr size="1" noshade>
 
     <div class="source_url">
-      <strong>Source URL:</strong> <a href="<?php print $node->source_url; ?>"><?php print $node->source_url; ?></a>
+      <?php print '<strong>'.t('Source URL:').'</strong><br><a href="'.$node->source_url.'>">'.$node->source_url.'</a>'?>
+    </div>
+
+    <div class="pfp-links">
+      <!-- Output printer friendly links -->
+      <?php $node->pfp_links ? print '<p class="links"><strong>'.t('Links:').'</strong><br>'.$node->pfp_links.'</p>' : ''; ?>
     </div>
 
     <div class="footer">
