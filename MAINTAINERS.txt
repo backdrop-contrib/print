@@ -1,3 +1,3 @@
 PRINT MODULE
-M: Matt Westgate <drupal at asitis dot org>
+M: Karsten Mueller <kmue at mac dot com>
 S: fixes/patches
