@@ -18,11 +18,11 @@
     </h1>
 
     <div class="submitted">
-      By <?php print $node->name; ?>
+      <?php print theme_get_setting("toggle_node_info_$node->type") ? 'By '.$node->name : ''; ?>
     </div>
 
     <div class="created">
-      Created <?php print format_date($node->created, 'small'); ?>
+      <?php print theme_get_setting("toggle_node_info_$node->type") ? 'Created '.format_date($node->created, 'small') : '' ?>
     </div>
 
     <div class="content">
