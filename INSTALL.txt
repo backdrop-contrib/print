@@ -10,12 +10,24 @@ INSTALLATION:
    directory.
 
 2. Enable via:
-
      administer > modules
 
 3. Configure via:
-
      administer > settings > print
 
 4. To modify the template of printer friendly pages, simply edit the
    print.tpl.php file found in this directory.
+
+********************************************************************
+CUSTOMIZATION:
+
+- To print the site logo add this line to print.tpl.php:
+<img src="<?php print theme_get_setting('logo'); ?>" alt="logo" border="0" />
+
+- Though it is not recommended to open links in a new window you can change
+theme_print_link() in print.module if you really want to force it:
+
+function theme_print_link($node) {
+  $attributes = array("target"=> "_blank");
+  return l(t('printer friendly page'), "node/$node->nid/print",$attributes);
+}
