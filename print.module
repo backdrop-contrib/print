@@ -25,7 +25,7 @@ function print_menu($may_cache) {
   $items = array();
 
   if (!$may_cache) {
-  $items[] = array('path' => 'node/'. arg(1) .'/print', 'title' => t('printer friendly page'),
+  $items[] = array('path' => 'node/'. arg(1) .'/print', 'title' => t('printer friendly'),
     'callback' => 'print_page', 'access' => user_access('access content'),
     'type' => MENU_CALLBACK);
   }
@@ -42,6 +42,10 @@ function print_menu($may_cache) {
  */
 function print_link($type, $node = 0, $main) {
   $links = array();
+
+  if ($node->type == 'book' && function_exists('book_link'))  {
+    return;
+  }
 
   if ($type == 'node' && variable_get('print_show_link', 1) && $main == 0) {
     $links[] = theme('print_link', $node);
