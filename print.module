@@ -146,6 +146,8 @@ function print_friendly_urls($url = 0) {
  ********************************************************************/
 
 function theme_print_link($node) {
-  return l(t('printer friendly page'), "node/$node->nid/print");
+  $links = l(t('printer friendly version'), "node/$node->nid/print", array('title' => t('Display a printer friendly version of this page.')));
+
+  return $links;
 }
 ?>
