@@ -24,8 +24,8 @@ function print_help($section) {
 function print_menu($may_cache) {
   $items = array();
 
-  if ($may_cache) {
-  $items[] = array('path' => 'node/print', 'title' => t('printer friendly page'),
+  if (!$may_cache) {
+  $items[] = array('path' => 'node/'. arg(1) .'/print', 'title' => t('printer friendly page'),
     'callback' => 'print_page', 'access' => user_access('access content'),
     'type' => MENU_CALLBACK);
   }
@@ -53,13 +53,9 @@ function print_link($type, $node = 0, $main) {
 function print_settings() {
   $output = form_textfield(t('Stylesheet URL'), 'print_css', variable_get('print_css', 'misc/print.css'), 60, 64, t('The URL to your print cascading stylesheet.'));
 
-  $field = form_checkbox(t('Submitted by'), 'print_submitted', 1, variable_get('print_submitted', 0));
-  $field .= form_checkbox(t('Created'), 'print_created', 1, variable_get('print_created', 0));
   $field .= form_checkbox(t('Printer friendly URLs'), 'print_urls', 1, variable_get('print_urls', 0));
   $output .= form_group(t('Print page elements'), $field);
-
-  $output .= form_textarea(t('Footer message'), 'print_footer', variable_get('print_footer', variable_get('site_footer', '')), 70, 5, t('This text will be displayed at the bottom of each printer friendly page.  Useful for adding a copyright and disclaimers.'));
-  $output .= form_radios(t('Printer friendly page link'), 'print_show_link', variable_get('print_show_link', 1), array(t("Disabled"), t("Enabled")), t("Enable or disable the 'printer friendly page' link for each node. Even if the link is disabled, you can still view the print version of a node by going to 'node/print/nid' where nid is the numeric id of the node."));
+  $output .= form_radios(t('Printer friendly page link'), 'print_show_link', variable_get('print_show_link', 1), array(t("Disabled"), t("Enabled")), t("Enable or disable the 'printer friendly page' link for each node. Even if the link is disabled, you can still view the print version of a node by going to 'node/nid/print' where nid is the numeric id of the node."));
 
   return $output;
 }
@@ -68,9 +64,10 @@ function print_settings() {
  * Module Functions :: Controllers
  ********************************************************************/
 
-function print_page($nid = null) {
+function print_page() {
+  $nid = arg(1);
   if (is_numeric($nid)) {
-    print print_generate($nid);
+    print_generate($nid);
   }
 }
 
@@ -79,25 +76,17 @@ function print_page($nid = null) {
  ********************************************************************/
 
 /**
- * Returns a printer friendly page.
- *
- * You can also configure how you want the page to look using GET parameters.
+ * Outputs a printer friendly page.
  */
 function print_generate($title) {
   global $base_url;
 
-  if ($_GET['urls'] || variable_get('print_urls', 1))
-    $print_urls = 1;
-
-  if ($_GET['submitted'] || variable_get('print_submitted', 1))
-    $print_submitted = 1;
-
-  if ($_GET['created'] || variable_get('print_created', 1))
-    $print_created = 1;
-
   /* We can take a node id or a node title */
   $node = (is_numeric($title)) ? node_load(array('nid' => $title)) : node_load(array('title' => $title));
+  if (!$node->title) return false;
 
+  $teaser = false;
+  $page = true;
   /* This section is ripped from node_view.
      This does everything node_view does except theme the node! */
 
@@ -107,60 +96,35 @@ function print_generate($title) {
 
   // The 'view' hook can be implemented to overwrite the default function
   // to display nodes.
-  if (node_hook($node, 'view')) {
+  if (node_hook($node, 'view'))
     node_invoke($node, 'view', $teaser, $page);
-  }
-  else {
+  else
     $node = node_prepare($node, $teaser);
-  }
   // Allow modules to change $node->body before viewing.
   node_invoke_nodeapi($node, 'view', $teaser, $page);
 
   /* End of code stealing from node_view() */
 
-  if ($node) {
-
-    $output = '<h1 class="title">'. $node->title .'</h1>';
-
-    if ($print_submitted) {
-      $output .= '<div class="submitted">'. t('By %author', array('%author' => $node->name)). '</div>';
-    }
-
-    if ($print_created) {
-      $output .= '<div class="created">'. t('Created %date', array('%date' => format_date($node->created, 'small'))). '</div>';
-    }
-
-    $output .= '<div class="content">';
-
-    if ($print_urls) {
-      /* Collect links and display them at the bottom of the page. Code once taken from Kjartan Mannes' project.module  */
-      $pattern = "@href=([\']?[\"]?)([^\"|^\'|^|^>]*)([^>]*)>(.+?)</a>@ise";
-      $node->body = preg_replace($pattern, "'<u>'.stripslashes('\\4').'</u> ['. print_friendly_urls(stripslashes('\\2')) .']'", $node->body);
-      $urls = print_friendly_urls();
-      if (count($urls)) {
-        $node->body .= '<h2 class="links">Links</h2>';
-        $max = count($urls);
-        for ($i = 0; $i < $max; $i++) {
-          $node->body .= '['. ($i + 1) .'] '. $urls[$i] ."<br />\n";
-        }
+  if (variable_get('print_urls', 1)) {
+    /* Collect links and display them at the bottom of the page. Code once taken from Kjartan Mannes' project.module  */
+    $pattern = "@href=([\']?[\"]?)([^\"|^\'|^|^>]*)([^>]*)>(.+?)</a>@ise";
+    $node->body = preg_replace($pattern, "'<u>'.stripslashes('\\4').'</u> ['. print_friendly_urls(stripslashes('\\2')) .']'", $node->body);
+    $urls = print_friendly_urls();
+    if (count($urls)) {
+      $node->pfp_links = '';
+      $max = count($urls);
+      for ($i = 0; $i < $max; $i++) {
+        $node->pfp_links .= '['. ($i + 1) .'] '. $urls[$i] ."<br />\n";
       }
     }
-
-    $output .= $node->body;
-
-    /* Grab and format the src URL */
-    $url = $base_url. '/'. url("node/view/$node->nid");
-    $output .= '<p class="source_url"><strong>Source URL:</strong> <a href="'. $url .'">'. $url. "</a></p>\n";
-
-    $output .= '<div class="footer">'. variable_get('print_footer', variable_get('site_footer', '')). '</div>';
   }
 
-  $html = "<html><head><title>$node->title</title>";
-  $html .= "<base href=\"$base_url/\" />";
-  $html .= "<style type=\"text/css\">\n@import url(". variable_get('print_css', 'misc/print.css') .");\n</style>";
-  $html .= "</head><body>". $output ."</body></html>";
+  /* Grab and format the src URL */
+  $node->source_url = $base_url. '/'. url("node/$node->nid");
+  $node->language = $GLOBALS['locale'];
+  $node->printcss = variable_get('print_css', 'misc/print.css');
 
-  return $html;
+  include_once('print.tpl.php');
 }
 
 function print_friendly_urls($url = 0) {
@@ -178,6 +142,6 @@ function print_friendly_urls($url = 0) {
  ********************************************************************/
 
 function theme_print_link($node) {
-  return l(t('printer friendly page'), "node/print/$node->nid");
+  return l(t('printer friendly page'), "node/$node->nid/print");
 }
 ?>

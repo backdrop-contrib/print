@@ -9,10 +9,13 @@ INSTALLATION:
 1. Place the entire print directory into your Drupal modules/
    directory.
 
-2. Enable this module by navigating to:
+2. Enable via:
 
      administer > modules
 
-3. Configure this module by navigating to:
+3. Configure via:
 
      administer > settings > print
+
+4. To modify the template of printer friendly pages, simply edit the
+   print.tpl.php file found in this directory.
