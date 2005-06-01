@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2005-04-26 00:21+0200\n"
+"POT-Creation-Date: 2005-06-01 17:34-0300\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -67,3 +67,22 @@ msgstr ""
 msgid "print"
 msgstr ""
 
+#: print.tpl.php:17
+msgid "Published on"
+msgstr ""
+
+#: print.tpl.php:25
+msgid "By"
+msgstr ""
+
+#: print.tpl.php:29
+msgid "Created"
+msgstr ""
+
+#: print.tpl.php:39
+msgid "Source URL:"
+msgstr ""
+
+#: print.tpl.php:44
+msgid "Links:"
+msgstr ""
