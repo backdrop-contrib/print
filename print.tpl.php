@@ -36,7 +36,7 @@
     <hr size="1" noshade>
 
     <div class="source_url">
-      <?php print '<strong>'.t('Source URL:').'</strong><br><a href="'.$node->source_url.'>">'.$node->source_url.'</a>'?>
+      <?php print '<strong>'.t('Source URL:').'</strong><br><a href="'.$node->source_url.'">'.$node->source_url.'</a>'?>
     </div>
 
     <div class="pfp-links">
