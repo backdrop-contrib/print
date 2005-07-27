@@ -19,6 +19,17 @@ INSTALLATION:
    print.tpl.php file found in this directory.
 
 ********************************************************************
+PROFILE PRINTING
+
+To print any profile page, change any profile URL from:
+
+  http://www.example.com/profile
+
+to
+
+  http://www.example.com/print/profile
+
+********************************************************************
 CUSTOMIZATION:
 
 - To print the site logo add this line to print.tpl.php:

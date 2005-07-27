@@ -11,11 +11,8 @@
 function print_help($section) {
   switch ($section) {
     case 'admin/modules#description':
-      $output = t('Allows users to create printer-friendly pages for nodes.');
-      break;
+      return t('Allows users to create printer-friendly pages for nodes and profile pages.');
   }
-
-  return $output;
 }
 
 /**
@@ -25,9 +22,13 @@ function print_menu($may_cache) {
   $items = array();
 
   if (!$may_cache) {
-  $items[] = array('path' => 'node/'. arg(1) .'/print', 'title' => t('printer friendly'),
-    'callback' => 'print_page', 'access' => user_access('access content'),
-    'type' => MENU_CALLBACK);
+    $items[] = array('path' => 'node/'. arg(1) .'/print', 'title' => t('printer friendly'),
+      'callback' => 'print_node_controller', 'access' => user_access('access content'),
+      'type' => MENU_CALLBACK);
+
+    $items[] = array('path' => 'print', 'title' => t('printer friendly'),
+      'callback' => 'print_controller', 'access' => user_access('access content'),
+      'type' => MENU_CALLBACK);
   }
 
   return $items;
@@ -68,10 +69,18 @@ function print_settings() {
  * Module Functions :: Controllers
  ********************************************************************/
 
-function print_page() {
+function print_node_controller() {
   $nid = arg(1);
   if (is_numeric($nid)) {
-    print_generate($nid);
+    print_generate_node($nid);
+  }
+}
+
+function print_controller($module) {
+  $f = 'print_generate_'. $module;
+
+  if (function_exists($f)) {
+    $f();
   }
 }
 
@@ -82,7 +91,7 @@ function print_page() {
 /**
  * Outputs a printer friendly page.
  */
-function print_generate($title) {
+function print_generate_node($title) {
   global $base_url;
 
   /* We can take a node id or a node title */
@@ -128,7 +137,100 @@ function print_generate($title) {
   $node->language = $GLOBALS['locale'];
   $node->printcss = variable_get('print_css', 'misc/print.css');
 
-  include_once('print.tpl.php');
+  include_once('print.node.tpl.php');
+}
+
+/**
+ * Renders a print friendly version of profile pages.
+ */
+function print_generate_profile() {
+  global $base_url;
+
+  $source_url = $base_url . substr($_GET['q'], 5);
+  $language = $GLOBALS['locale'];
+
+  $name = arg(2);
+  $value = arg(3);
+
+  $field = db_fetch_object(db_query("SELECT DISTINCT(fid), type, title, page, visibility FROM {profile_fields} WHERE name = '%s'", $name));
+
+  if ($name && $field->fid) {
+    // Do not allow browsing of private fields by non-admins
+    if (!user_access('administer users') && $field->visibility == PROFILE_PRIVATE) {
+       drupal_access_denied();
+       return;
+    }
+
+    // Compile a list of fields to show
+    $fields = array();
+    $result = db_query('SELECT name, title, type FROM {profile_fields} WHERE fid != %d AND visibility = %d ORDER BY weight', $field->fid, PROFILE_PUBLIC_LISTINGS);
+    while ($record = db_fetch_object($result)) {
+      $fields[] = $record;
+    }
+
+    // Determine what query to use:
+    switch ($field->type) {
+      case 'checkbox':
+        $query = 'v.value = 1';
+        break;
+      case 'selection':
+        $query = "v.value = '". db_escape_string($value) ."'";
+        break;
+      case 'list':
+        $query = "v.value LIKE '%%". db_escape_string($value) ."%%'";
+        break;
+      default:
+        drupal_not_found();
+        return;
+    }
+
+    // Extract the affected users:
+    $result = db_query("SELECT u.uid FROM {users} u INNER JOIN {profile_values} v ON u.uid = v.uid WHERE v.fid = %d AND $query", $field->fid);
+
+    $output = '<div id="profile">';
+    while ($account = db_fetch_object($result)) {
+      $user = user_load(array('uid' => $account->uid));
+      $sort[$user->profile_lastname] = $user;
+    }
+    ksort($sort);
+    foreach ($sort as $user) {
+      $output .= theme('profile_profile', $user, $fields);
+    }
+
+    if ($field->type == 'selection' || $field->type == 'list') {
+      $title = strtr($field->page, array('%value' => theme('placeholder', $value)));
+    }
+    else {
+      $title = $field->page;
+    }
+    $output .= '</div>';
+
+    include_once('print.profile.tpl.php');
+  }
+  else if ($name && !$field->id) {
+    drupal_not_found();
+  }
+  else {
+    // Compile a list of fields to show
+    $fields = array();
+    $result = db_query('SELECT name, title, type FROM {profile_fields} WHERE visibility = %d', PROFILE_PUBLIC_LISTINGS);
+    while ($record = db_fetch_object($result)) {
+      $fields[] = $record;
+    }
+
+    // Extract the affected users:
+    $result = pager_query("SELECT uid FROM {users} WHERE uid > 0 ORDER BY changed DESC", 20, 0, NULL);
+
+    $output = '<div id="profile">';
+    while ($account = db_fetch_object($result)) {
+      $output .= theme('profile_profile', user_load(array('uid' => $account->uid)), $fields);
+    }
+    $output .= '</div>';
+    $output .= theme('pager', NULL, 20);
+
+    $title = t('user list');
+    include_once('print.profile.tpl.php');
+  }
 }
 
 function print_friendly_urls($url = 0) {
