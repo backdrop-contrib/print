@@ -260,7 +260,11 @@ function print_friendly_urls($url = 0) {
   global $base_url;
   static $urls = array();
   if ($url) {
-    $urls[] = strpos($url, '://') ? $url : $base_url. '/'. url($url);
+    if(strpos($url, '://') || preg_match("/^mailto:.*?@.*?\..*?$/iu", $url)) {
+      $urls[] = $url;
+    } else {
+      $base_url. '/'. url($url);
+    }
     return count($urls);
   }
   return $urls;
