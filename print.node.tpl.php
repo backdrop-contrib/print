@@ -14,7 +14,7 @@
     <?php theme_get_setting('logo') ? print '<img src="'.theme_get_setting('logo').'" alt="logo" border="0" />' : '';?>
 
     <div class="source_url">
-    <?php variable_get('site_name', 0) && print t('Published on').' '.variable_get('site_name', 0).' ('.l($base_url,'').')'; ?>
+    <?php variable_get('site_name', 0) && print t('Published on').' '.variable_get('site_name', 0).' ('.l($base_url, $base_url).')'; ?>
     </div>
 
     <h2 class="title">
@@ -30,18 +30,18 @@
     </div>
 
     <div class="content">
-      <?php print $node->body; ?>
+      <?php print str_replace('<a <u>', '<u>', $node->body); ?>
     </div>
 
-    <hr size="1" noshade>
+    <hr size="1" noshade />
 
     <div class="source_url">
-      <?php print '<strong>'.t('Source URL:').'</strong><br><a href="'.$node->source_url.'>">'.$node->source_url.'</a>'?>
+      <?php print '<strong>'.t('Source URL:').'</strong><br /><a href="'.$node->source_url.'">'.$node->source_url.'</a>'?>
     </div>
 
     <div class="pfp-links">
       <!-- Output printer friendly links -->
-      <?php $node->pfp_links ? print '<p class="links"><strong>'.t('Links:').'</strong><br>'.$node->pfp_links.'</p>' : ''; ?>
+      <?php $node->pfp_links ? print '<p class="links"><strong>'.t('Links:').'</strong><br />'.$node->pfp_links.'</p>' : ''; ?>
     </div>
 
     <div class="footer">
