@@ -2,9 +2,10 @@
                      D R U P A L    M O D U L E
 ********************************************************************
 Name: Print module
+Maintainer: Peter John Hartman <peterjohnhartman at gmail.com>
 Author: Matt Westgate <drupal at asitis dot org>
 Last update: (See CHANGELOG.txt for details)
-Drupal: 4.5
+Drupal: 4.5+
 
 ********************************************************************
 DESCRIPTION:

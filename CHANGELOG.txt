@@ -1,5 +1,8 @@
 Print Module Changelog
 
+December 20, 2005
+  * Updated for Drupal 4.7 (PJH)
+
 October 30, 2004
   * Created a print.tpl.php template file to give site admins control of what node parts this module renders and how the pages are structured. This feature, combined with the custom print stylesheet option, gives max freedom in rendering print friendly pages.
 

@@ -2,6 +2,7 @@
                      D R U P A L    M O D U L E
 ********************************************************************
 Name: Print module
+Maintainer: Peter John Hartman <peterjohnhartman at gmail.com>
 Author: Matt Westgate <drupal at asitis dot org>
 ********************************************************************
 INSTALLATION:
