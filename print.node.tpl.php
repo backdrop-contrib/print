@@ -4,6 +4,7 @@
   <head>
     <title><?php print $node->title; ?></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <?php print $node->robots_meta; ?>
     <base href="<?php print $base_url ?>/" />
     <style type="text/css">
       @import url(<?php print $node->printcss; ?>);
@@ -11,7 +12,7 @@
   </head>
   <body>
 
-    <?php theme_get_setting('logo') ? print '<img src="'.theme_get_setting('logo').'" alt="logo" border="0" />' : '';?>
+    <?php $node->logo ? print '<img src="'.$node->logo.'" alt="logo" border="0" />' : '';?>
 
     <div class="source_url">
     <?php variable_get('site_name', 0) && print t('Published on').' '.variable_get('site_name', 0).' ('.l($base_url, $base_url).')'; ?>
@@ -30,7 +31,7 @@
     </div>
 
     <div class="content">
-      <?php print str_replace('<a <u>', '<u>', $node->body); ?>
+      <?php print $node->body; ?>
     </div>
 
     <hr size="1" noshade />

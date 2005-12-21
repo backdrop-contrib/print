@@ -48,7 +48,7 @@ function print_link($type, $node = 0, $main) {
     return;
   }
 
-  if ($type == 'node' && variable_get('print_show_link', 1) && $main == 0) {
+  if ($type == 'node' && !isset($node->parent) && variable_get('print_show_link', 1) && $main == 0) {
     $links[] = theme('print_link', $node);
   }
 
@@ -56,35 +56,87 @@ function print_link($type, $node = 0, $main) {
 }
 
 function print_settings() {
-  $form['print_settings'] = array(
-      '#type' => 'fieldset',
-      '#title' => t('Print settings'),
-      '#tree' => TRUE,
-    );
-
-  $form['print_settings']['print_css'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Stylesheet URL'),
-    '#default_value' => variable_get('print_css', 'misc/print.css'),
-    '#size' => 60,
-    '#maxlength' => 64,
-    '#description' => t('The URL to your print cascading stylesheet.'),
-  );
-
-  $form['print_settings']['print_urls'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Printer friendly URLs'),
-    '#return_value' => 1,
-    '#default_value' => variable_get('print_urls', 0),
-  );
-
-  $form['print_settings']['print_show_link'] = array(
+  $form['print_show_link'] = array(
     '#type' => 'radios',
     '#title' => t('Printer friendly page link'),
     '#default_value' => variable_get('print_show_link', 1),
     '#options' => array(t("Disabled"), t("Enabled")),
     '#description' => t("Enable or disable the printer friendly page link for each node. Even if the link is disabled, you can still view the print version of a node by going to node/nid/print where nid is the numeric id of the node."),
   );
+
+  $print_settings = variable_get('print_settings', NULL);
+
+  $form['print_settings'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Print settings'),
+      '#tree' => TRUE,
+    );
+
+  $form['print_settings']['logo_url'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Logo URL'),
+    '#default_value' => !isset($print_settings['logo_url']) ? '' : $print_settings['logo_url'],
+    '#size' => 60,
+    '#maxlength' => 250,
+    '#description' => t('An alternative logo to display on the printer friendly version'),
+  );
+
+  $form['print_settings']['css'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Stylesheet URL'),
+    '#default_value' => !isset($print_settings['css']) ? 'misc/print.css' : $print_settings['css'],
+    '#size' => 60,
+    '#maxlength' => 64,
+    '#description' => t('The URL to your print cascading stylesheet.'),
+  );
+
+  $form['print_settings']['urls'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Printer friendly URLs'),
+    '#return_value' => 1,
+    '#default_value' => !isset($print_settings['urls']) ? 1 : $print_settings['urls'],
+  );
+
+  $print_robot_settings = variable_get('print_robot_settings', NULL);
+
+  $form['print_robot_settings'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Robots META tags'),
+      '#tree' => TRUE,
+  );
+
+  $form['print_robot_settings']['noindex'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Add noindex'),
+    '#return_value' => 1,
+    '#default_value' => empty($print_robot_settings['noindex']) ? 0 : 1,
+    '#description' => t('Instruct robots to not index printer friendly pages')
+  );
+
+  $form['print_robot_settings']['nofollow'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Add nofollow'),
+    '#return_value' => 1,
+    '#default_value' => empty($print_robot_settings['nofollow']) ? 0 : 1,
+    '#description' => t('Instruct robots to not follow outgoing links on printer friendly pages')
+  );
+
+  $form['print_robot_settings']['noarchive'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Add noarchive'),
+    '#return_value' => 1,
+    '#default_value' => empty($print_robot_settings['noarchive']) ? 0 : 1,
+    '#description' => t('Non-standard tag to instruct search engines to not show a "Cached" link for your printer friendly pages. Recognized by Googlebot.')
+  );
+
+  $form['print_robot_settings']['nocache'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Add nocache'),
+    '#return_value' => 1,
+    '#default_value' => empty($print_robot_settings['nocache']) ? 0 : 1,
+    '#description' => t('Non-standard tag to instruct search engines to not show a "Cached" link for your printer friendly pages')
+  );
+
   return $form;
 }
 
@@ -121,6 +173,10 @@ function print_generate_node($title) {
   $node = (is_numeric($title)) ? node_load(array('nid' => $title)) : node_load(array('title' => $title));
   if (!$node->title) return false;
 
+  // associative array settings
+  $print_settings = variable_get('print_settings');
+  $robots_settings = variable_get('print_robot_settings', NULL);
+
   $teaser = false;
   $page = true;
   /* This section is ripped from node_view.
@@ -141,9 +197,9 @@ function print_generate_node($title) {
 
   /* End of code stealing from node_view() */
 
-  if (variable_get('print_urls', 1)) {
+  if (!isset($print_settings['urls']) || !empty($print_settings['urls'])) {
     /* Collect links and display them at the bottom of the page. Code once taken from Kjartan Mannes' project.module  */
-    $pattern = "@href=([\']?[\"]?)([^\"|^\'|^|^>]*)([^>]*)>(.+?)</a>@ise";
+    $pattern = "@<a.*?href=([\']?[\"]?)([^\"|^\'|^|^>]*)([^>]*)>(.+?)</a>@ise";
     $node->body = preg_replace($pattern, "'<u>'.stripslashes('\\4').'</u> ['. print_friendly_urls(stripslashes('\\2')) .']'", $node->body);
     $urls = print_friendly_urls();
     if (count($urls)) {
@@ -155,10 +211,33 @@ function print_generate_node($title) {
     }
   }
 
+  $robots_meta = array();
+  $node->robots_meta = '';
+
+  if(!empty($robots_settings['noindex'])) {
+    $robots_meta[] = 'noindex';
+  }
+  if(!empty($robots_settings['nofollow'])) {
+    $robots_meta[] = 'nofollow';
+  }
+  if(!empty($robots_settings['noarchive'])) {
+    $robots_meta[] = 'noarchive';
+  }
+  if(!empty($robots_settings['nocache'])) {
+    $robots_meta[] = 'nocache';
+  }
+
+  if(sizeof($robots_meta) > 0) {
+    $robots_meta = isset($robots_meta[1]) ? implode(', ', $robots_meta) : $robots_meta[0];
+    $node->robots_meta = '<meta name="robots" content="'. $robots_meta ."\" />\n";
+  }
+
+  $node->logo = !empty($print_settings['logo_url']) ? $print_settings['logo_url'] : theme_get_setting('logo');
+
   /* Grab and format the src URL */
   $node->source_url = $base_url. '/'. url("node/$node->nid");
   $node->language = $GLOBALS['locale'];
-  $node->printcss = variable_get('print_css', 'misc/print.css');
+  $node->printcss = empty($print_settings['css']) ? 'misc/print.css' : $print_settings['css'];
 
   include_once('print.node.tpl.php');
 }
