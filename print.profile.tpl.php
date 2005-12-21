@@ -33,7 +33,7 @@
 
     <div class="pfp-links">
       <!-- Output printer friendly links -->
-      <?php $node->pfp_links ? print '<p class="links"><strong>'.t('Links:').'</strong><br>'.$node->pfp_links.'</p>' : ''; ?>
+      <?php $node->pfp_links ? print '<p class="links"><strong>'.t('Links:').'</strong><br />'.$node->pfp_links.'</p>' : ''; ?>
     </div>
 
     <div class="footer">
