@@ -5,7 +5,7 @@ Name: Print module
 Maintainer: Peter John Hartman <peterjohnhartman at gmail.com>
 Author: Matt Westgate <drupal at asitis dot org>
 Last update: (See CHANGELOG.txt for details)
-Drupal: 4.5+
+Requires Drupal 4.7
 
 ********************************************************************
 DESCRIPTION:
