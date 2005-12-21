@@ -1,6 +1,11 @@
 <?php
 /* $Id$ */
 
+/**
+ * @file
+ * Display printer friendly versions of nodes (except books)
+ */
+
 /********************************************************************
  * Drupal Hooks :: Overview
  ********************************************************************/
@@ -164,6 +169,38 @@ function print_controller($module) {
  ********************************************************************/
 
 /**
+ * Generates a meta tag to tell robots what they may index based on module settings
+ *
+ * @return string
+ */
+function _print_robots_meta_generator() {
+  $robots_settings = variable_get('print_robot_settings', NULL);
+  $robots_meta = array();
+
+  if(!empty($robots_settings['noindex'])) {
+    $robots_meta[] = 'noindex';
+  }
+  if(!empty($robots_settings['nofollow'])) {
+    $robots_meta[] = 'nofollow';
+  }
+  if(!empty($robots_settings['noarchive'])) {
+    $robots_meta[] = 'noarchive';
+  }
+  if(!empty($robots_settings['nocache'])) {
+    $robots_meta[] = 'nocache';
+  }
+
+  if(sizeof($robots_meta) > 0) {
+    $robots_meta = isset($robots_meta[1]) ? implode(', ', $robots_meta) : $robots_meta[0];
+    $robots_meta = '<meta name="robots" content="'. $robots_meta ."\" />\n";
+  } else {
+    $robots_meta = '';
+  }
+
+  return $robots_meta;
+}
+
+/**
  * Outputs a printer friendly page.
  */
 function print_generate_node($title) {
@@ -172,10 +209,6 @@ function print_generate_node($title) {
   /* We can take a node id or a node title */
   $node = (is_numeric($title)) ? node_load(array('nid' => $title)) : node_load(array('title' => $title));
   if (!$node->title) return false;
-
-  // associative array settings
-  $print_settings = variable_get('print_settings');
-  $robots_settings = variable_get('print_robot_settings', NULL);
 
   $teaser = false;
   $page = true;
@@ -197,6 +230,9 @@ function print_generate_node($title) {
 
   /* End of code stealing from node_view() */
 
+  // associative array settings
+  $print_settings = variable_get('print_settings', NULL);
+
   if (!isset($print_settings['urls']) || !empty($print_settings['urls'])) {
     /* Collect links and display them at the bottom of the page. Code once taken from Kjartan Mannes' project.module  */
     $pattern = "@<a.*?href=([\']?[\"]?)([^\"|^\'|^|^>]*)([^>]*)>(.+?)</a>@ise";
@@ -211,33 +247,14 @@ function print_generate_node($title) {
     }
   }
 
-  $robots_meta = array();
-  $node->robots_meta = '';
-
-  if(!empty($robots_settings['noindex'])) {
-    $robots_meta[] = 'noindex';
-  }
-  if(!empty($robots_settings['nofollow'])) {
-    $robots_meta[] = 'nofollow';
-  }
-  if(!empty($robots_settings['noarchive'])) {
-    $robots_meta[] = 'noarchive';
-  }
-  if(!empty($robots_settings['nocache'])) {
-    $robots_meta[] = 'nocache';
-  }
-
-  if(sizeof($robots_meta) > 0) {
-    $robots_meta = isset($robots_meta[1]) ? implode(', ', $robots_meta) : $robots_meta[0];
-    $node->robots_meta = '<meta name="robots" content="'. $robots_meta ."\" />\n";
-  }
-
   $node->logo = !empty($print_settings['logo_url']) ? $print_settings['logo_url'] : theme_get_setting('logo');
 
   /* Grab and format the src URL */
   $node->source_url = $base_url. '/'. url("node/$node->nid");
   $node->language = $GLOBALS['locale'];
   $node->printcss = empty($print_settings['css']) ? 'misc/print.css' : $print_settings['css'];
+
+  $robots_meta = _print_robots_meta_generator();
 
   include_once('print.node.tpl.php');
 }
@@ -255,6 +272,10 @@ function print_generate_profile() {
   $value = arg(3);
 
   $field = db_fetch_object(db_query("SELECT DISTINCT(fid), type, title, page, visibility FROM {profile_fields} WHERE name = '%s'", $name));
+  $robots_meta = _print_robots_meta_generator();
+
+  $print_settings = variable_get('print_settings', NULL);
+  $node->printcss = empty($print_settings['css']) ? 'misc/print.css' : $print_settings['css'];
 
   if ($name && $field->fid) {
     // Do not allow browsing of private fields by non-admins
@@ -321,7 +342,7 @@ function print_generate_profile() {
     }
 
     // Extract the affected users:
-    $result = pager_query("SELECT uid FROM {users} WHERE uid > 0 ORDER BY changed DESC", 20, 0, NULL);
+    $result = pager_query("SELECT uid FROM {users} WHERE uid > 0 ORDER BY access DESC", 20, 0, NULL);
 
     $output = '<div id="profile">';
     while ($account = db_fetch_object($result)) {
@@ -331,6 +352,7 @@ function print_generate_profile() {
     $output .= theme('pager', NULL, 20);
 
     $title = t('user list');
+
     include_once('print.profile.tpl.php');
   }
 }

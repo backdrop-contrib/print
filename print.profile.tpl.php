@@ -4,9 +4,10 @@
   <head>
     <title><?php print strip_tags($title); ?></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <?php print $robots_meta; ?>
     <base href="<?php print $base_url ?>/" />
     <style type="text/css">
-      @import url('modules/print/print.css');
+      @import url(<?php print $node->printcss; ?>);
     </style>
   </head>
   <body>
