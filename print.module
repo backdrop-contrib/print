@@ -250,7 +250,7 @@ function print_generate_node($title) {
   $node->logo = !empty($print_settings['logo_url']) ? $print_settings['logo_url'] : theme_get_setting('logo');
 
   /* Grab and format the src URL */
-  $node->source_url = $base_url. '/'. url("node/$node->nid");
+  $node->source_url = $base_url . url("node/$node->nid");
   $node->language = $GLOBALS['locale'];
   $node->printcss = empty($print_settings['css']) ? 'misc/print.css' : $print_settings['css'];
 
