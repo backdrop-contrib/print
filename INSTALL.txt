@@ -40,7 +40,7 @@ CUSTOMIZATION:
 theme_print_link() in print.module if you really want to force it:
 
 function theme_print_link($node) {
-  $attributes = array("target"=> "_blank", "title" => "Display a printer friendly version of this page.");
+  $attributes = array("target"=> "_blank", 'title' => t('Display a printer friendly version of this page.'));
   $links = l(t('printer friendly version'), "node/$node->nid/print",$attributes );
   return $links;
 }
