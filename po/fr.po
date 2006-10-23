@@ -1,0 +1,105 @@
+# French Translation of Drupal
+# $Id$
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: print.module\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2006-10-23 15:56+0100\n"
+"Last-Translator: Ronan LE LOC'H <rondev@free.fr>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Country: FRANCE\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: modules/print/print.module:19
+msgid "Allows users to create printer-friendly pages for nodes and profile pages."
+msgstr "Autoriser les utilisateurs à créer des versions imprimables pour les noeuds et les pages de profil."
+
+#: modules/print/print.module:30
+#: ;34
+msgid "printer friendly"
+msgstr "version imprimable"
+
+#: modules/print/print.module:66
+msgid "Printer friendly page link"
+msgstr "Lien de la version imprimable de la page"
+
+#: modules/print/print.module:69
+msgid "Enable or disable the printer friendly page link for each node. Even if the link is disabled, you can still view the print version of a node by going to node/nid/print where nid is the numeric id of the node."
+msgstr "Active ou désactive le lien 'version imprimable' pour chaque noeud. Même si le lien est désactivé, vous pouvez toujours voir la version imprimable du noeud en allant à 'node/nid/print' où nid est l'id numérique du noeud."
+
+#: modules/print/print.module:76
+msgid "Print settings"
+msgstr "Paramètres de Print"
+
+#: modules/print/print.module:82
+msgid "Logo URL"
+msgstr "URL du logo"
+
+#: modules/print/print.module:86
+msgid "An alternative logo to display on the printer friendly version"
+msgstr "Logo alternatif à afficher sur la version imprimable"
+
+#: modules/print/print.module:91
+msgid "Stylesheet URL"
+msgstr "Stylesheet URL"
+
+#: modules/print/print.module:95
+msgid "The URL to your print cascading stylesheet."
+msgstr "URL vers votre feuille de style pour version imprimable"
+
+#: modules/print/print.module:100
+msgid "Printer friendly URLs"
+msgstr "URLs des versions imprimable"
+
+#: modules/print/print.module:109
+msgid "Robots META tags"
+msgstr "META tags de robots"
+
+#: modules/print/print.module:115
+msgid "Add noindex"
+msgstr "Ajouter noindex"
+
+#: modules/print/print.module:118
+msgid "Instruct robots to not index printer friendly pages"
+msgstr "Ordonner aux robots de ne pas indexer les versions imprimables"
+
+#: modules/print/print.module:123
+msgid "Add nofollow"
+msgstr "Ajouter nofollow"
+
+#: modules/print/print.module:126
+msgid "Instruct robots to not follow outgoing links on printer friendly pages"
+msgstr "Ordonner aux robots de ne pas suivre les liens inclus dans les versions imprimables"
+
+#: modules/print/print.module:131
+msgid "Add noarchive"
+msgstr "Ajouter noarchive"
+
+#: modules/print/print.module:134
+msgid "Non-standard tag to instruct search engines to not show a \"Cached\" link for your printer friendly pages. Recognized by Googlebot."
+msgstr "Tag non-standard pour ordonner aux moteurs de recherche de ne pas montrer un lien mis en cache pour les versions imprimables. Reconnu par Googlebot."
+
+#: modules/print/print.module:139
+msgid "Add nocache"
+msgstr "Ajouter nocache"
+
+#: modules/print/print.module:142
+msgid "Non-standard tag to instruct search engines to not show a \"Cached\" link for your printer friendly pages"
+msgstr "Tag non-standard pour ordonner aux moteurs de recherche de ne pas montrer un lien mis en cache pour les versions imprimables."
+
+#: modules/print/print.module:380
+msgid "Display a printer friendly version of this page."
+msgstr "Affiche une version imprimable de cette page"
+
+#: modules/print/print.module:381
+msgid "printer friendly version"
+msgstr "version imprimable"
+
+#: modules/print/print.module:0
+msgid "print"
+msgstr "imprimer"
+
