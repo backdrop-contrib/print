@@ -11,16 +11,6 @@
  ********************************************************************/
 
 /**
- * Implementation of hook_help().
- */
-function print_help($section) {
-  switch ($section) {
-    case 'admin/modules#description':
-      return t('Allows users to create printer-friendly pages for nodes and profile pages.');
-  }
-}
-
-/**
  * Implementation of hook_menu().
  */
 function print_menu($may_cache) {
@@ -34,6 +24,14 @@ function print_menu($may_cache) {
     $items[] = array('path' => 'print', 'title' => t('printer friendly'),
       'callback' => 'print_controller', 'access' => user_access('access content'),
       'type' => MENU_CALLBACK);
+
+    $items[] = array(
+      'path' => 'admin/settings/print',
+      'title' => t('Printer Friendly'),
+      'description' => t('Allows users to create printer-friendly pages for nodes and profile pages.'),
+      'callback' => 'drupal_get_form',
+      'callback arguments' => array('print_main_settings')
+      );
   }
 
   return $items;
@@ -54,13 +52,13 @@ function print_link($type, $node = 0, $main) {
   }
 
   if ($type == 'node' && !isset($node->parent) && variable_get('print_show_link', 1) && $main == 0) {
-    $links[] = theme('print_link', $node);
+    $links['print'] = theme('print_link', $node);
   }
 
   return $links;
 }
 
-function print_settings() {
+function print_main_settings() {
   $form['print_show_link'] = array(
     '#type' => 'radios',
     '#title' => t('Printer friendly page link'),
@@ -142,7 +140,7 @@ function print_settings() {
     '#description' => t('Non-standard tag to instruct search engines to not show a "Cached" link for your printer friendly pages')
   );
 
-  return $form;
+  return system_settings_form($form);
 }
 
 /********************************************************************
@@ -247,10 +245,11 @@ function print_generate_node($title) {
     }
   }
 
+  init_theme();
   $node->logo = !empty($print_settings['logo_url']) ? $print_settings['logo_url'] : theme_get_setting('logo');
 
   /* Grab and format the src URL */
-  $node->source_url = $base_url . url("node/$node->nid");
+  $node->source_url = url("node/$node->nid", NULL, NULL, TRUE);
   $node->language = $GLOBALS['locale'];
   $node->printcss = empty($print_settings['css']) ? 'misc/print.css' : $print_settings['css'];
 
@@ -376,8 +375,8 @@ function print_friendly_urls($url = 0) {
  ********************************************************************/
 
 function theme_print_link($node) {
-  $attributes = array('title' => t('Display a printer friendly version of this page.'));
-  $links = l(t('printer friendly version'), "node/$node->nid/print", $attributes);
-  return $links;
+  return array('title' => t('Printer friendly version'),
+           'href' => "node/$node->nid/print",
+           'attributes' => array('title' => t('Display a printer friendly version of this page.')),
+         );
 }
-?>
