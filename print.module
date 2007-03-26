@@ -16,22 +16,30 @@
 function print_menu($may_cache) {
   $items = array();
 
-  if (!$may_cache) {
-    $items[] = array('path' => 'node/'. arg(1) .'/print', 'title' => t('printer friendly'),
-      'callback' => 'print_node_controller', 'access' => user_access('access content'),
-      'type' => MENU_CALLBACK);
-
-    $items[] = array('path' => 'print', 'title' => t('printer friendly'),
-      'callback' => 'print_controller', 'access' => user_access('access content'),
-      'type' => MENU_CALLBACK);
-
+  if ($may_cache) {
+    $items[] = array(
+      'path' => 'print',
+      'title' => t('Printer friendly'),
+      'callback' => 'print_controller',
+      'access' => user_access('access content'),
+      'type' => MENU_CALLBACK
+    );
     $items[] = array(
       'path' => 'admin/settings/print',
-      'title' => t('Printer Friendly'),
+      'title' => t('Printer friendly'),
       'description' => t('Allows users to create printer-friendly pages for nodes and profile pages.'),
       'callback' => 'drupal_get_form',
       'callback arguments' => array('print_main_settings')
-      );
+    );
+  }
+  else {
+    $items[] = array(
+      'path' => 'node/'. arg(1) .'/print',
+      'title' => t('Printer friendly'),
+      'callback' => 'print_node_controller',
+      'access' => user_access('access content'),
+      'type' => MENU_CALLBACK
+    );
   }
 
   return $items;
