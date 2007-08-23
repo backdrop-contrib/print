@@ -36,7 +36,7 @@ function print_menu($may_cache) {
     $nid = arg(1);
     if (is_numeric($nid)) {
       $items[] = array(
-        'path' => 'node/'. $nid .'/print',
+        'path' => 'print/'. $nid,
         'title' => t('Printer friendly'),
         'callback' => 'print_node_controller',
         'callback arguments' => array($nid),
@@ -75,7 +75,7 @@ function print_main_settings() {
     '#title' => t('Printer friendly page link'),
     '#default_value' => variable_get('print_show_link', 1),
     '#options' => array(t("Disabled"), t("Enabled")),
-    '#description' => t("Enable or disable the printer friendly page link for each node. Even if the link is disabled, you can still view the print version of a node by going to node/nid/print where nid is the numeric id of the node."),
+    '#description' => t("Enable or disable the printer friendly page link for each node. Even if the link is disabled, you can still view the print version of a node by going to print/nid where nid is the numeric id of the node."),
   );
 
   $print_settings = variable_get('print_settings', NULL);
@@ -384,7 +384,7 @@ function print_friendly_urls($url = 0) {
 
 function theme_print_link($node) {
   return array('title' => t('Printer friendly version'),
-           'href' => "node/$node->nid/print",
+           'href' => "print/$node->nid",
            'attributes' => array('title' => t('Display a printer friendly version of this page.')),
          );
 }

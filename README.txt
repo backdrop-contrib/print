@@ -11,7 +11,7 @@ Requires Drupal 4.7
 DESCRIPTION:
 
 This module allows you to generate printer friendly versions of
-any node by navigating to www.example.com/node/nid/print, where nid
+any node by navigating to www.example.com/print/nid, where nid
 is the node id of content to render.
 
 ********************************************************************
