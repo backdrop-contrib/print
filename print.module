@@ -33,13 +33,16 @@ function print_menu($may_cache) {
     );
   }
   else {
-    $items[] = array(
-      'path' => 'node/'. arg(1) .'/print',
-      'title' => t('Printer friendly'),
-      'callback' => 'print_node_controller',
-      'access' => user_access('access content'),
-      'type' => MENU_CALLBACK
-    );
+    $nid = arg(1);
+    if (is_numeric($nid)) {
+      $items[] = array(
+        'path' => 'node/'. $nid .'/print',
+        'title' => t('Printer friendly'),
+        'callback' => 'print_node_controller',
+        'callback arguments' => array($nid),
+        'type' => MENU_CALLBACK
+      );
+    }
   }
 
   return $items;
@@ -155,11 +158,8 @@ function print_main_settings() {
  * Module Functions :: Controllers
  ********************************************************************/
 
-function print_node_controller() {
-  $nid = arg(1);
-  if (is_numeric($nid)) {
-    print_generate_node($nid);
-  }
+function print_node_controller($nid) {
+  print_generate_node($nid);
 }
 
 function print_controller($module) {
