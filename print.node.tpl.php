@@ -5,7 +5,7 @@
     <title><?php print $node->title; ?></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <?php print $robots_meta; ?>
-    <base href="<?php print $base_url ?>/" />
+    <base href="<?php print $node->url ?>/" />
     <style type="text/css">
       @import url(<?php print $node->printcss; ?>);
     </style>
