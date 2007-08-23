@@ -22,7 +22,7 @@
 
     <div class="content"><?php print $output; ?></div>
 
-    <hr size="1" noshade="noshade" />
+    <hr style="border:0;height:1px;color:#9E9E9E;background-color:#9E9E9E;" />
 
     <div class="source_url">
       <?php print '<strong>'.t('Source URL:').'</strong> <a href="'.$source_url.'>">'.$source_url.'</a>'?>

@@ -34,7 +34,7 @@
       <?php print $node->body; ?>
     </div>
 
-    <hr size="1" noshade />
+    <hr style="border:0;height:1px;color:#9E9E9E;background-color:#9E9E9E;" />
 
     <div class="source_url">
       <?php print '<strong>'.t('Source URL:').'</strong><br /><a href="'.$node->source_url.'">'.$node->source_url.'</a>'?>
