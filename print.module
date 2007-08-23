@@ -242,7 +242,7 @@ function print_generate_node($title) {
   if (!isset($print_settings['urls']) || !empty($print_settings['urls'])) {
     /* Collect links and display them at the bottom of the page. Code once taken from Kjartan Mannes' project.module  */
     $pattern = "@<a[^>]*?href=([\']?[\"]?)([^\"|^\'|^|^>]*)([^>]*)>(.+?)</a>@ise";
-    $node->body = preg_replace($pattern, "'<span style=\'text-decoration:underline\'>'.stripslashes('\\4').'</span> ['. print_friendly_urls(stripslashes('\\2')) .']'", $node->body);
+    $node->body = preg_replace($pattern, "'<span style=\'text-decoration:underline\'>'.stripslashes('\\4').'</span> ['. print_friendly_urls(trim(stripslashes('\\2')), $node->nid) .']'", $node->body);
     $urls = print_friendly_urls();
     if (count($urls)) {
       $node->pfp_links = '';
@@ -364,14 +364,19 @@ function print_generate_profile() {
   }
 }
 
-function print_friendly_urls($url = 0) {
-  global $base_url;
+function print_friendly_urls($url = 0, $nid) {
   static $urls = array();
   if ($url) {
     if(strpos($url, '://') || preg_match("/^mailto:.*?@.*?\..*?$/iu", $url)) {
       $urls[] = $url;
     } else {
-      $base_url. '/'. url($url);
+      // Convert into absolute URL, removing extra beginning and end '/'
+      if (substr($url, 0, 1) == "#") {
+        // Handle <a name> tags
+        $urls[] = url("node/" . $nid, NULL, substr($url,1), TRUE);
+      } else {
+        $urls[] = url(trim($url,"/"), NULL, NULL, TRUE);
+      }
     }
     return count($urls);
   }
