@@ -25,7 +25,7 @@
     <hr style="border:0;height:1px;color:#9E9E9E;background-color:#9E9E9E;" />
 
     <div class="source_url">
-      <?php print '<strong>'.t('Source URL:').'</strong> <a href="'.$source_url.'>">'.$source_url.'</a>'?>
+      <?php print '<strong>'.t('Source URL (retrieved on '. date(r).'):').'</strong> <a href="'.$source_url.'>">'.$source_url.'</a>'?>
     </div>
 
     <div class="date-printed">
