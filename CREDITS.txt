@@ -1,4 +1,5 @@
 This module was made by Matt Westgate <drupal at asitis dot org>
-and is currently maintained by Karsten Mueller <kmue at mac dot com>.
+and is currently maintained by Joao Ventura <joao at venturas dot org>.
 
 Some bug fixes by David Kent Norman on Dec 20, 2005 <deekayen at: deekayen {dot} net>
+Maintained up to version 4.7 by Peter John Hartman <peterjohnhartman at gmail.com>
