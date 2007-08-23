@@ -206,6 +206,17 @@ function _print_robots_meta_generator() {
   return $robots_meta;
 }
 
+function print_convert_abspath($matches) {
+  $path = $matches[2];
+  if (strpos($path, '://') || preg_match("/^mailto:.*?@.*?\..*?$/iu", $path) || ((substr($path, 0, 1) == "#")) ) {
+    // URL is OK, do not touch
+  } else {
+    $path = url(trim($path, "/"), NULL, NULL, TRUE);
+  }
+  
+  return $matches[1].$path.$matches[3];
+}
+
 /**
  * Outputs a printer friendly page.
  */
@@ -218,23 +229,17 @@ function print_generate_node($title) {
 
   $teaser = false;
   $page = true;
-  /* This section is ripped from node_view.
-     This does everything node_view does except theme the node! */
 
-  // Remove the delimiter (if any) that separates the teaser from the body.
-  // TODO: this strips legitimate uses of '<!--break-->' also.
-  $node->body = str_replace('<!--break-->', '', $node->body);
+  // To work with other node types, use drupal's render engine instead of the old node_view method
+  $node->body = drupal_render(node_build_content($node)->content);
 
-  // The 'view' hook can be implemented to overwrite the default function
-  // to display nodes.
-  if (node_hook($node, 'view'))
-    node_invoke($node, 'view', $teaser, $page);
-  else
-    $node = node_prepare($node, $teaser);
-  // Allow modules to change $node->body before viewing.
-  node_invoke_nodeapi($node, 'view', $teaser, $page);
-
-  /* End of code stealing from node_view() */
+  // Relative links need to be changed to absolute paths since we the printer friendly page is not in the original URL
+  // First the href links
+  $pattern ="@(<a[^>]*?href=[\']?[\"]?)([^\"|^\'|^|^>]*)(.+?</a>)@is";
+  $node->body = preg_replace_callback($pattern, "print_convert_abspath", $node->body);
+  // Now the src links
+  $pattern ="@(<[^>]*?src=[\']?[\"]?)([^\"|^\'|^|^>]*)(.+?>)@is";
+  $node->body = preg_replace_callback($pattern, "print_convert_abspath", $node->body);
 
   // associative array settings
   $print_settings = variable_get('print_settings', NULL);
