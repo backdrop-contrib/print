@@ -1,3 +1,3 @@
 ; $Id$
 name = "Printer-friendly pages"
-description = "Allows users to create printer-friendly pages for nodes and profile pages."
+description = "Adds a printer-friendly version link to node pages."
