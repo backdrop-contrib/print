@@ -1,11 +1,17 @@
-# French Translation of Drupal
 # $Id$
 #
+# French Translation of Drupal
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  print.module,v 1.15.2.5.2.18 2007/10/27 21:59:36 jcnventura
+#  print.info,v 1.1.2.2 2007/08/24 00:32:39 jcnventura
+#
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: print.module\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: 2006-10-23 15:56+0100\n"
+"POT-Creation-Date: 2007-10-28 17:12+0100\n"
+"PO-Revision-Date: 2007-10-23 20:51+0100\n"
 "Last-Translator: Ronan LE LOC'H <rondev@free.fr>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -14,92 +20,206 @@ msgstr ""
 "X-Poedit-Country: FRANCE\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: modules/print/print.module:19
-msgid "Allows users to create printer-friendly pages for nodes and profile pages."
-msgstr "Autoriser les utilisateurs à créer des versions imprimables pour les noeuds et les pages de profil."
+# Nom du module
+#: print.module:31;38
+msgid "Printer-friendly"
+msgstr "Printer-friendly"
 
-#: modules/print/print.module:30
-#: ;34
-msgid "printer friendly"
-msgstr "version imprimable"
+#: print.module:39 print.info:0
+msgid "Adds a printer-friendly version link to node pages."
+msgstr "Ajoute un lien vers la version imprimable au noeud."
 
-#: modules/print/print.module:66
-msgid "Printer friendly page link"
-msgstr "Lien de la version imprimable de la page"
+#: print.module:106;115
+msgid "Show printer-friendly version link"
+msgstr "Affiche le lien vers la version imprimable"
 
-#: modules/print/print.module:69
-msgid "Enable or disable the printer friendly page link for each node. Even if the link is disabled, you can still view the print version of a node by going to node/nid/print where nid is the numeric id of the node."
-msgstr "Active ou désactive le lien 'version imprimable' pour chaque noeud. Même si le lien est désactivé, vous pouvez toujours voir la version imprimable du noeud en allant à 'node/nid/print' où nid est l'id numérique du noeud."
+#: print.module:109;118
+msgid "Displays the link to a printer-friendly version of the content. Further configuration is available on the !settings."
+msgstr "Affiche le lien vers la version imprimable du contenu. La configuration des paramètres est disponible sur la page des !paramètres."
 
-#: modules/print/print.module:76
-msgid "Print settings"
-msgstr "Paramètres de Print"
+#: print.module:109;118
+msgid "settings page"
+msgstr "page des paramètres"
 
-#: modules/print/print.module:82
+#: print.module:149
+msgid "Printer-friendly page link"
+msgstr "Lien vers la version imprimable"
+
+#: print.module:151
+msgid "Disabled"
+msgstr "Désactivé"
+
+#: print.module:151
+msgid "Enabled"
+msgstr "Activé"
+
+#: print.module:152
+msgid "Enable or disable the printer-friendly page link for each node. Even if the link is disabled, you can still view the print version of a node by going to print/nid where nid is the numeric id of the node."
+msgstr "Active ou désactive le lien 'version imprimable' pour chaque noeud. Même si le lien est désactivé, vous pouvez toujours voir la version imprimable du noeud en allant à print/nid où nid est l'id numérique du noeud."
+
+#: print.module:157
+msgid "Show link in system (non-content) pages"
+msgstr ""
+
+#: print.module:160
+msgid "Setting this option will add a printer-friendly version page link on pages created by Drupal or the enabled modules."
+msgstr ""
+
+#: print.module:165
 msgid "Logo URL"
 msgstr "URL du logo"
 
-#: modules/print/print.module:86
-msgid "An alternative logo to display on the printer friendly version"
-msgstr "Logo alternatif à afficher sur la version imprimable"
+#: print.module:169
+msgid "An alternative logo to display on the printer-friendly version. If left empty, the current theme's logo is used."
+msgstr "Logo alternatif à afficher sur la version imprimable. Si laissé vide, le logo du thème courant est utilisé."
 
-#: modules/print/print.module:91
+#: print.module:174
 msgid "Stylesheet URL"
 msgstr "Stylesheet URL"
 
-#: modules/print/print.module:95
-msgid "The URL to your print cascading stylesheet."
-msgstr "URL vers votre feuille de style pour version imprimable"
+#: print.module:178
+msgid "The URL to your custom print cascading stylesheet, if any. When none is specified, the default module CSS file is used."
+msgstr "L'URL de votre feuille de style css personnalisée pour Printer-friendly si elle existe. Si rien n'est indiqué, le fichier css par défaut du module est utilisé."
 
-#: modules/print/print.module:100
-msgid "Printer friendly URLs"
-msgstr "URLs des versions imprimable"
+#: print.module:183
+msgid "Printer-friendly URLs list"
+msgstr "Liste des URLs des versions imprimables"
 
-#: modules/print/print.module:109
+#: print.module:186
+msgid "If set, a list of the destination URLs for the page links will be displayed at the bottom of the page."
+msgstr "Si coché, une liste des URLS destination des liens dans votre page sera affiché en bas de page."
+
+#: print.module:191
+msgid "Include comments in print-friendly version"
+msgstr ""
+
+#: print.module:194
+msgid "When this option is active, user comments are also included in the printer-friendly version. Requires the comment module."
+msgstr ""
+
+#: print.module:199
+msgid "Open the printer-friendly version in a new window"
+msgstr "Affiche une version imprimable dans une nouvelle fenêtre"
+
+#: print.module:202
+msgid "Setting this option will make the printer-friendly version open in a new window/tab."
+msgstr "Activée, cette option ouvrira la version dans une nouvelle fenêtre/onglet."
+
+#: print.module:207
+msgid "Send to printer"
+msgstr "Envoyer à l'imprimante"
+
+#: print.module:210
+msgid "Automatically calls the browser's print function when the printer-friendly version is displayed."
+msgstr "Appelle automatiquement la fonction d'impression du navigateur lorque la version imprimable est affichée."
+
+#: print.module:217;402
+msgid "Source URL"
+msgstr "URL source"
+
+#: print.module:225
+msgid "Display source URL"
+msgstr "Affiche l'URL source"
+
+#: print.module:228
+msgid "When this option is selected, the URL for the original page will be displayed at the bottom of the printer-friendly version."
+msgstr "Lorsque cette option est sélectionnée, l'URL de la page originale s'affichera en bas de page de la version imprimable."
+
+#: print.module:233
+msgid "Add current time/date to the source URL"
+msgstr "Ajoute la date et l'heure courante dans la ligne de l'URL source"
+
+#: print.module:236
+msgid "Display the current date and time in the Source URL line."
+msgstr "Affiche la date et l'heure courante dans la ligne de l'URL source."
+
+#: print.module:241
+msgid "Force use of node ID in source URL"
+msgstr "Force l'utilisation de l'ID des noeuds dans l'URL source."
+
+#: print.module:244
+msgid "Drupal will attempt to use the page's defined alias in case there is one. To force the use of the fixed URL, activate this option."
+msgstr "Drupal essayera d'utiliser l'alias des pages s'il existe. Pour forcer l'utilisation d'URL fixe, activez cette option."
+
+#: print.module:251
 msgid "Robots META tags"
 msgstr "META tags de robots"
 
-#: modules/print/print.module:115
+#: print.module:259
 msgid "Add noindex"
 msgstr "Ajouter noindex"
 
-#: modules/print/print.module:118
-msgid "Instruct robots to not index printer friendly pages"
-msgstr "Ordonner aux robots de ne pas indexer les versions imprimables"
+#: print.module:262
+msgid "Instruct robots to not index printer-friendly pages. Recommended for good search engine karma."
+msgstr "Ordonner aux robots de ne pas indexer les versions imprimables. Recommandé pour le karma des bon moteurs de recherches."
 
-#: modules/print/print.module:123
+#: print.module:267
 msgid "Add nofollow"
 msgstr "Ajouter nofollow"
 
-#: modules/print/print.module:126
-msgid "Instruct robots to not follow outgoing links on printer friendly pages"
-msgstr "Ordonner aux robots de ne pas suivre les liens inclus dans les versions imprimables"
+#: print.module:270
+msgid "Instruct robots to not follow outgoing links on printer-friendly pages."
+msgstr "Ordonner aux robots de ne pas suivre les liens inclus dans les versions imprimables."
 
-#: modules/print/print.module:131
+#: print.module:275
 msgid "Add noarchive"
 msgstr "Ajouter noarchive"
 
-#: modules/print/print.module:134
-msgid "Non-standard tag to instruct search engines to not show a \"Cached\" link for your printer friendly pages. Recognized by Googlebot."
-msgstr "Tag non-standard pour ordonner aux moteurs de recherche de ne pas montrer un lien mis en cache pour les versions imprimables. Reconnu par Googlebot."
+#: print.module:278
+msgid "Non-standard tag to instruct search engines to not show a \"Cached\" link for your printer-friendly pages. Recognized by Googlebot."
+msgstr "Tag non-standard pour ordonner aux moteurs de recherche de ne pas montrer un lien en cache pour les versions imprimables. Reconnu par Googlebot."
 
-#: modules/print/print.module:139
+#: print.module:283
 msgid "Add nocache"
 msgstr "Ajouter nocache"
 
-#: modules/print/print.module:142
-msgid "Non-standard tag to instruct search engines to not show a \"Cached\" link for your printer friendly pages"
-msgstr "Tag non-standard pour ordonner aux moteurs de recherche de ne pas montrer un lien mis en cache pour les versions imprimables."
+#: print.module:286
+msgid "Non-standard tag to instruct search engines to not show a \"Cached\" link for your printer-friendly pages"
+msgstr "Tag non-standard pour ordonner aux moteurs de recherche de ne pas montrer un lien en cache pour les versions imprimables."
 
-#: modules/print/print.module:380
-msgid "Display a printer friendly version of this page."
-msgstr "Affiche une version imprimable de cette page"
+#: print.module:401
+msgid "retrieved on"
+msgstr "créé le"
 
-#: modules/print/print.module:381
-msgid "printer friendly version"
-msgstr "version imprimable"
+#: print.module:408
+msgid "Published on"
+msgstr "Publié sur"
 
-#: modules/print/print.module:0
+#: print.module:409
+msgid "By"
+msgstr "Par"
+
+#: print.module:410
+msgid "Created"
+msgstr "Créé"
+
+#: print.module:421
+msgid "Links:"
+msgstr "Liens:"
+
+#: print.module:508
+msgid "Display a printer-friendly version of this page."
+msgstr "Affiche une version imprimable de cette page."
+
+#: print.module:514
+msgid "Printer-friendly version"
+msgstr "Version imprimable"
+msgstr ""
+
+#: print.module:19
+msgid "access print"
+msgstr "accède à l'imprimante"
+
+#: print.module:19
+msgid "administer print"
+msgstr "administre l'imprimante"
+
+#: print.module:0
 msgid "print"
 msgstr "imprimer"
+
+# Nom du module
+#: print.info:0
+msgid "Printer-friendly pages"
+msgstr "Printer-friendly pages"
 

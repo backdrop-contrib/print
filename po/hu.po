@@ -1,6 +1,6 @@
 # $Id$
 #
-# LANGUAGE translation of Drupal (general)
+# Hungarian translation of Drupal (general)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:
 #  print.module,v 1.15.2.5.2.18 2007/10/27 21:59:36 jcnventura
@@ -9,213 +9,215 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
+"Project-Id-Version: Drupal print-5.x-2.2\n"
 "POT-Creation-Date: 2007-10-28 17:12+0100\n"
-"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
-"Last-Translator: NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2007-10-23 21:07+0100\n"
+"Last-Translator: \n"
+"Language-Team: Balassy Mihály <search@google>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"X-Poedit-Language: Hungarian\n"
+"X-Poedit-Country: HUNGARY\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: print.module:31;38
 msgid "Printer-friendly"
-msgstr ""
+msgstr "Nyomtatóbarát"
 
 #: print.module:39 print.info:0
 msgid "Adds a printer-friendly version link to node pages."
-msgstr ""
+msgstr "A nyomtatóbarát oldalak beállítása."
 
 #: print.module:106;115
 msgid "Show printer-friendly version link"
-msgstr ""
+msgstr "\"Nyomtatóbarát változat\" hivatkozás mutatása."
 
 #: print.module:109;118
 msgid "Displays the link to a printer-friendly version of the content. Further configuration is available on the !settings."
-msgstr ""
+msgstr "Megjeleníti a \"Nyomtatóbarát változat\" hivatkozást a tartalmon. További beállítások elérhetők a !settings alatt."
 
 #: print.module:109;118
 msgid "settings page"
-msgstr ""
+msgstr "beállítások oldal"
 
 #: print.module:149
 msgid "Printer-friendly page link"
-msgstr ""
+msgstr "Nyomtatóbarát oldal hivatkozás"
 
 #: print.module:151
 msgid "Disabled"
-msgstr ""
+msgstr "Letiltva"
 
 #: print.module:151
 msgid "Enabled"
-msgstr ""
+msgstr "Engedélyezve"
 
 #: print.module:152
 msgid "Enable or disable the printer-friendly page link for each node. Even if the link is disabled, you can still view the print version of a node by going to print/nid where nid is the numeric id of the node."
-msgstr ""
+msgstr "A \"Nyomtatóbarát változat\" hivatkozás mutatásának beállítása egyes node-okora. Letiltott állapotban is megnézhető az egyes oldalak nyomtatóbarát verziói, ha a print/nid-re megy, ahol a nid a node azonosító száma."
 
 #: print.module:157
 msgid "Show link in system (non-content) pages"
-msgstr ""
+msgstr "Hivatkozás mutatása a rendszer lapokon"
 
 #: print.module:160
 msgid "Setting this option will add a printer-friendly version page link on pages created by Drupal or the enabled modules."
-msgstr ""
+msgstr "A nyomtatóbarát változat hivatkozás megjelenítése azokon az oldalakon, amit a Drupal vagy a modulok hoztak létre."
 
 #: print.module:165
 msgid "Logo URL"
-msgstr ""
+msgstr "Logó címe"
 
 #: print.module:169
 msgid "An alternative logo to display on the printer-friendly version. If left empty, the current theme's logo is used."
-msgstr ""
+msgstr "Alternatív logó használata a nyomtatóbarát oldalakon, egyébként az alapértelmezett logó jelenik meg."
 
 #: print.module:174
 msgid "Stylesheet URL"
-msgstr ""
+msgstr "CSS címe"
 
 #: print.module:178
 msgid "The URL to your custom print cascading stylesheet, if any. When none is specified, the default module CSS file is used."
-msgstr ""
+msgstr "Alternatív CSS címe a nyomtatóbarát oldalakhoz, egyébként az alapértlemezett CSS lesz használva."
 
 #: print.module:183
 msgid "Printer-friendly URLs list"
-msgstr ""
+msgstr "Nyomtatóbarát URL lista"
 
 #: print.module:186
 msgid "If set, a list of the destination URLs for the page links will be displayed at the bottom of the page."
-msgstr ""
+msgstr "Az oldal hivatkozásainak mutatása a nyomtatóbarát oldal alján."
 
 #: print.module:191
 msgid "Include comments in print-friendly version"
-msgstr ""
+msgstr "Hozzászólások megjelenítése a nyomtatóbarát oldalakon"
 
 #: print.module:194
 msgid "When this option is active, user comments are also included in the printer-friendly version. Requires the comment module."
-msgstr ""
+msgstr "A nyomtatóbarát oldalakon a hozzászólások megjelenítése. A Comment modul engedélyezése szükséges."
 
 #: print.module:199
 msgid "Open the printer-friendly version in a new window"
-msgstr ""
+msgstr "Nyomtatóbarát változat megjelenítése új ablakban"
 
 #: print.module:202
 msgid "Setting this option will make the printer-friendly version open in a new window/tab."
-msgstr ""
+msgstr "Nyomtatóbarát változat megjelenítése új ablakban."
 
 #: print.module:207
 msgid "Send to printer"
-msgstr ""
+msgstr "Nyomtatóra küldés"
 
 #: print.module:210
 msgid "Automatically calls the browser's print function when the printer-friendly version is displayed."
-msgstr ""
+msgstr "Automatikusan meghívja a böngésző nyomtatás funkcióját, amikor a nyomtatóbarát oldal megjelenik."
 
 #: print.module:217;402
 msgid "Source URL"
-msgstr ""
+msgstr "Forráscím"
 
 #: print.module:225
 msgid "Display source URL"
-msgstr ""
+msgstr "Forrás cím mutatása"
 
 #: print.module:228
 msgid "When this option is selected, the URL for the original page will be displayed at the bottom of the printer-friendly version."
-msgstr ""
+msgstr "Forrás cím mutatása a nyomtatóbarát oldal alján."
 
 #: print.module:233
 msgid "Add current time/date to the source URL"
-msgstr ""
+msgstr "Aktuális dátum és idő hozzáadása a forrás címhez"
 
 #: print.module:236
 msgid "Display the current date and time in the Source URL line."
-msgstr ""
+msgstr "Aktuális dátum és idő mutatása a forrás címben."
 
 #: print.module:241
 msgid "Force use of node ID in source URL"
-msgstr ""
+msgstr "A node ID használatának kikényszerítése a címben"
 
 #: print.module:244
 msgid "Drupal will attempt to use the page's defined alias in case there is one. To force the use of the fixed URL, activate this option."
-msgstr ""
+msgstr "A Drupal megpróbálja az oldal aliasát használni, ha létezik. Engedélyezze ezt a funckiót, ha fix címeket kíván használni."
 
 #: print.module:251
 msgid "Robots META tags"
-msgstr ""
+msgstr "META kulcsszavak keresőrobotoknak"
 
 #: print.module:259
 msgid "Add noindex"
-msgstr ""
+msgstr "'noindex' hozzáadása"
 
 #: print.module:262
 msgid "Instruct robots to not index printer-friendly pages. Recommended for good search engine karma."
-msgstr ""
+msgstr "A keresőrobotok ne indexeljék a nyomtatóbarát oldalakat. Ez egy elvárás a jó keresési karma eléréséhez."
 
 #: print.module:267
 msgid "Add nofollow"
-msgstr ""
+msgstr "'nofollow' hozzáadása"
 
 #: print.module:270
 msgid "Instruct robots to not follow outgoing links on printer-friendly pages."
-msgstr ""
+msgstr "A keresőrobotok ne kövessék a hivatkozásokat a nyomtatóbarát oldalakon. "
 
 #: print.module:275
 msgid "Add noarchive"
-msgstr ""
+msgstr "'noarchive' hozzáadása"
 
 #: print.module:278
 msgid "Non-standard tag to instruct search engines to not show a \"Cached\" link for your printer-friendly pages. Recognized by Googlebot."
-msgstr ""
+msgstr "Nem szabványos kulcsszó arra, hogy a keresőrobotok ne jelenítsék meg a \"Cached\" hivatkozást. A Google értelmezi ezt a kulcsszót."
 
 #: print.module:283
 msgid "Add nocache"
-msgstr ""
+msgstr "'nocache' hozzáadása"
 
 #: print.module:286
 msgid "Non-standard tag to instruct search engines to not show a \"Cached\" link for your printer-friendly pages"
-msgstr ""
+msgstr "Nem szabványos kulcsszó arra, hogy a keresőrobotok ne jelenítsék meg a \"Cached\" hivatkozást."
 
 #: print.module:401
 msgid "retrieved on"
-msgstr ""
+msgstr "letöltve"
 
 #: print.module:408
 msgid "Published on"
-msgstr ""
+msgstr "Közzétéve"
 
 #: print.module:409
 msgid "By"
-msgstr ""
+msgstr "Létrehozta"
 
 #: print.module:410
 msgid "Created"
-msgstr ""
+msgstr "Létrehozva"
 
 #: print.module:421
 msgid "Links:"
-msgstr ""
+msgstr "Linkek:"
 
 #: print.module:508
 msgid "Display a printer-friendly version of this page."
-msgstr ""
+msgstr "A nyomtatóbarát változat megjelenítése."
 
 #: print.module:514
 msgid "Printer-friendly version"
-msgstr ""
+msgstr "Nyomatatóbarát változat"
 
 #: print.module:19
 msgid "access print"
-msgstr ""
+msgstr "nyomtató hozzáférése"
 
 #: print.module:19
 msgid "administer print"
-msgstr ""
+msgstr "nyomtatás beállítások"
 
 #: print.module:0
 msgid "print"
-msgstr ""
+msgstr "nyomtat"
 
 #: print.info:0
 msgid "Printer-friendly pages"
-msgstr ""
+msgstr "Nyomtatóbarát oldalak"
 

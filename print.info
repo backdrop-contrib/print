@@ -1,3 +1,4 @@
 ; $Id$
 name = "Printer-friendly pages"
 description = "Adds a printer-friendly version link to node pages."
+core=6.x

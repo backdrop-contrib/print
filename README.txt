@@ -5,7 +5,7 @@ Name: Print module
 Maintainer: Joao Ventura <joao at venturas dot org>
 Author: Matt Westgate <drupal at asitis dot org>
 Last update: (See CHANGELOG.txt for details)
-Requires Drupal 5.x
+Requires Drupal 6.x
 
 ********************************************************************
 DESCRIPTION:
@@ -18,12 +18,6 @@ is the node id of content to render.
 INSTALLATION:
 
 see the INSTALL.txt file in this directory.
-
-********************************************************************
-TODO:
-
-- Add ability to optionally attach comments to nodes for printing
-  by calling comment_render().
 
 ********************************************************************
 UPCOMING FEATURES:

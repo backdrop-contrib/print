@@ -21,13 +21,4 @@ INSTALLATION:
 CUSTOMIZATION:
 
 - To modify the template of printer friendly pages, simply edit the
-   print.node.tpl.php file found in this directory.
-
-- Though it is not recommended to open links in a new window you can change
-theme_print_link() in print.module if you really want to force it:
-
-function theme_print_link($node) {
-  $attributes = array("target"=> "_blank", 'title' => t('Display a printer friendly version of this page.'));
-  $links = l(t('printer friendly version'), "node/$node->nid/print",$attributes );
-  return $links;
-}
+   print.tpl.php file found in this directory.
