@@ -7,18 +7,43 @@ Author: Matt Westgate <drupal at asitis dot org>
 ********************************************************************
 INSTALLATION:
 
-1. Place the entire print directory into your Drupal modules/
-   directory.
+1. Decompress the print-n.x-n.n.tar.gz file into your Drupal modules directory (usually sites/all/modules, see http://drupal.org/node/176044 for more information).
 
-2. Enable via:
-    Administer > Modules
+2. Enable the print module:
+    Administer > Site building > Modules (admin/build/modules)
 
-3. Configure via:
-    Administer > Site configuration > Printer friendly (admin/settings/print)
+3. Configure access rules:
+    Administer > User management > Access control (admin/user/access)
 
+4. Configure:
+    Administer > Site configuration > Printer-friendly (admin/settings/print)
+
+********************************************************************
+UPDATE:
+
+When updating from a previous version, just remove the print directory and follow the instructions above. Make sure that you backup any costumization to the print.tpl.php and print.css files.
+
+********************************************************************
+ROBOTS:
+
+Even though it is possible to set per-page robots settings, the following can be placed in your robots.txt file after the User-agent line to prevent search engines from even asking for the page:
+
+Disallow: /print/
+
+Also, for updates from older versions (<=4.7.x-1.0 and <=5.x-1.2) which used node/nnn/print instead of print/nnn, the following lines can prevent requests from Google for the obsolete print URLs:
+
+User-agent: Googlebot
+Disallow: /*/print$
+
+Note that pattern matching in robots.txt is a Google extension (see http://www.google.com/support/webmasters/bin/answer.py?answer=40367 for more information).
 
 ********************************************************************
 CUSTOMIZATION:
 
-- To modify the template of printer friendly pages, simply edit the
-   print.tpl.php file found in this directory.
+- To modify the template of printer friendly pages, simply edit the print.tpl.php or the print.css files found in this directory.
+
+- It is possible to set per-content-type and/or theme-specific templates which are searched for in the following order:
+  i. print.__node-type__.tpl.php in the theme directory
+ ii. print.__node-type__.tpl.php in the module directory
+iii. print.tpl.php in the theme directory
+ iv. print.tpl.php in the module directory (supplied by the module)
