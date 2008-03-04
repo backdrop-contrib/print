@@ -1,0 +1,190 @@
+<?php
+/* $Id$ */
+
+/**
+ * @file
+ * Display printer-friendly versions of Drupal pages
+ */
+
+define("PRINTPDF_PATH", "printpdf");
+
+/**
+ * Default values of the print_pdf_settings variable
+ */
+function print_pdf_settings_default() {
+  return array('show_link' => 0, 'show_sys_link' => 1, 'book_link' => 1, 'pdf_tool' => 0);
+}
+
+//*******************************************************************
+// Drupal Hooks
+//*******************************************************************
+
+/**
+ * Implementation of hook_theme()
+ */
+function print_pdf_theme() {
+  return array(
+    'print_pdf_format_link' => array(
+      'arguments' => array(),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_menu()
+ */
+function print_pdf_menu() {
+  $items = array();
+
+  $items[PRINTPDF_PATH] = array(
+    'title' => 'Printer-friendly PDF',
+    'page callback' => 'print_pdf_controller',
+    'access arguments' => array('access print'),
+    'type' => MENU_CALLBACK,
+    'file' => 'print.pdf.inc',
+  );
+  $items['admin/settings/print/pdf'] = array(
+    'title' => 'PDF',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('print_pdf_settings'),
+    'access arguments'  => array('administer print'),
+    'weight' => 2,
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'print_pdf.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_link().
+ */
+function print_pdf_link($type, $node = NULL, $teaser = FALSE) {
+  static $print_pdf_display = FALSE;
+  static $print_pdf_display_comment = FALSE;
+
+  if ($print_pdf_display == FALSE) {
+    $print_pdf_display_comment = variable_get('print_pdf_display_comment_'. $node->type, '0');
+    $print_pdf_display = variable_get('print_pdf_display_'. $node->type, '1');
+  }
+
+  $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
+  // No link is shown for several motives...
+  if ( !($teaser) &&
+      ($print_pdf_settings['show_link']) && user_access('access print') &&
+      (($type == 'comment' && $print_pdf_display_comment) ||
+      ($type == 'node' && $print_pdf_display))) {
+    $links = array();
+
+    $format = theme('print_pdf_format_link');
+
+    if ($type == 'comment') {
+      $query = "comment=$node->cid";
+    }
+
+    $links['print_pdf'] = array('href' => PRINTPDF_PATH ."/". $node->nid,
+                            'title' => $format['text'],
+                            'attributes' => $format['attributes'],
+                            'html' => $format['html'],
+                            'query' => $query);
+
+    return $links;
+  }
+  else {
+    return;
+  }
+}
+
+/**
+ * Implementation of hook_help()
+ */
+function print_pdf_help($path, $arg) {
+  $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
+
+  if (($print_pdf_settings['show_link']) && ($print_pdf_settings['show_sys_link']) &&
+      user_access('access print') && (preg_match("/^node\//i", $path) == 0)) {
+    static $output = FALSE;
+
+    if ($output === FALSE) {
+      $output = TRUE;
+    
+      return print_pdf_insert_link();
+    }
+  }
+}
+
+/**
+ * Implementation of hook_form_alter()
+ */
+function print_pdf_form_alter(&$form, $form_state, $form_id) {
+  // Add the node-type settings option to activate the PDF version link
+  if ('node_type_form' == $form_id) {
+    $form['workflow']['print_pdf_display'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show PDF version link'),
+      '#return_value' => 1,
+      '#default_value' => variable_get('print_pdf_display_'. $form['#node_type']->type, '1'),
+      '#description' => t('Displays the link to a PDF version of the content. Further configuration is available on the !settings.', array('!settings' => l(t('settings page'), 'admin/settings/print' ))),
+    );
+    $form['comment']['print_pdf_display_comment'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show PDF version link in individual comments'),
+      '#return_value' => 1,
+      '#default_value' => variable_get('print_pdf_display_comment_'. $form['#node_type']->type, '0'),
+      '#description' => t('Displays the link to a PDF version of the comment. Further configuration is available on the !settings.', array('!settings' => l(t('settings page'), 'admin/settings/print' ))),
+    );
+  }
+}
+
+/**
+ * Auxiliary function to fill the Printer-friendly link attributes
+ *
+ * @return array of formatted attributes
+ */
+function print_pdf_fill_attributes() {
+  $attributes = print_fill_attributes();
+  $attributes['title'] = t('Display a PDF version of this page.');
+  $attributes['class'] = 'print-pdf';
+
+  return $attributes;
+}
+
+function theme_print_pdf_format_link() {
+  global $base_path;
+
+  $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
+  $text = t('PDF version');
+  $img = '<img width="16px" height="16px" style="vertical-align:middle" src="'. $base_path . drupal_get_path('module', 'print') .'/icons/pdf_icon.gif" alt="'. $text .'">';
+  $html = TRUE;
+  switch ($print_pdf_settings['show_link']) {
+  case 2:
+    $text = $img;
+    break;
+  case 3:
+    $text = $img .' '. $text;
+    break;
+  }
+
+  return array('text' => $text,
+               'html' => $html,
+               'attributes' => print_pdf_fill_attributes());
+}
+
+/**
+ * Auxiliary function to display a formatted Printer-friendly link
+ *
+ * @return string
+ */
+function print_pdf_insert_link($path = NULL) {
+  if (user_access('access print')) {
+    if ($path === NULL) {
+      $path = PRINTPDF_PATH ."/". $_GET['q'];
+      $query = drupal_query_string_encode($_GET, array('q'));
+      if (empty($query)) {
+        $query = NULL;
+      }
+    }
+    $format = theme('print_pdf_format_link');
+    return '<span class="print">'. l($format['text'], $path, array('attributes' => $format['attributes'], 'query' => $query, 'absolute' => TRUE, 'html' => $format['html'])) .'</span>';
+  }
+}

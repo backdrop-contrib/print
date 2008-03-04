@@ -19,6 +19,30 @@ INSTALLATION:
     Administer > Site configuration > Printer-friendly (admin/settings/print)
 
 ********************************************************************
+PRINT_PDF module:
+
+The print_pdf module requires the use of an external PDF generation tool.
+The currently supported tools are dompdf and TCPDF.
+
+dompdf support:
+  The dompdf tool produces results that are more faithful to the HTML printer-friendly page.
+
+  1. Download dompdf from http://sourceforge.net/projects/dompdf/
+  2. Extract the contents of the downloaded package into the print module directory (usually sites/all/modules/print)
+  3. Edit dompdf_config.inc.php to fit your installation.
+  4. Grant write access to the lib/fonts directory to your webserver user.
+  5. If you're using dompdf-0.5.1, delete the dompdf.php file as it contains a security vulnerability
+  6. Check http://www.digitaljunkies.ca/dompdf/ for further information.
+
+TCPDF support:
+  TCPDF seems to be more actively developed than dompdf, but it's support for CSS is considerably worse.
+
+  1. Download TCPDF from http://sourceforge.net/projects/tcpdf/
+  2. Extract the contents of the downloaded package into the print module directory (usually sites/all/modules/print)
+  3. Edit the config/tcpdf_config.php file to fit your installation.
+  4. Check http://tcpdf.sourceforge.net/ for further information.
+
+********************************************************************
 UPDATE:
 
 When updating from a previous version, just remove the print directory and follow the instructions above. Make sure that you backup any costumization to the print.tpl.php and print.css files.
@@ -32,7 +56,6 @@ Disallow: /print/
 
 Also, for updates from older versions (<=4.7.x-1.0 and <=5.x-1.2) which used node/nnn/print instead of print/nnn, the following lines can prevent requests from Google for the obsolete print URLs:
 
-User-agent: Googlebot
 Disallow: /*/print$
 
 Note that pattern matching in robots.txt is a Google extension (see http://www.google.com/support/webmasters/bin/answer.py?answer=40367 for more information).
@@ -43,7 +66,7 @@ CUSTOMIZATION:
 - To modify the template of printer friendly pages, simply edit the print.tpl.php or the print.css files found in this directory.
 
 - It is possible to set per-content-type and/or theme-specific templates which are searched for in the following order:
-  i. print.__node-type__.tpl.php in the theme directory
- ii. print.__node-type__.tpl.php in the module directory
+  i. print.node-$type.tpl.php in the theme directory
+ ii. print.node-$type.tpl.php in the module directory
 iii. print.tpl.php in the theme directory
  iv. print.tpl.php in the module directory (supplied by the module)

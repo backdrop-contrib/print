@@ -1,3 +1,164 @@
+February 22, 2008
+      Commit #102401 by jcnventura at 02:55
+        Auto-discovery of the PDF generation tools
+February 21, 2008
+      Commit #102314 by jcnventura at 19:17
+        Make CSS path a full URL so that dompdf can find it
+      Commit #102284 by jcnventura at 14:42
+        Add PDF support
+February 16, 2008
+      Commit #101359 by jcnventura at 20:16
+        Fix #222234: Use Drupal 6 language var
+February 15, 2008
+      Commit #101076 by jcnventura at 02:22
+        Correct print vars when using the printable engine
+February 14, 2008
+      Commit #100728 by jcnventura at 03:34
+        Better support for Drupal 6.x (performance enhancements via include files and new translation I/F)
+        Add current page title to printed breadcrumb
+        Fix #216728 better: if first link was duplicate a new ref was generated
+February 9, 2008
+      Commit #99915 by jcnventura at 02:22
+        Better support for Drupal sites that do not reside in the server root.
+        Fix the 'printable' engine to display the page title.
+      Commit #99876 by jcnventura at 00:21
+        Cleanup code (ran latest coder module)
+February 8, 2008
+      Commit #99779 by jcnventura at 16:56
+        Replace module CSS import with an @import statement
+February 5, 2008
+      Commit #99392 by jcnventura at 12:12
+        Fix 217928: add default value to variable_get('anonymous')
+February 4, 2008
+      Commit #99299 by jcnventura at 18:56
+        Fix #217439: Add defined javascript to the PF page
+      Commit #99294 by jcnventura at 18:37
+        Fix #198688: remove added %20
+      Commit #99285 by jcnventura at 17:53
+        Remove whitespace immediately before and after the '=' sign
+      Commit #99277 by jcnventura at 17:15
+        Fix #216728 by jpereza: Don't show duplicate URLs in the URL list
+      Commit #99274 by jcnventura at 17:04
+        Fix #216716: do not process hreflang attributes
+January 25, 2008
+      Commit #97416 by jcnventura at 13:28
+        Add rel=nofollow tag to PF link (#213951)
+        Add taxonomy terms to the PF page (#214081)
+      Commit #97407 by jcnventura at 11:02
+        Small fixes to 6.x
+January 24, 2008
+      Commit #97277 by jcnventura at 17:36
+        Sync 5.x to 6.x
+      Commit #97252 by jcnventura at 12:12
+        Remove comment forms from PF page (fix for #213425)
+January 23, 2008
+      Commit #97112 by jcnventura at 18:02
+        Fix wrong Paginate hack (replace pages_count with page_count)
+January 22, 2008
+      Commit #96919 by jcnventura at 13:14
+        Added ability to change the output strings through theming (as per #206365)
+      Commit #96914 by jcnventura at 12:46
+        Slightly better solution to #211349.
+      Commit #96913 by jcnventura at 12:40
+        Added Portuguese (Brazil) translation (thanks psychopath_mind!)
+January 21, 2008
+      Commit #96693 by jcnventura at 12:45
+        Fix #211349: Add current query params to PF link
+January 8, 2008
+      Commit #94766 by jcnventura at 19:09
+        Update changelog
+January 5, 2008
+      Commit #94314 by jcnventura at 21:05
+        Add div tags around the logo image (fix for #206568)
+January 2, 2008
+      Commit #93687 by jcnventura at 14:01
+        Fix #202243: Use the anonymous setting for pages with a blank author variable
+December 14, 2007
+      Commit #91367 by jcnventura at 15:49
+        Added ability to theme the print_format_link function (fix for #198397)
+        Added access check to the print_insert_link function
+December 4, 2007
+      Commit #90227 by jcnventura at 19:04
+        Minor fix to #192855, use full base_url if it does not include subdirs
+December 3, 2007
+      Commit #90155 by jcnventura at 23:21
+        Sync print 5.x to 4.7.x
+      Commit #90154 by jcnventura at 23:11
+        Sync 5.x to 6.x
+      Commit #90151 by jcnventura at 22:47
+        Proper fix to the book_node_visitor_html_pre which was incorrectly committed with 'print' instead of 'view'
+      Commit #90126 by jcnventura at 17:31
+        Fix #195917: Use correct module check in hook_link_alter
+December 2, 2007
+      Commit #90019 by jcnventura at 20:25
+        Add replacement book_node_visitor_html_pre so that CCK pages in book nodes print correctly
+November 22, 2007
+      Commit #88906 by jcnventura at 11:27
+        Fix #192855: If relative links start with '/' just append them to the server name (commit to 5.x-3.x-dev)
+      Commit #88843 by jcnventura at 01:27
+        Fix #192855: If relative links start with '/' just append them to the server name
+November 19, 2007
+      Commit #88585 by jcnventura at 23:53
+        Sync print 5.x to 4.7.x
+      Commit #88584 by jcnventura at 23:49
+        Sync print 5.x to 4.7.x
+      Commit #88583 by jcnventura at 23:35
+        Update changelog
+      Commit #88581 by jcnventura at 23:23
+        Complete Spanish translation. Thanks gustz!
+      Commit #88487 by jcnventura at 10:21
+        Complete French translation. Thanks rondev!
+November 17, 2007
+      Commit #88352 by jcnventura at 23:59
+        Complete versions of the Hungarian and German translations. Thanks hinger and hailstorm!
+      Commit #88280 by jcnventura at 00:34
+        Try to solve #192855, by checking also for index.php in relative links
+November 15, 2007
+      Commit #88160 by jcnventura at 23:53
+        Sync print 5.x to 6.x
+      Commit #88158 by jcnventura at 23:52
+        Sync print 5.x to 4.7.x
+      Commit #88133 by jcnventura at 21:42
+        Final translation to russian. Thanks VladSavitsky!
+      Commit #88112 by jcnventura at 16:02
+        Remove TODOs in the .po files
+      Commit #88111 by jcnventura at 15:46
+        Updated Norwegian translation to final. Thanks stenjo!
+        Added (partial) Italian translation. Thanks ccattaneo74!
+      Commit #88081 by jcnventura at 12:18
+        Added (partial) Ukrainian translation. Thanks artem_sokolov!
+      Commit #88080 by jcnventura at 12:09
+        Added (partial) Romanian translation. Thanks baudolino!
+November 15, 2007
+      Commit #88080 by jcnventura at 12:09
+        Added (partial) Romanian translation. Thanks baudolino!
+November 13, 2007
+      Commit #87938 by jcnventura at 14:26
+        Make anchor tags (#id) links usable in the PF version again (after the base href fix broke it).
+      Commit #87887 by jcnventura at 02:05
+        Add setting to control the book PF link via this module
+      Commit #87880 by jcnventura at 03:58
+        Update all .po files to the latest print.pot from the potx module
+November 9, 2007
+      Commit #87371 by jcnventura at 01:56
+        Add the capability to handle book's PF link via this module
+November 8, 2007
+      Commit #87271 by jcnventura at 03:33
+        Enable choice of method to open the new window via radio boxes (now possible to select a Javascript XHTML Strict compliant method)
+November 7, 2007
+      Commit #87223 by jcnventura at 18:24
+        Correct fix for the duplicate PF link in book pages
+      Commit #87160 by jcnventura at 03:39
+        Sync documentation in HEAD with the 5.x version
+      Commit #87159 by jcnventura at 03:30
+        Russian translation by VladSavitsky. Thanks!
+      Commit #87155 by jcnventura at 02:26
+        Remove duplicate PF link in book pages
+November 6, 2007
+      Commit #87144 by jcnventura at 20:56
+        Updated the installation instructions (INSTALL.txt)
+      Commit #87136 by jcnventura at 19:34
+        Update documentation (README, CREDITS and CHANGELOG)
 October 31, 2007
       Commit #86493 by jcnventura at 12:58
         Fix #172100: use drupal_get_html_head to starting building the head section

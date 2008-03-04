@@ -1,0 +1,5 @@
+; $Id$
+name = "Printer-friendly pages as PDF"
+description = "Adds the capability to export pages as PDF."
+dependencies[] = print
+core=6.x

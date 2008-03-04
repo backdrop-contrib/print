@@ -5,7 +5,7 @@ Name: Print module
 Maintainer: Joao Ventura <joao at venturas dot org>
 Author: Matt Westgate <drupal at asitis dot org>
 Last update: (See CHANGELOG.txt for details)
-Requires Drupal 5.x
+Requires Drupal 6.x
 
 ********************************************************************
 DESCRIPTION:
@@ -64,6 +64,9 @@ Administer › Site configuration › Printer-friendly (admin/settings/print)
   Show link in system (non-content) pages (default: enabled)
   Setting this option will add a printer-friendly version page link on pages created by Drupal or the enabled modules.
 
+  Take control of the book module printer-friendly link (default: enabled)
+  Activate this to have the printer-friendly link in book nodes handled by this module. Requires the (core) book module.
+
   Logo URL (default: empty)
   An alternative logo to display on the printer-friendly version. If left empty, the current theme's logo is used.
 
@@ -112,67 +115,84 @@ Frequently Asked Questions:
 
 1. I have enabled the module, but the PF page link is not showing up!
 
-  There may be several reasons for this, but try the following in order (you must have appropriate permissions to perform some of these steps - login as user #1 if you don't):
+There may be several reasons for this, but try the following in order (you must have appropriate permissions to perform some of these steps - login as user #1 if you don't):
 
-    i. Make sure that the module is enabled (the checkbox next to 'Printer-friendly pages' in admin/build/modules must be ticked).
+i. Make sure that the module is enabled (the checkbox next to 'Printer-friendly pages' in admin/build/modules must be ticked).
 
-   ii. In admin/user/access under the print module heading make sure that you have enabled access to the desired groups. In most cases, you will want to tick the 'access print' boxes for all groups, and clear the 'admin print' boxes for all groups except the administrator group (if defined).
+ii. In admin/user/access under the print module heading make sure that you have enabled access to the desired groups. In most cases, you will want to tick the 'access print' boxes for all groups, and clear the 'admin print' boxes for all groups except the administrator group (if defined).
 
-  iii. In admin/settings/print, make sure that you have enabled the PF link.
+iii. In admin/settings/print, make sure that you have enabled the PF link.
 
-   iv. For each content type x, check in admin/content/types/x that the 'Show printer-friendly version link' is enabled.
+iv. For each content type x, check in admin/content/types/x that the 'Show printer-friendly version link' is enabled.
 
 2. The Printer-friendly version in book nodes is not working correctly..
 
-  That PF link is managed by the book module and this module has nothing to do with it.
+If you're using Drupal 4.7.x, that PF link is managed by the book module and this module has nothing to do with it. If you're using Drupal 5.x or later try to enable the 'Take control of the book module printer-friendly link' in the Printer-friendly settings form and see if you like it better that way.
 
-3. Can I replace the 'Printer-friendly version' link with an image?
+3. Can I add a printer icon to the 'Printer-friendly version' link?
 
-  Sure you can.. But you will have to change your theme's CSS pages for that. Define the following:
+Yes. But you will have to change your theme's CSS pages for that. Define the following:
 
   .print-page {
-    background:url(__icon_url__) no-repeat;
-    width:__icon_width__px;
-    height:__icon_height__px;
-    font-size: 0px;
+    padding: _n_px _n_px _n_px _icon_width+n_px;
+    background: url(__icon_url__) no-repeat left center;
+    display: block;
   }
 
-4. Is it possible to change the styles used in the PF page?
+Also, check out a real-life use in the comment posted in http://drupal.org/node/191608#comment-630836 by ronan of Gorton Studios.
 
-  You can always change them easily. You can either:
+4. Can I replace the 'Printer-friendly version' link with an image?
 
-  a) Edit the print.css in the modules directory, or
-  b) Define your own CSS with the appropriate styles and specify it in the module settings.
+Yes. You will have to define a theme_print_format_link function which will replace the module's print_format_link function and where you can replace the text with your custom-defined image, and set the html element to true so that your image tag is interpreted as HTML. See the following for an example:
 
-5. Is it possible to define a template for a specific content type?
+function theme_print_format_link() {
+   return array('text' =>"<img src='your img URL' />",
+                'html' => TRUE,
+                'attributes' => print_fill_attributes());
+}
 
-  Sure you can, the module will try the following locations for the PF page template:
+5. Is it possible to change the styles used in the PF page?
 
-    i. print.__node-type__.tpl.php in the theme directory
-   ii. print.__node-type__.tpl.php in the module directory
-  iii. print.tpl.php in the theme directory
-   iv. print.tpl.php in the module directory (supplied by the module)
+You can always change them easily. You can either:
 
-  I recommend that you edit the module's print.tpl.php to suit your tastes instead of creating something from scratch, as it is easier to remember the name of the members of the $print array and the names of the used styles.
+a) Edit the print.css in the modules directory, or
+b) Define your own CSS with the appropriate styles and specify it in the module settings.
 
-  Note that since you are creating your own template, if you want to use per-content-type styles, you can simply ignore the $print['css'] setting and hard-code your own per-content-type CSS file in your new template. Or you can define your own per-content-type styles to store in the configurable CSS file. Your choice!
+6. Is it possible to define a template for a specific content type?
 
-6. I don't like the template used. Can I use another?
+Yes, the module will try the following locations for the PF page template:
 
-  Of course, see the above question on how to do it (or you can always simply edit the module's print.tpl.php).
+i. print.__node-type__.tpl.php in the theme directory
+ii. print.__node-type__.tpl.php in the module directory
+iii. print.tpl.php in the theme directory
+iv. print.tpl.php in the module directory (supplied by the module)
 
-7. I am a module author/maintainer. Is there a way to know when a node is being built by the print module so that I can disable my output?
+I recommend that you edit the module's print.tpl.php to suit your tastes instead of creating something from scratch, as it is easier to remember the name of the members of the $print array and the names of the used styles.
 
-  Yes, if $node->printing evaluates to true, disable any output that is not suitable for a static page.
+Note that since you are creating your own template, if you want to use per-content-type styles, you can simply ignore the $print['css'] setting and hard-code your own per-content-type CSS file in your new template. Or you can define your own per-content-type styles to store in the configurable CSS file. Your choice!
 
-8. Is it possible to place the PF link somewhere else?
+7. I don't like the template used. Can I use another?
 
-  Yes, but you have to take care of it. Disable the PF link in admin/settings/print and you're then free to place a link to print/nid or to print/path_alias wherever you want (such as a block or the node content). I recommend the following code to place the link, as it maintains the configurable attributes:
+See the above question on how to do it (or you can always simply edit the module's print.tpl.php).
 
-  <?php print print_insert_link(); ?>
+8. I am a module author/maintainer. Is there a way to know when a node is being built by the print module so that I can disable my output?
 
-9. I have a problem/question not answered here. Where can I go for help?
+Yes, if $node->printing evaluates to true, disable any output that is not suitable for a static page.
 
-  Simply post a new issue in Drupal's issue system: http://drupal.org/project/issues/print
-  If possible, send me an e-mail with the link to your Drupal system where I can see the problem you are reporting.
+9. Is it possible to place the PF link somewhere else?
 
+Yes, but you have to take care of it. Disable the PF link in admin/settings/print and you're then free to place a link to print/nid or to print/path_alias wherever you want (such as a block or the node content). I recommend the following code to place the link, as it maintains the configurable attributes:
+
+<?php
+print print_insert_link();
+?>
+
+10. I have a problem/question not answered here. Where can I go for help?
+
+Simply post a new issue in Drupal's issue system: http://drupal.org/project/issues/print
+If possible, send me an e-mail with the link to your Drupal system where I can see the problem you are reporting.
+
+********************************************************************
+
+The print, pdf and mail icons are copyright Plone Foundation. Thanks for
+letting me use them!
