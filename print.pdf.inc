@@ -1,10 +1,10 @@
 <?php
 /* $Id$ */
 
-require_once(drupal_get_path('module', 'print') . '/print.pages.inc');
+require_once(drupal_get_path('module', 'print') .'/print.pages.inc');
 
 function print_pdf_controller() {
-  $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());  
+  $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
 
   $print = print_controller();
   // Img elements must be set to absolute
@@ -25,7 +25,7 @@ function print_pdf_controller() {
 }
 
 function _print_pdf_dompdf($print, $filename, $directives = array()) {
-  $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());  
+  $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
   require_once($print_pdf_settings['pdf_tool']);
 
   ob_start();
@@ -34,9 +34,9 @@ function _print_pdf_dompdf($print, $filename, $directives = array()) {
   ob_end_clean();
 
   $allowed_directives = array(
-    'set_base_path', 
-    'set_host', 
-    'set_paper', 
+    'set_base_path',
+    'set_host',
+    'set_paper',
     'set_protocol',
   );
 
@@ -54,7 +54,7 @@ function _print_pdf_dompdf($print, $filename, $directives = array()) {
 }
 
 function _print_pdf_tcpdf($print, $filename) {
-  $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());  
+  $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
   require_once($print_pdf_settings['pdf_tool']);
 
   $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true);
@@ -72,7 +72,7 @@ function _print_pdf_tcpdf($print, $filename) {
 
   $pdf->SetHeaderData("", 0, $print["title"], strip_tags($print["site_name"]));
   
-  // set auto page breaks  
+  // set auto page breaks
   $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
   $pdf->AliasNbPages();
   
@@ -90,7 +90,7 @@ function _print_pdf_tcpdf($print, $filename) {
   $pdf->Ln(5);
 
   if ($print["submitted"]) {
-    $pdf->SetFont(PDF_FONT_NAME_MAIN,'BI', PDF_FONT_SIZE_MAIN);
+    $pdf->SetFont(PDF_FONT_NAME_MAIN, 'BI', PDF_FONT_SIZE_MAIN);
     $pdf->MultiCell(0, 5, $print["submitted"], 0, 'L', 0);
   }
 

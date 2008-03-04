@@ -136,38 +136,19 @@ function print_pdf_form_alter(&$form, $form_state, $form_id) {
   }
 }
 
-/**
- * Auxiliary function to fill the Printer-friendly link attributes
- *
- * @return array of formatted attributes
- */
-function print_pdf_fill_attributes() {
-  $attributes = print_fill_attributes();
-  $attributes['title'] = t('Display a PDF version of this page.');
-  $attributes['class'] = 'print-pdf';
-
-  return $attributes;
-}
-
 function theme_print_pdf_format_link() {
   global $base_path;
 
   $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
   $text = t('PDF version');
-  $img = '<img width="16px" height="16px" style="vertical-align:middle" src="'. $base_path . drupal_get_path('module', 'print') .'/icons/pdf_icon.gif" alt="'. $text .'">';
-  $html = TRUE;
-  switch ($print_pdf_settings['show_link']) {
-  case 2:
-    $text = $img;
-    break;
-  case 3:
-    $text = $img .' '. $text;
-    break;
-  }
+  $img = $base_path . drupal_get_path('module', 'print') .'/icons/pdf_icon.gif';
+  $title = t('Display a PDF version of this page.');
+  $class = 'print-pdf';
+  $format = _print_format_link_aux($print_pdf_settings['show_link'], $text, $img, $title, $class);
 
-  return array('text' => $text,
-               'html' => $html,
-               'attributes' => print_pdf_fill_attributes());
+  return array('text' => $format['text'],
+               'html' => $format['html'],
+               'attributes' => $format['attributes']);
 }
 
 /**

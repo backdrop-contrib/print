@@ -213,12 +213,12 @@ function print_form_alter(&$form, $form_state, $form_id) {
  *
  * @return array of formatted attributes
  */
-function print_fill_attributes() {
+function _print_format_link_aux($type = 0, $text = '', $img = '', $title = '', $class = '') {
   $print_settings = variable_get('print_settings', print_settings_default());
   $robots_settings = variable_get('print_robot_settings', print_robot_settings_default());
 
-  $attributes = array('title' => t('Display a printer-friendly version of this page.'),
-                      'class' => 'print-page');
+  $attributes = array('title' => $title,
+                      'class' => $class);
   switch ($print_settings['newwindow']) {
   case 1:
     $attributes['target'] = '_blank';
@@ -230,7 +230,26 @@ function print_fill_attributes() {
   if (!empty($robots_settings['nofollow'])) {
     $attributes['rel'] = 'nofollow';
   }
-  return $attributes;
+
+  if ($type >= 2) {
+    $img = '<img width="16px" height="16px" style="vertical-align:middle" src="'. $img .'" alt="'. $text .'" />';
+    $html = TRUE;
+    switch ($type) {
+    case 2:
+      $text = $img;
+      break;
+    case 3:
+      $text = $img .' '. $text;
+      break;
+    }
+  }
+  else {
+    $html = FALSE;
+  }
+  
+  return array('text' => $text,
+               'html' => $html,
+               'attributes' => $attributes);
 }
 
 function theme_print_format_link() {
@@ -238,20 +257,14 @@ function theme_print_format_link() {
 
   $print_html_settings = variable_get('print_html_settings', print_html_settings_default());
   $text = t('Printer-friendly version');
-  $img = '<img width="16px" height="16px" style="vertical-align:middle" src="'. $base_path . drupal_get_path('module', 'print') .'/icons/print_icon.gif" alt="'. $text .'">';
-  $html = TRUE;
-  switch ($print_html_settings['show_link']) {
-  case 2:
-    $text = $img;
-    break;
-  case 3:
-    $text = $img .' '. $text;
-    break;
-  }
+  $img = $base_path . drupal_get_path('module', 'print') .'/icons/print_icon.gif';
+  $title = t('Display a printer-friendly version of this page.');
+  $class = 'print-page';
+  $format = _print_format_link_aux($print_html_settings['show_link'], $text, $img, $title, $class);
 
-  return array('text' => $text,
-               'html' => $html,
-               'attributes' => print_fill_attributes());
+  return array('text' => $format['text'],
+               'html' => $format['html'],
+               'attributes' => $format['attributes']);
 }
 
 function theme_print_text() {
