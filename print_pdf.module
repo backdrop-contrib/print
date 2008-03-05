@@ -78,9 +78,11 @@ function print_pdf_link($type, $node = NULL, $teaser = FALSE) {
 
     $format = theme('print_pdf_format_link');
 
+    $queryArr = $_GET;
     if ($type == 'comment') {
-      $query = "comment=$node->cid";
+      $queryArr['comment'] = $node->cid;
     }
+    $query = drupal_query_string_encode($queryArr, array('q'));
 
     $links['print_pdf'] = array('href' => PRINTPDF_PATH ."/". $node->nid,
                             'title' => $format['text'],

@@ -131,9 +131,11 @@ function print_link($type, $node = NULL, $teaser = FALSE) {
 
     $format = theme('print_format_link');
 
+    $queryArr = $_GET;
     if ($type == 'comment') {
-      $query = "comment=$node->cid";
+      $queryArr['comment'] = $node->cid;
     }
+    $query = drupal_query_string_encode($queryArr, array('q'));
 
     $links['print'] = array('href' => PRINT_PATH ."/". $node->nid,
                             'title' => $format['text'],
