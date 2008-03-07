@@ -143,6 +143,7 @@ function _print_var_generator($node, $cid = NULL) {
   $print["site_name"] = variable_get('site_name', 0) ? ($themed['published'] ." ". variable_get('site_name', 0) ." (". l($base_url, $base_url) .")") : "";
   $print["submitted"] = theme_get_setting("toggle_node_info_$node->type") ? $themed['by'] ." ". ($node->name ? $node->name : variable_get('anonymous', t('Anonymous'))) : "";
   $print["created"] = theme_get_setting("toggle_node_info_$node->type") ? $themed['created'] ." ". format_date($node->created, 'small') : "";
+  $print["footer_message"] = filter_xss_admin(variable_get('site_footer', FALSE)) ."\n". theme('blocks', 'footer') ;
 
   menu_set_active_item($path);
   $breadcrumb = drupal_get_breadcrumb();
@@ -158,8 +159,8 @@ function _print_var_generator($node, $cid = NULL) {
   if (!empty($print_settings['urls'])) {
     $urls = _print_friendly_urls();
     $max = count($urls);
+    $print["pfp_links"] = '';
     if ($max) {
-      $print["pfp_links"] = '';
       for ($i = 0; $i < $max; $i++) {
         $print["pfp_links"] .= '['. ($i + 1) .'] '. $urls[$i] ."<br />\n";
       }
@@ -167,7 +168,6 @@ function _print_var_generator($node, $cid = NULL) {
     }
   }
 
-  $print["footer_message"] = filter_xss_admin(variable_get('site_footer', FALSE)) ."\n". theme('blocks', 'footer') ;
 
   if (module_exists('taxonomy')) {
     $terms = taxonomy_link('taxonomy terms', $node);
@@ -361,7 +361,7 @@ function _print_generate_node($nid, $cid = NULL) {
 
   $print_settings = variable_get('print_settings', print_settings_default());
 
-  if (function_exists(comment_render) && (($cid != NULL) || ($print_settings['comments']))) {
+  if (function_exists('comment_render') && (($cid != NULL) || ($print_settings['comments']))) {
     //Print only the requested comment (or if $cid is NULL, all of them)
     $comments = comment_render($node, $cid);
     
@@ -371,6 +371,8 @@ function _print_generate_node($nid, $cid = NULL) {
     $comments = preg_replace("/<h2.*?>Post new comment<\/h2>/", "", $comments);
     //Remove the comment title hyperlink
     $comments = preg_replace("/(<h3.*?>)(<a.*?>)(.*?)<\/a>(<\/h3>)/", "$1$3$4", $comments);
+    //Remove the comment author link
+    $comments = preg_replace("/(<span class=\"submitted\">)(.*?)<a.*?>(.*?)<\/a>(<\/span>)/sim", "$1$2$3$4", $comments);
     //Remove the comment links
     $comments = preg_replace("/\s*<div class=\"links\">.*?<\/div>/sim", "", $comments);
     if ($cid != NULL) {
