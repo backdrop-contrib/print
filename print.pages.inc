@@ -17,7 +17,7 @@ function print_controller() {
   // Remove the print/ prefix
   $args = substr($_GET['q'], strpos($_GET['q'], '/')+1);
 
-  $cid = $_GET['comment'];
+  if (isset($_GET['comment'])) $cid = $_GET['comment'];
 
   $nid = $args;
   if (!is_numeric($nid)) {
@@ -140,9 +140,11 @@ function _print_var_generator($node, $cid = NULL) {
     $print["source_url"] = "";
   }
 
+  $nodetype = isset($node->type) ? $node->type : '';
+
   $print["site_name"] = variable_get('site_name', 0) ? ($themed['published'] ." ". variable_get('site_name', 0) ." (". l($base_url, $base_url) .")") : "";
-  $print["submitted"] = theme_get_setting("toggle_node_info_$node->type") ? $themed['by'] ." ". ($node->name ? $node->name : variable_get('anonymous', t('Anonymous'))) : "";
-  $print["created"] = theme_get_setting("toggle_node_info_$node->type") ? $themed['created'] ." ". format_date($node->created, 'small') : "";
+  $print["submitted"] = theme_get_setting("toggle_node_info_$nodetype") ? $themed['by'] ." ". ($node->name ? $node->name : variable_get('anonymous', t('Anonymous'))) : "";
+  $print["created"] = theme_get_setting("toggle_node_info_$nodetype") ? $themed['created'] ." ". format_date($node->created, 'small') : "";
   $print["footer_message"] = filter_xss_admin(variable_get('site_footer', FALSE)) ."\n". theme('blocks', 'footer') ;
 
   menu_set_active_item($path);
@@ -174,7 +176,7 @@ function _print_var_generator($node, $cid = NULL) {
     $print["taxonomy"] = theme('links', $terms);
   }
 
-  $print["type"] = $node->type;
+  $print["type"] = $nodetype;
   $print["content"] = $node->body;
 
   return $print;
@@ -261,7 +263,7 @@ function _print_rewrite_urls($matches) {
   $ret = '<'. $matches[1] .'>';
   if (count($matches) == 4) {
     $ret .= $matches[2] . $matches[3];
-    if (($pfurls) && ($newurl)) {
+    if (($pfurls) && (isset($newurl))) {
       $ret .= ' <span class="print-footnote">['. _print_friendly_urls(trim(stripslashes($newurl))) .']</span>';
     }
   }
@@ -374,7 +376,7 @@ function _print_generate_node($nid, $cid = NULL) {
     //Remove the comment author link
     $comments = preg_replace("/(<span class=\"submitted\">)(.*?)<a.*?>(.*?)<\/a>(<\/span>)/sim", "$1$2$3$4", $comments);
     //Remove the comment links
-    $comments = preg_replace("/\s*<div class=\"links\">.*?<\/div>/sim", "", $comments);
+    $comments = preg_replace("/\s*<ul class=\"links\">.*?<\/ul>/sim", "", $comments);
     if ($cid != NULL) {
       // Single comment requested, output only the comment
       unset($node->body);

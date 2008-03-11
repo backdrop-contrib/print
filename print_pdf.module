@@ -64,8 +64,9 @@ function print_pdf_link($type, $node = NULL, $teaser = FALSE) {
   static $print_pdf_display_comment = FALSE;
 
   if ($print_pdf_display == FALSE) {
-    $print_pdf_display_comment = variable_get('print_pdf_display_comment_'. $node->type, '0');
-    $print_pdf_display = variable_get('print_pdf_display_'. $node->type, '1');
+    $nodetype = isset($node->type) ? $node->type : '';
+    $print_pdf_display_comment = variable_get('print_pdf_display_comment_'.$nodetype, '0');
+    $print_pdf_display = variable_get('print_pdf_display_'.$nodetype, '1');
   }
 
   $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());

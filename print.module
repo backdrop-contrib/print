@@ -123,7 +123,7 @@ function print_link($type, $node = NULL, $teaser = FALSE) {
 
   $print_html_settings = variable_get('print_html_settings', print_html_settings_default());
   // No link is shown for several motives...
-  if ( !($teaser) && ($node->type != 'book') && (!$node->book) &&
+  if ( !($teaser) && (isset($node->type) && ($node->type != 'book')) && (!isset($node->book)) &&
       ($print_html_settings['show_link']) && user_access('access print') &&
       (($type == 'comment' && $print_display_comment) ||
       ($type == 'node' && $print_display))) {
