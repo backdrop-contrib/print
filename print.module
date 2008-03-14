@@ -228,6 +228,9 @@ function _print_format_link_aux($type = 0, $text = '', $img = '', $title = '', $
   case 2:
     $attributes['onclick'] = 'window.open(this.href); return false';
     break;
+  case 3:
+    $attributes['class'] .= " greybox";
+    break;
   }
   if (!empty($robots_settings['nofollow'])) {
     $attributes['rel'] = 'nofollow';
