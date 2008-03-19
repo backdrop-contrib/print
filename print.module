@@ -117,8 +117,9 @@ function print_link($type, $node = NULL, $teaser = FALSE) {
   static $print_display_comment = FALSE;
 
   if ($print_display == FALSE) {
-    $print_display_comment = variable_get('print_display_comment_'. $node->type, '0');
-    $print_display = variable_get('print_display_'. $node->type, '1');
+    $nodetype = isset($node->type) ? $node->type : '';
+    $print_display_comment = variable_get('print_display_comment_'. $nodetype, '0');
+    $print_display = variable_get('print_display_'. $nodetype, '1');
   }
 
   $print_html_settings = variable_get('print_html_settings', print_html_settings_default());

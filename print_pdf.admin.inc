@@ -48,7 +48,7 @@ function print_pdf_settings() {
   else {
     $form['print_pdf_settings'] = array(
       '#type' => 'markup',
-      '#value' => t("No PDF generation tool found! Please dowload a supported PHP PDF generation tool. Check this module's INSTALL.txt for more details."),
+      '#value' => '<p>'. t("No PDF generation tool found! Please dowload a supported PHP PDF generation tool. Check this module's INSTALL.txt for more details.") .'</p>',
     );
   }
 

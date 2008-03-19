@@ -17,7 +17,7 @@ function print_controller() {
   // Remove the print/ prefix
   $args = substr($_GET['q'], strpos($_GET['q'], '/')+1);
 
-  if (isset($_GET['comment'])) $cid = $_GET['comment'];
+  $cid = isset($_GET['comment']) ? $_GET['comment'] : NULL;
 
   $nid = $args;
   if (!is_numeric($nid)) {

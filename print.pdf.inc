@@ -4,6 +4,9 @@
 require_once(drupal_get_path('module', 'print') .'/print.pages.inc');
 
 function print_pdf_controller() {
+  // Remove the printpdf/ prefix
+  $args = substr($_GET['q'], strpos($_GET['q'], '/')+1);
+
   $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
 
   $print = print_controller();
