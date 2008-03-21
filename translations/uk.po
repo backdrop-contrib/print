@@ -1,32 +1,26 @@
 # $Id$
 #
-# LANGUAGE translation of Drupal (general)
+# Ukrainian translation of Drupal (general)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:
-#  print.admin.inc,v 1.3 2008/03/14 02:58:32 jcnventura
-#  print.module,v 1.31 2008/03/19 04:34:18 jcnventura
-#  print_pdf.admin.inc,v 1.3 2008/03/19 04:34:18 jcnventura
-#  print.pages.inc,v 1.5 2008/03/19 04:34:18 jcnventura
-#  print_pdf.module,v 1.6 2008/03/19 04:34:18 jcnventura
-#  print.info,v 1.3 2007/10/28 22:46:23 jcnventura
-#  print_pdf.info,v 1.2 2008/03/04 12:03:59 jcnventura
+#  print.module,v 1.15.2.5.2.26 2007/11/08 23:56:59 jcnventura
+#  print.info,v 1.1.2.2 2007/08/24 00:32:39 jcnventura
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "POT-Creation-Date: 2008-03-21 00:22+0100\n"
-"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
-"Last-Translator: NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2008-03-21 04:50+0100\n"
+"Last-Translator: Joao Ventura <joao@venturas.org>\n"
+"Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: print.admin.inc:21
 msgid "Logo URL"
-msgstr ""
+msgstr "URL емблеми"
 
 #: print.admin.inc:25
 msgid "An alternative logo to display on the printer-friendly version. If left empty, the current theme's logo is used."
@@ -34,7 +28,7 @@ msgstr ""
 
 #: print.admin.inc:30
 msgid "Stylesheet URL"
-msgstr ""
+msgstr "Шлях до файлу стилів"
 
 #: print.admin.inc:34
 msgid "The URL to your custom print cascading stylesheet, if any. When none is specified, the default module CSS file is used."
@@ -80,7 +74,8 @@ msgstr ""
 msgid "Setting this option will make the printer-friendly version open in a new window/tab."
 msgstr ""
 
-#: print.admin.inc:65 print.module:278
+#: print.admin.inc:65
+#: print.module:278
 msgid "Source URL"
 msgstr ""
 
@@ -110,29 +105,34 @@ msgstr ""
 
 #: print.admin.inc:108
 msgid "Printer-friendly page link"
-msgstr ""
+msgstr "Посилання 'версія для друку'"
 
-#: print.admin.inc:110 print_pdf.admin.inc:26
+#: print.admin.inc:110
+#: print_pdf.admin.inc:26
 msgid "None (Disabled)"
 msgstr ""
 
-#: print.admin.inc:110 print_pdf.admin.inc:26
+#: print.admin.inc:110
+#: print_pdf.admin.inc:26
 msgid "Text only"
 msgstr ""
 
-#: print.admin.inc:110 print_pdf.admin.inc:26
+#: print.admin.inc:110
+#: print_pdf.admin.inc:26
 msgid "Icon only"
 msgstr ""
 
-#: print.admin.inc:110 print_pdf.admin.inc:26
+#: print.admin.inc:110
+#: print_pdf.admin.inc:26
 msgid "Icon and Text"
 msgstr ""
 
 #: print.admin.inc:111
 msgid "Enable or disable the printer-friendly page link for each node. Even if the link is disabled, you can still view the print version of a node by going to print/nid where nid is the numeric id of the node."
-msgstr ""
+msgstr "Ввімкніть або вимкніть посилання 'версія для друку' для кожного з вузлів. Навіть якщо це посилання вимкнене, ви можете переглядати версію для друку, ввівши адресу виду 'print/nid', де nid - числовий ідентифікатор вузла."
 
-#: print.admin.inc:116 print_pdf.admin.inc:32
+#: print.admin.inc:116
+#: print_pdf.admin.inc:32
 msgid "Show link in system (non-content) pages"
 msgstr ""
 
@@ -158,11 +158,11 @@ msgstr ""
 
 #: print.admin.inc:142
 msgid "Robots META tags"
-msgstr ""
+msgstr "META теґи для роботів"
 
 #: print.admin.inc:150
 msgid "Add noindex"
-msgstr ""
+msgstr "Додати noindex"
 
 #: print.admin.inc:153
 msgid "Instruct robots to not index printer-friendly pages. Recommended for good search engine karma."
@@ -170,27 +170,27 @@ msgstr ""
 
 #: print.admin.inc:158
 msgid "Add nofollow"
-msgstr ""
+msgstr "Додати nofollow"
 
 #: print.admin.inc:161
 msgid "Instruct robots to not follow outgoing links on printer-friendly pages."
-msgstr ""
+msgstr "Вказати роботам не слідувати за зовнішніми посиланнями на сторінках із версіями для друку"
 
 #: print.admin.inc:166
 msgid "Add noarchive"
-msgstr ""
+msgstr "Додати noarchive"
 
 #: print.admin.inc:169
 msgid "Non-standard tag to instruct search engines to not show a \"Cached\" link for your printer-friendly pages. Recognized by Googlebot."
-msgstr ""
+msgstr "Нестандартний теґ, що вказує пошуковим машинам не показувати посилання 'Cached' для сторінки з версіями для друку з цього сайту. Розпізнається роботом Googlebot."
 
 #: print.admin.inc:174
 msgid "Add nocache"
-msgstr ""
+msgstr "Додати nocache"
 
 #: print.admin.inc:177
 msgid "Non-standard tag to instruct search engines to not show a \"Cached\" link for your printer-friendly pages"
-msgstr ""
+msgstr "Нестандартний теґ, що вказує пошуковим машинам не показувати посилання 'Cached' для сторінки з версіями для друку з цього сайту. "
 
 #: print.pages.inc:146
 msgid "Anonymous"
@@ -236,7 +236,8 @@ msgstr ""
 msgid "Displays the link to a printer-friendly version of the content. Further configuration is available on the !settings."
 msgstr ""
 
-#: print.module:202;209 print_pdf.module:130;137
+#: print.module:202;209
+#: print_pdf.module:130;137
 msgid "settings page"
 msgstr ""
 
@@ -250,11 +251,11 @@ msgstr ""
 
 #: print.module:265
 msgid "Printer-friendly version"
-msgstr ""
+msgstr "версія для друку"
 
 #: print.module:267
 msgid "Display a printer-friendly version of this page."
-msgstr ""
+msgstr "Вивести версію для друку цієї сторінки."
 
 #: print.module:277
 msgid "retrieved on"
@@ -286,9 +287,10 @@ msgstr ""
 
 #: print.module:80;87
 msgid "Printer-friendly"
-msgstr ""
+msgstr "версія для друку"
 
-#: print.module:88 print.info:0
+#: print.module:88
+#: print.info:0
 msgid "Adds a printer-friendly version link to node pages."
 msgstr ""
 
@@ -302,7 +304,7 @@ msgstr ""
 
 #: print.module:0
 msgid "print"
-msgstr ""
+msgstr "друк"
 
 #: print_pdf.module:127
 msgid "Show PDF version link"

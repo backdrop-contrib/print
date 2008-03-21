@@ -1,28 +1,22 @@
 # $Id$
 #
-# LANGUAGE translation of Drupal (general)
+# Italian translation of Drupal (general)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:
-#  print.admin.inc,v 1.3 2008/03/14 02:58:32 jcnventura
-#  print.module,v 1.31 2008/03/19 04:34:18 jcnventura
-#  print_pdf.admin.inc,v 1.3 2008/03/19 04:34:18 jcnventura
-#  print.pages.inc,v 1.5 2008/03/19 04:34:18 jcnventura
-#  print_pdf.module,v 1.6 2008/03/19 04:34:18 jcnventura
-#  print.info,v 1.3 2007/10/28 22:46:23 jcnventura
-#  print_pdf.info,v 1.2 2008/03/04 12:03:59 jcnventura
+#  print.module,v 1.15.2.5.2.26 2007/11/08 23:56:59 jcnventura
+#  print.info,v 1.1.2.2 2007/08/24 00:32:39 jcnventura
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "POT-Creation-Date: 2008-03-21 00:22+0100\n"
-"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
-"Last-Translator: NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2008-03-21 04:26+0100\n"
+"Last-Translator: Joao Ventura <joao@venturas.org>\n"
+"Language-Team: ITALIAN <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: print.admin.inc:21
 msgid "Logo URL"
@@ -34,7 +28,7 @@ msgstr ""
 
 #: print.admin.inc:30
 msgid "Stylesheet URL"
-msgstr ""
+msgstr "URL della pagina di stile"
 
 #: print.admin.inc:34
 msgid "The URL to your custom print cascading stylesheet, if any. When none is specified, the default module CSS file is used."
@@ -62,7 +56,7 @@ msgstr ""
 
 #: print.admin.inc:56
 msgid "Disabled"
-msgstr ""
+msgstr "Disabilitato"
 
 #: print.admin.inc:56
 msgid "Use HTML target (does not validate as XHTML Strict)"
@@ -80,9 +74,10 @@ msgstr ""
 msgid "Setting this option will make the printer-friendly version open in a new window/tab."
 msgstr ""
 
-#: print.admin.inc:65 print.module:278
+#: print.admin.inc:65
+#: print.module:278
 msgid "Source URL"
-msgstr ""
+msgstr "URL originale"
 
 #: print.admin.inc:73
 msgid "Display source URL"
@@ -110,29 +105,34 @@ msgstr ""
 
 #: print.admin.inc:108
 msgid "Printer-friendly page link"
-msgstr ""
+msgstr "Collegamento alla pagina adatta alla stampa"
 
-#: print.admin.inc:110 print_pdf.admin.inc:26
+#: print.admin.inc:110
+#: print_pdf.admin.inc:26
 msgid "None (Disabled)"
 msgstr ""
 
-#: print.admin.inc:110 print_pdf.admin.inc:26
+#: print.admin.inc:110
+#: print_pdf.admin.inc:26
 msgid "Text only"
 msgstr ""
 
-#: print.admin.inc:110 print_pdf.admin.inc:26
+#: print.admin.inc:110
+#: print_pdf.admin.inc:26
 msgid "Icon only"
 msgstr ""
 
-#: print.admin.inc:110 print_pdf.admin.inc:26
+#: print.admin.inc:110
+#: print_pdf.admin.inc:26
 msgid "Icon and Text"
 msgstr ""
 
 #: print.admin.inc:111
 msgid "Enable or disable the printer-friendly page link for each node. Even if the link is disabled, you can still view the print version of a node by going to print/nid where nid is the numeric id of the node."
-msgstr ""
+msgstr "Abilita o disabilitia il collegamento alla 'versione adatta alla stampa' per ogni pagina. Anche se il collegamento è disabilitato, è sempre possibile visualizzare una pagina adattta alla stampa andando su 'print/nid/' dove nid è l'id numerico della pagina."
 
-#: print.admin.inc:116 print_pdf.admin.inc:32
+#: print.admin.inc:116
+#: print_pdf.admin.inc:32
 msgid "Show link in system (non-content) pages"
 msgstr ""
 
@@ -236,7 +236,8 @@ msgstr ""
 msgid "Displays the link to a printer-friendly version of the content. Further configuration is available on the !settings."
 msgstr ""
 
-#: print.module:202;209 print_pdf.module:130;137
+#: print.module:202;209
+#: print_pdf.module:130;137
 msgid "settings page"
 msgstr ""
 
@@ -250,11 +251,11 @@ msgstr ""
 
 #: print.module:265
 msgid "Printer-friendly version"
-msgstr ""
+msgstr "Versione adatta alla stampa"
 
 #: print.module:267
 msgid "Display a printer-friendly version of this page."
-msgstr ""
+msgstr "Visualizza una versione della pagina adatta alla stampa."
 
 #: print.module:277
 msgid "retrieved on"
@@ -262,19 +263,19 @@ msgstr ""
 
 #: print.module:279
 msgid "Published on"
-msgstr ""
+msgstr "Pubblicato su"
 
 #: print.module:280
 msgid "By"
-msgstr ""
+msgstr "Di"
 
 #: print.module:281
 msgid "Created"
-msgstr ""
+msgstr "Creato il"
 
 #: print.module:282
 msgid "Links:"
-msgstr ""
+msgstr "Collegamenti:"
 
 #: print.module:56
 msgid "access print"
@@ -286,9 +287,10 @@ msgstr ""
 
 #: print.module:80;87
 msgid "Printer-friendly"
-msgstr ""
+msgstr "Adatta alla stampa"
 
-#: print.module:88 print.info:0
+#: print.module:88
+#: print.info:0
 msgid "Adds a printer-friendly version link to node pages."
 msgstr ""
 
@@ -302,7 +304,7 @@ msgstr ""
 
 #: print.module:0
 msgid "print"
-msgstr ""
+msgstr "stampa"
 
 #: print_pdf.module:127
 msgid "Show PDF version link"
@@ -351,4 +353,7 @@ msgstr ""
 #: print_pdf.info:0
 msgid "Adds the capability to export pages as PDF."
 msgstr ""
+
+#~ msgid "Enabled"
+#~ msgstr "Abilitato"
 
