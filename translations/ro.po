@@ -9,18 +9,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ro\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-03-21 00:22+0100\n"
-"PO-Revision-Date: 2008-03-21 04:49+0100\n"
+"PO-Revision-Date: 2008-03-24 19:28+0100\n"
 "Last-Translator: Joao Ventura <joao@venturas.org>\n"
 "Language-Team: Romanian\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Launchpad-Export-Date: 2008-03-21 02:12+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 
 #: print.admin.inc:21
 msgid "Logo URL"
-msgstr ""
+msgstr "URL logo"
 
 #: print.admin.inc:25
 msgid "An alternative logo to display on the printer-friendly version. If left empty, the current theme's logo is used."
@@ -28,7 +30,7 @@ msgstr ""
 
 #: print.admin.inc:30
 msgid "Stylesheet URL"
-msgstr "URL pentru stylesheet"
+msgstr "URL stylesheet"
 
 #: print.admin.inc:34
 msgid "The URL to your custom print cascading stylesheet, if any. When none is specified, the default module CSS file is used."
@@ -230,7 +232,7 @@ msgstr ""
 
 #: print.module:199
 msgid "Show printer-friendly version link"
-msgstr ""
+msgstr "Arată link pentru versiunea gata de tipărire"
 
 #: print.module:202
 msgid "Displays the link to a printer-friendly version of the content. Further configuration is available on the !settings."
@@ -239,7 +241,7 @@ msgstr ""
 #: print.module:202;209
 #: print_pdf.module:130;137
 msgid "settings page"
-msgstr ""
+msgstr "pagina configurări"
 
 #: print.module:206
 msgid "Show printer-friendly version link in individual comments"
@@ -292,7 +294,7 @@ msgstr "aranjat pentru tipărire"
 #: print.module:88
 #: print.info:0
 msgid "Adds a printer-friendly version link to node pages."
-msgstr ""
+msgstr "Adaugă un link către versiunea gata de tipărire în pagină"
 
 #: print.module:95
 msgid "Web page"
