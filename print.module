@@ -232,6 +232,9 @@ function _print_format_link_aux($type = 0, $text = '', $img = '', $title = '', $
   case 3:
     $attributes['class'] .= ' '. variable_get('greybox_class_text', 'greybox');
     break;
+  case 4:
+    $attributes['class'] .= ' thickbox';
+    break;
   }
   if (!empty($robots_settings['nofollow'])) {
     $attributes['rel'] = 'nofollow';

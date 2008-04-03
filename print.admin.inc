@@ -53,7 +53,7 @@ function print_main_settings() {
   $form['print_settings']['newwindow'] = array(
     '#type' => 'radios',
     '#title' => t('Open the printer-friendly version in a new window'),
-    '#options' => array(t("Disabled"), t("Use HTML target (does not validate as XHTML Strict)"), t("Use Javascript (requires browser support)"), t("Use Greybox Redux (requires the greybox module)")),
+    '#options' => array(t("Disabled"), t("Use HTML target (does not validate as XHTML Strict)"), t("Use Javascript (requires browser support)"), t("Use Greybox Redux (requires the greybox module)"), t("Use Thickbox (requires the thickbox module)")),
     '#default_value' => $print_settings['newwindow'],
     '#description' => t('Setting this option will make the printer-friendly version open in a new window/tab.'),
   );
