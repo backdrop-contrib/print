@@ -340,6 +340,7 @@ function _print_generate_node($nid, $cid = NULL) {
     // Access is denied
     return drupal_access_denied();
   }
+  drupal_set_title($node->title);
 
   //alert other modules that we are generating a printer-friendly page, so they can choose to show/hide info
   $node->printing = true;
