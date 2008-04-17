@@ -1,375 +1,365 @@
-# Turkish translation for drupalprint
-# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
-# This file is distributed under the same license as the drupalprint package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  print.admin.inc,v 1.3 2008/03/14 02:58:32 jcnventura
+#  print.module,v 1.31 2008/03/19 04:34:18 jcnventura
+#  print_pdf.admin.inc,v 1.3 2008/03/19 04:34:18 jcnventura
+#  print.pages.inc,v 1.5 2008/03/19 04:34:18 jcnventura
+#  print_pdf.module,v 1.6 2008/03/19 04:34:18 jcnventura
+#  print.info,v 1.3 2007/10/28 22:46:23 jcnventura
+#  print_pdf.info,v 1.2 2008/03/04 12:03:59 jcnventura
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: drupalprint\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"Project-Id-Version: print.module\n"
 "POT-Creation-Date: 2008-04-14 02:01+0200\n"
 "PO-Revision-Date: 2008-04-14 02:11+0100\n"
 "Last-Translator: \n"
-"Language-Team: Turkish <tr@li.org>\n"
+"Language-Team:  <drupal@kula.waw.pl>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-04-01 22:24+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Poedit-Language: Polish\n"
+"X-Poedit-Country: POLAND\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: print.admin.inc:21
 msgid "Logo URL"
-msgstr "Logo adresi"
+msgstr "Adres loga"
 
 #: print.admin.inc:25
 msgid "An alternative logo to display on the printer-friendly version. If left empty, the current theme's logo is used."
-msgstr "Yazıcı için ayrı logo kullanabilirsiniz. Boş bırakırsanız ön tanımlı logo kullanılır."
+msgstr "Alternatywne logo wyświetlane na stronach do wydruku. Jeśli pozostawisz puste, zostanie użyte aktualne logo skórki."
 
 #: print.admin.inc:30
 msgid "Stylesheet URL"
-msgstr "Stylesheet adresi"
+msgstr "Adres stylu CSS"
 
 #: print.admin.inc:34
 msgid "The URL to your custom print cascading stylesheet, if any. When none is specified, the default module CSS file is used."
-msgstr ""
+msgstr "Plik CSS do stylizowania wersji do wydruku. Jeśli nie zostanie ustawiony, zostanie użyty domyślny plik CSS."
 
 #: print.admin.inc:39
 msgid "Printer-friendly URLs list"
-msgstr "Bağlantıları yazıcıya uygun görüntüle"
+msgstr "Lista odnośników"
 
 #: print.admin.inc:42
 msgid "If set, a list of the destination URLs for the page links will be displayed at the bottom of the page."
-msgstr "Etkinleştirirseniz bağlantılar yazıcı dostu sayfanın altında özet biçimde görüntülenir."
+msgstr "Jeśli włączone, na dole wersji do wydruku zostaje wyświetlona lista odnośników zawartych w treści."
 
 #: print.admin.inc:47
 msgid "Include comments in printer-friendly version"
-msgstr "Yorumlarıda yazdır"
+msgstr "Wyświetl komentarze w wersji do wydruku"
 
 #: print.admin.inc:50
 msgid "When this option is active, user comments are also included in the printer-friendly version. Requires the comment module."
-msgstr ""
+msgstr "Aktywacja tej opcji spowoduje dodanie do wersji do wydruku również komentarze. Wymagany moduł comment."
 
 #: print.admin.inc:55
-#, fuzzy
 msgid "Open the printer-friendly version in a new window"
-msgstr "Yazıcı dastu sayfayı yeni pencerede aç"
+msgstr "Otwórz wersję do wydruku w nowym oknie"
 
 #: print.admin.inc:56
 msgid "Disabled"
-msgstr "Devre Dışı bırak"
+msgstr "Wyłączone"
 
 #: print.admin.inc:56
-#, fuzzy
 msgid "Use HTML target (does not validate as XHTML Strict)"
-msgstr "HTML \\\"target\\\" uzantısını kullan (Uyarı: XHTML 1.0 Strict için uydun değil)"
+msgstr "Za pomocą HTML'a (niezgodne ze standardem XHTML Strict)"
 
 #: print.admin.inc:56
-#, fuzzy
 msgid "Use Javascript (requires browser support)"
-msgstr "Javascript kullan (tarayıcıda Javascript etkin olması gerekir)"
+msgstr "Za pomocą Javascript (wymagane wsparcie przeglądarki)"
 
 #: print.admin.inc:56
-#, fuzzy
 msgid "Use Greybox Redux (requires the greybox module)"
-msgstr "Greybox Redux kullan (greybox eklentisi gerekli)"
+msgstr "Za pomocą GreyboxRedux (wymagany moduł greybox)"
 
 #: print.admin.inc:56
-#, fuzzy
 msgid "Use Thickbox (requires the thickbox module)"
-msgstr "Thickbox kullan (thickbox eklentisi gerekli)"
+msgstr "Za pomocą Thickbox (wymagany moduł thickbox)"
 
 #: print.admin.inc:58
 msgid "Setting this option will make the printer-friendly version open in a new window/tab."
-msgstr ""
+msgstr "Ustawienie tej opcji spowoduje otwieranie wersji do wydruku w nowym oknie/karcie."
 
 #: print.admin.inc:65
 #: print.module:281
 msgid "Source URL"
-msgstr "Kaynak adres"
+msgstr "Adres źródła"
 
 #: print.admin.inc:73
 msgid "Display source URL"
-msgstr "Kaynak adresi görüntüle"
+msgstr "Wyświetl odnośnik do źródła"
 
 #: print.admin.inc:76
 msgid "When this option is selected, the URL for the original page will be displayed at the bottom of the printer-friendly version."
-msgstr ""
+msgstr "Odnośnik do oryginalnej strony zostaje dodany na dole wersji do wydruku."
 
 #: print.admin.inc:81
 msgid "Add current time/date to the source URL"
-msgstr "Kaynak adrese tarih/zaman ekle"
+msgstr "Dodaj aktualną datę i czas do odnośnika źródła"
 
 #: print.admin.inc:84
 msgid "Display the current date and time in the Source URL line."
-msgstr "Kaynak adresin yanına tarih ve zaman ekler"
+msgstr "Wyświetl aktualną datę i czas przy odnośniku do źródła."
 
 #: print.admin.inc:89
 msgid "Force use of node ID in source URL"
-msgstr ""
+msgstr "Wymuś użycie ID treści w odnośniku do źródła"
 
 #: print.admin.inc:92
 msgid "Drupal will attempt to use the page's defined alias in case there is one. To force the use of the fixed URL, activate this option."
-msgstr ""
+msgstr "Drupal domyślnie używa aliasów adresów treści. Aby wymusić używanie przy wersji do wydruku oryginalnych adresów treści, aktywuj tą opcję."
 
 #: print.admin.inc:108
 msgid "Printer-friendly page link"
-msgstr "Yazdır bağlantısını göster"
+msgstr "Odnośnik do wersji do wydruku"
 
 #: print.admin.inc:110
 #: print_pdf.admin.inc:26
 msgid "None (Disabled)"
-msgstr ""
+msgstr "Wyłączone"
 
 #: print.admin.inc:110
 #: print_pdf.admin.inc:26
 msgid "Text only"
-msgstr ""
+msgstr "Tylko tekst"
 
 #: print.admin.inc:110
 #: print_pdf.admin.inc:26
 msgid "Icon only"
-msgstr ""
+msgstr "Tylko ikona"
 
 #: print.admin.inc:110
 #: print_pdf.admin.inc:26
 msgid "Icon and Text"
-msgstr ""
+msgstr "Ikona i tekst"
 
 #: print.admin.inc:111
 msgid "Enable or disable the printer-friendly page link for each node. Even if the link is disabled, you can still view the print version of a node by going to print/nid where nid is the numeric id of the node."
-msgstr ""
+msgstr "Włączenie lub wyłączenie odnośnika do wersji do wydruku dla wszystkich treści. Jeśli odnośnik jest wyłączony, możesz wciąż otworzyć wersję do wydruku bezpośrednio przez print/nid, gdzie nid jest identyfikatorem treści."
 
 #: print.admin.inc:116
 #: print_pdf.admin.inc:32
-#, fuzzy
 msgid "Show link in system (non-content) pages"
-msgstr "Yazdır bağlantısını yönetici sayfalarında göster"
+msgstr "Pokaż odnośnik na stronach systemowych"
 
 #: print.admin.inc:119
 msgid "Setting this option will add a printer-friendly version page link on pages created by Drupal or the enabled modules."
-msgstr ""
+msgstr "Aktywowanie tej opcji spowoduje dodanie odnośnika do wersji do wydruku na stronach utworzonych przez Drupala oraz włączone moduły."
 
 #: print.admin.inc:124
 msgid "Take control of the book module printer-friendly link"
-msgstr "Kitap Eklentisi içinde kullan"
+msgstr "Zachowaj kontrolę nad odnośnikami do wersji do wydruku modułu książka"
 
 #: print.admin.inc:127
 msgid "Activate this to have the printer-friendly link in book nodes handled by this module. Requires the (core) book module."
-msgstr ""
+msgstr "Aktywacja tej opcji spowoduje dodanie odnośników do wersji do wydruku na stronach ksiązki. Wymagany moduł książki."
 
 #: print.admin.inc:132
 msgid "Send to printer"
-msgstr "Yazıcıya gönder"
+msgstr "Wyślij do drukarki"
 
 #: print.admin.inc:135
 msgid "Automatically calls the browser's print function when the printer-friendly version is displayed."
-msgstr ""
+msgstr "Automatyczne odwołanie do funkcji drukowania w przeglądarce, w momencie otwarcia strony do wydruku."
 
 #: print.admin.inc:142
-#, fuzzy
 msgid "Robots META tags"
-msgstr "Robots META tags"
+msgstr "META tagi robotów"
 
 #: print.admin.inc:150
-#, fuzzy
 msgid "Add noindex"
-msgstr "noindex ekle"
+msgstr "Dodaj noindex"
 
 #: print.admin.inc:153
 msgid "Instruct robots to not index printer-friendly pages. Recommended for good search engine karma."
-msgstr ""
+msgstr "Poinstruuje roboty aby nie indeksowały wersji do wydruku. Zalezane dla dobrych wyników wyszukiwania w przeglądarkach."
 
 #: print.admin.inc:158
 msgid "Add nofollow"
-msgstr "nofollow ekle"
+msgstr "Dodaj nofollow"
 
 #: print.admin.inc:161
 msgid "Instruct robots to not follow outgoing links on printer-friendly pages."
-msgstr ""
+msgstr "Poinstruuje roboty aby nie podążały za odnośnikiem do wersji do wydruku"
 
 #: print.admin.inc:166
-#, fuzzy
 msgid "Add noarchive"
-msgstr "noarchive ekle"
+msgstr "Dodaj noarchive"
 
 #: print.admin.inc:169
 msgid "Non-standard tag to instruct search engines to not show a \"Cached\" link for your printer-friendly pages. Recognized by Googlebot."
-msgstr ""
+msgstr "Niestandardowy tag, który poinstruuje roboty wyszukiwarek aby nie pokazywały odnośnika do kopii wersji do wydruku. Uznawane przez Googlebot."
 
 #: print.admin.inc:174
-#, fuzzy
 msgid "Add nocache"
-msgstr "nocache ekle"
+msgstr "Dodaj nocache"
 
 #: print.admin.inc:177
 msgid "Non-standard tag to instruct search engines to not show a \"Cached\" link for your printer-friendly pages"
-msgstr ""
+msgstr "Niestandardowy tag, który poinstruuje roboty wyszukiwarek aby nie pokazywały odnośnika do kopii wersji do wydruku."
 
 #: print.pages.inc:146
 msgid "Anonymous"
-msgstr "Misafir"
+msgstr "Anonim"
 
 #: print_pdf.admin.inc:24
 msgid "PDF version link"
-msgstr ""
+msgstr "Odnośnik do wersji PDF"
 
 #: print_pdf.admin.inc:27
 msgid "Enable or disable the PDF version link for each node. Even if the link is disabled, you can still view the PDF version of a node by going to printpdf/nid where nid is the numeric id of the node."
-msgstr ""
+msgstr "Włączenie lub wyłączenie odnośnika do wersji PDF wszystkich treści. Jeśli odnośnik jest wyłączony, możesz wciąż otworzyć wersję PDF bezpośrednio przez printpdf/nid, gdzie nid jest identyfikatorem treści."
 
 #: print_pdf.admin.inc:35
 msgid "Setting this option will add a PDF version page link on pages created by Drupal or the enabled modules."
-msgstr ""
+msgstr "Aktywowanie tej opcji spowoduje dodanie odnośnika do wersji PDF na stronach utworzonych przez Drupala oraz włączone moduły."
 
 #: print_pdf.admin.inc:40
 msgid "Show link in book nodes"
-msgstr ""
+msgstr "Pokaż odnośnik na stonach książki"
 
 #: print_pdf.admin.inc:43
 msgid "Activate this to add a PDF version link in book nodes. Requires the (core) book module."
-msgstr ""
+msgstr "Aktywacja tej opcji spowoduje dodanie odnośników do wersji PDF na stronach ksiązki. Wymagany moduł książki."
 
 #: print_pdf.admin.inc:51
 msgid "No PDF generation tool found! Please dowload a supported PHP PDF generation tool. Check this module's INSTALL.txt for more details."
-msgstr ""
+msgstr "Nie znaleziono żadnego narzędzia do generowania PDF. Zainstaluj narzędzie do generowania PDF wspierane przez ten moduł. Więcej szczegółów znajdziesz w pliku INSTALL.txt."
 
 #: print_pdf.admin.inc:78
 msgid "PDF generation tool"
-msgstr ""
+msgstr "Narzędzie do generowania PDF"
 
 #: print_pdf.admin.inc:81
 msgid "This option selects the PDF generation tool being used by this module to create the PDF version."
-msgstr ""
+msgstr "Dzięki tej opcji wybierzesz narzędzie, które posłuży do generowania PDF."
 
 #: print.module:199
 msgid "Show printer-friendly version link"
-msgstr "Yazdır bağlantısı göster"
+msgstr "Pokaż odnośnik do wersji do wydruku"
 
 #: print.module:202
-#, fuzzy
 msgid "Displays the link to a printer-friendly version of the content. Further configuration is available on the !settings."
-msgstr "İçerik için yazıcı dostu sayfa gösterir. Ayar bölümünde Eklentiyi istediğiniz gibi şekillendirebilrsiniz"
+msgstr "Wyświetla odnośnik do wersji do wydruku zawartości. Konfiguracja dostępna na !settings."
 
 #: print.module:202;209
 #: print_pdf.module:130;137
 msgid "settings page"
-msgstr "ayar sayfası"
+msgstr "stronie konfiguracji"
 
 #: print.module:206
 msgid "Show printer-friendly version link in individual comments"
-msgstr ""
+msgstr "Pokaż wersję do wydruku dla każdego komentarza"
 
 #: print.module:209
 msgid "Displays the link to a printer-friendly version of the comment. Further configuration is available on the !settings."
-msgstr ""
+msgstr "Wyświetla wersję do wydruku komentarza. Dodatkowa konfiguracja dostępna jest w !settings."
 
 #: print.module:268
 msgid "Printer-friendly version"
-msgstr ""
+msgstr "Wersja do wydruku"
 
 #: print.module:270
 msgid "Display a printer-friendly version of this page."
-msgstr ""
+msgstr "Wyświetl wersję do wydruku tej strony."
 
 #: print.module:280
 msgid "retrieved on"
-msgstr "basım tarihi"
+msgstr "wygenerowane"
 
 #: print.module:282
 msgid "Published on"
-msgstr "Yayın adresi"
+msgstr "Opublikowane na"
 
 #: print.module:283
 msgid "By"
-msgstr "Yazar"
+msgstr "Przez"
 
 #: print.module:284
 msgid "Created"
-msgstr "Oluşturulma"
+msgstr "Utworzone"
 
 #: print.module:285
 msgid "Links:"
-msgstr "Bağlantı"
+msgstr "Odnośniki:"
 
 #: print.module:56
 msgid "access print"
-msgstr "erişim print"
+msgstr "dostęp do wydruku"
 
 #: print.module:56
 msgid "administer print"
-msgstr "yönet print"
+msgstr "zarządzaj wydrukiem"
 
 #: print.module:80;87
 msgid "Printer-friendly"
-msgstr "Yazdır"
+msgstr "Wersja do wydruku"
 
 #: print.module:88
 #: print.info:0
-#, fuzzy
 msgid "Adds a printer-friendly version link to node pages."
-msgstr "Yazdır bağlantısı node sayfalarında göster"
+msgstr "Dodaje odnośnik do wersji do wydruku do stron treści."
 
 #: print.module:95
 msgid "Web page"
-msgstr ""
+msgstr "Strona do wydruku"
 
 #: print.module:100
 msgid "Settings"
-msgstr ""
+msgstr "Ustawienia"
 
 #: print.module:0
 msgid "print"
-msgstr "yazdır"
+msgstr "drukuj"
 
 #: print_pdf.module:127
 msgid "Show PDF version link"
-msgstr ""
+msgstr "Pokaż link do wersji PDF"
 
 #: print_pdf.module:130
 msgid "Displays the link to a PDF version of the content. Further configuration is available on the !settings."
-msgstr ""
+msgstr "Wyświetla odnośnik do wersji PDF zawartości. Konfiguracja dostępna na !settings."
 
 #: print_pdf.module:134
 msgid "Show PDF version link in individual comments"
-msgstr ""
+msgstr "Pokaż wersję PDF dla każdego komentarza"
 
 #: print_pdf.module:137
 msgid "Displays the link to a PDF version of the comment. Further configuration is available on the !settings."
-msgstr ""
+msgstr "Wyświetla odnośnik do wersji PDF komentarza. Konfiguracja dostępna na !settings."
 
 #: print_pdf.module:146
 msgid "PDF version"
-msgstr ""
+msgstr "Wersja PDF"
 
 #: print_pdf.module:148
 msgid "Display a PDF version of this page."
-msgstr ""
+msgstr "Wyświetl wersję PDF tej strony."
 
 #: print_pdf.module:40
 msgid "Printer-friendly PDF"
-msgstr ""
+msgstr "Wersja PDF"
 
 #: print_pdf.module:47
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #: print_pdf.module:0
 msgid "print_pdf"
-msgstr ""
+msgstr "print_pdf"
 
 #: print.info:0
-#, fuzzy
 msgid "Printer-friendly pages"
-msgstr "Yazıcı dostu sayfalar"
+msgstr "Wersje do wydruku"
 
 #: print_pdf.info:0
 msgid "Printer-friendly pages as PDF"
-msgstr ""
+msgstr "Wersja do wydruku jako PDF"
 
 #: print_pdf.info:0
 msgid "Adds the capability to export pages as PDF."
-msgstr ""
-
-#~ msgid "Enabled"
-#~ msgstr "Etkin"
+msgstr "Dodaje możliwość eksportu stron jako PDF."
 

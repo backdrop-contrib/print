@@ -9,9 +9,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Drupal print-5.x-2.2\n"
-"POT-Creation-Date: 2008-03-21 00:22+0100\n"
-"PO-Revision-Date: 2008-03-21 04:26+0100\n"
-"Last-Translator: Joao Ventura <joao@venturas.org>\n"
+"POT-Creation-Date: 2008-04-14 02:01+0200\n"
+"PO-Revision-Date: 2008-04-14 02:15+0100\n"
+"Last-Translator: \n"
 "Language-Team: CSEPPEK.hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -72,12 +72,16 @@ msgstr "Javascript kód használata. A böngészőnek támogatnia kell ezt a fun
 msgid "Use Greybox Redux (requires the greybox module)"
 msgstr ""
 
+#: print.admin.inc:56
+msgid "Use Thickbox (requires the thickbox module)"
+msgstr ""
+
 #: print.admin.inc:58
 msgid "Setting this option will make the printer-friendly version open in a new window/tab."
 msgstr "Nyomtatóbarát változat megjelenítése új ablakban."
 
 #: print.admin.inc:65
-#: print.module:278
+#: print.module:281
 msgid "Source URL"
 msgstr "Forráscím"
 
@@ -251,31 +255,31 @@ msgstr "A \"Nyomtatóbarát változat\" hivatkozás mutatása minden egyes hozz�
 msgid "Displays the link to a printer-friendly version of the comment. Further configuration is available on the !settings."
 msgstr "Megjeleníti a \"Nyomtatóbarát változat\" hivatkozást a hozzászólásoknál. További beállítások elérhetők a !settings oldalon."
 
-#: print.module:265
+#: print.module:268
 msgid "Printer-friendly version"
 msgstr "Nyomatatóbarát változat"
 
-#: print.module:267
+#: print.module:270
 msgid "Display a printer-friendly version of this page."
 msgstr "A \"Nyomtatóbarát változat\" hivatkozás mutatása ezen az oldalon."
 
-#: print.module:277
+#: print.module:280
 msgid "retrieved on"
 msgstr "letöltve"
 
-#: print.module:279
+#: print.module:282
 msgid "Published on"
 msgstr "Közzétéve"
 
-#: print.module:280
+#: print.module:283
 msgid "By"
 msgstr "Létrehozta"
 
-#: print.module:281
+#: print.module:284
 msgid "Created"
 msgstr "Létrehozva"
 
-#: print.module:282
+#: print.module:285
 msgid "Links:"
 msgstr "Linkek:"
 

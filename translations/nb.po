@@ -9,9 +9,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: print\n"
-"POT-Creation-Date: 2008-03-21 00:22+0100\n"
-"PO-Revision-Date: 2008-03-21 04:28+0100\n"
-"Last-Translator: Joao Ventura <joao@venturas.org>\n"
+"POT-Creation-Date: 2008-04-14 02:01+0200\n"
+"PO-Revision-Date: 2008-04-14 02:13+0100\n"
+"Last-Translator: \n"
 "Language-Team: THINEA Webteknologi <sten@thinea.no>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -73,12 +73,16 @@ msgstr "Benytt Javascript (krever nettleser støtte)"
 msgid "Use Greybox Redux (requires the greybox module)"
 msgstr ""
 
+#: print.admin.inc:56
+msgid "Use Thickbox (requires the thickbox module)"
+msgstr ""
+
 #: print.admin.inc:58
 msgid "Setting this option will make the printer-friendly version open in a new window/tab."
 msgstr "Slår du på denne innstillingen vil den utskriftsvennlige versjonen åpnes i et nytt vindu eller fanekort."
 
 #: print.admin.inc:65
-#: print.module:278
+#: print.module:281
 msgid "Source URL"
 msgstr "Kilde URL "
 
@@ -252,31 +256,31 @@ msgstr "Vis lenke til utskriftsvennlig versjon i individuelle kommentarer"
 msgid "Displays the link to a printer-friendly version of the comment. Further configuration is available on the !settings."
 msgstr "Viser en lenke til en utskriftsvennlig versjon av kommentaren. Flere innstillinger er tilgjengelig i !settings."
 
-#: print.module:265
+#: print.module:268
 msgid "Printer-friendly version"
 msgstr "Se utskriftsvennlig utgave"
 
-#: print.module:267
+#: print.module:270
 msgid "Display a printer-friendly version of this page."
 msgstr "Vis en utskriftsvennlig versjon av denne siden."
 
-#: print.module:277
+#: print.module:280
 msgid "retrieved on"
 msgstr "hentet"
 
-#: print.module:279
+#: print.module:282
 msgid "Published on"
 msgstr "Publisert på"
 
-#: print.module:280
+#: print.module:283
 msgid "By"
 msgstr "av"
 
-#: print.module:281
+#: print.module:284
 msgid "Created"
 msgstr "Laget"
 
-#: print.module:282
+#: print.module:285
 msgid "Links:"
 msgstr "Lenker:"
 

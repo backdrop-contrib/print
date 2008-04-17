@@ -3,19 +3,19 @@
 # LANGUAGE translation of Drupal (general)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:
-#  print.admin.inc,v 1.3 2008/03/14 02:58:32 jcnventura
-#  print.module,v 1.31 2008/03/19 04:34:18 jcnventura
-#  print_pdf.admin.inc,v 1.3 2008/03/19 04:34:18 jcnventura
-#  print.pages.inc,v 1.5 2008/03/19 04:34:18 jcnventura
-#  print_pdf.module,v 1.6 2008/03/19 04:34:18 jcnventura
+#  print.admin.inc,v 1.1.2.5 2008/04/03 13:57:51 jcnventura
+#  print.module,v 1.25.2.25 2008/04/03 13:57:51 jcnventura
+#  print_pdf.admin.inc,v 1.1.2.3 2008/03/31 14:03:46 jcnventura
+#  print.pages.inc,v 1.1.2.14 2008/04/03 13:57:51 jcnventura
+#  print_pdf.module,v 1.1.2.10 2008/03/31 14:03:46 jcnventura
 #  print.info,v 1.3 2007/10/28 22:46:23 jcnventura
-#  print_pdf.info,v 1.2 2008/03/04 12:03:59 jcnventura
+#  print_pdf.info,v 1.1.2.2 2008/02/27 23:26:27 jcnventura
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2008-03-21 00:22+0100\n"
+"POT-Creation-Date: 2008-04-14 02:01+0200\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -76,11 +76,15 @@ msgstr ""
 msgid "Use Greybox Redux (requires the greybox module)"
 msgstr ""
 
+#: print.admin.inc:56
+msgid "Use Thickbox (requires the thickbox module)"
+msgstr ""
+
 #: print.admin.inc:58
 msgid "Setting this option will make the printer-friendly version open in a new window/tab."
 msgstr ""
 
-#: print.admin.inc:65 print.module:278
+#: print.admin.inc:65 print.module:281
 msgid "Source URL"
 msgstr ""
 
@@ -248,31 +252,31 @@ msgstr ""
 msgid "Displays the link to a printer-friendly version of the comment. Further configuration is available on the !settings."
 msgstr ""
 
-#: print.module:265
+#: print.module:268
 msgid "Printer-friendly version"
 msgstr ""
 
-#: print.module:267
+#: print.module:270
 msgid "Display a printer-friendly version of this page."
 msgstr ""
 
-#: print.module:277
+#: print.module:280
 msgid "retrieved on"
 msgstr ""
 
-#: print.module:279
+#: print.module:282
 msgid "Published on"
 msgstr ""
 
-#: print.module:280
+#: print.module:283
 msgid "By"
 msgstr ""
 
-#: print.module:281
+#: print.module:284
 msgid "Created"
 msgstr ""
 
-#: print.module:282
+#: print.module:285
 msgid "Links:"
 msgstr ""
 

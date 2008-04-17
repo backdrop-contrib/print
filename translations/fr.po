@@ -9,9 +9,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: print.module\n"
-"POT-Creation-Date: 2008-03-21 00:22+0100\n"
-"PO-Revision-Date: 2008-03-21 04:23+0100\n"
-"Last-Translator: Joao Ventura <joao@venturas.org>\n"
+"POT-Creation-Date: 2008-04-14 02:01+0200\n"
+"PO-Revision-Date: 2008-04-17 11:34+0100\n"
+"Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -71,12 +71,16 @@ msgstr "Utilise Javascript (requiert le support par l'explorateur)"
 msgid "Use Greybox Redux (requires the greybox module)"
 msgstr ""
 
+#: print.admin.inc:56
+msgid "Use Thickbox (requires the thickbox module)"
+msgstr ""
+
 #: print.admin.inc:58
 msgid "Setting this option will make the printer-friendly version open in a new window/tab."
 msgstr "Activée, cette option ouvrira la version dans une nouvelle fenêtre/onglet."
 
 #: print.admin.inc:65
-#: print.module:278
+#: print.module:281
 msgid "Source URL"
 msgstr "URL source"
 
@@ -195,7 +199,7 @@ msgstr "Tag non-standard pour ordonner aux moteurs de recherche de ne pas montre
 
 #: print.pages.inc:146
 msgid "Anonymous"
-msgstr ""
+msgstr "Anonyme"
 
 #: print_pdf.admin.inc:24
 msgid "PDF version link"
@@ -250,31 +254,31 @@ msgstr "Affiche le lien vers la version imprimable dans les commentaires individ
 msgid "Displays the link to a printer-friendly version of the comment. Further configuration is available on the !settings."
 msgstr "Affiche le lien vers la version imprimable des commentaires. D'autres paramètres sont possibles dans !settings."
 
-#: print.module:265
+#: print.module:268
 msgid "Printer-friendly version"
 msgstr "Version imprimable"
 
-#: print.module:267
+#: print.module:270
 msgid "Display a printer-friendly version of this page."
 msgstr "Affiche une version imprimable de cette page."
 
-#: print.module:277
+#: print.module:280
 msgid "retrieved on"
 msgstr "créé le"
 
-#: print.module:279
+#: print.module:282
 msgid "Published on"
 msgstr "Publié sur"
 
-#: print.module:280
+#: print.module:283
 msgid "By"
 msgstr "Par"
 
-#: print.module:281
+#: print.module:284
 msgid "Created"
 msgstr "Créé"
 
-#: print.module:282
+#: print.module:285
 msgid "Links:"
 msgstr "Liens:"
 
