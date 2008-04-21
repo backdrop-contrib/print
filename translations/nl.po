@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-14 02:01+0200\n"
-"PO-Revision-Date: 2008-04-17 11:37+0100\n"
+"PO-Revision-Date: 2008-04-22 00:08+0100\n"
 "Last-Translator: \n"
 "Language-Team: Nederlands <nl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -244,8 +244,9 @@ msgstr "Toon de link naar een printvriendelijke versie van de content. Verdere c
 
 #: print.module:202;209
 #: print_pdf.module:130;137
+#, fuzzy
 msgid "settings page"
-msgstr ""
+msgstr "Configuratie"
 
 #: print.module:206
 msgid "Show printer-friendly version link in individual comments"
@@ -297,8 +298,9 @@ msgstr "Printvriendelijk"
 
 #: print.module:88
 #: print.info:0
+#, fuzzy
 msgid "Adds a printer-friendly version link to node pages."
-msgstr ""
+msgstr "Voeg een link naar printvriendelijke versie toe aan node pagina's"
 
 #: print.module:95
 msgid "Web page"

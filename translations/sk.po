@@ -1,72 +1,69 @@
-# $Id$
-#
-# LANGUAGE translation of Drupal (general)
-# Copyright YEAR NAME <EMAIL@ADDRESS>
-# Generated from files:
-#  print.module,v 1.15.2.5.2.26 2007/11/08 23:56:59 jcnventura
-#  print.info,v 1.1.2.2 2007/08/24 00:32:39 jcnventura
+# Slovak translation for drupalprint
+# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+# This file is distributed under the same license as the drupalprint package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Drupal Print Modul\n"
+"Project-Id-Version: drupalprint\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2008-04-14 02:01+0200\n"
-"PO-Revision-Date: 2008-04-17 11:36+0100\n"
+"PO-Revision-Date: 2008-04-21 23:58+0100\n"
 "Last-Translator: \n"
-"Language-Team:  <drupal@gmx.net>\n"
+"Language-Team: Slovak <sk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: German\n"
-"X-Poedit-Country: GERMANY\n"
-"X-Poedit-SourceCharset: utf-8\n"
+"X-Launchpad-Export-Date: 2008-04-21 20:24+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 
 #: print.admin.inc:21
 msgid "Logo URL"
-msgstr "Logo URL"
+msgstr ""
 
 #: print.admin.inc:25
 msgid "An alternative logo to display on the printer-friendly version. If left empty, the current theme's logo is used."
-msgstr "Ein alternatives Logo zur Verwendung in der Druckversion. Ist das Feld leer, wird das aktuelle Logo des Themes benutzt."
+msgstr ""
 
 #: print.admin.inc:30
 msgid "Stylesheet URL"
-msgstr "CSS Stylesheet URL"
+msgstr ""
 
 #: print.admin.inc:34
 msgid "The URL to your custom print cascading stylesheet, if any. When none is specified, the default module CSS file is used."
-msgstr "Der URL zu einem speziellen CSS Druck-Stylesheet. Ist das Feld leer, wird das Standard Monitor-Stylesheet verwendet."
+msgstr ""
 
 #: print.admin.inc:39
 msgid "Printer-friendly URLs list"
-msgstr "Druckoptimierte URL-Liste"
+msgstr ""
 
 #: print.admin.inc:42
 msgid "If set, a list of the destination URLs for the page links will be displayed at the bottom of the page."
-msgstr "Wenn aktiviert, werden Links im Text am Ende der Seite in einer Liste zusammengefasst dargestellt."
+msgstr ""
 
 #: print.admin.inc:47
 msgid "Include comments in printer-friendly version"
-msgstr "Füge Kommentare zur Druckversion hinzu"
+msgstr ""
 
 #: print.admin.inc:50
 msgid "When this option is active, user comments are also included in the printer-friendly version. Requires the comment module."
-msgstr "Wenn diese Option aktiviert ist, werden Kommentare zur Druckversion hinzugefügt. Diese Funktion benötigt ein aktives Comment Module."
+msgstr ""
 
 #: print.admin.inc:55
 msgid "Open the printer-friendly version in a new window"
-msgstr "Öffnet die Druckversion in neuen Browserfenster/Tab"
+msgstr "Verziu pre tlač otvoriť v novom okne"
 
 #: print.admin.inc:56
 msgid "Disabled"
-msgstr "Deaktiviert"
+msgstr "Zakázané"
 
 #: print.admin.inc:56
 msgid "Use HTML target (does not validate as XHTML Strict)"
-msgstr "Benutze das HTML \"target\" Attribut (Achtung: validiert nicht in XHTML 1.0 Strict)"
+msgstr ""
 
 #: print.admin.inc:56
 msgid "Use Javascript (requires browser support)"
-msgstr "Benutze Javascript (Javascript muß im Browser aktiviert sein)"
+msgstr "Používať Javascript (vyžaduje podporu na strane prehliadača)"
 
 #: print.admin.inc:56
 msgid "Use Greybox Redux (requires the greybox module)"
@@ -78,40 +75,40 @@ msgstr ""
 
 #: print.admin.inc:58
 msgid "Setting this option will make the printer-friendly version open in a new window/tab."
-msgstr "Ist diese Option aktiviert werden die Druckversion in einem neuen Browserfenster/Tab geöffnet."
+msgstr ""
 
 #: print.admin.inc:65
 #: print.module:281
 msgid "Source URL"
-msgstr "Quellen URL"
+msgstr "Adresa zdroja"
 
 #: print.admin.inc:73
 msgid "Display source URL"
-msgstr "Quellen URL anzeigen"
+msgstr "Zobraziť adresu zdroja"
 
 #: print.admin.inc:76
 msgid "When this option is selected, the URL for the original page will be displayed at the bottom of the printer-friendly version."
-msgstr "Wenn diese Option ausgewählt ist, wird die URL der Orginalseite am Seitenende der Druckversion angezeigt."
+msgstr ""
 
 #: print.admin.inc:81
 msgid "Add current time/date to the source URL"
-msgstr "Datum und Uhrzeit zur Quellen URL hinzufügen"
+msgstr "Pridať aktuálny čas a dátum k adrese zdroja"
 
 #: print.admin.inc:84
 msgid "Display the current date and time in the Source URL line."
-msgstr "Zeige Datum und Uhrzeit in der Quellen URL Zeile an."
+msgstr ""
 
 #: print.admin.inc:89
 msgid "Force use of node ID in source URL"
-msgstr "Erzwinge die Verwendung der Node ID in der Quellen URL."
+msgstr ""
 
 #: print.admin.inc:92
 msgid "Drupal will attempt to use the page's defined alias in case there is one. To force the use of the fixed URL, activate this option."
-msgstr "Drupal wird versuchen, falls vorhanden, den URL-Alias dieser Seite zu nutzen. Um eine fixe URL zu erzwingen, aktivieren Sie bitte diese Option."
+msgstr ""
 
 #: print.admin.inc:108
 msgid "Printer-friendly page link"
-msgstr "Link \"Druckversion\" anzeigen"
+msgstr ""
 
 #: print.admin.inc:110
 #: print_pdf.admin.inc:26
@@ -135,68 +132,68 @@ msgstr ""
 
 #: print.admin.inc:111
 msgid "Enable or disable the printer-friendly page link for each node. Even if the link is disabled, you can still view the print version of a node by going to print/nid where nid is the numeric id of the node."
-msgstr "Aktivieren oder deaktiveren Sie die druckoptimierte Version für jeden Inhalt. Selbst wenn dieser Link deaktivert ist, können Sie die Druckversion eines Node über die Adresszeile mit den Argumenten print/nid (nid = ID des Knotens) anzeigen lassen."
+msgstr ""
 
 #: print.admin.inc:116
 #: print_pdf.admin.inc:32
 msgid "Show link in system (non-content) pages"
-msgstr "Zeige eine Link auf allen Drupal Verwaltungsseiten an"
+msgstr "Zobraziť odkaz na systémových stránkach"
 
 #: print.admin.inc:119
 msgid "Setting this option will add a printer-friendly version page link on pages created by Drupal or the enabled modules."
-msgstr "Diese Option fügt einen Link unterhalb des Titels ein der zu einer Druckversion von allen durch Drupal oder Modulen erzeugten Seiten ein."
+msgstr ""
 
 #: print.admin.inc:124
 msgid "Take control of the book module printer-friendly link"
-msgstr "Ersetze den Link zur Druckversion im Book Module "
+msgstr ""
 
 #: print.admin.inc:127
 msgid "Activate this to have the printer-friendly link in book nodes handled by this module. Requires the (core) book module."
-msgstr "Aktivieren Sie diese Option um eine Druckversion für einzelne Buchseiten mit Hilfe des Print-Moduls zu erhalten. Diese Funktion benötigt das Core Book Module."
+msgstr ""
 
 #: print.admin.inc:132
 msgid "Send to printer"
-msgstr "An Drucker senden"
+msgstr "Poslať do frontu tlačiarne"
 
 #: print.admin.inc:135
 msgid "Automatically calls the browser's print function when the printer-friendly version is displayed."
-msgstr "Ruft automatisch die Druckfunktion des Browsers auf wenn die Druckversion angezeigt wird."
+msgstr "Po zobrazení verzie pre tlač automaticky zavolá funkciu pre tlač."
 
 #: print.admin.inc:142
 msgid "Robots META tags"
-msgstr "Robots META-Tags"
+msgstr "META značky pre robotov"
 
 #: print.admin.inc:150
 msgid "Add noindex"
-msgstr "\"noindex\" hinzufügen"
+msgstr "Pridať noindex"
 
 #: print.admin.inc:153
 msgid "Instruct robots to not index printer-friendly pages. Recommended for good search engine karma."
-msgstr "Weist Suchmaschinen-Robots an die Druckversion nicht zu indexieren. Die Aktivierung wird empfohlen."
+msgstr ""
 
 #: print.admin.inc:158
 msgid "Add nofollow"
-msgstr "\"nofollow\" hinzufügen"
+msgstr "Pridať nofollox"
 
 #: print.admin.inc:161
 msgid "Instruct robots to not follow outgoing links on printer-friendly pages."
-msgstr "Weist Suchmaschinen-Robots an Links in der Druckversion nicht zu folgen."
+msgstr ""
 
 #: print.admin.inc:166
 msgid "Add noarchive"
-msgstr "\"noarchive\" hinzufügen"
+msgstr "Pridať noarchive"
 
 #: print.admin.inc:169
 msgid "Non-standard tag to instruct search engines to not show a \"Cached\" link for your printer-friendly pages. Recognized by Googlebot."
-msgstr "Nicht standardisierter Tag, weist Suchmaschinen an keinen \"Cached\" Link für die Druckversion anzuzeigen. Diese Version wird von Googlebot erkannt."
+msgstr ""
 
 #: print.admin.inc:174
 msgid "Add nocache"
-msgstr "\"nocache\" hinzufügen"
+msgstr "Pridať nocache"
 
 #: print.admin.inc:177
 msgid "Non-standard tag to instruct search engines to not show a \"Cached\" link for your printer-friendly pages"
-msgstr "Nicht standardisierter Tag, weist Suchmaschinen an keinen \"Cached\" Link für die Druckversion anzuzeigen. "
+msgstr ""
 
 #: print.pages.inc:146
 msgid "Anonymous"
@@ -236,69 +233,69 @@ msgstr ""
 
 #: print.module:199
 msgid "Show printer-friendly version link"
-msgstr "Zeige Link zur Druckversion"
+msgstr "Pridať odkaz \"Verzia pre tlač\""
 
 #: print.module:202
 msgid "Displays the link to a printer-friendly version of the content. Further configuration is available on the !settings."
-msgstr "Zeigt den Link zur druckoptimierten Version eines Inhaltstyps an. Die Konfiguration kann über die Einstellungen vorgenommen werden."
+msgstr ""
 
 #: print.module:202;209
 #: print_pdf.module:130;137
 msgid "settings page"
-msgstr "Einstellungen"
+msgstr "Nastavenia"
 
 #: print.module:206
 msgid "Show printer-friendly version link in individual comments"
-msgstr "Zeige Link zur Druckversion für individuelle Kommentare."
+msgstr ""
 
 #: print.module:209
 msgid "Displays the link to a printer-friendly version of the comment. Further configuration is available on the !settings."
-msgstr "Zeige den Link zur Druckversion des Kommentars. Weitergehene Einstellungen sind über !settings möglich. "
+msgstr ""
 
 #: print.module:268
 msgid "Printer-friendly version"
-msgstr "Druckversion"
+msgstr "Verzia pre tlač"
 
 #: print.module:270
 msgid "Display a printer-friendly version of this page."
-msgstr "Zeige die Druckversion dieses Inhaltes an."
+msgstr "Zobraziť verziu pre tlač na tejto stránke."
 
 #: print.module:280
 msgid "retrieved on"
-msgstr "erhalten am"
+msgstr ""
 
 #: print.module:282
 msgid "Published on"
-msgstr "Veröffentlicht am"
+msgstr "Zverejnené"
 
 #: print.module:283
 msgid "By"
-msgstr "Von"
+msgstr "Autor"
 
 #: print.module:284
 msgid "Created"
-msgstr "Erstellt"
+msgstr "Vytvorené"
 
 #: print.module:285
 msgid "Links:"
-msgstr "Links:"
+msgstr "Odkazy"
 
 #: print.module:56
 msgid "access print"
-msgstr "Zugriff auf Druckversion"
+msgstr ""
 
 #: print.module:56
 msgid "administer print"
-msgstr "Einstellungen verwalten"
+msgstr ""
 
 #: print.module:80;87
 msgid "Printer-friendly"
-msgstr "Druckversion"
+msgstr "Verzia pre tlač"
 
 #: print.module:88
 #: print.info:0
 msgid "Adds a printer-friendly version link to node pages."
-msgstr "Fügt einen Link zur Druckversion von Inhalten ein."
+msgstr "Pridať odkaz \"Verzia pre tlač\" na stránku typu node"
 
 #: print.module:95
 msgid "Web page"
@@ -310,7 +307,7 @@ msgstr ""
 
 #: print.module:0
 msgid "print"
-msgstr "Print"
+msgstr ""
 
 #: print_pdf.module:127
 msgid "Show PDF version link"
@@ -350,7 +347,7 @@ msgstr ""
 
 #: print.info:0
 msgid "Printer-friendly pages"
-msgstr "Druckoptimierte Seiten"
+msgstr "Stránky s verziou pre tlač"
 
 #: print_pdf.info:0
 msgid "Printer-friendly pages as PDF"
@@ -361,5 +358,5 @@ msgid "Adds the capability to export pages as PDF."
 msgstr ""
 
 #~ msgid "Enabled"
-#~ msgstr "Aktiviert"
+#~ msgstr "Povelené"
 

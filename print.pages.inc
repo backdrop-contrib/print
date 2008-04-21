@@ -375,7 +375,10 @@ function _print_generate_node($nid, $cid = NULL) {
     //Remove the comment title hyperlink
     $comments = preg_replace("/(<h3.*?>)(<a.*?>)(.*?)<\/a>(<\/h3>)/", "$1$3$4", $comments);
     //Remove the comment author link
-    $comments = preg_replace("/(<span class=\"submitted\">)(.*?)<a.*?>(.*?)<\/a>(<\/span>)/sim", "$1$2$3$4", $comments);
+    $pattern = "/(<span class=\"submitted\">)(.*?)<a.*?>(.*?)<\/a>(<\/span>)/sim";
+    if (preg_match($pattern, $comments)) {
+      $comments = preg_replace($pattern , "$1$2$3$4", $comments);
+    }
     //Remove the comment links
     $comments = preg_replace("/\s*<ul class=\"links\">.*?<\/ul>/sim", "", $comments);
     if ($cid != NULL) {

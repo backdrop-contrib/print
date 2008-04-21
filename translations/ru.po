@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "POT-Creation-Date: 2008-04-14 02:01+0200\n"
-"PO-Revision-Date: 2008-04-14 02:11+0100\n"
+"PO-Revision-Date: 2008-04-21 23:55+0100\n"
 "Last-Translator: \n"
 "Language-Team: russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -68,12 +68,14 @@ msgid "Use Javascript (requires browser support)"
 msgstr "Использовать Javascript (требует поддержки браузера)"
 
 #: print.admin.inc:56
+#, fuzzy
 msgid "Use Greybox Redux (requires the greybox module)"
-msgstr ""
+msgstr "Использовать Greybox Redux (нужен модуль greybox)"
 
 #: print.admin.inc:56
+#, fuzzy
 msgid "Use Thickbox (requires the thickbox module)"
-msgstr ""
+msgstr "Использовать Thickbox (нужен модуль thickbox)"
 
 #: print.admin.inc:58
 msgid "Setting this option will make the printer-friendly version open in a new window/tab."
@@ -195,11 +197,11 @@ msgstr "Добавить запрет кеширования (nocache)"
 
 #: print.admin.inc:177
 msgid "Non-standard tag to instruct search engines to not show a \"Cached\" link for your printer-friendly pages"
-msgstr "Не стандартный ярлык, который говорит поисковым системам не показывать ссылку \"Сохранено в кеше\" для ваших страниц для печати. "
+msgstr "Не стандартный ярлык, который говорит поисковым системам не показывать ссылку \"Сохранено в кеше\" для ваших страниц для печати."
 
 #: print.pages.inc:146
 msgid "Anonymous"
-msgstr ""
+msgstr "Анонимный"
 
 #: print_pdf.admin.inc:24
 msgid "PDF version link"
