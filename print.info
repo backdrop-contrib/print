@@ -1,4 +1,5 @@
 ; $Id$
-name = "Printer-friendly pages"
+name = "Printer-friendly pages (core)"
 description = "Adds a printer-friendly version link to node pages."
 core=6.x
+package = "Printer-friendly pages"
