@@ -73,9 +73,9 @@ function _print_robots_meta_generator() {
     $robots_meta[] = 'nocache';
   }
 
-  if (sizeof($robots_meta) > 0) {
-    $robots_meta = isset($robots_meta[1]) ? implode(', ', $robots_meta) : $robots_meta[0];
-    $robots_meta = '<meta name="robots" content="'. $robots_meta ."\" />\n";
+  if (count($robots_meta) > 0) {
+    $robots_meta = implode(', ', $robots_meta);
+    $robots_meta = "<meta name=\"robots\" content=\"". $robots_meta ."\" />\n";
   }
   else {
     $robots_meta = '';
@@ -113,7 +113,7 @@ function _print_var_generator($node, $cid = NULL) {
     $css_file = $print_settings['css'];
   }
   else {
-    $css_file = $base_url ."/". drupal_get_path('module', 'print') ."/print.css";
+    $css_file = base_path() . drupal_get_path('module', 'print') ."/print.css";
   }
   $print["css"] = "<style type=\"text/css\" media=\"all\">@import url(\"". $css_file ."\");</style>\n";
 
@@ -140,11 +140,19 @@ function _print_var_generator($node, $cid = NULL) {
     $print["source_url"] = "";
   }
 
-  $nodetype = isset($node->type) ? $node->type : '';
+  if (isset($node->type)) {
+    $node_type = $node->type;
+    $print["submitted"] = theme_get_setting("toggle_node_info_$node_type") ? $themed['by'] ." ". ($node->name ? $node->name : variable_get('anonymous', t('Anonymous'))) : "";
+    $print["created"] = theme_get_setting("toggle_node_info_$node_type") ? $themed['created'] ." ". format_date($node->created, 'small') : "";
+    $print["type"] = $node->type;
+  }
+  else {
+    $print["submitted"] = "";
+    $print["created"] = "";
+    $print["type"] = '';
+  }
 
   $print["site_name"] = variable_get('site_name', 0) ? ($themed['published'] ." ". variable_get('site_name', 0) ." (". l($base_url, $base_url) .")") : "";
-  $print["submitted"] = theme_get_setting("toggle_node_info_$nodetype") ? $themed['by'] ." ". ($node->name ? $node->name : variable_get('anonymous', t('Anonymous'))) : "";
-  $print["created"] = theme_get_setting("toggle_node_info_$nodetype") ? $themed['created'] ." ". format_date($node->created, 'small') : "";
   $print["footer_message"] = filter_xss_admin(variable_get('site_footer', FALSE)) ."\n". theme('blocks', 'footer') ;
 
   menu_set_active_item($path);
@@ -176,7 +184,6 @@ function _print_var_generator($node, $cid = NULL) {
     $print["taxonomy"] = theme('links', $terms);
   }
 
-  $print["type"] = $nodetype;
   $print["content"] = $node->body;
 
   return $print;
@@ -196,7 +203,7 @@ function _print_rewrite_urls($matches) {
   $pfurls = (!empty($print_settings['urls']));
 
   //Temporarily convert spaces to %20 so that it isn't split below
-  $in_string = false;
+  $in_string = FALSE;
   for ($i=0; $i < strlen($matches[1]); $i++) {
     if ($matches[1][$i] == '"') {
       $in_string = !$in_string;
@@ -332,8 +339,6 @@ function _print_get_template($type = NULL) {
  * Outputs a printer-friendly page. Used for content types
  */
 function _print_generate_node($nid, $cid = NULL) {
-  global $base_url;
-
   // We can take a node id
   $node = node_load(array('nid' => $nid));
   if (!node_access('view', $node)) {
@@ -343,7 +348,7 @@ function _print_generate_node($nid, $cid = NULL) {
   drupal_set_title($node->title);
 
   //alert other modules that we are generating a printer-friendly page, so they can choose to show/hide info
-  $node->printing = true;
+  $node->printing = TRUE;
   // Turn off Pagination by the Paging module
   unset($node->pages);
   unset($node->page_count);
@@ -353,7 +358,7 @@ function _print_generate_node($nid, $cid = NULL) {
   if ($cid === NULL) {
     // Adapted (simplified) version of node_view for Drupal 5.x
     //Render the node content
-    $node = node_build_content($node, false, true);
+    $node = node_build_content($node, FALSE, TRUE);
     // Disable fivestar widget output
     unset($node->content["fivestar_widget"]);
     // Disable service links module output
@@ -388,7 +393,7 @@ function _print_generate_node($nid, $cid = NULL) {
     $node->body .= $comments;
   }
 
-  node_invoke_nodeapi($node, 'alter', false, true);
+  node_invoke_nodeapi($node, 'alter', FALSE, TRUE);
 
   // Convert the a href elements
   $pattern = "@<(a\s[^>]*?)>(.*?)(</a>)@is";
@@ -405,8 +410,6 @@ function _print_generate_node($nid, $cid = NULL) {
  * Outputs a printer-friendly page. Used for drupal core pages.
  */
 function _print_generate_path($path) {
-  global $base_url;
-
   $path = drupal_get_normal_path($path);
 
   menu_set_active_item($path);
@@ -449,8 +452,6 @@ function _print_generate_path($path) {
  * Outputs a printer-friendly page. Used for book pages
  */
 function _print_generate_book($nid) {
-  global $base_url;
-
   $node = node_load(array('nid' => $nid));
   if (!node_access('view', $node) || (!user_access('access printer-friendly version'))) {
     // Access is denied

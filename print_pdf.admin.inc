@@ -30,7 +30,6 @@ function print_pdf_settings() {
     $form['print_pdf_settings']['show_sys_link'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show link in system (non-content) pages'),
-      '#return_value' => 1,
       '#default_value' => $print_pdf_settings['show_sys_link'],
       '#description' => t('Setting this option will add a PDF version page link on pages created by Drupal or the enabled modules.'),
     );
@@ -38,7 +37,6 @@ function print_pdf_settings() {
     $form['print_pdf_settings']['book_link'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show link in book nodes'),
-      '#return_value' => 1,
       '#default_value' => $print_pdf_settings['book_link'],
       '#description' => t('Activate this to add a PDF version link in book nodes. Requires the (core) book module.'),
     );

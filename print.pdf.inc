@@ -60,7 +60,7 @@ function _print_pdf_tcpdf($print, $filename) {
   $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
   require_once($print_pdf_settings['pdf_tool']);
 
-  $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true);
+  $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, TRUE);
   $pdf->Open();
 
   $pdf->SetAuthor($print["submitted"]);
