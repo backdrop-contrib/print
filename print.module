@@ -144,6 +144,7 @@ function print_link($type, $node = NULL, $teaser = FALSE) {
       $query_arr['comment'] = $node->cid;
     }
     $query = drupal_query_string_encode($query_arr, array('q'));
+    if (empty($query)) $query = NULL;
 
     $links['print'] = array('href' => PRINT_PATH ."/". $node->nid,
                             'title' => $format['text'],

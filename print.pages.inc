@@ -115,7 +115,7 @@ function _print_var_generator($node, $cid = NULL) {
   else {
     $css_file = base_path() . drupal_get_path('module', 'print') ."/print.css";
   }
-  $print["css"] = "<style type=\"text/css\" media=\"all\">@import url(\"". $css_file ."\");</style>\n";
+  $print["css"] = "<style type=\"text/css\" media=\"all\">@import \"". $css_file ."\";</style>\n";
 
   $print["sendtoprinter"] = $print_html_settings['sendtoprinter'] ? " onload=\"window.print();\"" : "";
     
@@ -178,7 +178,6 @@ function _print_var_generator($node, $cid = NULL) {
     }
   }
 
-
   if (module_exists('taxonomy')) {
     $terms = taxonomy_link('taxonomy terms', $node);
     $print["taxonomy"] = theme('links', $terms);
@@ -233,7 +232,7 @@ function _print_rewrite_urls($matches) {
         if (substr($url, 0, 1) == "#") {
           // URL is an anchor tag
           if ($pfurls) {
-            $path = substr($_GET['q'], strlen(PRINT_PATH)+1);
+            $path = substr($_GET['q'], strpos($_GET['q'], '/')+1);
             if (is_numeric($path)) {
               $path = "node/$path";
             }
