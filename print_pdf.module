@@ -60,8 +60,8 @@ function print_pdf_menu() {
  * Implementation of hook_link().
  */
 function print_pdf_link($type, $node = NULL, $teaser = FALSE) {
+  $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
   static $print_pdf_display = FALSE;
-  static $print_pdf_display_comment = FALSE;
 
   if ($print_pdf_display == FALSE) {
     if (isset($node->type)) {
@@ -76,7 +76,6 @@ function print_pdf_link($type, $node = NULL, $teaser = FALSE) {
     }
   }
 
-  $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
   // No link is shown for several motives...
   if ( !($teaser) &&
       ($print_pdf_settings['show_link']) && user_access('access print') &&
