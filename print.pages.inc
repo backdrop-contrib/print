@@ -1,17 +1,37 @@
 <?php
-/* $Id$ */
+// $Id$
 
-//*******************************************************************
-// Module Functions :: Controller
-//*******************************************************************
+/**
+ * @file
+ * Contains the functions to generate Printer-friendly pages.
+ *
+ * This file is included by the core PF module, and includes all the
+ * functions necessary to generate a PF version of the original page
+ * in HTML format.
+ */
 
+/**
+ * Generate an HTML version of the printer-friendly page
+ *
+ * @see print_controller()
+ * @see _print_get_template()
+ */
 function print_controller_html() {
   $print = print_controller();
   include_once(_print_get_template($print["type"]));
 }
 
 /**
- * Print module path catcher
+ * Select the print generator function based on the current path
+ *
+ * Depending on the type of node, this functions chooses the appropriate
+ * generator function.
+ *
+ * @return
+ *   array with the fields to be used in the template
+ * @see _print_generate_node()
+ * @see _print_generate_path()
+ * @see _print_generate_book()
  */
 function print_controller() {
   // Remove the print/ prefix
@@ -47,14 +67,11 @@ function print_controller() {
   return $print;
 }
 
-//*******************************************************************
-// Module Functions : Auxiliary
-//*******************************************************************
-
 /**
- * Generates a meta tag to tell robots what they may index based on module settings
+ * Generates a robots meta tag to tell them what they may index
  *
- * @return string
+ * @return
+ *   string with the meta robots tag 
  */
 function _print_robots_meta_generator() {
   $robots_settings = variable_get('print_robot_settings', print_robot_settings_default());
@@ -85,9 +102,15 @@ function _print_robots_meta_generator() {
 }
 
 /**
- * Generates the HTML to insert in the template file
+ * Post-processor that fills the array for the template with common details
  *
- * @return string
+ * @param $node
+ *   generated node with a printer-friendly node body
+ * @param $cid
+ *   id of current comment being generated (NULL when not generating 
+ *   an individual comment)
+ * @return
+ *   array with the fields to be used in the template
  */
 function _print_var_generator($node, $cid = NULL) {
   global $base_url, $language;
@@ -174,7 +197,7 @@ function _print_var_generator($node, $cid = NULL) {
       for ($i = 0; $i < $max; $i++) {
         $print["pfp_links"] .= '['. ($i + 1) .'] '. $urls[$i] ."<br />\n";
       }
-      $print["pfp_links"] = "<p><strong>". $themed['links'] ."</strong><br />". $print["pfp_links"] ."</p>";
+      $print["pfp_links"] = "<p><strong>". $themed['links'] .":</strong><br />". $print["pfp_links"] ."</p>";
     }
   }
 
@@ -189,10 +212,16 @@ function _print_var_generator($node, $cid = NULL) {
 }
 
 /**
- * We need to manipulate URLs so that they are recorded as absolute in the
- *  Printer-friendly URLs list, and to add a [n] footnote marker.
+ * Callback function for the preg_replace_callback for URL-capable patterns
  *
- * @return string containing the changed <a> tag
+ * Manipulate URLs to make them absolute in the URLs list, and to add a 
+ * [n] footnote marker.
+ * 
+ * @param $matches
+ *   array with the matched tag patterns, usually <a...>+text+</a>
+ * @return
+ *   tag with re-written URL and when appropriate the [n] index to the 
+ *   URL list
  */
 function _print_rewrite_urls($matches) {
   global $base_url, $base_root;
@@ -280,8 +309,11 @@ function _print_rewrite_urls($matches) {
 /**
  * Auxiliary function to store the Printer-friendly URLs list as static.
  *
- * @return string containing the list of URLs previously stored if $url is 0,
- *         or the current count otherwise.
+ * @param $url
+ *   absolute URL to be inserted in the list
+ * @return 
+ *   list of URLs previously stored if $url is 0, or the current count 
+ *   otherwise.
  */
 function _print_friendly_urls($url = 0) {
   static $urls = array();
@@ -299,11 +331,16 @@ function _print_friendly_urls($url = 0) {
 }
 
 /**
+ * Choose most appropriate template
+ * 
  * Auxiliary function to resolve the most appropriate template trying to find
  * a content specific template in the theme or module dir before falling back
  * on a generic template also in those dirs.
  *
- * @return string with the most suitable template filename
+ * @param $type
+ *   name of the node type being rendered in a PF page
+ * @return
+ *   filename of the most suitable template
  */
 function _print_get_template($type = NULL) {
   if ($type) {
@@ -330,12 +367,15 @@ function _print_get_template($type = NULL) {
   return drupal_get_path('module', 'print') ."/print.tpl.php";
 }
 
-//*******************************************************************
-// Module Functions : Content renderers
-//*******************************************************************
-
 /**
- * Outputs a printer-friendly page. Used for content types
+ * Prepare a Printer-friendly-ready node body for content nodes
+ * 
+ * @param $nid
+ *   node ID of the node to be rendered into a printer-friendly page
+ * @param $cid
+ *   comment ID of the individual comment to be rendered
+ * @return
+ *   filled array ready to be used in the template
  */
 function _print_generate_node($nid, $cid = NULL) {
   // We can take a node id
@@ -406,7 +446,12 @@ function _print_generate_node($nid, $cid = NULL) {
 }
 
 /**
- * Outputs a printer-friendly page. Used for drupal core pages.
+ * Prepare a Printer-friendly-ready node body for non-content pages
+ * 
+ * @param $path
+ *   path of the node to be rendered into a printer-friendly page
+ * @return
+ *   filled array ready to be used in the template
  */
 function _print_generate_path($path) {
   $path = drupal_get_normal_path($path);
@@ -448,7 +493,12 @@ function _print_generate_path($path) {
 
 
 /**
- * Outputs a printer-friendly page. Used for book pages
+ * Prepare a Printer-friendly-ready node body for book pages
+ * 
+ * @param $nid
+ *   node ID of the node to be rendered into a printer-friendly page
+ * @return
+ *   filled array ready to be used in the template
  */
 function _print_generate_book($nid) {
   $node = node_load(array('nid' => $nid));

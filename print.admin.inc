@@ -1,12 +1,18 @@
 <?php
-/* $Id$ */
-
-//*******************************************************************
-// Admin Settings: Print
-//*******************************************************************
+// $Id$
 
 /**
- * Print module settings form
+ * @file
+ * Contains the administrative functions of the PF module.
+ *
+ * This file is included by the core PF module, and includes the
+ * settings form.
+ */
+
+/**
+ * Menu callback for the Printer-friendly pages module settings form.
+ *
+ * @ingroup forms
  */
 function print_main_settings() {
   $print_settings = variable_get('print_settings', print_settings_default());

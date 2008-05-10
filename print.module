@@ -1,15 +1,21 @@
 <?php
-/* $Id$ */
+// $Id$
 
 /**
  * @file
- * Display printer-friendly versions of Drupal pages
+ * Displays Printer-friendly versions of Drupal pages.
+ *
+ * This is the core module of the PF package, with the Drupal hooks
+ * and other administrative functions.
  */
 
 define("PRINT_PATH", "print");
 
 /**
  * Default values of the print_settings variable
+ *
+ * @return
+ *   array with the values
  */
 function print_settings_default() {
   return array('logo_url' => '',
@@ -33,6 +39,9 @@ function print_html_settings_default() {
 
 /**
  * Default values of the print_sourceurl_settings variable
+ *
+ * @return
+ *   array with the values
  */
 function print_sourceurl_settings_default() {
   return array('enabled' => 1, 'date' => 0, 'forcenode' => 0);
@@ -40,14 +49,13 @@ function print_sourceurl_settings_default() {
 
 /**
  * Default values of the print_robot_settings variable
+ *
+ * @return
+ *   array with the values
  */
 function print_robot_settings_default() {
   return array('noindex' => 1, 'nofollow' => 1, 'noarchive' => 0, 'nocache' => 0);
 }
-
-//*******************************************************************
-// Drupal Hooks
-//*******************************************************************
 
 /**
  * Implementation of hook_perm().
@@ -182,6 +190,12 @@ function print_link_alter(&$links, $node) {
  * Implementation of hook_help().
  */
 function print_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#print':
+      // Return a line-break version of the module README
+      return filter_filter('process', 2, NULL, file_get_contents(drupal_get_path('module', 'print') ."/README.txt") );
+  }
+
   $print_html_settings = variable_get('print_html_settings', print_html_settings_default());
 
   if (($print_html_settings['show_link']) && ($print_html_settings['show_sys_link']) &&
@@ -220,7 +234,8 @@ function print_form_alter(&$form, $form_state, $form_id) {
 /**
  * Auxiliary function to fill the Printer-friendly link attributes
  *
- * @return array of formatted attributes
+ * @return
+ *   array of formatted attributes
  */
 function _print_format_link_aux($type = 0, $text = '', $img = '', $title = '', $class = '') {
   $print_settings = variable_get('print_settings', print_settings_default());
@@ -269,6 +284,13 @@ function _print_format_link_aux($type = 0, $text = '', $img = '', $title = '', $
               );
 }
 
+/**
+ * Format the Printer-friendly link
+ *
+ * @return
+ *   array of formatted attributes
+ * @ingroup themeable
+ */
 function theme_print_format_link() {
   $print_html_settings = variable_get('print_html_settings', print_html_settings_default());
   $text = t('Printer-friendly version');
@@ -283,20 +305,34 @@ function theme_print_format_link() {
               );
 }
 
+/**
+ * Define the strings displayed by the module in the printer-friendly template
+ *
+ * @return
+ *   array with the used text strings
+ * @ingroup themeable
+ */
 function theme_print_text() {
   return array('retrieved' => t('retrieved on'),
                'sourceURL' => t('Source URL'),
                'published' => t('Published on'),
                'by' => t('By'),
                'created' => t('Created'),
-               'links' => t('Links:'),
+               'links' => t('Links'),
               );
 }
 
 /**
  * Auxiliary function to display a formatted Printer-friendly link
  *
- * @return string
+ * Function made available so that developers may call this function from
+ * their defined pages/blocks.
+ *
+ * @param $path
+ *   path of the original page (optional). If not specified, the current URL 
+ *   is used
+ * @return
+ *   string with the HTML link to the printer-friendly page
  */
 function print_insert_link($path = NULL) {
   if (user_access('access print')) {

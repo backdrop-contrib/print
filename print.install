@@ -2,6 +2,15 @@
 // $Id$
 
 /**
+ * Implementation of hook_install().
+ */
+function print_install() {
+  drupal_set_message(t("Printer-friendly Page settings are available under !link",
+    array( '!link' => l('Administer > Site configuration > Printer-friendly Pages ',  'admin/settings/print' ) )
+  ));
+}
+
+/**
  * Implementation of hook_uninstall().
  */
 function print_uninstall() {
@@ -14,4 +23,5 @@ function print_uninstall() {
   while ($variable = db_fetch_object($settings)) {
     variable_del($variable->name);
   }
+
 }
