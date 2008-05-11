@@ -23,5 +23,4 @@ function print_uninstall() {
   while ($variable = db_fetch_object($settings)) {
     variable_del($variable->name);
   }
-
 }

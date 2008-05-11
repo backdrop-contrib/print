@@ -117,7 +117,18 @@ function _print_var_generator($node, $cid = NULL) {
 
   $path = empty($node->nid) ? $node->path : "node/$node->nid";
 
+  $retrieved_date = format_date(time(), 'small');
+  $published_site = variable_get('site_name', 0);
+  $by_author = ($node->name ? $node->name : variable_get('anonymous', t('Anonymous')));
+  $created_datetime = format_date($node->created, 'small');
   $themed = theme('print_text');
+
+  $retrieved = (empty($themed["retrieved"])) ? t('retrieved on %date', array('%date' => $retrieved_date)) : ($themed["retrieved"] ." ". $retrieved_date);
+  $source_url = (empty($themed["sourceURL"])) ? t('Source URL') : $themed["sourceURL"];
+  $published = (empty($themed["published"])) ? t('Published on %site_name', array('%site_name' => $published_site)) : ($themed['published'] ." ". $published_site);
+  $by = (empty($themed["by"])) ? t('By %author', array('%author' => $by_author)) : ($themed["by"] ." ". $by_author);
+  $created = (empty($themed["created"])) ? t('Created %date', array('%date' => $created_datetime)) : ($themed["created"] ." ". $created_datetime);
+  $links = (empty($themed["links"])) ? t('Links') : $themed["links"];
 
   // print module settings
   $print_settings = variable_get('print_settings', print_settings_default());
@@ -126,10 +137,10 @@ function _print_var_generator($node, $cid = NULL) {
 
   $print["language"] = $language->language;
   $print["title"] = $node->title;
-  $print["robots_meta"] = _print_robots_meta_generator();
-  $print["base_href"] = "<base href=\"". url($path, array('absolute' => TRUE)) ."\" />\n";
   $print["head"] = drupal_get_html_head();
   $print["scripts"] = drupal_get_js();
+  $print["robots_meta"] = _print_robots_meta_generator();
+  $print["base_href"] = "<base href=\"". url($path, array('absolute' => TRUE)) ."\" />\n";
   $print["favicon"] = theme_get_setting("toggle_favicon") ? "<link rel=\"shortcut icon\" href=\"". theme_get_setting("favicon") ."\" type=\"image/x-icon\"/>\n" : "";
 
   if (!empty($print_settings['css'])) {
@@ -144,20 +155,21 @@ function _print_var_generator($node, $cid = NULL) {
     
   $print["logo"] = !empty($print_settings['logo_url']) ? $print_settings['logo_url'] : theme_get_setting('logo');
   $print["logo"] = $print["logo"] ? "<img class=\"print-logo\" src=\"". $print["logo"] ."\" alt=\"\" />\n" : "";
+  $print["site_name"] = $published_site_name ? $published ." (". l($base_url, $base_url) .")" : "";
 
-  /* Grab and format the src URL */
-  if (empty($print_sourceurl_settings['forcenode'])) {
-    $print["url"] = url($path, array('absolute' => TRUE));
-  }
-  else {
-    $print["url"] = $base_url .'/'. (((bool)variable_get('clean_url', '0')) ? '' : '?q=') . $path;
-  }
-  if ($cid) {
-    $print["url"] .= "#comment-$cid";
-  }
   if ($print_sourceurl_settings['enabled'] == 1) {
-    $print["printdate"] = $print_sourceurl_settings['date'] ? (" (". $themed['retrieved'] ." ". format_date(time(), 'small') .")") : "";
-    $print["source_url"] = "<strong>". $themed['sourceURL'] . $print["printdate"] .":</strong> <a href=\"". $print["url"] ."\">". $print["url"] ."</a>";
+    /* Grab and format the src URL */
+    if (empty($print_sourceurl_settings['forcenode'])) {
+      $print["source_url"] = url($path, array('absolute' => TRUE));
+    }
+    else {
+      $print["source_url"] = $base_url .'/'. (((bool)variable_get('clean_url', '0')) ? '' : '?q=') . $path;
+    }
+    if ($cid) {
+      $print["source_url"] .= "#comment-$cid";
+    }
+    $print["printdate"] = $print_sourceurl_settings['date'] ? " ($retrieved)" : "";
+    $print["source_url"] = "<strong>". $source_url . $print["printdate"] .":</strong> ". l($print["source_url"], $print["source_url"]);
   }
   else {
     $print["source_url"] = "";
@@ -165,8 +177,8 @@ function _print_var_generator($node, $cid = NULL) {
 
   if (isset($node->type)) {
     $node_type = $node->type;
-    $print["submitted"] = theme_get_setting("toggle_node_info_$node_type") ? $themed['by'] ." ". ($node->name ? $node->name : variable_get('anonymous', t('Anonymous'))) : "";
-    $print["created"] = theme_get_setting("toggle_node_info_$node_type") ? $themed['created'] ." ". format_date($node->created, 'small') : "";
+    $print["submitted"] = theme_get_setting("toggle_node_info_$node_type") ? $by : "";
+    $print["created"] = theme_get_setting("toggle_node_info_$node_type") ? $created : "";
     $print["type"] = $node->type;
   }
   else {
@@ -174,9 +186,6 @@ function _print_var_generator($node, $cid = NULL) {
     $print["created"] = "";
     $print["type"] = '';
   }
-
-  $print["site_name"] = variable_get('site_name', 0) ? ($themed['published'] ." ". variable_get('site_name', 0) ." (". l($base_url, $base_url) .")") : "";
-  $print["footer_message"] = filter_xss_admin(variable_get('site_footer', FALSE)) ."\n". theme('blocks', 'footer') ;
 
   menu_set_active_item($path);
   $breadcrumb = drupal_get_breadcrumb();
@@ -197,7 +206,7 @@ function _print_var_generator($node, $cid = NULL) {
       for ($i = 0; $i < $max; $i++) {
         $print["pfp_links"] .= '['. ($i + 1) .'] '. $urls[$i] ."<br />\n";
       }
-      $print["pfp_links"] = "<p><strong>". $themed['links'] .":</strong><br />". $print["pfp_links"] ."</p>";
+      $print["pfp_links"] = "<p><strong>". $links .":</strong><br />". $print["pfp_links"] ."</p>";
     }
   }
 
@@ -207,6 +216,7 @@ function _print_var_generator($node, $cid = NULL) {
   }
 
   $print["content"] = $node->body;
+  $print["footer_message"] = filter_xss_admin(variable_get('site_footer', FALSE)) ."\n". theme('blocks', 'footer') ;
 
   return $print;
 }

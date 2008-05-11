@@ -313,12 +313,12 @@ function theme_print_format_link() {
  * @ingroup themeable
  */
 function theme_print_text() {
-  return array('retrieved' => t('retrieved on'),
-               'sourceURL' => t('Source URL'),
-               'published' => t('Published on'),
-               'by' => t('By'),
-               'created' => t('Created'),
-               'links' => t('Links'),
+  return array('retrieved' => "",
+               'sourceURL' => "",
+               'published' => "",
+               'by' => "",
+               'created' => "",
+               'links' => "",
               );
 }
 
