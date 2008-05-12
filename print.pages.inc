@@ -117,18 +117,7 @@ function _print_var_generator($node, $cid = NULL) {
 
   $path = empty($node->nid) ? $node->path : "node/$node->nid";
 
-  $retrieved_date = format_date(time(), 'small');
-  $published_site = variable_get('site_name', 0);
-  $by_author = ($node->name ? $node->name : variable_get('anonymous', t('Anonymous')));
-  $created_datetime = format_date($node->created, 'small');
   $themed = theme('print_text');
-
-  $retrieved = (empty($themed["retrieved"])) ? t('retrieved on %date', array('%date' => $retrieved_date)) : ($themed["retrieved"] ." ". $retrieved_date);
-  $source_url = (empty($themed["sourceURL"])) ? t('Source URL') : $themed["sourceURL"];
-  $published = (empty($themed["published"])) ? t('Published on %site_name', array('%site_name' => $published_site)) : ($themed['published'] ." ". $published_site);
-  $by = (empty($themed["by"])) ? t('By %author', array('%author' => $by_author)) : ($themed["by"] ." ". $by_author);
-  $created = (empty($themed["created"])) ? t('Created %date', array('%date' => $created_datetime)) : ($themed["created"] ." ". $created_datetime);
-  $links = (empty($themed["links"])) ? t('Links') : $themed["links"];
 
   // print module settings
   $print_settings = variable_get('print_settings', print_settings_default());
@@ -153,9 +142,17 @@ function _print_var_generator($node, $cid = NULL) {
 
   $print["sendtoprinter"] = $print_html_settings['sendtoprinter'] ? " onload=\"window.print();\"" : "";
     
-  $print["logo"] = !empty($print_settings['logo_url']) ? $print_settings['logo_url'] : theme_get_setting('logo');
-  $print["logo"] = $print["logo"] ? "<img class=\"print-logo\" src=\"". $print["logo"] ."\" alt=\"\" />\n" : "";
-  $print["site_name"] = $published_site_name ? $published ." (". l($base_url, $base_url) .")" : "";
+  $logo_url = !empty($print_settings['logo_url']) ? $print_settings['logo_url'] : theme_get_setting('logo');
+  $print["logo"] = $logo_url ? "<img class=\"print-logo\" src=\"". $logo_url ."\" alt=\"\" />\n" : "";
+
+  $published_site = variable_get('site_name', 0);
+  if ($published_site_name) {
+    $published = (empty($themed["published"])) ? t('Published on %site_name', array('%site_name' => $published_site)) : ($themed['published'] ." ". $published_site);
+    $print["site_name"] = $published ." (". l($base_url, $base_url) .")";
+  }
+  else {
+    $print["site_name"] = "";
+  }
 
   if ($print_sourceurl_settings['enabled'] == 1) {
     /* Grab and format the src URL */
@@ -168,7 +165,11 @@ function _print_var_generator($node, $cid = NULL) {
     if ($cid) {
       $print["source_url"] .= "#comment-$cid";
     }
+    $retrieved_date = format_date(time(), 'small');
+    $retrieved = (empty($themed["retrieved"])) ? t('retrieved on %date', array('%date' => $retrieved_date)) : ($themed["retrieved"] ." ". $retrieved_date);
     $print["printdate"] = $print_sourceurl_settings['date'] ? " ($retrieved)" : "";
+
+    $source_url = (empty($themed["sourceURL"])) ? t('Source URL') : $themed["sourceURL"];
     $print["source_url"] = "<strong>". $source_url . $print["printdate"] .":</strong> ". l($print["source_url"], $print["source_url"]);
   }
   else {
@@ -177,8 +178,15 @@ function _print_var_generator($node, $cid = NULL) {
 
   if (isset($node->type)) {
     $node_type = $node->type;
+
+    $by_author = ($node->name ? $node->name : variable_get('anonymous', t('Anonymous')));
+    $by = (empty($themed["by"])) ? t('By %author', array('%author' => $by_author)) : ($themed["by"] ." ". $by_author);
     $print["submitted"] = theme_get_setting("toggle_node_info_$node_type") ? $by : "";
+
+    $created_datetime = format_date($node->created, 'small');
+    $created = (empty($themed["created"])) ? t('Created %date', array('%date' => $created_datetime)) : ($themed["created"] ." ". $created_datetime);
     $print["created"] = theme_get_setting("toggle_node_info_$node_type") ? $created : "";
+
     $print["type"] = $node->type;
   }
   else {
@@ -201,12 +209,13 @@ function _print_var_generator($node, $cid = NULL) {
   if (!empty($print_settings['urls'])) {
     $urls = _print_friendly_urls();
     $max = count($urls);
-    $print["pfp_links"] = '';
+    $pfp_links = '';
     if ($max) {
       for ($i = 0; $i < $max; $i++) {
-        $print["pfp_links"] .= '['. ($i + 1) .'] '. $urls[$i] ."<br />\n";
+        $pfp_links .= '['. ($i + 1) .'] '. $urls[$i] ."<br />\n";
       }
-      $print["pfp_links"] = "<p><strong>". $links .":</strong><br />". $print["pfp_links"] ."</p>";
+      $links = (empty($themed["links"])) ? t('Links') : $themed["links"];
+      $print["pfp_links"] = "<p><strong>". $links .":</strong><br />". $pfp_links ."</p>";
     }
   }
 
