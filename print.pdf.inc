@@ -53,7 +53,7 @@ function _print_pdf_dompdf($print, $filename, $directives = array()) {
   }
 
   $dompdf->render();
-  $dompdf->stream($filename, array("Attachment" => 0));
+  $dompdf->stream($filename, array("Attachment" => $print_pdf_settings['content_disposition']));
 }
 
 function _print_pdf_tcpdf($print, $filename) {
@@ -106,5 +106,8 @@ function _print_pdf_tcpdf($print, $filename) {
   $pdf->SetFont(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN);
   $html = preg_replace("/<head>.*<\/head>/sim", "", $html);
   $pdf->writeHTML($print["content"]);
-  $pdf->Output($filename, 'I');
+
+  $output_dest = $print_pdf_settings['content_disposition'] ? 'D' : 'I';
+
+  $pdf->Output($filename, $output_dest);
 }

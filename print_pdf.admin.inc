@@ -41,7 +41,22 @@ function print_pdf_settings() {
       '#description' => t('Activate this to add a PDF version link in book nodes. Requires the (core) book module.'),
     );
 
-    $form['print_pdf_settings']['pdf_tool'] = $pdf_tools;
+    $form['print_pdf_settings']['content_disposition'] = array(
+      '#type' => 'radios',
+      '#title' => t('Open PDF in'),
+      '#options' => array(t('Browser window'), t('Save dialog')),
+      '#default_value' => $print_pdf_settings['content_disposition'],
+      '#description' => t("Select the desired method for opening the PDF in the user's browser."),
+    );
+
+    $form['print_pdf_settings']['pdf_tool'] = array(
+      '#type' => 'radios',
+      '#title' => t('PDF generation tool'),
+      '#options' => $pdf_tools,
+      '#default_value' => $print_pdf_settings['pdf_tool'],
+      '#description' => t('This option selects the PDF generation tool being used by this module to create the PDF version.'),
+      '#required' => TRUE,
+    );
   }
   else {
     $form['print_pdf_settings'] = array(
@@ -76,13 +91,6 @@ function print_pdf_tools() {
       $tools2[$val] = $tools[$key];
     }
 
-    return array(
-      '#type' => 'radios',
-      '#title' => t('PDF generation tool'),
-      '#options' => $tools2,
-      '#default_value' => $print_pdf_settings['pdf_tool'],
-      '#description' => t('This option selects the PDF generation tool being used by this module to create the PDF version.'),
-      '#required' => TRUE,
-    );
+    return $tools2;
   }
 }

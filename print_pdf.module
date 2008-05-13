@@ -12,7 +12,7 @@ define("PRINTPDF_PATH", "printpdf");
  * Default values of the print_pdf_settings variable
  */
 function print_pdf_settings_default() {
-  return array('show_link' => 0, 'show_sys_link' => 1, 'book_link' => 1, 'pdf_tool' => 0);
+  return array('show_link' => 0, 'show_sys_link' => 0, 'book_link' => 1, 'pdf_tool' => 0, 'content_disposition' => 0);
 }
 
 //*******************************************************************
