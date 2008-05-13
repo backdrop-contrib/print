@@ -4,7 +4,7 @@
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:
 #  print.admin.inc,v 1.6 2008/05/10 02:25:55 jcnventura
-#  print.pages.inc,v 1.11 2008/05/11 23:51:17 jcnventura
+#  print.pages.inc,v 1.12 2008/05/12 10:30:55 jcnventura
 #  print_pdf.admin.inc,v 1.5 2008/05/06 23:22:10 jcnventura
 #  print.module,v 1.39 2008/05/11 23:51:17 jcnventura
 #  print_pdf.module,v 1.8 2008/05/09 21:32:26 jcnventura
@@ -16,7 +16,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2008-05-12 12:27+0200\n"
+"POT-Creation-Date: 2008-05-13 01:10+0200\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -293,8 +293,8 @@ msgstr ""
 msgid "Printer-friendly"
 msgstr ""
 
-#: print.module:95
-msgid "Printer-friendly Pages"
+#: print.module:95 print.info:0 print_pdf.info:0
+msgid "Printer-friendly pages"
 msgstr ""
 
 #: print.module:96 print.info:0
@@ -355,10 +355,6 @@ msgstr ""
 
 #: print.info:0
 msgid "Printer-friendly pages (core)"
-msgstr ""
-
-#: print.info:0 print_pdf.info:0
-msgid "Printer-friendly pages"
 msgstr ""
 
 #: print_pdf.info:0

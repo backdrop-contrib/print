@@ -1,3 +1,97 @@
+May 12, 2008
+      Commit #115838 by jcnventura at 10:30
+        Slightly better template vars handling
+May 11, 2008
+      Commit #115798 by jcnventura at 23:51
+        Improve translability of template strings
+May 10, 2008
+      Commit #115600 by jcnventura at 02:25
+        Improve the documentation
+May 9, 2008
+      Commit #115568 by jcnventura at 21:32
+        Revert back the last patch
+May 8, 2008
+      Commit #115378 by jcnventura at 17:14
+        Remove what seems to be unnecessary code in print_link
+May 7, 2008
+      Commit #115219 by jcnventura at 22:17
+        Small changes to sync better with the 5.x version
+May 6, 2008
+      Commit #115022 by jcnventura at 23:22
+        Changes to comply with http://www.drupaltoughlove.com/review/printer-friendly-pages
+April 22, 2008
+      Commit #112305 by jcnventura at 20:41
+        Add Printer-friendly module group
+April 21, 2008
+      Commit #112142 by jcnventura at 23:31
+        Added Indonesian translation. Thanks SepedaTua!
+        Added Slovak translation. Thanks empError!
+        Fix #249526: correct German translation
+        Try to fix #230013: only call preg_replace with comment author link if there's anything to replace
+April 17, 2008
+      Commit #111188 by jcnventura at 11:08
+        Remove PDF admin pages dependecy on PHP5.
+        Added Polish translation. Thanks sir_kula!
+        Added Swedish translation. Thanks seals!
+April 3, 2008
+      Commit #108934 by jcnventura at 13:55
+        Add thickbox module support.
+      Commit #108933 by jcnventura at 13:55
+        Fix #239896: Make sure drupal_get_title() returns the original page's title
+April 2, 2008
+      Commit #108770 by jcnventura at 10:35
+        Added Turkish translation. Thanks turkyilmaz1963
+March 27, 2008
+      Commit #107835 by jcnventura at 11:20
+        Remove hard-coding of the greybox class name, now changes to what greybox uses (#233203)
+March 24, 2008
+      Commit #107382 by jcnventura at 18:35
+        Updated Romanian translation. Thanks Andrei
+March 21, 2008
+      Commit #106902 by jcnventura at 04:06
+        Updated translation files to match current code
+March 19, 2008
+      Commit #106567 by jcnventura at 04:34
+        Remove some more PHP warnings
+March 14, 2008
+      Commit #105780 by jcnventura at 02:58
+        Fix #233203: Add option to open in new window using the jQuery Greybox Redux module
+March 11, 2008
+      Commit #105364 by jcnventura at 04:42
+        Some more misc changes by zuriel
+March 7, 2008
+      Commit #104684 by jcnventura at 00:04
+        Some misc changes suggested by zuriel
+March 5, 2008
+      Commit #104500 by jcnventura at 22:42
+        Fix #230318 by shaisachs: include page query in PF link
+March 4, 2008
+      Commit #104311 by jcnventura at 23:21
+        Improve the theme_print_format_link functions
+      Commit #104277 by jcnventura at 18:42
+        Update changelog for release 6.x-1.0-rc1
+      Commit #104186 by jcnventura at 11:42
+        Better fix for #227127: use number of patterns instead of comparing to a
+      Commit #104150 by jcnventura at 03:13
+        Separation of the configuration variables for the HTML and common sections
+        Ability to configure use of text, icon or both in the PF links
+February 28, 2008
+      Commit #103576 by jcnventura at 17:21
+        Adding icons. Thanks to the Plone Foundation
+      Commit #103516 by jcnventura at 01:49
+        Fix #227625: add print['url'] var with absolute source url
+      Commit #103514 by jcnventura at 01:26
+        Add PDF module settings
+February 27, 2008
+      Commit #103327 by jcnventura at 00:25
+        Handle uppercase 'a' tags
+February 26, 2008
+      Commit #103286 by jcnventura at 20:52
+        Properly document the PDF tools installation steps
+        Rename the print_fill_attributes function back to the previous name
+      Commit #103278 by jcnventura at 20:10
+        Correct the support for the PDF per-node-type settings
+        Support print.node-.tpl.php filenames
 February 22, 2008
       Commit #102401 by jcnventura at 02:55
         Auto-discovery of the PDF generation tools
