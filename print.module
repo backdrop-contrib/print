@@ -192,7 +192,7 @@ function print_help($path, $arg) {
   switch ($path) {
     case 'admin/help#print':
       // Return a line-break version of the module README
-      return filter_filter('process', 2, NULL, file_get_contents(drupal_get_path('module', 'print') ."/README.txt") );
+      return filter_filter('process', 1, NULL, file_get_contents(drupal_get_path('module', 'print') ."/README.txt") );
   }
 
   $print_html_settings = variable_get('print_html_settings', print_html_settings_default());
