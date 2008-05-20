@@ -133,7 +133,7 @@ function _print_var_generator($node, $cid = NULL) {
   $print["favicon"] = theme_get_setting("toggle_favicon") ? "<link rel=\"shortcut icon\" href=\"". theme_get_setting("favicon") ."\" type=\"image/x-icon\"/>\n" : "";
 
   if (!empty($print_settings['css'])) {
-    $css_file = $print_settings['css'];
+    $css_file = strip_tags($print_settings['css']);
   }
   else {
     $css_file = base_path() . drupal_get_path('module', 'print') ."/print.css";
@@ -142,7 +142,7 @@ function _print_var_generator($node, $cid = NULL) {
 
   $print["sendtoprinter"] = $print_html_settings['sendtoprinter'] ? " onload=\"window.print();\"" : "";
     
-  $logo_url = !empty($print_settings['logo_url']) ? $print_settings['logo_url'] : theme_get_setting('logo');
+  $logo_url = !empty($print_settings['logo_url']) ? strip_tags($print_settings['logo_url']) : theme_get_setting('logo');
   $print["logo"] = $logo_url ? "<img class=\"print-logo\" src=\"". $logo_url ."\" alt=\"\" />\n" : "";
 
   $published_site = variable_get('site_name', 0);

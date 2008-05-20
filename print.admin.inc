@@ -57,7 +57,7 @@ function print_main_settings() {
   $form['print_settings']['newwindow'] = array(
     '#type' => 'radios',
     '#title' => t('Open the printer-friendly version in a new window'),
-    '#options' => array(t("Disabled"), t("Use HTML target (does not validate as XHTML Strict)"), t("Use Javascript (requires browser support)"), t("Use Greybox Redux (requires the greybox module)"), t("Use Thickbox (requires the thickbox module)")),
+    '#options' => array(t("Disabled"), t("Use HTML target (does not validate as XHTML Strict)"), t("Use Javascript (requires browser support)")),
     '#default_value' => $print_settings['newwindow'],
     '#description' => t('Setting this option will make the printer-friendly version open in a new window/tab.'),
   );
@@ -110,6 +110,15 @@ function print_html_settings() {
     '#default_value' => $print_html_settings['show_link'],
     '#options' => array(t("None (Disabled)"), t("Text only"), t("Icon only"), t("Icon and Text")),
     '#description' => t("Enable or disable the printer-friendly page link for each node. Even if the link is disabled, you can still view the print version of a node by going to print/nid where nid is the numeric id of the node."),
+  );
+
+  $form['print_html_settings']['link_class'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Link class'),
+    '#default_value' => $print_html_settings['link_class'],
+    '#size' => 60,
+    '#maxlength' => 250,
+    '#description' => t('This can be used by themers to change the link style or by jQuery modules to open in a new window (e.g. greybox or thickbox). Multiple classes can be specified, separated by spaces.'),
   );
 
   $form['print_html_settings']['show_sys_link'] = array(

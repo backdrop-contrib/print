@@ -12,7 +12,13 @@ define("PRINTPDF_PATH", "printpdf");
  * Default values of the print_pdf_settings variable
  */
 function print_pdf_settings_default() {
-  return array('show_link' => 0, 'show_sys_link' => 0, 'book_link' => 1, 'pdf_tool' => 0, 'content_disposition' => 0);
+  return array('show_link' => 0,
+               'link_class' => 'print-pdf',
+               'show_sys_link' => 0,
+               'book_link' => 1,
+               'pdf_tool' => 0,
+               'content_disposition' => 0,
+              );
 }
 
 //*******************************************************************
@@ -144,17 +150,24 @@ function print_pdf_form_alter(&$form, $form_state, $form_id) {
   }
 }
 
+/**
+ * Format the PDF version link
+ *
+ * @return
+ *   array of formatted attributes
+ * @ingroup themeable
+ */
 function theme_print_pdf_format_link() {
   $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
   $text = t('PDF version');
   $img = base_path() . drupal_get_path('module', 'print') .'/icons/pdf_icon.gif';
   $title = t('Display a PDF version of this page.');
-  $class = 'print-pdf';
-  $format = _print_format_link_aux($print_pdf_settings['show_link'], $text, $img, $title, $class);
+  $class = $print_pdf_settings['link_class'];
+  $format = _print_format_link_aux($print_pdf_settings['show_link'], $text, $img);
 
   return array('text' => $format['text'],
                'html' => $format['html'],
-               'attributes' => $format['attributes'],
+               'attributes' => print_fill_attributes($title, $class),
               );
 }
 

@@ -27,6 +27,15 @@ function print_pdf_settings() {
       '#description' => t("Enable or disable the PDF version link for each node. Even if the link is disabled, you can still view the PDF version of a node by going to printpdf/nid where nid is the numeric id of the node."),
     );
 
+    $form['print_pdf_settings']['link_class'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Link class'),
+      '#default_value' => $print_pdf_settings['link_class'],
+      '#size' => 60,
+      '#maxlength' => 250,
+      '#description' => t('This can be used by themers to change the link style or by jQuery modules to open in a new window (e.g. greybox or thickbox). Multiple classes can be specified, separated by spaces.'),
+    );
+
     $form['print_pdf_settings']['show_sys_link'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show link in system (non-content) pages'),
