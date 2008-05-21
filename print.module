@@ -123,16 +123,15 @@ function print_menu() {
  */
 function print_link($type, $node = NULL, $teaser = FALSE) {
   $print_html_settings = variable_get('print_html_settings', print_html_settings_default());
-  static $print_display = FALSE;
+  static $print_display_comment = FALSE;
 
-  if (($print_display == FALSE) && (isset($node->type))) {
+  if (($print_display_comment == FALSE) && (isset($node->type))) {
     $node_type = $node->type;
     $print_display_comment = variable_get('print_display_comment_'. $node->type, 0);
     $print_display = variable_get('print_display_'. $node->type, 1);
   }
   else {
     $node_type = '';
-    $print_display_comment = 0;
     $print_display = 1;
   }
 

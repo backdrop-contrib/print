@@ -67,48 +67,55 @@ function print_pdf_menu() {
  */
 function print_pdf_link($type, $node = NULL, $teaser = FALSE) {
   $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
-  static $print_pdf_display = FALSE;
+  static $print_pdf_display_comment = FALSE;
 
-  if ($print_pdf_display == FALSE) {
-    if (isset($node->type)) {
-      $node_type = $node->type;
-      $print_pdf_display_comment = variable_get('print_pdf_display_comment_'. $node->type, 0);
-      $print_pdf_display = variable_get('print_pdf_display_'. $node->type, 1);
-    }
-    else {
-      $node_type = '';
-      $print_pdf_display_comment = 0;
-      $print_pdf_display = 1;
-    }
+  if (($print_pdf_display_comment == FALSE) && (isset($node->type))) {
+    $node_type = $node->type;
+    $print_pdf_display_comment = variable_get('print_pdf_display_comment_'. $node->type, 0);
+    $print_pdf_display = variable_get('print_pdf_display_'. $node->type, 1);
+  }
+  else {
+    $node_type = '';
+    $print_pdf_display = 1;
   }
 
-  // No link is shown for several motives...
-  if ( !($teaser) &&
+  if (!$teaser) {
+    $links = array();
+    $format = theme('print_pdf_format_link');
+    // Show book link
+    if (($print_pdf_settings['book_link']) && user_access('access printer-friendly version') &&
+        (($node_type == 'book') || isset($node->book))) {
+
+      $links['book_pdf'] = array('href' => PRINTPDF_PATH ."/book/export/html/". $node->nid,
+                                 'title' => strip_tags($format['text']),
+                                 'attributes' => $format['attributes'],
+                                );
+
+      return $links;
+    }
+    // No link is shown for several motives...
+    elseif (($node_type != 'book') && (!isset($node->book)) &&
       ($print_pdf_settings['show_link']) && user_access('access print') &&
       (($type == 'comment' && $print_pdf_display_comment) ||
       ($type == 'node' && $print_pdf_display))) {
-    $links = array();
 
-    $format = theme('print_pdf_format_link');
+      $query_arr = $_GET;
+      if ($type == 'comment') {
+        $query_arr['comment'] = $node->cid;
+      }
+      $query = drupal_query_string_encode($query_arr, array('q'));
 
-    $query_arr = $_GET;
-    if ($type == 'comment') {
-      $query_arr['comment'] = $node->cid;
+      $links['print_pdf'] = array('href' => PRINTPDF_PATH ."/". $node->nid,
+                                  'title' => $format['text'],
+                                  'attributes' => $format['attributes'],
+                                  'html' => $format['html'],
+                                  'query' => $query,
+                                 );
+
+      return $links;
     }
-    $query = drupal_query_string_encode($query_arr, array('q'));
-
-    $links['print_pdf'] = array('href' => PRINTPDF_PATH ."/". $node->nid,
-                                'title' => $format['text'],
-                                'attributes' => $format['attributes'],
-                                'html' => $format['html'],
-                                'query' => $query,
-                               );
-
-    return $links;
   }
-  else {
-    return;
-  }
+  return;
 }
 
 /**
