@@ -27,7 +27,7 @@ function print_pdf_controller() {
   }
 }
 
-function _print_pdf_dompdf($print, $filename, $directives = array()) {
+function _print_pdf_dompdf($print, $filename) {
   $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
   require_once($print_pdf_settings['pdf_tool']);
 
@@ -36,22 +36,20 @@ function _print_pdf_dompdf($print, $filename, $directives = array()) {
   $html = ob_get_contents();
   ob_end_clean();
 
-  $allowed_directives = array(
-    'set_base_path',
-    'set_host',
-    'set_paper',
-    'set_protocol',
-  );
+  $url_array  = parse_url($print['url']);
+
+  $protocol = $url_array['scheme'] . "://";
+  $host = $url_array['host'];
+  $path = dirname($url_array['path']) . "/";
 
   $dompdf = new DOMPDF();
+  $dompdf->set_base_path($path);
+  $dompdf->set_host($host);
+  $dompdf->set_paper(strtolower($print_pdf_settings['paper_size']), $print_pdf_settings['page_orientation']);
+  $dompdf->set_protocol($protocol);
+
   $dompdf->load_html($html);
   
-  foreach ($directives as $directive => $params) {
-    if (in_array($directive, $allowed_directives)) {
-      call_user_func_array(array($dompdf, $directive), $params);
-    }
-  }
-
   $dompdf->render();
   $dompdf->stream($filename, array("Attachment" => $print_pdf_settings['content_disposition']));
 }
@@ -60,54 +58,60 @@ function _print_pdf_tcpdf($print, $filename) {
   $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
   require_once($print_pdf_settings['pdf_tool']);
 
-  $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, TRUE);
-  $pdf->Open();
+  $orientation = strtoupper($print_pdf_settings['page_orientation']{0});
 
-  $pdf->SetAuthor($print["submitted"]);
-  $pdf->SetCreator("Drupal");
-  $pdf->SetKeywords(trim(strip_tags($print["taxonomy"])));
+  // create new PDF document
+  $pdf = new TCPDF($orientation , PDF_UNIT, $print_pdf_settings['paper_size'], TRUE);
+
+  // set document information
+  $pdf->SetAuthor(strip_tags($print["submitted"]));
+  $pdf->SetCreator(variable_get("site_name", "Drupal"));
   $pdf->SetTitle($print["title"]);
+  $keys = implode(" ", explode("\n", trim(strip_tags($print["taxonomy"]))));
+  $pdf->SetKeywords($keys);
+
+  // set header data
+  $pdf->SetHeaderData("", 0, $print["title"], strip_tags($print["site_name"]));
+
+  // set header and footer fonts
+  $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+  $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
   // set margins
   $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
   $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
   $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-  $pdf->SetHeaderData("", 0, $print["title"], strip_tags($print["site_name"]));
   
   // set auto page breaks
   $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-  $pdf->AliasNbPages();
-  
+
   // set image scale factor
   $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-  
-  $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-  $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
+  //initialize document
+  $pdf->AliasNbPages();
+  
+  // add a page
   $pdf->AddPage();
 
   $pdf->SetFont(PDF_FONT_NAME_MAIN, 'B',  PDF_FONT_SIZE_MAIN * K_TITLE_MAGNIFICATION);
-  $pdf->SetLineWidth(1);
   $pdf->writeHTML($print["title"]);
-  $pdf->Ln(5);
 
   if ($print["submitted"]) {
-    $pdf->SetFont(PDF_FONT_NAME_MAIN, 'BI', PDF_FONT_SIZE_MAIN);
-    $pdf->MultiCell(0, 5, $print["submitted"], 0, 'L', 0);
-  }
-
-  if ($print["created"]) {
-    $pdf->SetFont('', '', PDF_FONT_SIZE_MAIN);
-    $pdf->MultiCell(0, 5, $print["created"], 0, 'L', 0);
-    $pdf->Ln(5);
+    $pdf->Ln(2);
+    $pdf->SetFont(PDF_FONT_NAME_MAIN, 'B', PDF_FONT_SIZE_MAIN);
+    $pdf->writeHTML($print["submitted"]);
+    $pdf->SetFont(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN);
+    $pdf->writeHTML($print["created"]);
   }
 
   $pdf->SetFont(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN);
-  $html = preg_replace("/<head>.*<\/head>/sim", "", $html);
   $pdf->writeHTML($print["content"]);
+  $pdf->writeHTML('<hr class="print-hr" />');
+  $pdf->writeHTML($print["source_url"]);
+  $pdf->writeHTML($print["pfp_links"]);
 
+  //Close and output PDF document 
   $output_dest = $print_pdf_settings['content_disposition'] ? 'D' : 'I';
-
   $pdf->Output($filename, $output_dest);
 }

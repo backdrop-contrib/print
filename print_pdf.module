@@ -18,6 +18,8 @@ function print_pdf_settings_default() {
                'book_link' => 1,
                'pdf_tool' => 0,
                'content_disposition' => 0,
+               'paper_size' => 'A4',
+               'page_orientation' => 'portrait',
               );
 }
 
