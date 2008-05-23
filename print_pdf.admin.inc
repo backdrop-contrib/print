@@ -1,17 +1,24 @@
 <?php
 /* $Id$ */
 
-//*******************************************************************
-// Admin Settings: Print
-//*******************************************************************
+/**
+ * @file
+ * Contains the administrative functions of the PDF version module.
+ *
+ * This file is included by the PDF version module, and includes the
+ * settings form.
+ */
 
 /**
- * Print module settings form
+ * Menu callback for the PDF version module settings form.
+ *
+ * @ingroup forms
+ * @see _print_pdf_tools()
  */
 function print_pdf_settings() {
   $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
 
-  $pdf_tools = print_pdf_tools();
+  $pdf_tools = _print_pdf_tools();
 
   if ($pdf_tools != -1) {
     $form['print_pdf_settings'] = array(
@@ -108,17 +115,19 @@ function print_pdf_settings() {
 }
 
 /**
- * Print module settings form
+ * Auxiliary function to locate suitable PDF generation tools
+ *
+ * @return
+ *   array of filenames with the include-able PHP file of the located tools
  */
-function print_pdf_tools() {
-  $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
-
+function _print_pdf_tools() {
   $tools = array_keys(file_scan_directory(drupal_get_path('module', 'print'), '^dompdf_config.inc.php$'));
   $tools = array_merge($tools, array_keys(file_scan_directory(drupal_get_path('module', 'print'), '^tcpdf.php$')));
 
   $num_tools = count($tools);
 
   if ($num_tools == 0) {
+    $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
     $print_pdf_settings['show_link'] = 0;
     variable_set('print_pdf_settings', $print_pdf_settings);
     return -1;
