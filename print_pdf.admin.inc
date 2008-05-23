@@ -62,7 +62,7 @@ function print_pdf_settings() {
     $form['print_pdf_settings']['content_disposition'] = array(
       '#type' => 'radios',
       '#title' => t('Open PDF in'),
-      '#options' => array(t('Browser window'), t('Save dialog')),
+      '#options' => array(t('Same browser window'), t('New browser window'), t('Save dialog')),
       '#default_value' => $print_pdf_settings['content_disposition'],
       '#description' => t("Select the desired method for opening the PDF in the user's browser."),
     );

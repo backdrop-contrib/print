@@ -16,25 +16,25 @@ function print_pdf_controller() {
   $print["logo"] = preg_replace_callback($pattern, "_print_rewrite_urls", $print["logo"]);
   $print["footer_message"] = preg_replace_callback($pattern, "_print_rewrite_urls", $print["footer_message"]);
 
+  ob_start();
+  include_once(_print_get_template($print["type"]));
+  $html = ob_get_contents();
+  ob_end_clean();
+
   if (basename($print_pdf_settings['pdf_tool']) == "dompdf_config.inc.php") {
-    _print_pdf_dompdf($print, $args .".pdf");
+    _print_pdf_dompdf($print, $html, $args .".pdf");
   }
   elseif (basename($print_pdf_settings['pdf_tool']) == "tcpdf.php") {
-    _print_pdf_tcpdf($print, $args .".pdf");
+    _print_pdf_tcpdf($print, $html, $args .".pdf");
   }
   else {
     return drupal_not_found();
   }
 }
 
-function _print_pdf_dompdf($print, $filename) {
+function _print_pdf_dompdf($print, $html, $filename) {
   $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
   require_once($print_pdf_settings['pdf_tool']);
-
-  ob_start();
-  include_once(_print_get_template($print["type"]));
-  $html = ob_get_contents();
-  ob_end_clean();
 
   $url_array  = parse_url($print['url']);
 
@@ -51,10 +51,10 @@ function _print_pdf_dompdf($print, $filename) {
   $dompdf->load_html($html);
   
   $dompdf->render();
-  $dompdf->stream($filename, array("Attachment" => $print_pdf_settings['content_disposition']));
+  $dompdf->stream($filename, array("Attachment" => ($print_pdf_settings['content_disposition'] == 2)));
 }
 
-function _print_pdf_tcpdf($print, $filename) {
+function _print_pdf_tcpdf($print, $html, $filename) {
   $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
   require_once($print_pdf_settings['pdf_tool']);
 
@@ -94,6 +94,9 @@ function _print_pdf_tcpdf($print, $filename) {
   // add a page
   $pdf->AddPage();
 
+  preg_match("/<body>(.*)<\/body>/sim", $html, $matches);
+  $matches[1] = preg_replace("/.*?(<[^<]*?print-content.*?>)/sim", "$1", $matches[1]);
+
   $pdf->SetFont(PDF_FONT_NAME_MAIN, 'B',  PDF_FONT_SIZE_MAIN * K_TITLE_MAGNIFICATION);
   $pdf->writeHTML($print["title"]);
 
@@ -106,12 +109,9 @@ function _print_pdf_tcpdf($print, $filename) {
   }
 
   $pdf->SetFont(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN);
-  $pdf->writeHTML($print["content"]);
-  $pdf->writeHTML('<hr class="print-hr" />');
-  $pdf->writeHTML($print["source_url"]);
-  $pdf->writeHTML($print["pfp_links"]);
+  $pdf->writeHTML($matches[1]);
 
   //Close and output PDF document 
-  $output_dest = $print_pdf_settings['content_disposition'] ? 'D' : 'I';
+  $output_dest = ($print_pdf_settings['content_disposition'] == 2) ? 'D' : 'I';
   $pdf->Output($filename, $output_dest);
 }

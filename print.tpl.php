@@ -15,7 +15,7 @@
     <p />
     <div class="print-breadcrumb"><?php  print $print["breadcrumb"] ?></div>
     <hr class="print-hr" />
-    <div class="print-title"><?php  print $print["title"] ?></div>
+    <h1 class="print-title"><?php  print $print["title"] ?></h1>
     <div class="print-submitted"><?php  print $print["submitted"] ?></div>
     <div class="print-created"><?php  print $print["created"] ?></div>
     <p />

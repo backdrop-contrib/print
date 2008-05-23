@@ -22,7 +22,7 @@ function print_settings_default() {
                'css' => '',
                'urls' => 1,
                'comments' => 0,
-               'newwindow' => 0,
+               'newwindow' => 1,
               );
 }
 
@@ -34,6 +34,7 @@ function print_html_settings_default() {
                'link_class' => 'print-page',
                'show_sys_link' => 1,
                'book_link' => 1,
+               'new_window' => 0,
                'sendtoprinter' => 0,
               );
 }
@@ -239,7 +240,7 @@ function print_form_alter(&$form, $form_state, $form_id) {
  * @return
  *   array of formatted attributes
  */
-function print_fill_attributes($title = '', $class = '') {
+function print_fill_attributes($title = '', $class = '', $new_window = FALSE) {
   $print_settings = variable_get('print_settings', print_settings_default());
   $robots_settings = variable_get('print_robot_settings', print_robot_settings_default());
 
@@ -247,13 +248,15 @@ function print_fill_attributes($title = '', $class = '') {
   $attributes['title'] = $title;
   $attributes['class'] = $class;
 
-  switch ($print_settings['newwindow']) {
-  case 1:
-    $attributes['target'] = '_blank';
-    break;
-  case 2:
-    $attributes['onclick'] = 'window.open(this.href); return false';
-    break;
+  if ($new_window) {
+    switch ($print_settings['newwindow']) {
+    case 0:
+      $attributes['target'] = '_blank';
+      break;
+    case 1:
+      $attributes['onclick'] = 'window.open(this.href); return false';
+      break;
+    }
   }
   if (!empty($robots_settings['nofollow'])) {
     $attributes['rel'] = 'nofollow';
@@ -309,11 +312,12 @@ function theme_print_format_link() {
   $img = base_path() . drupal_get_path('module', 'print') .'/icons/print_icon.gif';
   $title = t('Display a printer-friendly version of this page.');
   $class = $print_html_settings['link_class'];
+  $new_window = $print_html_settings['new_window'];
   $format = _print_format_link_aux($print_html_settings['show_link'], $text, $img);
 
   return array('text' => $format['text'],
                'html' => $format['html'],
-               'attributes' => print_fill_attributes($title, $class),
+               'attributes' => print_fill_attributes($title, $class, $new_window),
               );
 }
 

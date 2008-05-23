@@ -17,7 +17,7 @@ function print_pdf_settings_default() {
                'show_sys_link' => 0,
                'book_link' => 1,
                'pdf_tool' => 0,
-               'content_disposition' => 0,
+               'content_disposition' => 2,
                'paper_size' => 'A4',
                'page_orientation' => 'portrait',
               );
@@ -172,11 +172,12 @@ function theme_print_pdf_format_link() {
   $img = base_path() . drupal_get_path('module', 'print') .'/icons/pdf_icon.gif';
   $title = t('Display a PDF version of this page.');
   $class = $print_pdf_settings['link_class'];
+  $new_window = ($print_pdf_settings['content_disposition'] == 1);
   $format = _print_format_link_aux($print_pdf_settings['show_link'], $text, $img);
 
   return array('text' => $format['text'],
                'html' => $format['html'],
-               'attributes' => print_fill_attributes($title, $class),
+               'attributes' => print_fill_attributes($title, $class, $new_window),
               );
 }
 
