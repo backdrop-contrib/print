@@ -1,6 +1,3 @@
-# Turkish translation of Türkiye Komünist Partisi
-# Copyright (c) 2008 yonetici <arikusu@gmail.com>
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: print 1.7\n"
