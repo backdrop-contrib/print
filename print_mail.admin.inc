@@ -1,0 +1,58 @@
+<?php
+/* $Id$ */
+
+/**
+ * @file
+ * Contains the administrative functions of the send by e-mail module.
+ *
+ * This file is included by the send by e-mail module, and includes the
+ * settings form.
+ */
+
+/**
+ * Menu callback for the send by e-mail module settings form.
+ *
+ * @ingroup forms
+ * @see _print_mail_tools()
+ */
+function print_mail_settings() {
+  $print_mail_settings = variable_get('print_mail_settings', print_mail_settings_default());
+
+  $form['print_mail_settings'] = array(
+      '#type' => 'fieldset',
+      '#tree' => TRUE,
+    );
+
+  $form['print_mail_settings']['show_link'] = array(
+    '#type' => 'radios',
+    '#title' => t('Send by e-mail link'),
+    '#default_value' => $print_mail_settings['show_link'],
+    '#options' => array(t("None (Disabled)"), t("Text only"), t("Icon only"), t("Icon and Text")),
+    '#description' => t("Enable or disable the send by e-mail link for each node. Even if the link is disabled, you can still send a node by e-mail by going to printmail/nid where nid is the numeric id of the node."),
+  );
+
+  $form['print_mail_settings']['link_class'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Link class'),
+    '#default_value' => $print_mail_settings['link_class'],
+    '#size' => 60,
+    '#maxlength' => 250,
+    '#description' => t('This can be used by themers to change the link style or by jQuery modules to open in a new window (e.g. greybox or thickbox). Multiple classes can be specified, separated by spaces.'),
+  );
+
+  $form['print_mail_settings']['show_sys_link'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show link in system (non-content) pages'),
+    '#default_value' => $print_mail_settings['show_sys_link'],
+    '#description' => t('Setting this option will add a send by e-mail link on pages created by Drupal or the enabled modules.'),
+  );
+
+  $form['print_mail_settings']['book_link'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show link in book nodes'),
+    '#default_value' => $print_mail_settings['book_link'],
+    '#description' => t('Activate this to add a send by e-mail link in book nodes. Requires the (core) book module.'),
+  );
+
+  return system_settings_form($form);
+}
