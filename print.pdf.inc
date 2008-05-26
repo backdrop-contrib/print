@@ -58,6 +58,9 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
   require_once($print_pdf_settings['pdf_tool']);
 
+  $font_name = "dejavusans";
+  $font_size = 10;
+
   $orientation = strtoupper($print_pdf_settings['page_orientation']{0});
 
   // create new PDF document
@@ -74,8 +77,8 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   $pdf->SetHeaderData("", 0, $print["title"], strip_tags($print["site_name"]));
 
   // set header and footer fonts
-  $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-  $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+  $pdf->setHeaderFont(Array($font_name, '', $font_size));
+  $pdf->setFooterFont(Array($font_name, '', PDF_FONT_SIZE_DATA));
 
   // set margins
   $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
@@ -97,18 +100,18 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   preg_match("/<body>(.*)<\/body>/sim", $html, $matches);
   $matches[1] = preg_replace("/.*?(<[^<]*?print-content.*?>)/sim", "$1", $matches[1]);
 
-  $pdf->SetFont(PDF_FONT_NAME_MAIN, 'B',  PDF_FONT_SIZE_MAIN * K_TITLE_MAGNIFICATION);
+  $pdf->SetFont($font_name, 'B', $font_size * K_TITLE_MAGNIFICATION);
   $pdf->writeHTML($print["title"]);
 
   if ($print["submitted"]) {
     $pdf->Ln(2);
-    $pdf->SetFont(PDF_FONT_NAME_MAIN, 'B', PDF_FONT_SIZE_MAIN);
+    $pdf->SetFont($font_name, 'B', $font_size);
     $pdf->writeHTML($print["submitted"]);
-    $pdf->SetFont(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN);
+    $pdf->SetFont($font_name, '', $font_size);
     $pdf->writeHTML($print["created"]);
   }
 
-  $pdf->SetFont(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN);
+  $pdf->SetFont($font_name, '', $font_size);
   $pdf->writeHTML($matches[1]);
 
   //Close and output PDF document 
