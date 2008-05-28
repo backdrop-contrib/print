@@ -42,7 +42,8 @@ function print_mail_menu() {
 
   $items[PRINTMAIL_PATH] = array(
     'title' => 'Printer-friendly Mail',
-    'page callback' => 'print_mail_controller',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('print_mail_form'),
     'access arguments' => array('access print'),
     'type' => MENU_CALLBACK,
     'file' => 'print_mail.inc',

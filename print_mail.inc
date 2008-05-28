@@ -1,0 +1,161 @@
+<?php
+/* $Id$ */
+
+require_once(drupal_get_path('module', 'print') .'/print.pages.inc');
+
+function print_mail_form($form_sate) {
+  global $user;
+
+  $form = array();
+
+  // Remove the printmail/ prefix
+  $path = substr($_GET['q'], strpos($_GET['q'], '/')+1);
+  if (is_numeric($path)) {
+    $path = "node/". $path;
+  }
+  $form['path'] = array('#type' => 'value', '#value' => $path);
+
+  $form['fld_from_addr'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Your e-mail address'),
+    '#size' => 60,
+  );
+  $form['fld_from_name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Your name'),
+    '#size' => 60,
+  );
+  $form['fld_to_addrs'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Send to the following e-mail addresses'),
+    '#rows' => 3,
+    '#description' => t('Enter multiple addresses separated by commas and/or different lines.'),
+  );
+  $form['fld_subject'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Subject'),
+  );
+  $form['btn_submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Send e-mail',
+  );
+  $form['btn_clear'] = array(
+    '#type' => 'submit',
+    '#value' => 'Clear form',
+    '#validate' => array('print_mail_form_reset'),
+  );
+  $form['btn_cancel'] = array(
+    '#type' => 'submit',
+    '#value' => 'Cancel',
+    '#validate' => array(),
+    '#submit' => array('print_mail_form_cancel'),
+  );
+
+  if ($user->uid != 0) {
+    $form['fld_from_addr']['#default_value'] = $user->mail;
+    $form['fld_from_addr']['#disabled'] = TRUE;
+    $form['fld_from_addr']['#value'] = $user->mail;
+    $form['fld_from_name']['#default_value'] = $user->name;
+  }
+
+  return $form;
+}
+
+/**
+ * Validate the send by-email form submission.
+ */
+function print_mail_form_validate($form, &$form_state) {
+  $from_addr = trim($form_state['values']['fld_from_addr']);
+  $test = user_validate_mail($from_addr);
+  if ($test) {
+    form_set_error('fld_from_addr', $test);
+  }
+
+  // All new-lines are replaced by commas
+  $to_addrs = str_replace(array("\r\n", "\n", "\r"), ',', $form_state['values']['fld_to_addrs']);
+  // Create an array from the string
+  $to_array = explode(',', $to_addrs);
+  // Verify each element of the array
+  foreach ($to_array as $key => $address) {
+    $address = trim($address);
+    if (preg_match('/(.*?) <(.*)>/s', $address, $matches)) {
+      // Address is of the type User Name <user@domain.tld>
+      $test = user_validate_mail($matches[2]);
+      $to_array[$key] = trim($matches[1]) ." <". $matches[2] .">";
+    }
+    else {
+      // Address must be user@domain.tld
+      $test = user_validate_mail($address);
+    }
+    if ($test) {
+      form_set_error('fld_to_addrs', $test);
+    }
+  }
+
+  // In all fields, prevent insertion of custom headers
+  foreach ($form_state['values'] as $key => $string) {
+    if ( (substr($key, 0, 4) == "fld_") && ((strpos($string, "\n") !== FALSE) || (strpos($string, "\r") !== FALSE)) ) {
+      form_set_error($key, 'Found invalid character');
+    }
+  }
+
+  $form_state['values']['fld_from_addr'] = $from_addr;
+  $form_state['values']['fld_from_name'] = trim($form_state['values']['fld_from_name']);
+  // Re-create the string from the re-organized array
+  $form_state['values']['fld_to_addrs'] = implode(', ', $to_array);
+}
+
+/**
+ * Process the send by-email form submission.
+ */
+function print_mail_form_submit($form, &$form_state) {
+  global $language;
+
+  $from = $form_state['values']['fld_from_name'] ." <". $form_state['values']['fld_from_addr'] .">";
+  $to = $form_state['values']['fld_to_addrs'];
+  $params = array();
+  $params['subject'] = $form_state['values']['fld_subject'];
+
+  $site_name = variable_get('site_name', t('us'));
+  drupal_set_message(t('Thank you for spreading the word about !site.', array('!site' => $site_name)));
+  drupal_mail('print_mail', 'sendpage', $to, $language->language, $params, $from, TRUE);
+  $form_state['redirect'] = $form_state['values']['path'];
+}
+
+/**
+ * Implementation of hook_mail().
+ */
+function print_mail_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'sendpage':
+      $print = print_controller();
+
+      // Img elements must be set to absolute
+//      $pattern = "@<(img\s[^>]*?)>@is";
+//      $print["content"] = preg_replace_callback($pattern, "_print_rewrite_urls", $print["content"]);
+//      $print["logo"] = preg_replace_callback($pattern, "_print_rewrite_urls", $print["logo"]);
+//      $print["footer_message"] = preg_replace_callback($pattern, "_print_rewrite_urls", $print["footer_message"]);
+
+      ob_start();
+      include_once(_print_get_template($print["type"]));
+      $html = ob_get_contents();
+      ob_end_clean();
+
+      $message['subject'] = $params['subject'];
+      $message['body'] = $html;
+      $message['headers']['Content-Type'] = 'text/html; charset=utf-8';
+    break;
+  }
+}
+
+function print_mail_form_reset($form, &$form_state) {
+  $form_state['rebuild'] = TRUE;
+  drupal_set_message(t('The form has been reset to the default values.'));
+}
+
+
+function print_mail_form_cancel($form, &$form_state) {
+  $form_state['redirect'] = $form_state['values']['path'];
+}
+
+//  $print_mail_settings = variable_get('print_mail_settings', print_mail_settings_default());
