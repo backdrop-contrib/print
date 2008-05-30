@@ -140,6 +140,10 @@ function _print_var_generator($node, $cid = NULL) {
     $css_file = base_path() . drupal_get_path('module', 'print') ."/print.css";
   }
   $print["css"] = "<style type=\"text/css\" media=\"all\">@import \"". $css_file ."\";</style>\n";
+  // Add CCK's CSS file to properly display the fields
+  if (module_exists('content')) {
+    $print["css"] .= "<style type=\"text/css\" media=\"all\">@import \"". base_path() . drupal_get_path('module', 'content') ."/content.css\";</style>\n";
+  }
 
   $print["sendtoprinter"] = $print_html_settings['sendtoprinter'] ? " onload=\"window.print();\"" : "";
     
