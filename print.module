@@ -32,7 +32,7 @@ function print_settings_default() {
 function print_html_settings_default() {
   return array('show_link' => 1,
                'link_class' => 'print-page',
-               'show_sys_link' => 1,
+               'show_sys_link' => '<front>',
                'book_link' => 1,
                'new_window' => 0,
                'sendtoprinter' => 0,
@@ -197,7 +197,7 @@ function print_help($path, $arg) {
 
   $print_html_settings = variable_get('print_html_settings', print_html_settings_default());
 
-  if (($print_html_settings['show_link']) && ($print_html_settings['show_sys_link']) &&
+  if (($print_html_settings['show_link']) && (drupal_match_path($path, $print_html_settings['show_sys_link'])) &&
       user_access('access print') && (preg_match("/^node\//i", $path) == 0)) {
     static $output = FALSE;
 

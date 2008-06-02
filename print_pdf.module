@@ -14,7 +14,7 @@ define("PRINTPDF_PATH", "printpdf");
 function print_pdf_settings_default() {
   return array('show_link' => 0,
                'link_class' => 'print-pdf',
-               'show_sys_link' => 0,
+               'show_sys_link' => '<front>',
                'book_link' => 1,
                'pdf_tool' => 0,
                'content_disposition' => 2,
@@ -126,7 +126,7 @@ function print_pdf_link($type, $node = NULL, $teaser = FALSE) {
 function print_pdf_help($path, $arg) {
   $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
 
-  if (($print_pdf_settings['show_link']) && ($print_pdf_settings['show_sys_link']) &&
+  if (($print_pdf_settings['show_link']) && (drupal_match_path($path, $print_pdf_settings['show_sys_link'])) &&
       user_access('access print') && (preg_match("/^node\//i", $path) == 0)) {
     static $output = FALSE;
 

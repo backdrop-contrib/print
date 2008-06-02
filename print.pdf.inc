@@ -5,11 +5,12 @@ require_once(drupal_get_path('module', 'print') .'/print.pages.inc');
 
 function print_pdf_controller() {
   // Remove the printpdf/ prefix
-  $args = substr($_GET['q'], strpos($_GET['q'], '/')+1);
+  $path = substr($_GET['q'], strpos($_GET['q'], '/')+1);
+  $cid = isset($_GET['comment']) ? $_GET['comment'] : NULL;
 
   $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
 
-  $print = print_controller();
+  $print = print_controller($path, $cid);
   // Img elements must be set to absolute
   $pattern = "@<(img\s[^>]*?)>@is";
   $print["content"] = preg_replace_callback($pattern, "_print_rewrite_urls", $print["content"]);
@@ -22,10 +23,10 @@ function print_pdf_controller() {
   ob_end_clean();
 
   if (basename($print_pdf_settings['pdf_tool']) == "dompdf_config.inc.php") {
-    _print_pdf_dompdf($print, $html, $args .".pdf");
+    _print_pdf_dompdf($print, $html, $path .".pdf");
   }
   elseif (basename($print_pdf_settings['pdf_tool']) == "tcpdf.php") {
-    _print_pdf_tcpdf($print, $html, $args .".pdf");
+    _print_pdf_tcpdf($print, $html, $path .".pdf");
   }
   else {
     return drupal_not_found();

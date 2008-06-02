@@ -17,50 +17,54 @@
  * @see _print_get_template()
  */
 function print_controller_html() {
-  $print = print_controller();
+  // Remove the print/ prefix
+  $path = substr($_GET['q'], strpos($_GET['q'], '/')+1);
+  $cid = isset($_GET['comment']) ? $_GET['comment'] : NULL;
+
+  $print = print_controller($path, $cid);
   include_once(_print_get_template($print["type"]));
 }
 
 /**
- * Select the print generator function based on the current path
+ * Select the print generator function based on the page type
  *
  * Depending on the type of node, this functions chooses the appropriate
  * generator function.
  *
+ * @param $path
+ *   path of the original page
+ * @param $cid
+ *   comment ID of the individual comment to be rendered
+ * @param $teaser
+ *   if set to TRUE, outputs only the node's teaser
  * @return
  *   array with the fields to be used in the template
  * @see _print_generate_node()
  * @see _print_generate_path()
  * @see _print_generate_book()
  */
-function print_controller() {
-  // Remove the print/ prefix
-  $args = substr($_GET['q'], strpos($_GET['q'], '/')+1);
-
-  $cid = isset($_GET['comment']) ? $_GET['comment'] : NULL;
-
-  $nid = $args;
-  if (!is_numeric($nid)) {
+function print_controller($path, $cid, $teaser = FALSE) {
+  if (!is_numeric($path)) {
     // Indirect call with print/alias
     // If there is a path alias with these arguments, generate a printer-friendly version for it
-    $path = drupal_get_normal_path($args);
+    $path = drupal_get_normal_path($path);
     $ret = preg_match("/^node\/(.*)/i", $path, $matches);
     if ($ret == 1) {
-      $nid = $matches[1];
+      $path = $matches[1];
     }
   }
-  if (is_numeric($nid)) {
-    $print = _print_generate_node($nid, $cid);
+  if (is_numeric($path)) {
+    $print = _print_generate_node($path, $cid, $teaser);
   }
   else {
-    $ret = preg_match("/^book\/export\/html\/(.*)/i", $args, $matches);
+    $ret = preg_match("/^book\/export\/html\/(.*)/i", $path, $matches);
     if ($ret == 1) {
       // This is a book PF page link, handle trough the book handling functions
       $print = _print_generate_book($matches[1]);
     }
     else {
       // If no content node was found, handle the page printing with the 'printable' engine
-      $print = _print_generate_path($args);
+      $print = _print_generate_path($path);
     }
   }
 
@@ -405,10 +409,12 @@ function _print_get_template($type = NULL) {
  *   node ID of the node to be rendered into a printer-friendly page
  * @param $cid
  *   comment ID of the individual comment to be rendered
+ * @param $teaser
+ *   if set to TRUE, outputs only the node's teaser
  * @return
  *   filled array ready to be used in the template
  */
-function _print_generate_node($nid, $cid = NULL) {
+function _print_generate_node($nid, $cid = NULL, $teaser = FALSE) {
   // We can take a node id
   $node = node_load(array('nid' => $nid));
   if (!node_access('view', $node)) {
@@ -423,12 +429,17 @@ function _print_generate_node($nid, $cid = NULL) {
   unset($node->pages);
   unset($node->page_count);
 
-  unset($node->teaser);
+  if ($teaser) {
+    unset($node->body);
+  }
+  else {
+    unset($node->teaser);
+  }
   $node = (object)$node;
   if ($cid === NULL) {
     // Adapted (simplified) version of node_view for Drupal 5.x
     //Render the node content
-    $node = node_build_content($node, FALSE, TRUE);
+    $node = node_build_content($node, $teaser, TRUE);
     // Disable fivestar widget output
     unset($node->content["fivestar_widget"]);
     // Disable service links module output

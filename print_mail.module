@@ -14,8 +14,10 @@ define("PRINTMAIL_PATH", "printmail");
 function print_mail_settings_default() {
   return array('show_link' => 0,
                'link_class' => 'print-mail',
-               'show_sys_link' => 0,
+               'show_sys_link' => '<front>',
                'book_link' => 1,
+               'teaser_default' => 1,
+               'teaser_choice' => 1,
               );
 }
 
@@ -31,6 +33,10 @@ function print_mail_theme() {
     'print_mail_format_link' => array(
       'arguments' => array(),
     ),
+    'print_mail_form' => array(
+      'arguments' => array('form'),
+      'file' => 'print_mail.inc',
+    ),
   );
 }
 
@@ -41,7 +47,7 @@ function print_mail_menu() {
   $items = array();
 
   $items[PRINTMAIL_PATH] = array(
-    'title' => 'Printer-friendly Mail',
+    'title' => 'Send page by e-mail',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_mail_form'),
     'access arguments' => array('access print'),
@@ -123,7 +129,7 @@ function print_mail_link($type, $node = NULL, $teaser = FALSE) {
 function print_mail_help($path, $arg) {
   $print_mail_settings = variable_get('print_mail_settings', print_mail_settings_default());
 
-  if (($print_mail_settings['show_link']) && ($print_mail_settings['show_sys_link']) &&
+  if (($print_mail_settings['show_link']) && (drupal_match_path($path, $print_mail_settings['show_sys_link'])) &&
       user_access('access print') && (preg_match("/^node\//i", $path) == 0)) {
     static $output = FALSE;
 

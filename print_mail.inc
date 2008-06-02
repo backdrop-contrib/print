@@ -3,9 +3,14 @@
 
 require_once(drupal_get_path('module', 'print') .'/print.pages.inc');
 
-function print_mail_form($form_sate) {
+/**
+ * Menu callback for the send by e-mail form.
+ *
+ * @ingroup forms
+ */
+function print_mail_form($form_state) {
   global $user;
-
+  $print_mail_settings = variable_get('print_mail_settings', print_mail_settings_default());
   $form = array();
 
   // Remove the printmail/ prefix
@@ -13,7 +18,9 @@ function print_mail_form($form_sate) {
   if (is_numeric($path)) {
     $path = "node/". $path;
   }
+  $cid = isset($_GET['comment']) ? $_GET['comment'] : NULL;
   $form['path'] = array('#type' => 'value', '#value' => $path);
+  $forn['cid'] =  array('#type' => 'value', '#value' => $cid);
 
   $form['fld_from_addr'] = array(
     '#type' => 'textfield',
@@ -35,6 +42,18 @@ function print_mail_form($form_sate) {
     '#type' => 'textfield',
     '#title' => t('Subject'),
   );
+
+  if ($print_mail_settings['teaser_choice']) {
+    $form['chk_teaser'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Send only the teaser'),
+      '#default_value' => $print_mail_settings['teaser_default'],
+    );
+  }
+  else {
+    $form['chk_teaser'] = array('#type' => 'value', '#value' => $print_mail_settings['teaser_default']);
+  }
+
   $form['btn_submit'] = array(
     '#type' => 'submit',
     '#value' => 'Send e-mail',
@@ -52,17 +71,35 @@ function print_mail_form($form_sate) {
   );
 
   if ($user->uid != 0) {
+    $user_name = $user->name;
     $form['fld_from_addr']['#default_value'] = $user->mail;
     $form['fld_from_addr']['#disabled'] = TRUE;
     $form['fld_from_addr']['#value'] = $user->mail;
     $form['fld_from_name']['#default_value'] = $user->name;
   }
+  else {
+    $user_name = t('Someone');
+  }
+  $site_name = variable_get('site_name', t('an interesting site'));
+  $form['fld_subject']['#default_value'] = t('!user has sent you a message from !site', 
+                                             array('!user' => $user_name, '!site' => $site_name));
 
   return $form;
 }
 
+function theme_print_mail_form($form) {
+  $content = '';
+  foreach (element_children($form) as $key) {
+    $tmp = drupal_render($form[$key]);
+    $content .= $tmp;
+  }
+  return $content;
+}
+
 /**
  * Validate the send by-email form submission.
+ *
+ * @ingroup forms
  */
 function print_mail_form_validate($form, &$form_state) {
   $from_addr = trim($form_state['values']['fld_from_addr']);
@@ -107,6 +144,8 @@ function print_mail_form_validate($form, &$form_state) {
 
 /**
  * Process the send by-email form submission.
+ *
+ * @ingroup forms
  */
 function print_mail_form_submit($form, &$form_state) {
   global $language;
@@ -115,6 +154,9 @@ function print_mail_form_submit($form, &$form_state) {
   $to = $form_state['values']['fld_to_addrs'];
   $params = array();
   $params['subject'] = $form_state['values']['fld_subject'];
+  $params['path'] = $form_state['values']['path'];
+  $params['cid'] = $form_state['values']['cid'];
+  $params['teaser'] = $form_state['values']['chk_teaser'];
 
   $site_name = variable_get('site_name', t('us'));
   drupal_set_message(t('Thank you for spreading the word about !site.', array('!site' => $site_name)));
@@ -128,7 +170,7 @@ function print_mail_form_submit($form, &$form_state) {
 function print_mail_mail($key, &$message, $params) {
   switch ($key) {
     case 'sendpage':
-      $print = print_controller();
+      $print = print_controller($params['path'], $params['cid'], $params['teaser']);
 
       // Img elements must be set to absolute
 //      $pattern = "@<(img\s[^>]*?)>@is";
@@ -148,14 +190,23 @@ function print_mail_mail($key, &$message, $params) {
   }
 }
 
+/**
+ * Process the send by-email form reset submission.
+ *
+ * @ingroup forms
+ */
 function print_mail_form_reset($form, &$form_state) {
   $form_state['rebuild'] = TRUE;
   drupal_set_message(t('The form has been reset to the default values.'));
 }
 
 
+/**
+ * Process the send by-email form cancel submission.
+ *
+ * @ingroup forms
+ */
 function print_mail_form_cancel($form, &$form_state) {
   $form_state['redirect'] = $form_state['values']['path'];
 }
 
-//  $print_mail_settings = variable_get('print_mail_settings', print_mail_settings_default());

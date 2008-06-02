@@ -13,7 +13,6 @@
  * Menu callback for the send by e-mail module settings form.
  *
  * @ingroup forms
- * @see _print_mail_tools()
  */
 function print_mail_settings() {
   $print_mail_settings = variable_get('print_mail_settings', print_mail_settings_default());
@@ -41,10 +40,11 @@ function print_mail_settings() {
   );
 
   $form['print_mail_settings']['show_sys_link'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Show link in system (non-content) pages'),
+    '#type' => 'textarea',
+    '#title' => t('Show link in the following system (non-content) pages'),
     '#default_value' => $print_mail_settings['show_sys_link'],
-    '#description' => t('Setting this option will add a send by e-mail link on pages created by Drupal or the enabled modules.'),
+    '#rows' => 3,
+    '#description' => t("Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>')),
   );
 
   $form['print_mail_settings']['book_link'] = array(
@@ -52,6 +52,20 @@ function print_mail_settings() {
     '#title' => t('Show link in book nodes'),
     '#default_value' => $print_mail_settings['book_link'],
     '#description' => t('Activate this to add a send by e-mail link in book nodes. Requires the (core) book module.'),
+  );
+
+  $form['print_mail_settings']['teaser_default'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Send only the teaser'),
+    '#default_value' => $print_mail_settings['teaser_default'],
+    '#description' => t("If selected, the default choice will be to send only the node's teaser instead of the full content."),
+  );
+
+  $form['print_mail_settings']['teaser_choice'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable teaser/full mode choice'),
+    '#default_value' => $print_mail_settings['teaser_choice'],
+    '#description' => t('If checked, the user will be able to choose between sending the full content or only the teaser at send time.'),
   );
 
   return system_settings_form($form);
