@@ -24,23 +24,30 @@ function print_mail_form($form_state) {
 
   $form['fld_from_addr'] = array(
     '#type' => 'textfield',
-    '#title' => t('Your e-mail address'),
-    '#size' => 60,
+    '#title' => t('Your e-mail'),
+    '#size' => 62,
   );
   $form['fld_from_name'] = array(
     '#type' => 'textfield',
     '#title' => t('Your name'),
-    '#size' => 60,
+    '#size' => 62,
   );
-  $form['fld_to_addrs'] = array(
+  $form['txt_to_addrs'] = array(
     '#type' => 'textarea',
-    '#title' => t('Send to the following e-mail addresses'),
+    '#title' => t('Send to'),
     '#rows' => 3,
+    '#resizable' => FALSE,
     '#description' => t('Enter multiple addresses separated by commas and/or different lines.'),
   );
   $form['fld_subject'] = array(
     '#type' => 'textfield',
     '#title' => t('Subject'),
+    '#size' => 62,
+  );
+  $form['txt_message'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Your message'),
+    '#rows' => 6,
   );
 
   if ($print_mail_settings['teaser_choice']) {
@@ -91,6 +98,15 @@ function theme_print_mail_form($form) {
   $content = '';
   foreach (element_children($form) as $key) {
     $tmp = drupal_render($form[$key]);
+    switch ($key) {
+      case 'fld_from_addr':
+      case 'fld_from_name':
+      case 'txt_to_addrs':
+      case 'fld_subject':
+        $tmp = str_replace('<div class="form-item"', '<div style="clear: left;" class="form-item"', $tmp);
+        $tmp = str_replace('<label', '<label style="width: 100px; float: left;"', $tmp);
+        break;
+    }
     $content .= $tmp;
   }
   return $content;
@@ -109,7 +125,7 @@ function print_mail_form_validate($form, &$form_state) {
   }
 
   // All new-lines are replaced by commas
-  $to_addrs = str_replace(array("\r\n", "\n", "\r"), ',', $form_state['values']['fld_to_addrs']);
+  $to_addrs = str_replace(array("\r\n", "\n", "\r"), ',', $form_state['values']['txt_to_addrs']);
   // Create an array from the string
   $to_array = explode(',', $to_addrs);
   // Verify each element of the array
@@ -125,7 +141,7 @@ function print_mail_form_validate($form, &$form_state) {
       $test = user_validate_mail($address);
     }
     if ($test) {
-      form_set_error('fld_to_addrs', $test);
+      form_set_error('txt_to_addrs', $test);
     }
   }
 
@@ -136,10 +152,21 @@ function print_mail_form_validate($form, &$form_state) {
     }
   }
 
+  $subject = trim($form_state['values']['fld_subject']);
+  if (empty($subject)) {
+    form_set_error('fld_subject', t("You must enter a subject."));
+  }
+  $message = trim($form_state['values']['txt_message']);
+  if (empty($message)) {
+    form_set_error('txt_message', t("You must enter a message."));
+  }
+
   $form_state['values']['fld_from_addr'] = $from_addr;
   $form_state['values']['fld_from_name'] = trim($form_state['values']['fld_from_name']);
   // Re-create the string from the re-organized array
-  $form_state['values']['fld_to_addrs'] = implode(', ', $to_array);
+  $form_state['values']['txt_to_addrs'] = implode(', ', $to_array);
+  $form_state['values']['fld_subject'] = $subject;
+  $form_state['values']['txt_message'] = $message;
 }
 
 /**
@@ -151,16 +178,19 @@ function print_mail_form_submit($form, &$form_state) {
   global $language;
 
   $from = $form_state['values']['fld_from_name'] ." <". $form_state['values']['fld_from_addr'] .">";
-  $to = $form_state['values']['fld_to_addrs'];
+  $to = $form_state['values']['txt_to_addrs'];
   $params = array();
   $params['subject'] = $form_state['values']['fld_subject'];
+  $params['message'] = $form_state['values']['txt_message'];
   $params['path'] = $form_state['values']['path'];
   $params['cid'] = $form_state['values']['cid'];
   $params['teaser'] = $form_state['values']['chk_teaser'];
 
   $site_name = variable_get('site_name', t('us'));
-  drupal_set_message(t('Thank you for spreading the word about !site.', array('!site' => $site_name)));
-  drupal_mail('print_mail', 'sendpage', $to, $language->language, $params, $from, TRUE);
+  $ret = drupal_mail('print_mail', 'sendpage', $to, $language, $params, $from, TRUE);
+  if ($ret['result']) {
+    drupal_set_message(t('Thank you for spreading the word about !site.', array('!site' => $site_name)));
+  }
   $form_state['redirect'] = $form_state['values']['path'];
 }
 
@@ -170,7 +200,9 @@ function print_mail_form_submit($form, &$form_state) {
 function print_mail_mail($key, &$message, $params) {
   switch ($key) {
     case 'sendpage':
-      $print = print_controller($params['path'], $params['cid'], $params['teaser']);
+      $sender_message = t('Message from sender:') .'<br /><br /><em>'. nl2br($params['message']) .'</em>';
+
+      $print = print_controller($params['path'], $params['cid'], $params['teaser'], $sender_message);
 
       // Img elements must be set to absolute
 //      $pattern = "@<(img\s[^>]*?)>@is";

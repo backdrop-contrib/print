@@ -37,6 +37,10 @@ a:link img, a:visited img {border: 0;}
   color: #9E9E9E;
   background-color: #9E9E9E;
 }
+.print-message {
+  border: medium dotted blue;
+  padding: 1em;
+}
 .print-source_url {font-size: small;}
 .print-links {font-size: small;}
 .print-footer {text-align: center;}

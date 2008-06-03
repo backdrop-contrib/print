@@ -43,7 +43,7 @@ function print_controller_html() {
  * @see _print_generate_path()
  * @see _print_generate_book()
  */
-function print_controller($path, $cid, $teaser = FALSE) {
+function print_controller($path, $cid, $teaser = FALSE, $message = NULL) {
   if (!is_numeric($path)) {
     // Indirect call with print/alias
     // If there is a path alias with these arguments, generate a printer-friendly version for it
@@ -54,17 +54,17 @@ function print_controller($path, $cid, $teaser = FALSE) {
     }
   }
   if (is_numeric($path)) {
-    $print = _print_generate_node($path, $cid, $teaser);
+    $print = _print_generate_node($path, $cid, $teaser, $message);
   }
   else {
     $ret = preg_match("/^book\/export\/html\/(.*)/i", $path, $matches);
     if ($ret == 1) {
       // This is a book PF page link, handle trough the book handling functions
-      $print = _print_generate_book($matches[1]);
+      $print = _print_generate_book($matches[1], $teaser, $message);
     }
     else {
       // If no content node was found, handle the page printing with the 'printable' engine
-      $print = _print_generate_path($path);
+      $print = _print_generate_path($path, $teaser, $message);
     }
   }
 
@@ -116,7 +116,7 @@ function _print_robots_meta_generator() {
  * @return
  *   array with the fields to be used in the template
  */
-function _print_var_generator($node, $cid = NULL) {
+function _print_var_generator($node, $message = NULL, $cid = NULL) {
   global $base_url, $language;
 
   $path = empty($node->nid) ? $node->path : "node/$node->nid";
@@ -135,18 +135,35 @@ function _print_var_generator($node, $cid = NULL) {
   $print["robots_meta"] = _print_robots_meta_generator();
   $print["url"] = url($path, array('absolute' => TRUE));
   $print["base_href"] = "<base href=\"". $print["url"] ."\" />\n";
-  $print["favicon"] = theme_get_setting("toggle_favicon") ? "<link rel=\"shortcut icon\" href=\"". theme_get_setting("favicon") ."\" type=\"image/x-icon\"/>\n" : "";
+  $print["favicon"] = theme_get_setting("toggle_favicon") ? "<link rel=\"shortcut icon\" href=\"". theme_get_setting("favicon") ."\" type=\"image/x-icon\" />\n" : "";
 
   if (!empty($print_settings['css'])) {
     $css_file = strip_tags($print_settings['css']);
   }
   else {
-    $css_file = base_path() . drupal_get_path('module', 'print') ."/print.css";
+    $css_file = drupal_get_path('module', 'print') ."/print.css";
   }
-  $print["css"] = "<style type=\"text/css\" media=\"all\">@import \"". $css_file ."\";</style>\n";
   // Add CCK's CSS file to properly display the fields
   if (module_exists('content')) {
-    $print["css"] .= "<style type=\"text/css\" media=\"all\">@import \"". base_path() . drupal_get_path('module', 'content') ."/content.css\";</style>\n";
+    $cck_css_file = drupal_get_path('module', 'content') ."/content.css";
+  }
+
+  // If we are sending a message via e-mail, the CSS must be embedded
+  if (!empty($message)) {
+    ob_start();
+    include($css_file);
+    if (module_exists('content')) {
+      include($cck_css_file);
+    }
+    $style = ob_get_contents();
+    ob_end_clean();
+    $print["css"] = "<style type=\"text/css\" media=\"all\">". $style ."</style>\n";
+  }
+  else {
+    $print["css"] = "<link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"". base_path() . $css_file ."\" />\n";
+    if (module_exists('content')) {
+      $print["css"] .= "<link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"". base_path() . $cck_css_file ."\" />\n";
+    }
   }
 
   $print["sendtoprinter"] = $print_html_settings['sendtoprinter'] ? " onload=\"window.print();\"" : "";
@@ -241,6 +258,7 @@ function _print_var_generator($node, $cid = NULL) {
 
   $print["content"] = $node->body;
   $print["node"] = $node;
+  $print["message"] = $message;
   $print["footer_message"] = filter_xss_admin(variable_get('site_footer', FALSE)) ."\n". theme('blocks', 'footer') ;
 
   return $print;
@@ -414,7 +432,7 @@ function _print_get_template($type = NULL) {
  * @return
  *   filled array ready to be used in the template
  */
-function _print_generate_node($nid, $cid = NULL, $teaser = FALSE) {
+function _print_generate_node($nid, $cid = NULL, $teaser = FALSE, $message = NULL) {
   // We can take a node id
   $node = node_load(array('nid' => $nid));
   if (!node_access('view', $node)) {
@@ -482,7 +500,7 @@ function _print_generate_node($nid, $cid = NULL, $teaser = FALSE) {
 
   init_theme();
 
-  $print = _print_var_generator($node, $cid);
+  $print = _print_var_generator($node, $message, $cid);
 
   return $print;
 }
@@ -495,7 +513,7 @@ function _print_generate_node($nid, $cid = NULL, $teaser = FALSE) {
  * @return
  *   filled array ready to be used in the template
  */
-function _print_generate_path($path) {
+function _print_generate_path($path, $teaser = FALSE, $message = NULL) {
   $path = drupal_get_normal_path($path);
 
   menu_set_active_item($path);
@@ -528,7 +546,7 @@ function _print_generate_path($path) {
 
   init_theme();
 
-  $print = _print_var_generator($node);
+  $print = _print_var_generator($node, $message);
 
   return $print;
 }
@@ -542,7 +560,7 @@ function _print_generate_path($path) {
  * @return
  *   filled array ready to be used in the template
  */
-function _print_generate_book($nid) {
+function _print_generate_book($nid, $teaser = FALSE, $message = NULL) {
   $node = node_load(array('nid' => $nid));
   if (!node_access('view', $node) || (!user_access('access printer-friendly version'))) {
     // Access is denied
@@ -558,7 +576,7 @@ function _print_generate_book($nid) {
 
   init_theme();
 
-  $print = _print_var_generator($node);
+  $print = _print_var_generator($node, $message);
   // The title is already displayed by the book_recurse, so avoid duplication
   $print["title"] = "";
 
