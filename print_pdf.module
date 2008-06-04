@@ -169,7 +169,7 @@ function print_pdf_form_alter(&$form, $form_state, $form_id) {
 function theme_print_pdf_format_link() {
   $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
   $text = t('PDF version');
-  $img = base_path() . drupal_get_path('module', 'print') .'/icons/pdf_icon.gif';
+  $img = drupal_get_path('module', 'print') .'/icons/pdf_icon.gif';
   $title = t('Display a PDF version of this page.');
   $class = $print_pdf_settings['link_class'];
   $new_window = ($print_pdf_settings['content_disposition'] == 1);

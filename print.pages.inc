@@ -520,7 +520,7 @@ function _print_generate_path($path, $teaser = FALSE, $message = NULL) {
   // Adapted from index.php.
   $node = new stdClass();
   $node->body = menu_execute_active_handler($path);
-  $node->title = menu_get_active_title();
+  $node->title = drupal_get_title();
   $node->path = $path;
 
   // It may happen that a drupal_not_found is called in the above call

@@ -172,7 +172,7 @@ function print_mail_form_alter(&$form, $form_state, $form_id) {
 function theme_print_mail_format_link() {
   $print_mail_settings = variable_get('print_mail_settings', print_mail_settings_default());
   $text = t('Send to friend');
-  $img = base_path() . drupal_get_path('module', 'print') .'/icons/mail_icon.gif';
+  $img = drupal_get_path('module', 'print') .'/icons/mail_icon.gif';
   $title = t('Send this page by e-mail.');
   $class = $print_mail_settings['link_class'];
   $new_window = ($print_mail_settings['content_disposition'] == 1);
