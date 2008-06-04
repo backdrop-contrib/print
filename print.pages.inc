@@ -22,7 +22,7 @@ function print_controller_html() {
   $cid = isset($_GET['comment']) ? $_GET['comment'] : NULL;
 
   $print = print_controller($path, $cid);
-  include_once(_print_get_template($print["type"]));
+  include_once(_print_get_template("html", $print["type"]));
 }
 
 /**
@@ -137,32 +137,32 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   $print["base_href"] = "<base href=\"". $print["url"] ."\" />\n";
   $print["favicon"] = theme_get_setting("toggle_favicon") ? "<link rel=\"shortcut icon\" href=\"". theme_get_setting("favicon") ."\" type=\"image/x-icon\" />\n" : "";
 
+  $css_files = array();
   if (!empty($print_settings['css'])) {
-    $css_file = strip_tags($print_settings['css']);
+    $css_files[] = strip_tags($print_settings['css']);
   }
   else {
-    $css_file = drupal_get_path('module', 'print') ."/print.css";
+    $css_files[] = drupal_get_path('module', 'print') ."/print.css";
   }
   // Add CCK's CSS file to properly display the fields
   if (module_exists('content')) {
-    $cck_css_file = drupal_get_path('module', 'content') ."/content.css";
+    $css_files[] = drupal_get_path('module', 'content') ."/content.css";
   }
 
   // If we are sending a message via e-mail, the CSS must be embedded
   if (!empty($message)) {
     ob_start();
-    include($css_file);
-    if (module_exists('content')) {
-      include($cck_css_file);
+    foreach ($css_files as $value) {
+      include($value);
     }
     $style = ob_get_contents();
     ob_end_clean();
     $print["css"] = "<style type=\"text/css\" media=\"all\">". $style ."</style>\n";
   }
   else {
-    $print["css"] = "<link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"". base_path() . $css_file ."\" />\n";
-    if (module_exists('content')) {
-      $print["css"] .= "<link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"". base_path() . $cck_css_file ."\" />\n";
+    $print["css"] = "";
+    foreach ($css_files as $value) {
+      $print["css"] .= "<link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"". base_path() . $value ."\" />\n";
     }
   }
 
@@ -390,34 +390,44 @@ function _print_friendly_urls($url = 0) {
  * a content specific template in the theme or module dir before falling back
  * on a generic template also in those dirs.
  *
+ * @param format
+ *   format of the PF page being rendered (html, pdf, etc.)
  * @param $type
  *   name of the node type being rendered in a PF page
  * @return
  *   filename of the most suitable template
  */
-function _print_get_template($type = NULL) {
-  if ($type) {
-    // If the node type is known, then try to find that type's template file
+function _print_get_template($format = NULL, $type = NULL) {
+  $filenames = array();
+  // First try to find a template defined both for the format and then the type
+  if (!empty($format) && !empty($type)) {
+    $filenames[] = "print_$format.node-$type.tpl.php";
+  }
+  // Then only for the format
+  if (!empty($format)) {
+    $filenames[] = "print_$format.tpl.php";
+  }
+  // If the node type is known, then try to find that type's template file
+  if (!empty($type)) {
+    $filenames[] = "print.node-$type.tpl.php";
+  }
+  // Finally search for a generic template file
+  $filenames[] = "print.tpl.php";
+
+  foreach ($filenames as $value) {
     // First in the theme directory
-    $filename = drupal_get_path('theme', $GLOBALS['theme_key']) ."/print.node-$type.tpl.php";
-    if (file_exists($filename)) {
-      return $filename;
+    $file = drupal_get_path('theme', $GLOBALS['theme_key']) ."/". $value;
+    var_dump($file);
+    if (file_exists($file)) {
+      return $file;
     }
     // Then in the module directory
-    $filename = drupal_get_path('module', 'print') ."/print.node-$type.tpl.php";
-    if (file_exists($filename)) {
-      return $filename;
+    $file = drupal_get_path('module', 'print') ."/". $value;
+    var_dump($file);
+    if (file_exists($file)) {
+      return $file;
     }
   }
-  // Search for a generic template file
-  // First in the theme directory
-  $filename = drupal_get_path('theme', $GLOBALS['theme_key']) ."/print.tpl.php";
-  if (file_exists($filename)) {
-    return $filename;
-  }
-  // Then in the module directory
-  // This one must always exist (provided with the module!)
-  return drupal_get_path('module', 'print') ."/print.tpl.php";
 }
 
 /**

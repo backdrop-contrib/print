@@ -18,7 +18,7 @@ function print_pdf_controller() {
   $print["footer_message"] = preg_replace_callback($pattern, "_print_rewrite_urls", $print["footer_message"]);
 
   ob_start();
-  include_once(_print_get_template($print["type"]));
+  include_once(_print_get_template("pdf", $print["type"]));
   $html = ob_get_contents();
   ob_end_clean();
 
