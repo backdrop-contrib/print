@@ -30,6 +30,20 @@ function print_mail_settings() {
     '#description' => t("Enable or disable the send by e-mail link for each node. Even if the link is disabled, you can still send a node by e-mail by going to printmail/nid where nid is the numeric id of the node."),
   );
 
+  $form['print_mail_settings']['node_link_visibility'] = array(
+    '#type' => 'radios',
+    '#title' => t('Link visibility'),
+    '#default_value' => $print_mail_settings['node_link_visibility'],
+    '#options' => array(t('Show on every page except the listed pages.'), t('Show on only the listed pages.')),
+  );
+
+  $form['print_mail_settings']['node_link_pages'] = array(
+    '#type' => 'textarea',
+    '#default_value' => $print_mail_settings['node_link_pages'],
+    '#rows' => 3,
+    '#description' => t("Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>')),
+  );
+
   $form['print_mail_settings']['link_class'] = array(
     '#type' => 'textfield',
     '#title' => t('Link class'),
@@ -39,12 +53,19 @@ function print_mail_settings() {
     '#description' => t('This can be used by themers to change the link style or by jQuery modules to open in a new window (e.g. greybox or thickbox). Multiple classes can be specified, separated by spaces.'),
   );
 
-  $form['print_mail_settings']['show_sys_link'] = array(
+  $form['print_mail_settings']['sys_link_visibility'] = array(
+    '#type' => 'radios',
+    '#title' => t('Show link in system (non-content) pages'),
+    '#default_value' => $print_mail_settings['sys_link_visibility'],
+    '#options' => array(t('Show on every page except the listed pages.'), t('Show on only the listed pages.')),
+  );
+
+  $form['print_mail_settings']['sys_link_pages'] = array(
     '#type' => 'textarea',
-    '#title' => t('Show link in the following system (non-content) pages'),
-    '#default_value' => $print_mail_settings['show_sys_link'],
+    '#default_value' => $print_mail_settings['sys_link_pages'],
     '#rows' => 3,
-    '#description' => t("Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>')),
+    '#description' => t("Setting this option will add a send by-email link on pages created by Drupal or the enabled modules.") .'<br />'. 
+                      t("Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>')),
   );
 
   $form['print_mail_settings']['book_link'] = array(

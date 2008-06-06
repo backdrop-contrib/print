@@ -31,8 +31,11 @@ function print_settings_default() {
  */
 function print_html_settings_default() {
   return array('show_link' => 1,
+               'node_link_visibility' => 0,
+               'node_link_pages' => '',
                'link_class' => 'print-page',
-               'show_sys_link' => '<front>',
+               'sys_link_visibility' => 1,
+               'sys_link_pages' => '<front>',
                'book_link' => 1,
                'new_window' => 0,
                'sendtoprinter' => 0,
@@ -139,6 +142,8 @@ function print_link($type, $node = NULL, $teaser = FALSE) {
   // No link is shown for several motives...
   if ( !($teaser) && ($node_type != 'book') && (!isset($node->book)) &&
       ($print_html_settings['show_link']) && user_access('access print') &&
+      !(($print_html_settings['node_link_visibility']) xor
+       (drupal_match_path("node/". $node->nid, $print_html_settings['node_link_pages']))) &&
       (($type == 'comment' && $print_display_comment) ||
       ($type == 'node' && $print_display))) {
     $links = array();
@@ -197,8 +202,10 @@ function print_help($path, $arg) {
 
   $print_html_settings = variable_get('print_html_settings', print_html_settings_default());
 
-  if (($print_html_settings['show_link']) && (drupal_match_path($path, $print_html_settings['show_sys_link'])) &&
-      user_access('access print') && (preg_match("/^node\//i", $path) == 0)) {
+  if (($print_html_settings['show_link']) && user_access('access print') &&
+      !(($print_html_settings['sys_link_visibility']) xor 
+       (drupal_match_path($path, $print_html_settings['sys_link_pages']))) &&
+      (preg_match("/^node\//i", $path) == 0)) {
     static $output = FALSE;
 
     if ($output === FALSE) {
@@ -237,6 +244,8 @@ function print_form_alter(&$form, $form_state, $form_id) {
  *   text to displayed by the link when hovering over it with the mouse
  * @param $class
  *   class attribute to be used in the link
+ * @param $new_window
+ *   if TRUE opens the target page in a new window
  * @return
  *   array of formatted attributes
  */
@@ -311,7 +320,7 @@ function theme_print_format_link() {
   $text = t('Printer-friendly version');
   $img = drupal_get_path('module', 'print') .'/icons/print_icon.gif';
   $title = t('Display a printer-friendly version of this page.');
-  $class = $print_html_settings['link_class'];
+  $class = strip_tags($print_html_settings['link_class']);
   $new_window = $print_html_settings['new_window'];
   $format = _print_format_link_aux($print_html_settings['show_link'], $text, $img);
 

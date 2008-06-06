@@ -37,6 +37,8 @@ function print_controller_html() {
  *   comment ID of the individual comment to be rendered
  * @param $teaser
  *   if set to TRUE, outputs only the node's teaser
+ * @param $message
+ *   optional sender's message (used by the send e-mail module)
  * @return
  *   array with the fields to be used in the template
  * @see _print_generate_node()
@@ -110,6 +112,8 @@ function _print_robots_meta_generator() {
  *
  * @param $node
  *   generated node with a printer-friendly node body
+ * @param $message
+ *   optional sender's message (used by the send e-mail module)
  * @param $cid
  *   id of current comment being generated (NULL when not generating 
  *   an individual comment)
@@ -142,11 +146,11 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
     $css_files[] = strip_tags($print_settings['css']);
   }
   else {
-    $css_files[] = drupal_get_path('module', 'print') ."/print.css";
+    $css_files[] = base_path() . drupal_get_path('module', 'print') ."/print.css";
   }
   // Add CCK's CSS file to properly display the fields
   if (module_exists('content')) {
-    $css_files[] = drupal_get_path('module', 'content') ."/content.css";
+    $css_files[] = base_path() . drupal_get_path('module', 'content') ."/content.css";
   }
 
   // If we are sending a message via e-mail, the CSS must be embedded
@@ -162,7 +166,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   else {
     $print["css"] = "";
     foreach ($css_files as $value) {
-      $print["css"] .= "<link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"". base_path() . $value ."\" />\n";
+      $print["css"] .= "<link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"". $value ."\" />\n";
     }
   }
 
@@ -417,13 +421,11 @@ function _print_get_template($format = NULL, $type = NULL) {
   foreach ($filenames as $value) {
     // First in the theme directory
     $file = drupal_get_path('theme', $GLOBALS['theme_key']) ."/". $value;
-    var_dump($file);
     if (file_exists($file)) {
       return $file;
     }
     // Then in the module directory
     $file = drupal_get_path('module', 'print') ."/". $value;
-    var_dump($file);
     if (file_exists($file)) {
       return $file;
     }
@@ -439,6 +441,8 @@ function _print_get_template($format = NULL, $type = NULL) {
  *   comment ID of the individual comment to be rendered
  * @param $teaser
  *   if set to TRUE, outputs only the node's teaser
+ * @param $message
+ *   optional sender's message (used by the send e-mail module)
  * @return
  *   filled array ready to be used in the template
  */
@@ -520,6 +524,10 @@ function _print_generate_node($nid, $cid = NULL, $teaser = FALSE, $message = NUL
  * 
  * @param $path
  *   path of the node to be rendered into a printer-friendly page
+ * @param $teaser
+ *   if set to TRUE, outputs only the node's teaser
+ * @param $message
+ *   optional sender's message (used by the send e-mail module)
  * @return
  *   filled array ready to be used in the template
  */
@@ -567,6 +575,10 @@ function _print_generate_path($path, $teaser = FALSE, $message = NULL) {
  * 
  * @param $nid
  *   node ID of the node to be rendered into a printer-friendly page
+ * @param $teaser
+ *   if set to TRUE, outputs only the node's teaser
+ * @param $message
+ *   optional sender's message (used by the send e-mail module)
  * @return
  *   filled array ready to be used in the template
  */

@@ -12,9 +12,12 @@ define("PRINTPDF_PATH", "printpdf");
  * Default values of the print_pdf_settings variable
  */
 function print_pdf_settings_default() {
-  return array('show_link' => 0,
+  return array('show_link' => 1,
+               'node_link_visibility' => 0,
+               'node_link_pages' => '',
                'link_class' => 'print-pdf',
-               'show_sys_link' => '<front>',
+               'sys_link_visibility' => 1,
+               'sys_link_pages' => '<front>',
                'book_link' => 1,
                'pdf_tool' => 0,
                'content_disposition' => 2,
@@ -98,6 +101,8 @@ function print_pdf_link($type, $node = NULL, $teaser = FALSE) {
     // No link is shown for several motives...
     elseif (($node_type != 'book') && (!isset($node->book)) &&
       ($print_pdf_settings['show_link']) && user_access('access print') &&
+      !(($print_pdf_settings['node_link_visibility']) xor
+       (drupal_match_path("node/". $node->nid, $print_pdf_settings['node_link_pages']))) &&
       (($type == 'comment' && $print_pdf_display_comment) ||
       ($type == 'node' && $print_pdf_display))) {
 
@@ -126,8 +131,10 @@ function print_pdf_link($type, $node = NULL, $teaser = FALSE) {
 function print_pdf_help($path, $arg) {
   $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
 
-  if (($print_pdf_settings['show_link']) && (drupal_match_path($path, $print_pdf_settings['show_sys_link'])) &&
-      user_access('access print') && (preg_match("/^node\//i", $path) == 0)) {
+  if (($print_pdf_settings['show_link']) && user_access('access print') &&
+      !(($print_pdf_settings['sys_link_visibility']) xor 
+       (drupal_match_path($path, $print_pdf_settings['sys_link_pages']))) &&
+      (preg_match("/^node\//i", $path) == 0)) {
     static $output = FALSE;
 
     if ($output === FALSE) {
@@ -171,7 +178,7 @@ function theme_print_pdf_format_link() {
   $text = t('PDF version');
   $img = drupal_get_path('module', 'print') .'/icons/pdf_icon.gif';
   $title = t('Display a PDF version of this page.');
-  $class = $print_pdf_settings['link_class'];
+  $class = strip_tags($print_pdf_settings['link_class']);
   $new_window = ($print_pdf_settings['content_disposition'] == 1);
   $format = _print_format_link_aux($print_pdf_settings['show_link'], $text, $img);
 
