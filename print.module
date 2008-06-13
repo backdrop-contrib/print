@@ -255,7 +255,9 @@ function print_fill_attributes($title = '', $class = '', $new_window = FALSE) {
 
   $attributes = array();
   $attributes['title'] = $title;
-  $attributes['class'] = $class;
+  if (!empty($class)) {
+    $attributes['class'] = $class;
+  }
 
   if ($new_window) {
     switch ($print_settings['newwindow']) {
