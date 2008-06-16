@@ -202,12 +202,5 @@ function print_html_settings() {
     '#description' => t('Non-standard tag to instruct search engines to not show a "Cached" link for your printer-friendly pages. Recognized by Googlebot.'),
   );
 
-  $form['print_robot_settings']['nocache'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Add nocache'),
-    '#default_value' => $print_robot_settings['nocache'],
-    '#description' => t('Non-standard tag to instruct search engines to not show a "Cached" link for your printer-friendly pages'),
-  );
-
   return system_settings_form($form);
 }

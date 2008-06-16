@@ -59,7 +59,7 @@ function print_sourceurl_settings_default() {
  *   array with the values
  */
 function print_robot_settings_default() {
-  return array('noindex' => 1, 'nofollow' => 1, 'noarchive' => 0, 'nocache' => 0);
+  return array('noindex' => 1, 'nofollow' => 1, 'noarchive' => 0);
 }
 
 /**
@@ -276,7 +276,7 @@ function print_fill_attributes($title = '', $class = '', $new_window = FALSE) {
       break;
     }
   }
-  if (!empty($robots_settings['nofollow'])) {
+  if (!empty($robots_settings['noindex'])) {
     $attributes['rel'] = 'nofollow';
   }
   return $attributes;

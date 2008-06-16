@@ -92,9 +92,6 @@ function _print_robots_meta_generator() {
   if (!empty($robots_settings['noarchive'])) {
     $robots_meta[] = 'noarchive';
   }
-  if (!empty($robots_settings['nocache'])) {
-    $robots_meta[] = 'nocache';
-  }
 
   if (count($robots_meta) > 0) {
     $robots_meta = implode(', ', $robots_meta);
