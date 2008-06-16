@@ -222,13 +222,20 @@ function print_help($path, $arg) {
 function print_form_alter(&$form, $form_state, $form_id) {
   // Add the node-type settings option to activate the printer-friendly version link
   if ($form_id == 'node_type_form') {
-    $form['workflow']['print_display'] = array(
+    $form['print'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Printer-friendly pages'),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+    );
+
+    $form['print']['print_display'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show printer-friendly version link'),
       '#default_value' => variable_get('print_display_'. $form['#node_type']->type, 1),
       '#description' => t('Displays the link to a printer-friendly version of the content. Further configuration is available on the !settings.', array('!settings' => l(t('settings page'), 'admin/settings/print' ))),
     );
-    $form['comment']['print_display_comment'] = array(
+    $form['print']['print_display_comment'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show printer-friendly version link in individual comments'),
       '#default_value' => variable_get('print_display_comment_'. $form['#node_type']->type, 0),

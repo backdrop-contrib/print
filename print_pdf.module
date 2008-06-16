@@ -151,13 +151,13 @@ function print_pdf_help($path, $arg) {
 function print_pdf_form_alter(&$form, $form_state, $form_id) {
   // Add the node-type settings option to activate the PDF version link
   if ($form_id == 'node_type_form') {
-    $form['workflow']['print_pdf_display'] = array(
+    $form['print']['print_pdf_display'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show PDF version link'),
       '#default_value' => variable_get('print_pdf_display_'. $form['#node_type']->type, 1),
       '#description' => t('Displays the link to a PDF version of the content. Further configuration is available on the !settings.', array('!settings' => l(t('settings page'), 'admin/settings/print' ))),
     );
-    $form['comment']['print_pdf_display_comment'] = array(
+    $form['print']['print_pdf_display_comment'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show PDF version link in individual comments'),
       '#default_value' => variable_get('print_pdf_display_comment_'. $form['#node_type']->type, 0),

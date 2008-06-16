@@ -154,13 +154,13 @@ function print_mail_help($path, $arg) {
 function print_mail_form_alter(&$form, $form_state, $form_id) {
   // Add the node-type settings option to activate the mail version link
   if ($form_id == 'node_type_form') {
-    $form['workflow']['print_mail_display'] = array(
+    $form['print']['print_mail_display'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show send by e-mail link'),
       '#default_value' => variable_get('print_mail_display_'. $form['#node_type']->type, 1),
       '#description' => t('Displays a link to send the content by e-mail. Further configuration is available on the !settings.', array('!settings' => l(t('settings page'), 'admin/settings/print' ))),
     );
-    $form['comment']['print_mail_display_comment'] = array(
+    $form['print']['print_mail_display_comment'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show send by e-mail link in individual comments'),
       '#default_value' => variable_get('print_mail_display_comment_'. $form['#node_type']->type, 0),
