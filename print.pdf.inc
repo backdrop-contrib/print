@@ -73,6 +73,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   $pdf->SetTitle($print["title"]);
   $keys = implode(" ", explode("\n", trim(strip_tags($print["taxonomy"]))));
   $pdf->SetKeywords($keys);
+  $pdf->setPDFVersion("1.6");
 
   // set header data
   $pdf->SetHeaderData("", 0, $print["title"], strip_tags($print["site_name"]));
