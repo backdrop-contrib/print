@@ -56,7 +56,19 @@ function _print_pdf_dompdf($print, $html, $filename) {
 }
 
 function _print_pdf_tcpdf($print, $html, $filename) {
+  global $base_url;
   $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
+
+  define("K_TCPDF_EXTERNAL_CONFIG", TRUE);
+  define("K_PATH_MAIN", realpath(dirname($print_pdf_settings['pdf_tool'])) ."/");
+  define("K_PATH_URL", $base_url ."/". dirname($print_pdf_settings['pdf_tool']) ."/");
+  define("K_PATH_FONTS", K_PATH_MAIN ."fonts/");
+  define("K_PATH_CACHE", K_PATH_MAIN ."cache/");
+  define("K_PATH_IMAGES", K_PATH_MAIN ."images/");
+  define("K_BLANK_IMAGE", K_PATH_IMAGES ."_blank.png");
+  define("K_CELL_HEIGHT_RATIO", 1.25);
+  define("K_SMALL_RATIO", 2/3);
+
   require_once($print_pdf_settings['pdf_tool']);
 
   $font_name = "dejavusans";
@@ -65,7 +77,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   $orientation = strtoupper($print_pdf_settings['page_orientation']{0});
 
   // create new PDF document
-  $pdf = new TCPDF($orientation , PDF_UNIT, $print_pdf_settings['paper_size'], TRUE);
+  $pdf = new TCPDF($orientation , "mm", $print_pdf_settings['paper_size'], TRUE);
 
   // set document information
   $pdf->SetAuthor(strip_tags($print["submitted"]));
@@ -80,18 +92,18 @@ function _print_pdf_tcpdf($print, $html, $filename) {
 
   // set header and footer fonts
   $pdf->setHeaderFont(Array($font_name, '', $font_size));
-  $pdf->setFooterFont(Array($font_name, '', PDF_FONT_SIZE_DATA));
+  $pdf->setFooterFont(Array($font_name, '', 8));
 
   // set margins
-  $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-  $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-  $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+  $pdf->SetMargins(15, 27, 15);
+  $pdf->SetHeaderMargin(5);
+  $pdf->SetFooterMargin(10);
   
   // set auto page breaks
-  $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+  $pdf->SetAutoPageBreak(TRUE, 25);
 
   // set image scale factor
-  $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+  $pdf->setImageScale(4);
 
   //initialize document
   $pdf->AliasNbPages();
@@ -102,7 +114,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   preg_match("/<body>(.*)<\/body>/sim", $html, $matches);
   $matches[1] = preg_replace("/.*?(<[^<]*?print-content.*?>)/sim", "$1", $matches[1]);
 
-  $pdf->SetFont($font_name, 'B', $font_size * K_TITLE_MAGNIFICATION);
+  $pdf->SetFont($font_name, 'B', $font_size * 1.3);
   $pdf->writeHTML($print["title"]);
 
   if ($print["submitted"]) {

@@ -34,8 +34,7 @@ TCPDF support:
   1. Download TCPDF from http://sourceforge.net/projects/tcpdf/
   2. Extract the contents of the downloaded package into the print module
   directory (usually sites/all/modules/print)
-  3. Edit the config/tcpdf_config.php file to fit your installation.
-  4. Check http://tcpdf.sourceforge.net/ for further information.
+  3. Check http://tcpdf.sourceforge.net/ for further information.
 
 UPDATE
 ------
