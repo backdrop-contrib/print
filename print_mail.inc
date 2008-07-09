@@ -210,6 +210,7 @@ function print_mail_mail($key, &$message, $params) {
 //      $print["logo"] = preg_replace_callback($pattern, "_print_rewrite_urls", $print["logo"]);
 //      $print["footer_message"] = preg_replace_callback($pattern, "_print_rewrite_urls", $print["footer_message"]);
 
+      $node = $print["node"];
       ob_start();
       include_once(_print_get_template("mail", $print["type"]));
       $html = ob_get_contents();

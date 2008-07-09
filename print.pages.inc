@@ -22,6 +22,7 @@ function print_controller_html() {
   $cid = isset($_GET['comment']) ? $_GET['comment'] : NULL;
 
   $print = print_controller($path, $cid);
+  $node = $print["node"];
   include_once(_print_get_template("html", $print["type"]));
 }
 
@@ -55,7 +56,8 @@ function print_controller($path, $cid, $teaser = FALSE, $message = NULL) {
       $path = $matches[1];
     }
   }
-  if (is_numeric($path)) {
+  $parts = explode("/", $path);
+  if (is_numeric($parts[0])) {
     $print = _print_generate_node($path, $cid, $teaser, $message);
   }
   else {
@@ -144,6 +146,10 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   }
   else {
     $css_files[] = base_path() . drupal_get_path('module', 'print') ."/print.css";
+  }
+  // If the current language is RTL add the RTL stylesheet.
+  if (defined('LANGUAGE_RTL') && $language->direction == LANGUAGE_RTL) {
+    $css_files[] = base_path() . drupal_get_path('module', 'print') ."/print-rtl.css";
   }
   // Add CCK's CSS file to properly display the fields
   if (module_exists('content')) {
@@ -475,6 +481,10 @@ function _print_generate_node($nid, $cid = NULL, $teaser = FALSE, $message = NUL
     unset($node->content["service_links"]);
   
     $node->body = drupal_render($node->content);
+    //TODO the following was part of the fix for http://drupal.org/node/254863
+    //check if it is reproducible and find the exact condition which
+    //triggered it
+    //$node->body = html_entity_decode($node->body);
   }
 
   $print_settings = variable_get('print_settings', print_settings_default());

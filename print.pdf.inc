@@ -17,6 +17,7 @@ function print_pdf_controller() {
   $print["logo"] = preg_replace_callback($pattern, "_print_rewrite_urls", $print["logo"]);
   $print["footer_message"] = preg_replace_callback($pattern, "_print_rewrite_urls", $print["footer_message"]);
 
+  $node = $print["node"];
   ob_start();
   include_once(_print_get_template("pdf", $print["type"]));
   $html = ob_get_contents();
