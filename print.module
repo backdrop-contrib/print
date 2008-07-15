@@ -297,14 +297,14 @@ function print_fill_attributes($title = '', $class = '', $new_window = FALSE) {
  */
 function _print_format_link_aux($type = 0, $text = '', $img = '') {
   if ($type >= 2) {
-    $img = theme('image', $img, $text, '', array('style' => 'vertical-align: middle'));
+    $img = theme('image', $img, $text, '', array('style' => 'margin-right: 4px;vertical-align: middle'));
     $html = TRUE;
     switch ($type) {
     case 2:
       $text = $img;
       break;
     case 3:
-      $text = $img .' '. $text;
+      $text = $img . $text;
       break;
     }
   }
