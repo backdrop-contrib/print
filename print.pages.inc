@@ -158,12 +158,16 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
 
   // If we are sending a message via e-mail, the CSS must be embedded
   if (!empty($message)) {
-    ob_start();
-    foreach ($css_files as $value) {
-      include($value);
+    $style = "";
+    $pattern = '!^'. base_path() .'!';
+    foreach ($css_files as $filename) {
+      // Convert to a local path, by removing the base_path
+      $filename = preg_replace($pattern, '', $filename);
+      $res = file_get_contents($filename, TRUE);
+      if ($res != FALSE) {
+        $style .= $res;
+      }
     }
-    $style = ob_get_contents();
-    ob_end_clean();
     $print["css"] = "<style type=\"text/css\" media=\"all\">". $style ."</style>\n";
   }
   else {
