@@ -2,6 +2,11 @@
 // $Id$
 
 /**
+ * @file
+ * Install file of the print_mail module
+ */
+
+/**
  * Implementation of hook_uninstall().
  */
 function print_mail_uninstall() {

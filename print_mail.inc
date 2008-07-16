@@ -1,5 +1,13 @@
 <?php
-/* $Id$ */
+// $Id$
+
+/**
+ * @file
+ * Displays and processes the mail send form.
+ *
+ * This file is included by the print_mail module and includes the
+ * mail form display, validation and submit hooks.
+ */
 
 require_once(drupal_get_path('module', 'print') .'/print.pages.inc');
 
@@ -88,8 +96,8 @@ function print_mail_form($form_state) {
     $user_name = t('Someone');
   }
   $site_name = variable_get('site_name', t('an interesting site'));
-  $form['fld_subject']['#default_value'] = t('!user has sent you a message from !site', 
-                                             array('!user' => $user_name, '!site' => $site_name));
+  $form['fld_subject']['#default_value'] = t('!user has sent you a message from !site',
+                                              array('!user' => $user_name, '!site' => $site_name));
 
   return $form;
 }
@@ -232,7 +240,6 @@ function print_mail_form_reset($form, &$form_state) {
   $form_state['rebuild'] = TRUE;
   drupal_set_message(t('The form has been reset to the default values.'));
 }
-
 
 /**
  * Process the send by-email form cancel submission.

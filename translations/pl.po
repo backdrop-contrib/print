@@ -1,26 +1,18 @@
-# LANGUAGE translation of Drupal (general)
+# $Id$
+#
+# Polish translation of Drupal (print)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
-# Generated from files:
-#  print.admin.inc,v 1.3 2008/03/14 02:58:32 jcnventura
-#  print.module,v 1.31 2008/03/19 04:34:18 jcnventura
-#  print_pdf.admin.inc,v 1.3 2008/03/19 04:34:18 jcnventura
-#  print.pages.inc,v 1.5 2008/03/19 04:34:18 jcnventura
-#  print_pdf.module,v 1.6 2008/03/19 04:34:18 jcnventura
-#  print.info,v 1.3 2007/10/28 22:46:23 jcnventura
-#  print_pdf.info,v 1.2 2008/03/04 12:03:59 jcnventura
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: print.module\n"
-"POT-Creation-Date: 2008-05-13 01:10+0200\n"
-"PO-Revision-Date: 2008-05-13 01:20+0100\n"
+"POT-Creation-Date: 2008-07-15 23:35+0200\n"
+"PO-Revision-Date: 2008-07-16 00:51+0100\n"
 "Last-Translator: \n"
 "Language-Team:  <drupal@kula.waw.pl>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Polish\n"
-"X-Poedit-Country: POLAND\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: print.admin.inc:27
@@ -56,12 +48,8 @@ msgid "When this option is active, user comments are also included in the printe
 msgstr "Aktywacja tej opcji spowoduje dodanie do wersji do wydruku również komentarze. Wymagany moduł comment."
 
 #: print.admin.inc:59
-msgid "Open the printer-friendly version in a new window"
-msgstr "Otwórz wersję do wydruku w nowym oknie"
-
-#: print.admin.inc:60
-msgid "Disabled"
-msgstr "Wyłączone"
+msgid "New window method"
+msgstr ""
 
 #: print.admin.inc:60
 msgid "Use HTML target (does not validate as XHTML Strict)"
@@ -71,20 +59,12 @@ msgstr "Za pomocą HTML'a (niezgodne ze standardem XHTML Strict)"
 msgid "Use Javascript (requires browser support)"
 msgstr "Za pomocą Javascript (wymagane wsparcie przeglądarki)"
 
-#: print.admin.inc:60
-msgid "Use Greybox Redux (requires the greybox module)"
-msgstr "Za pomocą GreyboxRedux (wymagany moduł greybox)"
-
-#: print.admin.inc:60
-msgid "Use Thickbox (requires the thickbox module)"
-msgstr "Za pomocą Thickbox (wymagany moduł thickbox)"
-
 #: print.admin.inc:62
-msgid "Setting this option will make the printer-friendly version open in a new window/tab."
-msgstr "Ustawienie tej opcji spowoduje otwieranie wersji do wydruku w nowym oknie/karcie."
+msgid "Choose the method used to open pages in a new window/tab."
+msgstr ""
 
 #: print.admin.inc:69
-#: print.pages.inc:172
+#: print.pages.inc:205
 msgid "Source URL"
 msgstr "Adres źródła"
 
@@ -117,22 +97,26 @@ msgid "Printer-friendly page link"
 msgstr "Odnośnik do wersji do wydruku"
 
 #: print.admin.inc:111
-#: print_pdf.admin.inc:26
+#: print_mail.admin.inc:29
+#: print_pdf.admin.inc:42
 msgid "None (Disabled)"
 msgstr "Wyłączone"
 
 #: print.admin.inc:111
-#: print_pdf.admin.inc:26
+#: print_mail.admin.inc:29
+#: print_pdf.admin.inc:42
 msgid "Text only"
 msgstr "Tylko tekst"
 
 #: print.admin.inc:111
-#: print_pdf.admin.inc:26
+#: print_mail.admin.inc:29
+#: print_pdf.admin.inc:42
 msgid "Icon only"
 msgstr "Tylko ikona"
 
 #: print.admin.inc:111
-#: print_pdf.admin.inc:26
+#: print_mail.admin.inc:29
+#: print_pdf.admin.inc:42
 msgid "Icon and Text"
 msgstr "Ikona i tekst"
 
@@ -141,185 +125,366 @@ msgid "Enable or disable the printer-friendly page link for each node. Even if t
 msgstr "Włączenie lub wyłączenie odnośnika do wersji do wydruku dla wszystkich treści. Jeśli odnośnik jest wyłączony, możesz wciąż otworzyć wersję do wydruku bezpośrednio przez print/nid, gdzie nid jest identyfikatorem treści."
 
 #: print.admin.inc:117
-#: print_pdf.admin.inc:32
+#: print_mail.admin.inc:35
+#: print_pdf.admin.inc:48
+msgid "Link visibility"
+msgstr ""
+
+#: print.admin.inc:119;142
+#: print_mail.admin.inc:37;60
+#: print_pdf.admin.inc:50;73
+msgid "Show on every page except the listed pages."
+msgstr ""
+
+#: print.admin.inc:119;142
+#: print_mail.admin.inc:37;60
+#: print_pdf.admin.inc:50;73
+msgid "Show on only the listed pages."
+msgstr ""
+
+#: print.admin.inc:126;150
+#: print_mail.admin.inc:44;68
+#: print_pdf.admin.inc:57;81
+msgid "Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page."
+msgstr ""
+
+#: print.admin.inc:131
+#: print_mail.admin.inc:49
+#: print_pdf.admin.inc:62
+msgid "Link class"
+msgstr ""
+
+#: print.admin.inc:135
+#: print_mail.admin.inc:53
+#: print_pdf.admin.inc:66
+msgid "This can be used by themers to change the link style or by jQuery modules to open in a new window (e.g. greybox or thickbox). Multiple classes can be specified, separated by spaces."
+msgstr ""
+
+#: print.admin.inc:140
+#: print_mail.admin.inc:58
+#: print_pdf.admin.inc:71
 msgid "Show link in system (non-content) pages"
 msgstr "Pokaż odnośnik na stronach systemowych"
 
-#: print.admin.inc:119
+#: print.admin.inc:149
 msgid "Setting this option will add a printer-friendly version page link on pages created by Drupal or the enabled modules."
 msgstr "Aktywowanie tej opcji spowoduje dodanie odnośnika do wersji do wydruku na stronach utworzonych przez Drupala oraz włączone moduły."
 
-#: print.admin.inc:124
+#: print.admin.inc:155
 msgid "Take control of the book module printer-friendly link"
 msgstr "Zachowaj kontrolę nad odnośnikami do wersji do wydruku modułu książka"
 
-#: print.admin.inc:126
+#: print.admin.inc:157
 msgid "Activate this to have the printer-friendly link in book nodes handled by this module. Requires the (core) book module."
 msgstr "Aktywacja tej opcji spowoduje dodanie odnośników do wersji do wydruku na stronach ksiązki. Wymagany moduł książki."
 
-#: print.admin.inc:131
+#: print.admin.inc:162
+msgid "Open the printer-friendly version in a new window"
+msgstr "Otwórz wersję do wydruku w nowym oknie"
+
+#: print.admin.inc:164
+msgid "Setting this option will make the printer-friendly version open in a new window/tab."
+msgstr "Ustawienie tej opcji spowoduje otwieranie wersji do wydruku w nowym oknie/karcie."
+
+#: print.admin.inc:169
 msgid "Send to printer"
 msgstr "Wyślij do drukarki"
 
-#: print.admin.inc:133
+#: print.admin.inc:171
 msgid "Automatically calls the browser's print function when the printer-friendly version is displayed."
 msgstr "Automatyczne odwołanie do funkcji drukowania w przeglądarce, w momencie otwarcia strony do wydruku."
 
-#: print.admin.inc:140
+#: print.admin.inc:178
 msgid "Robots META tags"
 msgstr "META tagi robotów"
 
-#: print.admin.inc:148
+#: print.admin.inc:186
 msgid "Add noindex"
 msgstr "Dodaj noindex"
 
-#: print.admin.inc:150
+#: print.admin.inc:188
 msgid "Instruct robots to not index printer-friendly pages. Recommended for good search engine karma."
 msgstr "Poinstruuje roboty aby nie indeksowały wersji do wydruku. Zalezane dla dobrych wyników wyszukiwania w przeglądarkach."
 
-#: print.admin.inc:155
+#: print.admin.inc:193
 msgid "Add nofollow"
 msgstr "Dodaj nofollow"
 
-#: print.admin.inc:157
+#: print.admin.inc:195
 msgid "Instruct robots to not follow outgoing links on printer-friendly pages."
 msgstr "Poinstruuje roboty aby nie podążały za odnośnikiem do wersji do wydruku"
 
-#: print.admin.inc:162
+#: print.admin.inc:200
 msgid "Add noarchive"
 msgstr "Dodaj noarchive"
 
-#: print.admin.inc:164
+#: print.admin.inc:202
 msgid "Non-standard tag to instruct search engines to not show a \"Cached\" link for your printer-friendly pages. Recognized by Googlebot."
 msgstr "Niestandardowy tag, który poinstruuje roboty wyszukiwarek aby nie pokazywały odnośnika do kopii wersji do wydruku. Uznawane przez Googlebot."
 
-#: print.admin.inc:169
-msgid "Add nocache"
-msgstr "Dodaj nocache"
-
-#: print.admin.inc:171
-msgid "Non-standard tag to instruct search engines to not show a \"Cached\" link for your printer-friendly pages"
-msgstr "Niestandardowy tag, który poinstruuje roboty wyszukiwarek aby nie pokazywały odnośnika do kopii wersji do wydruku."
-
-#: print.pages.inc:150
+#: print.pages.inc:183
 #, fuzzy
 msgid "Published on %site_name"
 msgstr "Opublikowane na %site_name"
 
-#: print.pages.inc:169
+#: print.pages.inc:202
 #, fuzzy
 msgid "retrieved on %date"
 msgstr "wygenerowane %date"
 
-#: print.pages.inc:182
+#: print.pages.inc:216
 msgid "Anonymous"
 msgstr "Anonim"
 
-#: print.pages.inc:183
+#: print.pages.inc:217
 #, fuzzy
 msgid "By %author"
 msgstr "Przez %author"
 
-#: print.pages.inc:187
+#: print.pages.inc:221
 #, fuzzy
 msgid "Created %date"
 msgstr "Utworzone %date"
 
-#: print.pages.inc:217
+#: print.pages.inc:256
 #, fuzzy
 msgid "Links"
 msgstr "Odnośniki"
 
-#: print_pdf.admin.inc:24
-msgid "PDF version link"
-msgstr "Odnośnik do wersji PDF"
+#: print_mail.admin.inc:27
+msgid "Send by e-mail link"
+msgstr ""
 
-#: print_pdf.admin.inc:27
-msgid "Enable or disable the PDF version link for each node. Even if the link is disabled, you can still view the PDF version of a node by going to printpdf/nid where nid is the numeric id of the node."
-msgstr "Włączenie lub wyłączenie odnośnika do wersji PDF wszystkich treści. Jeśli odnośnik jest wyłączony, możesz wciąż otworzyć wersję PDF bezpośrednio przez printpdf/nid, gdzie nid jest identyfikatorem treści."
+#: print_mail.admin.inc:30
+msgid "Enable or disable the send by e-mail link for each node. Even if the link is disabled, you can still send a node by e-mail by going to printmail/nid where nid is the numeric id of the node."
+msgstr ""
 
-#: print_pdf.admin.inc:34
-msgid "Setting this option will add a PDF version page link on pages created by Drupal or the enabled modules."
-msgstr "Aktywowanie tej opcji spowoduje dodanie odnośnika do wersji PDF na stronach utworzonych przez Drupala oraz włączone moduły."
+#: print_mail.admin.inc:67
+msgid "Setting this option will add a send by-email link on pages created by Drupal or the enabled modules."
+msgstr ""
 
-#: print_pdf.admin.inc:39
+#: print_mail.admin.inc:73
+#: print_pdf.admin.inc:86
 msgid "Show link in book nodes"
 msgstr "Pokaż odnośnik na stonach książki"
 
-#: print_pdf.admin.inc:41
-msgid "Activate this to add a PDF version link in book nodes. Requires the (core) book module."
-msgstr "Aktywacja tej opcji spowoduje dodanie odnośników do wersji PDF na stronach ksiązki. Wymagany moduł książki."
+#: print_mail.admin.inc:75
+msgid "Activate this to add a send by e-mail link in book nodes. Requires the (core) book module."
+msgstr ""
 
-#: print_pdf.admin.inc:49
-msgid "No PDF generation tool found! Please dowload a supported PHP PDF generation tool. Check this module's INSTALL.txt for more details."
-msgstr "Nie znaleziono żadnego narzędzia do generowania PDF. Zainstaluj narzędzie do generowania PDF wspierane przez ten moduł. Więcej szczegółów znajdziesz w pliku INSTALL.txt."
+#: print_mail.admin.inc:80
+#: print_mail.inc:64
+msgid "Send only the teaser"
+msgstr ""
 
-#: print_pdf.admin.inc:81
+#: print_mail.admin.inc:82
+msgid "If selected, the default choice will be to send only the node's teaser instead of the full content."
+msgstr ""
+
+#: print_mail.admin.inc:87
+msgid "Enable teaser/full mode choice"
+msgstr ""
+
+#: print_mail.admin.inc:89
+msgid "If checked, the user will be able to choose between sending the full content or only the teaser at send time."
+msgstr ""
+
+#: print_mail.inc:35
+msgid "Your e-mail"
+msgstr ""
+
+#: print_mail.inc:40
+msgid "Your name"
+msgstr ""
+
+#: print_mail.inc:45
+msgid "Send to"
+msgstr ""
+
+#: print_mail.inc:48
+msgid "Enter multiple addresses separated by commas and/or different lines."
+msgstr ""
+
+#: print_mail.inc:52
+msgid "Subject"
+msgstr ""
+
+#: print_mail.inc:57
+msgid "Your message"
+msgstr ""
+
+#: print_mail.inc:96
+msgid "Someone"
+msgstr ""
+
+#: print_mail.inc:98
+msgid "an interesting site"
+msgstr ""
+
+#: print_mail.inc:99
+msgid "!user has sent you a message from !site"
+msgstr ""
+
+#: print_mail.inc:165
+msgid "You must enter a subject."
+msgstr ""
+
+#: print_mail.inc:169
+msgid "You must enter a message."
+msgstr ""
+
+#: print_mail.inc:197
+msgid "us"
+msgstr ""
+
+#: print_mail.inc:200
+msgid "Thank you for spreading the word about !site."
+msgstr ""
+
+#: print_mail.inc:211
+msgid "Message from sender:"
+msgstr ""
+
+#: print_mail.inc:241
+msgid "The form has been reset to the default values."
+msgstr ""
+
+#: print_pdf.admin.inc:31
 msgid "PDF generation tool"
 msgstr "Narzędzie do generowania PDF"
 
-#: print_pdf.admin.inc:84
+#: print_pdf.admin.inc:34
 msgid "This option selects the PDF generation tool being used by this module to create the PDF version."
 msgstr "Dzięki tej opcji wybierzesz narzędzie, które posłuży do generowania PDF."
 
-#: print.module:221
-msgid "Show printer-friendly version link"
-msgstr "Pokaż odnośnik do wersji do wydruku"
+#: print_pdf.admin.inc:40
+msgid "PDF version link"
+msgstr "Odnośnik do wersji PDF"
 
-#: print.module:223
-msgid "Displays the link to a printer-friendly version of the content. Further configuration is available on the !settings."
-msgstr "Wyświetla odnośnik do wersji do wydruku zawartości. Konfiguracja dostępna na !settings."
+#: print_pdf.admin.inc:43
+msgid "Enable or disable the PDF version link for each node. Even if the link is disabled, you can still view the PDF version of a node by going to printpdf/nid where nid is the numeric id of the node."
+msgstr "Włączenie lub wyłączenie odnośnika do wersji PDF wszystkich treści. Jeśli odnośnik jest wyłączony, możesz wciąż otworzyć wersję PDF bezpośrednio przez printpdf/nid, gdzie nid jest identyfikatorem treści."
 
-#: print.module:223;229
-#: print_pdf.module:136;142
-msgid "settings page"
-msgstr "stronie konfiguracji"
+#: print_pdf.admin.inc:80
+msgid "Setting this option will add a PDF version page link on pages created by Drupal or the enabled modules."
+msgstr "Aktywowanie tej opcji spowoduje dodanie odnośnika do wersji PDF na stronach utworzonych przez Drupala oraz włączone moduły."
+
+#: print_pdf.admin.inc:88
+msgid "Activate this to add a PDF version link in book nodes. Requires the (core) book module."
+msgstr "Aktywacja tej opcji spowoduje dodanie odnośników do wersji PDF na stronach ksiązki. Wymagany moduł książki."
+
+#: print_pdf.admin.inc:93
+msgid "Open PDF in"
+msgstr ""
+
+#: print_pdf.admin.inc:94
+msgid "Same browser window"
+msgstr ""
+
+#: print_pdf.admin.inc:94
+msgid "New browser window"
+msgstr ""
+
+#: print_pdf.admin.inc:94
+msgid "Save dialog"
+msgstr ""
+
+#: print_pdf.admin.inc:96
+msgid "Select the desired method for opening the PDF in the user's browser."
+msgstr ""
+
+#: print_pdf.admin.inc:101
+msgid "Paper size"
+msgstr ""
+
+#: print_pdf.admin.inc:118
+msgid "Choose the paper size of the generated PDF."
+msgstr ""
+
+#: print_pdf.admin.inc:123
+msgid "Page orientation"
+msgstr ""
+
+#: print_pdf.admin.inc:124
+msgid "Portrait"
+msgstr ""
+
+#: print_pdf.admin.inc:124
+msgid "Landscape"
+msgstr ""
+
+#: print_pdf.admin.inc:126
+msgid "Choose the page orientation of the generated PDF."
+msgstr ""
+
+#: print_pdf.admin.inc:132
+msgid "No PDF generation tool found! Please dowload a supported PHP PDF generation tool. Check this module's INSTALL.txt for more details."
+msgstr "Nie znaleziono żadnego narzędzia do generowania PDF. Zainstaluj narzędzie do generowania PDF wspierane przez ten moduł. Więcej szczegółów znajdziesz w pliku INSTALL.txt."
 
 #: print.module:227
-msgid "Show printer-friendly version link in individual comments"
-msgstr "Pokaż wersję do wydruku dla każdego komentarza"
-
-#: print.module:229
-msgid "Displays the link to a printer-friendly version of the comment. Further configuration is available on the !settings."
-msgstr "Wyświetla wersję do wydruku komentarza. Dodatkowa konfiguracja dostępna jest w !settings."
-
-#: print.module:296
-msgid "Printer-friendly version"
-msgstr "Wersja do wydruku"
-
-#: print.module:298
-msgid "Display a printer-friendly version of this page."
-msgstr "Wyświetl wersję do wydruku tej strony."
-
-#: print.module:64
-msgid "access print"
-msgstr "dostęp do wydruku"
-
-#: print.module:64
-msgid "administer print"
-msgstr "zarządzaj wydrukiem"
-
-#: print.module:88
-msgid "Printer-friendly"
-msgstr "Wersja do wydruku"
-
-#: print.module:95
 #: print.info:0
+#: print_mail.info:0
 #: print_pdf.info:0
 msgid "Printer-friendly pages"
 msgstr "Wersje do wydruku"
 
-#: print.module:96
-#: print.info:0
-#, fuzzy
-msgid "Adds a printer-friendly version link to content and administrative pages."
-msgstr "Dodaje odnośnik do wersji do wydruku do stron treści."
+#: print.module:234
+msgid "Show printer-friendly version link"
+msgstr "Pokaż odnośnik do wersji do wydruku"
 
-#: print.module:103
+#: print.module:236
+msgid "Displays the link to a printer-friendly version of the content. Further configuration is available on the !settings."
+msgstr "Wyświetla odnośnik do wersji do wydruku zawartości. Konfiguracja dostępna na !settings."
+
+#: print.module:236;242
+#: print_mail.module:161;167
+#: print_pdf.module:180;186
+msgid "settings page"
+msgstr "stronie konfiguracji"
+
+#: print.module:240
+msgid "Show printer-friendly version link in individual comments"
+msgstr "Pokaż wersję do wydruku dla każdego komentarza"
+
+#: print.module:242
+msgid "Displays the link to a printer-friendly version of the comment. Further configuration is available on the !settings."
+msgstr "Wyświetla wersję do wydruku komentarza. Dodatkowa konfiguracja dostępna jest w !settings."
+
+#: print.module:329
+msgid "Printer-friendly version"
+msgstr "Wersja do wydruku"
+
+#: print.module:331
+msgid "Display a printer-friendly version of this page."
+msgstr "Wyświetl wersję do wydruku tej strony."
+
+#: print.module:69
+msgid "access print"
+msgstr "dostęp do wydruku"
+
+#: print.module:69
+msgid "administer print"
+msgstr "zarządzaj wydrukiem"
+
+#: print.module:93
+msgid "Printer-friendly"
+msgstr "Wersja do wydruku"
+
+#: print.module:100
+#, fuzzy
+msgid "Printer-friendly Pages"
+msgstr "Wersje do wydruku"
+
+#: print.module:101
+#: print.info:0
+msgid "Adds a printer-friendly version link to content and administrative pages."
+msgstr ""
+
+#: print.module:108
 msgid "Web page"
 msgstr "Strona do wydruku"
 
-#: print.module:108
+#: print.module:113
 msgid "Settings"
 msgstr "Ustawienia"
 
@@ -327,36 +492,80 @@ msgstr "Ustawienia"
 msgid "print"
 msgstr "drukuj"
 
-#: print_pdf.module:134
+#: print_mail.module:159
+msgid "Show send by e-mail link"
+msgstr ""
+
+#: print_mail.module:161
+msgid "Displays a link to send the content by e-mail. Further configuration is available on the !settings."
+msgstr ""
+
+#: print_mail.module:165
+msgid "Show send by e-mail link in individual comments"
+msgstr ""
+
+#: print_mail.module:167
+msgid "Displays a link to send the comment by e-mail. Further configuration is available on the !settings."
+msgstr ""
+
+#: print_mail.module:181
+msgid "Send to friend"
+msgstr ""
+
+#: print_mail.module:183
+msgid "Send this page by e-mail."
+msgstr ""
+
+#: print_mail.module:53
+msgid "Send page by e-mail"
+msgstr ""
+
+#: print_mail.module:61
+msgid "e-mail"
+msgstr ""
+
+#: print_mail.module:0
+msgid "print_mail"
+msgstr ""
+
+#: print_pdf.module:178
 msgid "Show PDF version link"
 msgstr "Pokaż link do wersji PDF"
 
-#: print_pdf.module:136
+#: print_pdf.module:180
 msgid "Displays the link to a PDF version of the content. Further configuration is available on the !settings."
 msgstr "Wyświetla odnośnik do wersji PDF zawartości. Konfiguracja dostępna na !settings."
 
-#: print_pdf.module:140
+#: print_pdf.module:184
 msgid "Show PDF version link in individual comments"
 msgstr "Pokaż wersję PDF dla każdego komentarza"
 
-#: print_pdf.module:142
+#: print_pdf.module:186
 msgid "Displays the link to a PDF version of the comment. Further configuration is available on the !settings."
 msgstr "Wyświetla odnośnik do wersji PDF komentarza. Konfiguracja dostępna na !settings."
 
-#: print_pdf.module:149
+#: print_pdf.module:200
 #: print_pdf.info:0
 msgid "PDF version"
 msgstr "Wersja PDF"
 
-#: print_pdf.module:151
+#: print_pdf.module:202
 msgid "Display a PDF version of this page."
 msgstr "Wyświetl wersję PDF tej strony."
 
-#: print_pdf.module:40
+#: (duplicate) print_pdf.module:82
+msgid "Print PDF"
+msgstr ""
+
+#: (duplicate) print_pdf.module:83
+msgid "No PDF tool selected. Please configure it in the <a href=\"@url\">PDF settings page</a>."
+msgstr ""
+
+#: print_pdf.module:51
 msgid "Printer-friendly PDF"
 msgstr "Wersja PDF"
 
-#: print_pdf.module:47
+#: print_pdf.module:58
 msgid "PDF"
 msgstr "PDF"
 
@@ -364,7 +573,7 @@ msgstr "PDF"
 msgid "print_pdf"
 msgstr "print_pdf"
 
-#: print.install:8
+#: print.install:13
 msgid "Printer-friendly Page settings are available under !link"
 msgstr ""
 
@@ -372,13 +581,32 @@ msgstr ""
 msgid "Printer-friendly pages (core)"
 msgstr ""
 
+#: print_mail.info:0
+msgid "Send by e-mail"
+msgstr ""
+
+#: print_mail.info:0
+msgid "Provides the capability to send the web page by e-mail"
+msgstr ""
+
 #: print_pdf.info:0
 msgid "Adds the capability to export pages as PDF."
 msgstr "Dodaje możliwość eksportu stron jako PDF."
 
-#, fuzzy
-#~ msgid "Printer-friendly Pages"
-#~ msgstr "Wersje do wydruku"
+#~ msgid "Disabled"
+#~ msgstr "Wyłączone"
+#~ msgid "Use Greybox Redux (requires the greybox module)"
+#~ msgstr "Za pomocą GreyboxRedux (wymagany moduł greybox)"
+#~ msgid "Use Thickbox (requires the thickbox module)"
+#~ msgstr "Za pomocą Thickbox (wymagany moduł thickbox)"
+#~ msgid "Add nocache"
+#~ msgstr "Dodaj nocache"
+#~ msgid ""
+#~ "Non-standard tag to instruct search engines to not show a \"Cached\" link "
+#~ "for your printer-friendly pages"
+#~ msgstr ""
+#~ "Niestandardowy tag, który poinstruuje roboty wyszukiwarek aby nie "
+#~ "pokazywały odnośnika do kopii wersji do wydruku."
 #~ msgid "By"
 #~ msgstr "Przez"
 #~ msgid "Printer-friendly pages as PDF"

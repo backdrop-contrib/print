@@ -1,21 +1,18 @@
-# Danish translation for drupalprint
-# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
-# This file is distributed under the same license as the drupalprint package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
+# $Id$
+#
+# Danish translation of Drupal (print)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: drupalprint\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2008-05-13 01:10+0200\n"
-"PO-Revision-Date: 2008-05-13 01:17+0100\n"
+"POT-Creation-Date: 2008-07-15 23:35+0200\n"
+"PO-Revision-Date: 2008-07-16 00:40+0100\n"
 "Last-Translator: \n"
 "Language-Team: Danish <da@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-05-12 00:52+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
 
 #: print.admin.inc:27
 msgid "Logo URL"
@@ -57,13 +54,8 @@ msgid "When this option is active, user comments are also included in the printe
 msgstr "Når denne er aktiveret, vil bruger kommentarer også blive indkluderet i den printer venlige version. Kræver kommentar modulet."
 
 #: print.admin.inc:59
-msgid "Open the printer-friendly version in a new window"
-msgstr "Åben den printer venlige version i et nyt vindue"
-
-#: print.admin.inc:60
-#, fuzzy
-msgid "Disabled"
-msgstr "Deaktiveret"
+msgid "New window method"
+msgstr ""
 
 #: print.admin.inc:60
 #, fuzzy
@@ -75,23 +67,12 @@ msgstr "Brug HTML target (bliver ikke valideret som XHTML Strict)"
 msgid "Use Javascript (requires browser support)"
 msgstr "Brug Javascript (kræver browser support)"
 
-#: print.admin.inc:60
-#, fuzzy
-msgid "Use Greybox Redux (requires the greybox module)"
-msgstr "Brug Greybox Redux (kræver greybox modulet)"
-
-#: print.admin.inc:60
-#, fuzzy
-msgid "Use Thickbox (requires the thickbox module)"
-msgstr "Brug Thickbox (kræver thickbox modulet)"
-
 #: print.admin.inc:62
-#, fuzzy
-msgid "Setting this option will make the printer-friendly version open in a new window/tab."
-msgstr "Ved at aktivere dette, vil den printer venlige version åbne i et nyt vindue/tab."
+msgid "Choose the method used to open pages in a new window/tab."
+msgstr ""
 
 #: print.admin.inc:69
-#: print.pages.inc:172
+#: print.pages.inc:205
 #, fuzzy
 msgid "Source URL"
 msgstr "Destinations URL"
@@ -132,23 +113,27 @@ msgid "Printer-friendly page link"
 msgstr "Printer venlig side link"
 
 #: print.admin.inc:111
-#: print_pdf.admin.inc:26
+#: print_mail.admin.inc:29
+#: print_pdf.admin.inc:42
 #, fuzzy
 msgid "None (Disabled)"
 msgstr "Deaktiveret"
 
 #: print.admin.inc:111
-#: print_pdf.admin.inc:26
+#: print_mail.admin.inc:29
+#: print_pdf.admin.inc:42
 msgid "Text only"
 msgstr ""
 
 #: print.admin.inc:111
-#: print_pdf.admin.inc:26
+#: print_mail.admin.inc:29
+#: print_pdf.admin.inc:42
 msgid "Icon only"
 msgstr ""
 
 #: print.admin.inc:111
-#: print_pdf.admin.inc:26
+#: print_mail.admin.inc:29
+#: print_pdf.admin.inc:42
 msgid "Icon and Text"
 msgstr ""
 
@@ -158,211 +143,393 @@ msgid "Enable or disable the printer-friendly page link for each node. Even if t
 msgstr "Aktiver eller deaktiver printer venlig side linket for hver side. Selvom linket er deaktiveret, kan du stadig se print versionen af side ved at gå til print/nid, hvor nid er det numeriske  id for siden."
 
 #: print.admin.inc:117
-#: print_pdf.admin.inc:32
+#: print_mail.admin.inc:35
+#: print_pdf.admin.inc:48
+msgid "Link visibility"
+msgstr ""
+
+#: print.admin.inc:119;142
+#: print_mail.admin.inc:37;60
+#: print_pdf.admin.inc:50;73
+msgid "Show on every page except the listed pages."
+msgstr ""
+
+#: print.admin.inc:119;142
+#: print_mail.admin.inc:37;60
+#: print_pdf.admin.inc:50;73
+msgid "Show on only the listed pages."
+msgstr ""
+
+#: print.admin.inc:126;150
+#: print_mail.admin.inc:44;68
+#: print_pdf.admin.inc:57;81
+msgid "Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page."
+msgstr ""
+
+#: print.admin.inc:131
+#: print_mail.admin.inc:49
+#: print_pdf.admin.inc:62
+msgid "Link class"
+msgstr ""
+
+#: print.admin.inc:135
+#: print_mail.admin.inc:53
+#: print_pdf.admin.inc:66
+msgid "This can be used by themers to change the link style or by jQuery modules to open in a new window (e.g. greybox or thickbox). Multiple classes can be specified, separated by spaces."
+msgstr ""
+
+#: print.admin.inc:140
+#: print_mail.admin.inc:58
+#: print_pdf.admin.inc:71
 #, fuzzy
 msgid "Show link in system (non-content) pages"
 msgstr "Vis linket i system (ikke indholds) sider"
 
-#: print.admin.inc:119
+#: print.admin.inc:149
 #, fuzzy
 msgid "Setting this option will add a printer-friendly version page link on pages created by Drupal or the enabled modules."
 msgstr "Ved at aktivere denne indstilling vil der blive tilføjet et printer venlig versions side link på sider oprettet af Drupal eller af aktive moduler."
 
-#: print.admin.inc:124
+#: print.admin.inc:155
 #, fuzzy
 msgid "Take control of the book module printer-friendly link"
 msgstr "Tag kontrol over bog modul printer venlig linket"
 
-#: print.admin.inc:126
+#: print.admin.inc:157
 #, fuzzy
 msgid "Activate this to have the printer-friendly link in book nodes handled by this module. Requires the (core) book module."
 msgstr "Aktiver denne for at have et printer venlig link i bog sider styret af dette modul. Kræver (core) bog modul."
 
-#: print.admin.inc:131
+#: print.admin.inc:162
+msgid "Open the printer-friendly version in a new window"
+msgstr "Åben den printer venlige version i et nyt vindue"
+
+#: print.admin.inc:164
+#, fuzzy
+msgid "Setting this option will make the printer-friendly version open in a new window/tab."
+msgstr "Ved at aktivere dette, vil den printer venlige version åbne i et nyt vindue/tab."
+
+#: print.admin.inc:169
 #, fuzzy
 msgid "Send to printer"
 msgstr "Send til printer"
 
-#: print.admin.inc:133
+#: print.admin.inc:171
 #, fuzzy
 msgid "Automatically calls the browser's print function when the printer-friendly version is displayed."
 msgstr "Kalder automatisk browserens print funktion når den printer venlige version bliver vist."
 
-#: print.admin.inc:140
+#: print.admin.inc:178
 #, fuzzy
 msgid "Robots META tags"
 msgstr "Robot META tags"
 
-#: print.admin.inc:148
+#: print.admin.inc:186
 #, fuzzy
 msgid "Add noindex"
 msgstr "Tilføj noindex"
 
-#: print.admin.inc:150
+#: print.admin.inc:188
 #, fuzzy
 msgid "Instruct robots to not index printer-friendly pages. Recommended for good search engine karma."
 msgstr "Instruer robotter til ikke at indeksere printer venlige sider. Anbefalet for god søgemaskine karma."
 
-#: print.admin.inc:155
+#: print.admin.inc:193
 #, fuzzy
 msgid "Add nofollow"
 msgstr "Tilføj nofollow"
 
-#: print.admin.inc:157
+#: print.admin.inc:195
 #, fuzzy
 msgid "Instruct robots to not follow outgoing links on printer-friendly pages."
 msgstr "Instruer robotter til ikke at følge udgående links på printer venlige sider."
 
-#: print.admin.inc:162
+#: print.admin.inc:200
 #, fuzzy
 msgid "Add noarchive"
 msgstr "Tilføj noarchive"
 
-#: print.admin.inc:164
+#: print.admin.inc:202
 #, fuzzy
 msgid "Non-standard tag to instruct search engines to not show a \"Cached\" link for your printer-friendly pages. Recognized by Googlebot."
 msgstr "Ikke Standardiseret tag til at instruere søgemaskiner til ikke at vise \"Cached\" links for dine printer venlige sider. Genkendt af Googlebot."
 
-#: print.admin.inc:169
-#, fuzzy
-msgid "Add nocache"
-msgstr "Tilføj nocache"
-
-#: print.admin.inc:171
-#, fuzzy
-msgid "Non-standard tag to instruct search engines to not show a \"Cached\" link for your printer-friendly pages"
-msgstr "Ikke Standardiseret tag til at instruere søgemaskiner til ikke at vise \"Cached\" links for dine printer venlige sider"
-
-#: print.pages.inc:150
+#: print.pages.inc:183
 #, fuzzy
 msgid "Published on %site_name"
 msgstr "Publiseret den %site_name"
 
-#: print.pages.inc:169
+#: print.pages.inc:202
 #, fuzzy
 msgid "retrieved on %date"
 msgstr "fundet den %date"
 
-#: print.pages.inc:182
+#: print.pages.inc:216
 #, fuzzy
 msgid "Anonymous"
 msgstr "Anonym"
 
-#: print.pages.inc:183
+#: print.pages.inc:217
 #, fuzzy
 msgid "By %author"
 msgstr "Af %author"
 
-#: print.pages.inc:187
+#: print.pages.inc:221
 #, fuzzy
 msgid "Created %date"
 msgstr "Oprettet %date"
 
-#: print.pages.inc:217
+#: print.pages.inc:256
 #, fuzzy
 msgid "Links"
 msgstr "Links"
 
-#: print_pdf.admin.inc:24
-msgid "PDF version link"
+#: print_mail.admin.inc:27
+msgid "Send by e-mail link"
 msgstr ""
 
-#: print_pdf.admin.inc:27
-msgid "Enable or disable the PDF version link for each node. Even if the link is disabled, you can still view the PDF version of a node by going to printpdf/nid where nid is the numeric id of the node."
+#: print_mail.admin.inc:30
+msgid "Enable or disable the send by e-mail link for each node. Even if the link is disabled, you can still send a node by e-mail by going to printmail/nid where nid is the numeric id of the node."
 msgstr ""
 
-#: print_pdf.admin.inc:34
-msgid "Setting this option will add a PDF version page link on pages created by Drupal or the enabled modules."
+#: print_mail.admin.inc:67
+msgid "Setting this option will add a send by-email link on pages created by Drupal or the enabled modules."
 msgstr ""
 
-#: print_pdf.admin.inc:39
+#: print_mail.admin.inc:73
+#: print_pdf.admin.inc:86
 msgid "Show link in book nodes"
 msgstr ""
 
-#: print_pdf.admin.inc:41
-msgid "Activate this to add a PDF version link in book nodes. Requires the (core) book module."
+#: print_mail.admin.inc:75
+msgid "Activate this to add a send by e-mail link in book nodes. Requires the (core) book module."
 msgstr ""
 
-#: print_pdf.admin.inc:49
-msgid "No PDF generation tool found! Please dowload a supported PHP PDF generation tool. Check this module's INSTALL.txt for more details."
+#: print_mail.admin.inc:80
+#: print_mail.inc:64
+msgid "Send only the teaser"
 msgstr ""
 
-#: print_pdf.admin.inc:81
+#: print_mail.admin.inc:82
+msgid "If selected, the default choice will be to send only the node's teaser instead of the full content."
+msgstr ""
+
+#: print_mail.admin.inc:87
+msgid "Enable teaser/full mode choice"
+msgstr ""
+
+#: print_mail.admin.inc:89
+msgid "If checked, the user will be able to choose between sending the full content or only the teaser at send time."
+msgstr ""
+
+#: print_mail.inc:35
+msgid "Your e-mail"
+msgstr ""
+
+#: print_mail.inc:40
+msgid "Your name"
+msgstr ""
+
+#: print_mail.inc:45
+#, fuzzy
+msgid "Send to"
+msgstr "Send til printer"
+
+#: print_mail.inc:48
+msgid "Enter multiple addresses separated by commas and/or different lines."
+msgstr ""
+
+#: print_mail.inc:52
+msgid "Subject"
+msgstr ""
+
+#: print_mail.inc:57
+msgid "Your message"
+msgstr ""
+
+#: print_mail.inc:96
+msgid "Someone"
+msgstr ""
+
+#: print_mail.inc:98
+msgid "an interesting site"
+msgstr ""
+
+#: print_mail.inc:99
+msgid "!user has sent you a message from !site"
+msgstr ""
+
+#: print_mail.inc:165
+msgid "You must enter a subject."
+msgstr ""
+
+#: print_mail.inc:169
+msgid "You must enter a message."
+msgstr ""
+
+#: print_mail.inc:197
+msgid "us"
+msgstr ""
+
+#: print_mail.inc:200
+msgid "Thank you for spreading the word about !site."
+msgstr ""
+
+#: print_mail.inc:211
+msgid "Message from sender:"
+msgstr ""
+
+#: print_mail.inc:241
+msgid "The form has been reset to the default values."
+msgstr ""
+
+#: print_pdf.admin.inc:31
 msgid "PDF generation tool"
 msgstr ""
 
-#: print_pdf.admin.inc:84
+#: print_pdf.admin.inc:34
 msgid "This option selects the PDF generation tool being used by this module to create the PDF version."
 msgstr ""
 
-#: print.module:221
-msgid "Show printer-friendly version link"
-msgstr "Vis printer venlig versions link"
+#: print_pdf.admin.inc:40
+msgid "PDF version link"
+msgstr ""
 
-#: print.module:223
-#, fuzzy
-msgid "Displays the link to a printer-friendly version of the content. Further configuration is available on the !settings."
-msgstr "Viser et link til printer venlig version af indholdet. Yderlig konfiguration er tilgængelig under indstillinger."
+#: print_pdf.admin.inc:43
+msgid "Enable or disable the PDF version link for each node. Even if the link is disabled, you can still view the PDF version of a node by going to printpdf/nid where nid is the numeric id of the node."
+msgstr ""
 
-#: print.module:223;229
-#: print_pdf.module:136;142
-#, fuzzy
-msgid "settings page"
-msgstr "indstillings side"
+#: print_pdf.admin.inc:80
+msgid "Setting this option will add a PDF version page link on pages created by Drupal or the enabled modules."
+msgstr ""
+
+#: print_pdf.admin.inc:88
+msgid "Activate this to add a PDF version link in book nodes. Requires the (core) book module."
+msgstr ""
+
+#: print_pdf.admin.inc:93
+msgid "Open PDF in"
+msgstr ""
+
+#: print_pdf.admin.inc:94
+msgid "Same browser window"
+msgstr ""
+
+#: print_pdf.admin.inc:94
+msgid "New browser window"
+msgstr ""
+
+#: print_pdf.admin.inc:94
+msgid "Save dialog"
+msgstr ""
+
+#: print_pdf.admin.inc:96
+msgid "Select the desired method for opening the PDF in the user's browser."
+msgstr ""
+
+#: print_pdf.admin.inc:101
+msgid "Paper size"
+msgstr ""
+
+#: print_pdf.admin.inc:118
+msgid "Choose the paper size of the generated PDF."
+msgstr ""
+
+#: print_pdf.admin.inc:123
+msgid "Page orientation"
+msgstr ""
+
+#: print_pdf.admin.inc:124
+msgid "Portrait"
+msgstr ""
+
+#: print_pdf.admin.inc:124
+msgid "Landscape"
+msgstr ""
+
+#: print_pdf.admin.inc:126
+msgid "Choose the page orientation of the generated PDF."
+msgstr ""
+
+#: print_pdf.admin.inc:132
+msgid "No PDF generation tool found! Please dowload a supported PHP PDF generation tool. Check this module's INSTALL.txt for more details."
+msgstr ""
 
 #: print.module:227
-#, fuzzy
-msgid "Show printer-friendly version link in individual comments"
-msgstr "Vis printer venlig versions link i individuel kommentar"
-
-#: print.module:229
-#, fuzzy
-msgid "Displays the link to a printer-friendly version of the comment. Further configuration is available on the !settings."
-msgstr "Viser et link til printer venlig version af kommentarer. Yderlig konfiguration er tilgængelig under indstillinger."
-
-#: print.module:296
-#, fuzzy
-msgid "Printer-friendly version"
-msgstr "Printer venlig version"
-
-#: print.module:298
-#, fuzzy
-msgid "Display a printer-friendly version of this page."
-msgstr "Vis en printer venlig version af denne side"
-
-#: print.module:64
-#, fuzzy
-msgid "access print"
-msgstr "adgang til print"
-
-#: print.module:64
-#, fuzzy
-msgid "administer print"
-msgstr "Administrer print"
-
-#: print.module:88
-#, fuzzy
-msgid "Printer-friendly"
-msgstr "Printer venlig"
-
-#: print.module:95
 #: print.info:0
+#: print_mail.info:0
 #: print_pdf.info:0
 #, fuzzy
 msgid "Printer-friendly pages"
 msgstr "Printer venlige sider"
 
-#: print.module:96
+#: print.module:234
+msgid "Show printer-friendly version link"
+msgstr "Vis printer venlig versions link"
+
+#: print.module:236
+#, fuzzy
+msgid "Displays the link to a printer-friendly version of the content. Further configuration is available on the !settings."
+msgstr "Viser et link til printer venlig version af indholdet. Yderlig konfiguration er tilgængelig under indstillinger."
+
+#: print.module:236;242
+#: print_mail.module:161;167
+#: print_pdf.module:180;186
+#, fuzzy
+msgid "settings page"
+msgstr "indstillings side"
+
+#: print.module:240
+#, fuzzy
+msgid "Show printer-friendly version link in individual comments"
+msgstr "Vis printer venlig versions link i individuel kommentar"
+
+#: print.module:242
+#, fuzzy
+msgid "Displays the link to a printer-friendly version of the comment. Further configuration is available on the !settings."
+msgstr "Viser et link til printer venlig version af kommentarer. Yderlig konfiguration er tilgængelig under indstillinger."
+
+#: print.module:329
+#, fuzzy
+msgid "Printer-friendly version"
+msgstr "Printer venlig version"
+
+#: print.module:331
+#, fuzzy
+msgid "Display a printer-friendly version of this page."
+msgstr "Vis en printer venlig version af denne side"
+
+#: print.module:69
+#, fuzzy
+msgid "access print"
+msgstr "adgang til print"
+
+#: print.module:69
+#, fuzzy
+msgid "administer print"
+msgstr "Administrer print"
+
+#: print.module:93
+#, fuzzy
+msgid "Printer-friendly"
+msgstr "Printer venlig"
+
+#: print.module:100
+#, fuzzy
+msgid "Printer-friendly Pages"
+msgstr "Printer venlige sider"
+
+#: print.module:101
 #: print.info:0
 #, fuzzy
 msgid "Adds a printer-friendly version link to content and administrative pages."
 msgstr "Tilføjer et printer venlig versions link til siderne"
 
-#: print.module:103
+#: print.module:108
 msgid "Web page"
 msgstr ""
 
-#: print.module:108
+#: print.module:113
 #, fuzzy
 msgid "Settings"
 msgstr "indstillings side"
@@ -372,36 +539,80 @@ msgstr "indstillings side"
 msgid "print"
 msgstr "print"
 
-#: print_pdf.module:134
+#: print_mail.module:159
+msgid "Show send by e-mail link"
+msgstr ""
+
+#: print_mail.module:161
+msgid "Displays a link to send the content by e-mail. Further configuration is available on the !settings."
+msgstr ""
+
+#: print_mail.module:165
+msgid "Show send by e-mail link in individual comments"
+msgstr ""
+
+#: print_mail.module:167
+msgid "Displays a link to send the comment by e-mail. Further configuration is available on the !settings."
+msgstr ""
+
+#: print_mail.module:181
+msgid "Send to friend"
+msgstr ""
+
+#: print_mail.module:183
+msgid "Send this page by e-mail."
+msgstr ""
+
+#: print_mail.module:53
+msgid "Send page by e-mail"
+msgstr ""
+
+#: print_mail.module:61
+msgid "e-mail"
+msgstr ""
+
+#: print_mail.module:0
+msgid "print_mail"
+msgstr ""
+
+#: print_pdf.module:178
 msgid "Show PDF version link"
 msgstr ""
 
-#: print_pdf.module:136
+#: print_pdf.module:180
 msgid "Displays the link to a PDF version of the content. Further configuration is available on the !settings."
 msgstr ""
 
-#: print_pdf.module:140
+#: print_pdf.module:184
 msgid "Show PDF version link in individual comments"
 msgstr ""
 
-#: print_pdf.module:142
+#: print_pdf.module:186
 msgid "Displays the link to a PDF version of the comment. Further configuration is available on the !settings."
 msgstr ""
 
-#: print_pdf.module:149
+#: print_pdf.module:200
 #: print_pdf.info:0
 msgid "PDF version"
 msgstr ""
 
-#: print_pdf.module:151
+#: print_pdf.module:202
 msgid "Display a PDF version of this page."
 msgstr ""
 
-#: print_pdf.module:40
+#: (duplicate) print_pdf.module:82
+msgid "Print PDF"
+msgstr ""
+
+#: (duplicate) print_pdf.module:83
+msgid "No PDF tool selected. Please configure it in the <a href=\"@url\">PDF settings page</a>."
+msgstr ""
+
+#: print_pdf.module:51
 msgid "Printer-friendly PDF"
 msgstr ""
 
-#: print_pdf.module:47
+#: print_pdf.module:58
 msgid "PDF"
 msgstr ""
 
@@ -409,7 +620,7 @@ msgstr ""
 msgid "print_pdf"
 msgstr ""
 
-#: print.install:8
+#: print.install:13
 msgid "Printer-friendly Page settings are available under !link"
 msgstr ""
 
@@ -417,13 +628,41 @@ msgstr ""
 msgid "Printer-friendly pages (core)"
 msgstr ""
 
+#: print_mail.info:0
+msgid "Send by e-mail"
+msgstr ""
+
+#: print_mail.info:0
+msgid "Provides the capability to send the web page by e-mail"
+msgstr ""
+
 #: print_pdf.info:0
 msgid "Adds the capability to export pages as PDF."
 msgstr ""
 
 #, fuzzy
-#~ msgid "Printer-friendly Pages"
-#~ msgstr "Printer venlige sider"
+#~ msgid "Disabled"
+#~ msgstr "Deaktiveret"
+
+#, fuzzy
+#~ msgid "Use Greybox Redux (requires the greybox module)"
+#~ msgstr "Brug Greybox Redux (kræver greybox modulet)"
+
+#, fuzzy
+#~ msgid "Use Thickbox (requires the thickbox module)"
+#~ msgstr "Brug Thickbox (kræver thickbox modulet)"
+
+#, fuzzy
+#~ msgid "Add nocache"
+#~ msgstr "Tilføj nocache"
+
+#, fuzzy
+#~ msgid ""
+#~ "Non-standard tag to instruct search engines to not show a \"Cached\" link "
+#~ "for your printer-friendly pages"
+#~ msgstr ""
+#~ "Ikke Standardiseret tag til at instruere søgemaskiner til ikke at vise "
+#~ "\"Cached\" links for dine printer venlige sider"
 
 #, fuzzy
 #~ msgid "Enabled"

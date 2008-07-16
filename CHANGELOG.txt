@@ -1,3 +1,20 @@
+July 16, 2008
+        Updated all translations
+        Misc fixes from the coder module
+July 15, 2008
+        Fix #282385: Remove whitespace between icon and text, use margin instead
+July 9, 2008
+        To make the job easier for themers, added access to the $node var inside the template
+        Fix #278922: Add support to the RTL languages
+        Fix #276627: Accept paths of the form node/nnn/args
+June 17, 2008
+        Self configure TCPDF
+June 16, 2008
+        With the new agreement between the major search engines, robots=nocache is obsolete
+        Set PDF version to 1.6 (Acrobat 7.x)
+        Use own panel in node type edit form, instead of workflow and comment panels.
+June 13, 2008
+        Fix #270095 by suit4: prevent validation error when the class field is empty
 June 6, 2008
         Add path-based visibility options to all modules
         Minor code documentation fixes

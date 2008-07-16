@@ -1,5 +1,5 @@
 <?php
-/* $Id$ */
+// $Id$
 
 /**
  * @file
@@ -64,7 +64,7 @@ function print_mail_settings() {
     '#type' => 'textarea',
     '#default_value' => $print_mail_settings['sys_link_pages'],
     '#rows' => 3,
-    '#description' => t("Setting this option will add a send by-email link on pages created by Drupal or the enabled modules.") .'<br />'. 
+    '#description' => t("Setting this option will add a send by-email link on pages created by Drupal or the enabled modules.") .'<br />'.
                       t("Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>')),
   );
 

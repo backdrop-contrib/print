@@ -2,6 +2,11 @@
 // $Id$
 
 /**
+ * @file
+ * Install file of the print_pdf module
+ */
+
+/**
  * Implementation of hook_uninstall().
  */
 function print_pdf_uninstall() {

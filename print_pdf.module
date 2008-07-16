@@ -68,6 +68,28 @@ function print_pdf_menu() {
 }
 
 /**
+ * Implementation of hook_requirements().
+ */
+function print_pdf_requirements($phase) {
+  $requirements = array();
+  $t = get_t();
+  switch ($phase) {
+    // At runtime, make sure that a PDF generation tool is selected
+    case 'runtime':
+      $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
+      if (empty($print_pdf_settings['pdf_tool'])) {
+        $requirements['print_pdf_tool'] = array(
+          'title' => $t('Print PDF'),
+          'value' => $t('No PDF tool selected. Please configure it in the <a href="@url">PDF settings page</a>.', array('@url' => url('admin/settings/print/pdf'))),
+          'severity' => REQUIREMENT_ERROR,
+        );
+      }
+      break;
+  }
+  return $requirements;
+}
+
+/**
  * Implementation of hook_link().
  */
 function print_pdf_link($type, $node = NULL, $teaser = FALSE) {

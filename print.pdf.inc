@@ -1,5 +1,13 @@
 <?php
-/* $Id$ */
+// $Id$
+
+/**
+ * @file
+ * Generates the PDF versions of the pages
+ *
+ * This file is included by the print_pdf module and includes the
+ * functions that interface with the PDF generation packages.
+ */
 
 require_once(drupal_get_path('module', 'print') .'/print.pages.inc');
 
@@ -40,9 +48,9 @@ function _print_pdf_dompdf($print, $html, $filename) {
 
   $url_array  = parse_url($print['url']);
 
-  $protocol = $url_array['scheme'] . "://";
+  $protocol = $url_array['scheme'] .'://';
   $host = $url_array['host'];
-  $path = dirname($url_array['path']) . "/";
+  $path = dirname($url_array['path']) .'/';
 
   $dompdf = new DOMPDF();
   $dompdf->set_base_path($path);
@@ -51,7 +59,7 @@ function _print_pdf_dompdf($print, $html, $filename) {
   $dompdf->set_protocol($protocol);
 
   $dompdf->load_html($html);
-  
+
   $dompdf->render();
   $dompdf->stream($filename, array("Attachment" => ($print_pdf_settings['content_disposition'] == 2)));
 }
@@ -99,7 +107,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   $pdf->SetMargins(15, 27, 15);
   $pdf->SetHeaderMargin(5);
   $pdf->SetFooterMargin(10);
-  
+
   // set auto page breaks
   $pdf->SetAutoPageBreak(TRUE, 25);
 
@@ -108,7 +116,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
 
   //initialize document
   $pdf->AliasNbPages();
-  
+
   // add a page
   $pdf->AddPage();
 
@@ -129,7 +137,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   $pdf->SetFont($font_name, '', $font_size);
   $pdf->writeHTML($matches[1]);
 
-  //Close and output PDF document 
+  //Close and output PDF document
   $output_dest = ($print_pdf_settings['content_disposition'] == 2) ? 'D' : 'I';
   $pdf->Output($filename, $output_dest);
 }
