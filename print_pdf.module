@@ -114,8 +114,9 @@ function print_pdf_link($type, $node = NULL, $teaser = FALSE) {
         (($node_type == 'book') || isset($node->book))) {
 
       $links['book_pdf'] = array('href' => PRINTPDF_PATH ."/book/export/html/". $node->nid,
-                                 'title' => strip_tags($format['text']),
+                                 'title' => $format['text'],
                                  'attributes' => $format['attributes'],
+                                 'html' => $format['html'],
                                 );
 
       return $links;
