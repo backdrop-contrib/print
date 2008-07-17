@@ -12,8 +12,9 @@
 require_once(drupal_get_path('module', 'print') .'/print.pages.inc');
 
 function print_pdf_controller() {
+  $args = func_get_args();
   // Remove the printpdf/ prefix
-  $path = substr($_GET['q'], strpos($_GET['q'], '/')+1);
+  $path = implode('/', $args);
   $cid = isset($_GET['comment']) ? $_GET['comment'] : NULL;
 
   $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());

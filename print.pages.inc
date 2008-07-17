@@ -17,8 +17,9 @@
  * @see _print_get_template()
  */
 function print_controller_html() {
+  $args = func_get_args();
   // Remove the print/ prefix
-  $path = substr($_GET['q'], strpos($_GET['q'], '/')+1);
+  $path = implode('/', $args);
   $cid = isset($_GET['comment']) ? $_GET['comment'] : NULL;
 
   $print = print_controller($path, $cid);
