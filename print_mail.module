@@ -150,6 +150,22 @@ function print_mail_help($path, $arg) {
 }
 
 /**
+ * Implementation of hook_nodeapi().
+ */
+function print_mail_nodeapi(&$node, $op = 'view', $teaser, $page) {
+  switch ($op) {
+    case 'view':
+      if (TRUE && !$node->printing) {
+        $link = print_mail_insert_link();
+        $node->content['print_mail_link'] = array(
+          '#value' => "<div style='float:right;clear:left;'>$link</div>",
+          '#weight' => -2,
+        );
+      }
+  }
+}
+
+/**
  * Implementation of hook_form_alter().
  */
 function print_mail_form_alter(&$form, $form_state, $form_id) {

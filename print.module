@@ -217,6 +217,22 @@ function print_help($path, $arg) {
 }
 
 /**
+ * Implementation of hook_nodeapi().
+ */
+function print_nodeapi(&$node, $op = 'view', $teaser, $page) {
+  switch ($op) {
+    case 'view':
+      if (TRUE && !$node->printing) {
+        $link = print_insert_link();
+        $node->content['print_link'] = array(
+          '#value' => "<div style='float:right;clear:left;margin: 0 0 1em 2em;'>$link</div>",
+          '#weight' => -1,
+        );
+      }
+  }
+}
+
+/**
  * Implementation of hook_form_alter().
  */
 function print_form_alter(&$form, $form_state, $form_id) {

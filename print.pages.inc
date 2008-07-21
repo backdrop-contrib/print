@@ -313,7 +313,7 @@ function _print_rewrite_urls($matches) {
 
   for ($i=1; $i < count($attribs); $i++) {
     // If the attribute is href or src, we may need to rewrite the URL in the value
-    if (preg_match("/^(href|src)\s*?=/i", $attribs[$i]) > 0) {
+    if (preg_match("/^(?:href|src)\s*?=/i", $attribs[$i]) > 0) {
       // We may need to rewrite the URL, so let's isolate it
       preg_match("/.*?=(.*)/is", $attribs[$i], $urls);
       $url = trim($urls[1], " \t\n\r\0\x0B\"\'");
@@ -344,7 +344,7 @@ function _print_rewrite_urls($matches) {
             // If it starts with '/' just append it to the server name
             $newurl = $base_root .'/'. trim(urldecode($url), "/");
           }
-          elseif ((!$clean_url) && (preg_match("/^[index.php]?\?q=.*/i", $url))) {
+          elseif ((!$clean_url) && (preg_match("/^(?:index.php)?\?q=.*/i", $url))) {
             // If Clean URLs is disabled, and it starts with q=?, just prepend with the base URL
             $newurl = $base_url .'/'. trim(urldecode($url), "/");
           }

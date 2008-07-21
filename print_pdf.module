@@ -169,6 +169,22 @@ function print_pdf_help($path, $arg) {
 }
 
 /**
+ * Implementation of hook_nodeapi().
+ */
+function print_pdf_nodeapi(&$node, $op = 'view', $teaser, $page) {
+  switch ($op) {
+    case 'view':
+      if (TRUE && !$node->printing) {
+        $link = print_pdf_insert_link();
+        $node->content['print_pdf_link'] = array(
+          '#value' => "<div style='float:right;clear:left;'>$link</div>",
+          '#weight' => -3,
+        );
+      }
+  }
+}
+
+/**
  * Implementation of hook_form_alter().
  */
 function print_pdf_form_alter(&$form, $form_state, $form_id) {
