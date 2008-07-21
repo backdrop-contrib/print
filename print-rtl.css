@@ -6,3 +6,6 @@ body {
 th {
   text-align: right;
 }
+.print-taxonomy {
+  text-align: left;
+}

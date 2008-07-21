@@ -40,6 +40,9 @@ a:link img, a:visited img {border: 0;}
   margin: 0;
   padding: 0px;
 }
+.print-taxonomy {
+  text-align: right;
+}
 .print-taxonomy li {display: inline;}
 .print-content {}
 .print-hr {
