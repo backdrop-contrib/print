@@ -71,16 +71,16 @@ function print_mail_form($form_state) {
 
   $form['btn_submit'] = array(
     '#type' => 'submit',
-    '#value' => 'Send e-mail',
+    '#value' => t('Send e-mail'),
   );
   $form['btn_clear'] = array(
     '#type' => 'submit',
-    '#value' => 'Clear form',
+    '#value' => t('Clear form'),
     '#validate' => array('print_mail_form_reset'),
   );
   $form['btn_cancel'] = array(
     '#type' => 'submit',
-    '#value' => 'Cancel',
+    '#value' => t('Cancel'),
     '#validate' => array(),
     '#submit' => array('print_mail_form_cancel'),
   );

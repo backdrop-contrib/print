@@ -97,7 +97,7 @@ function print_menu() {
     'file' => 'print.pages.inc',
   );
   $items['admin/settings/print'] = array(
-    'title' => 'Printer-friendly Pages',
+    'title' => 'Printer-friendly pages',
     'description' => 'Adds a printer-friendly version link to content and administrative pages.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_html_settings'),
