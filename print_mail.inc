@@ -112,7 +112,7 @@ function theme_print_mail_form($form) {
       case 'txt_to_addrs':
       case 'fld_subject':
         $tmp = str_replace('<div class="form-item"', '<div style="clear: left;" class="form-item"', $tmp);
-        $tmp = str_replace('<label', '<label style="width: 100px; float: left;"', $tmp);
+        $tmp = str_replace('<label', '<label style="width: 175px; float: left;"', $tmp);
         break;
     }
     $content .= $tmp;
