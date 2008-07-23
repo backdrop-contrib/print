@@ -6,23 +6,17 @@
  * Display printer-friendly versions of Drupal pages
  */
 
-define("PRINTMAIL_PATH", "printmail");
+define('PRINTMAIL_PATH', 'printmail');
 
-/**
- * Default values of the print_mail_settings variable
- */
-function print_mail_settings_default() {
-  return array('show_link' => 1,
-               'node_link_visibility' => 0,
-               'node_link_pages' => '',
-               'link_class' => 'print-mail',
-               'sys_link_visibility' => 1,
-               'sys_link_pages' => '<front>',
-               'book_link' => 1,
-               'teaser_default' => 1,
-               'teaser_choice' => 1,
-              );
-}
+define('PRINT_MAIL_SHOW_LINK_DEFAULT', 1);
+define('PRINT_MAIL_NODE_LINK_VISIBILITY_DEFAULT', 0);
+define('PRINT_MAIL_NODE_LINK_PAGES_DEFAULT', '');
+define('PRINT_MAIL_LINK_CLASS_DEFAULT', 'print-mail');
+define('PRINT_MAIL_SYS_LINK_VISIBILITY_DEFAULT', 1);
+define('PRINT_MAIL_SYS_LINK_PAGES_DEFAULT', '<front>');
+define('PRINT_MAIL_BOOK_LINK_DEFAULT', 1);
+define('PRINT_MAIL_TEASER_DEFAULT_DEFAULT', 1);
+define('PRINT_MAIL_TEASER_CHOICE_DEFAULT', 1);
 
 //*******************************************************************
 // Drupal Hooks
@@ -74,13 +68,16 @@ function print_mail_menu() {
  * Implementation of hook_link().
  */
 function print_mail_link($type, $node = NULL, $teaser = FALSE) {
-  $print_mail_settings = variable_get('print_mail_settings', print_mail_settings_default());
+  $print_mail_book_link = variable_get('print_mail_book_link', PRINT_MAIL_BOOK_LINK_DEFAULT);
+  $print_mail_show_link = variable_get('print_mail_show_link', PRINT_MAIL_SHOW_LINK_DEFAULT);
+  $print_mail_node_link_visibility = variable_get('print_mail_node_link_visibility', PRINT_MAIL_NODE_LINK_VISIBILITY_DEFAULT);
+  $print_mail_node_link_pages = variable_get('print_mail_node_link_pages', PRINT_MAIL_NODE_LINK_PAGES_DEFAULT);
   static $print_mail_display_comment = FALSE;
 
   if (($print_mail_display_comment == FALSE) && (isset($node->type))) {
     $node_type = $node->type;
-    $print_mail_display_comment = variable_get('print_mail_display_comment_'. $node->type, 0);
-    $print_mail_display = variable_get('print_mail_display_'. $node->type, 1);
+    $print_mail_display_comment = variable_get('print_mail_display_comment_'. $node->type, PRINT_TYPE_COMMENT_LINK_DEFAULT);
+    $print_mail_display = variable_get('print_mail_display_'. $node->type, PRINT_TYPE_SHOW_LINK_DEFAULT);
   }
   else {
     $node_type = '';
@@ -91,10 +88,10 @@ function print_mail_link($type, $node = NULL, $teaser = FALSE) {
     $links = array();
     $format = theme('print_mail_format_link');
     // Show book link
-    if (($print_mail_settings['book_link']) && user_access('access printer-friendly version') &&
+    if (($print_mail_book_link) && user_access('access printer-friendly version') &&
         (($node_type == 'book') || isset($node->book))) {
 
-      $links['book_mail'] = array('href' => PRINTMAIL_PATH ."/book/export/html/". $node->nid,
+      $links['book_mail'] = array('href' => PRINTMAIL_PATH .'/book/export/html/'. $node->nid,
                                  'title' => $format['text'],
                                  'attributes' => $format['attributes'],
                                  'html' => $format['html'],
@@ -104,9 +101,9 @@ function print_mail_link($type, $node = NULL, $teaser = FALSE) {
     }
     // No link is shown for several motives...
     elseif (($node_type != 'book') && (!isset($node->book)) &&
-      ($print_mail_settings['show_link']) && user_access('access print') &&
-      !(($print_mail_settings['node_link_visibility']) xor
-       (drupal_match_path("node/". $node->nid, $print_mail_settings['node_link_pages']))) &&
+      ($print_mail_show_link) && user_access('access print') &&
+      !(($print_mail_node_link_visibility) xor
+       (drupal_match_path('node/'. $node->nid, $print_mail_node_link_pages))) &&
       (($type == 'comment' && $print_mail_display_comment) ||
       ($type == 'node' && $print_mail_display))) {
 
@@ -116,7 +113,7 @@ function print_mail_link($type, $node = NULL, $teaser = FALSE) {
       }
       $query = drupal_query_string_encode($query_arr, array('q'));
 
-      $links['print_mail'] = array('href' => PRINTMAIL_PATH ."/". $node->nid,
+      $links['print_mail'] = array('href' => PRINTMAIL_PATH .'/'. $node->nid,
                                   'title' => $format['text'],
                                   'attributes' => $format['attributes'],
                                   'html' => $format['html'],
@@ -133,12 +130,14 @@ function print_mail_link($type, $node = NULL, $teaser = FALSE) {
  * Implementation of hook_help().
  */
 function print_mail_help($path, $arg) {
-  $print_mail_settings = variable_get('print_mail_settings', print_mail_settings_default());
+  $print_mail_show_link = variable_get('print_mail_show_link', PRINT_MAIL_SHOW_LINK_DEFAULT);
+  $print_mail_sys_link_visibility = variable_get('print_mail_sys_link_visibility', PRINT_MAIL_SYS_LINK_VISIBILITY_DEFAULT);
+  $print_mail_sys_link_pages = variable_get('print_mail_sys_link_pages', PRINT_MAIL_SYS_LINK_PAGES_DEFAULT);
 
-  if (($print_mail_settings['show_link']) && user_access('access print') &&
-      !(($print_mail_settings['sys_link_visibility']) xor 
-       (drupal_match_path($path, $print_mail_settings['sys_link_pages']))) &&
-      (preg_match("/^node\//i", $path) == 0)) {
+  if (($print_mail_show_link) && user_access('access print') &&
+      !(($print_mail_sys_link_visibility) xor 
+       (drupal_match_path($path, $print_mail_sys_link_pages))) &&
+      (preg_match('!^node/!i', $path) == 0)) {
     static $output = FALSE;
 
     if ($output === FALSE) {
@@ -174,13 +173,13 @@ function print_mail_form_alter(&$form, $form_state, $form_id) {
     $form['print']['print_mail_display'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show send by e-mail link'),
-      '#default_value' => variable_get('print_mail_display_'. $form['#node_type']->type, 1),
+      '#default_value' => variable_get('print_mail_display_'. $form['#node_type']->type, PRINT_TYPE_SHOW_LINK_DEFAULT),
       '#description' => t('Displays a link to send the content by e-mail. Further configuration is available on the !settings.', array('!settings' => l(t('settings page'), 'admin/settings/print' ))),
     );
     $form['print']['print_mail_display_comment'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show send by e-mail link in individual comments'),
-      '#default_value' => variable_get('print_mail_display_comment_'. $form['#node_type']->type, 0),
+      '#default_value' => variable_get('print_mail_display_comment_'. $form['#node_type']->type, PRINT_TYPE_COMMENT_LINK_DEFAULT),
       '#description' => t('Displays a link to send the comment by e-mail. Further configuration is available on the !settings.', array('!settings' => l(t('settings page'), 'admin/settings/print' ))),
     );
   }
@@ -194,13 +193,15 @@ function print_mail_form_alter(&$form, $form_state, $form_id) {
  * @ingroup themeable
  */
 function theme_print_mail_format_link() {
-  $print_mail_settings = variable_get('print_mail_settings', print_mail_settings_default());
+  $print_mail_link_class  = variable_get('print_mail_link_class', PRINT_MAIL_LINK_CLASS_DEFAULT);
+  $print_mail_show_link = variable_get('print_mail_show_link', PRINT_MAIL_SHOW_LINK_DEFAULT);
+
   $text = t('Send to friend');
   $img = drupal_get_path('module', 'print') .'/icons/mail_icon.gif';
   $title = t('Send this page by e-mail.');
-  $class = strip_tags($print_mail_settings['link_class']);
-  $new_window = ($print_mail_settings['content_disposition'] == 1);
-  $format = _print_format_link_aux($print_mail_settings['show_link'], $text, $img);
+  $class = strip_tags($print_mail_link_class);
+  $new_window = FALSE;
+  $format = _print_format_link_aux($print_mail_show_link, $text, $img);
 
   return array('text' => $format['text'],
                'html' => $format['html'],
@@ -216,7 +217,7 @@ function theme_print_mail_format_link() {
 function print_mail_insert_link($path = NULL) {
   if (user_access('access print')) {
     if ($path === NULL) {
-      $path = PRINTMAIL_PATH ."/". $_GET['q'];
+      $path = PRINTMAIL_PATH .'/'. $_GET['q'];
       $query = drupal_query_string_encode($_GET, array('q'));
       if (empty($query)) {
         $query = NULL;

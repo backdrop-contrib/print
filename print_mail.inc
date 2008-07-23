@@ -18,13 +18,14 @@ require_once(drupal_get_path('module', 'print') .'/print.pages.inc');
  */
 function print_mail_form($form_state) {
   global $user;
-  $print_mail_settings = variable_get('print_mail_settings', print_mail_settings_default());
+  $print_mail_teaser_default = variable_get('print_mail_teaser_default', PRINT_MAIL_TEASER_DEFAULT_DEFAULT);
+  $print_mail_teaser_choice = variable_get('print_mail_teaser_choice', PRINT_MAIL_TEASER_CHOICE_DEFAULT);
   $form = array();
 
   // Remove the printmail/ prefix
   $path = substr($_GET['q'], strpos($_GET['q'], '/')+1);
   if (is_numeric($path)) {
-    $path = "node/". $path;
+    $path = 'node/'. $path;
   }
   $cid = isset($_GET['comment']) ? $_GET['comment'] : NULL;
   $form['path'] = array('#type' => 'value', '#value' => $path);
@@ -58,15 +59,15 @@ function print_mail_form($form_state) {
     '#rows' => 6,
   );
 
-  if ($print_mail_settings['teaser_choice']) {
+  if ($print_mail_teaser_choice) {
     $form['chk_teaser'] = array(
       '#type' => 'checkbox',
       '#title' => t('Send only the teaser'),
-      '#default_value' => $print_mail_settings['teaser_default'],
+      '#default_value' => $print_mail_teaser_default,
     );
   }
   else {
-    $form['chk_teaser'] = array('#type' => 'value', '#value' => $print_mail_settings['teaser_default']);
+    $form['chk_teaser'] = array('#type' => 'value', '#value' => $print_mail_teaser_default);
   }
 
   $form['btn_submit'] = array(
@@ -142,7 +143,7 @@ function print_mail_form_validate($form, &$form_state) {
     if (preg_match('/(.*?) <(.*)>/s', $address, $matches)) {
       // Address is of the type User Name <user@domain.tld>
       $test = user_validate_mail($matches[2]);
-      $to_array[$key] = trim($matches[1]) ." <". $matches[2] .">";
+      $to_array[$key] = trim($matches[1]) .' <'. $matches[2] .'>';
     }
     else {
       // Address must be user@domain.tld
@@ -155,18 +156,18 @@ function print_mail_form_validate($form, &$form_state) {
 
   // In all fields, prevent insertion of custom headers
   foreach ($form_state['values'] as $key => $string) {
-    if ( (substr($key, 0, 4) == "fld_") && ((strpos($string, "\n") !== FALSE) || (strpos($string, "\r") !== FALSE)) ) {
+    if ( (substr($key, 0, 4) == 'fld_') && ((strpos($string, "\n") !== FALSE) || (strpos($string, "\r") !== FALSE)) ) {
       form_set_error($key, 'Found invalid character');
     }
   }
 
   $subject = trim($form_state['values']['fld_subject']);
   if (empty($subject)) {
-    form_set_error('fld_subject', t("You must enter a subject."));
+    form_set_error('fld_subject', t('You must enter a subject.'));
   }
   $message = trim($form_state['values']['txt_message']);
   if (empty($message)) {
-    form_set_error('txt_message', t("You must enter a message."));
+    form_set_error('txt_message', t('You must enter a message.'));
   }
 
   $form_state['values']['fld_from_addr'] = $from_addr;
@@ -185,7 +186,7 @@ function print_mail_form_validate($form, &$form_state) {
 function print_mail_form_submit($form, &$form_state) {
   global $language;
 
-  $from = $form_state['values']['fld_from_name'] ." <". $form_state['values']['fld_from_addr'] .">";
+  $from = $form_state['values']['fld_from_name'] .' <'. $form_state['values']['fld_from_addr'] .'>';
   $to = $form_state['values']['txt_to_addrs'];
   $params = array();
   $params['subject'] = $form_state['values']['fld_subject'];
@@ -213,14 +214,14 @@ function print_mail_mail($key, &$message, $params) {
       $print = print_controller($params['path'], $params['cid'], $params['teaser'], $sender_message);
 
       // Img elements must be set to absolute
-//      $pattern = "@<(img\s[^>]*?)>@is";
-//      $print["content"] = preg_replace_callback($pattern, "_print_rewrite_urls", $print["content"]);
-//      $print["logo"] = preg_replace_callback($pattern, "_print_rewrite_urls", $print["logo"]);
-//      $print["footer_message"] = preg_replace_callback($pattern, "_print_rewrite_urls", $print["footer_message"]);
+//      $pattern = '!<(img\s[^>]*?)>!is';
+//      $print['content'] = preg_replace_callback($pattern, '_print_rewrite_urls', $print['content']);
+//      $print['logo'] = preg_replace_callback($pattern, '_print_rewrite_urls', $print['logo']);
+//      $print['footer_message'] = preg_replace_callback($pattern, '_print_rewrite_urls', $print['footer_message']);
 
-      $node = $print["node"];
+      $node = $print['node'];
       ob_start();
-      include_once(_print_get_template("mail", $print["type"]));
+      include_once(_print_get_template('mail', $print['type']));
       $html = ob_get_contents();
       ob_end_clean();
 

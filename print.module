@@ -9,58 +9,34 @@
  * and other administrative functions.
  */
 
-define("PRINT_PATH", "print");
+define('PRINT_PATH', 'print');
 
-/**
- * Default values of the print_settings variable
- *
- * @return
- *   array with the values
- */
-function print_settings_default() {
-  return array('logo_url' => '',
-               'css' => '',
-               'urls' => 1,
-               'comments' => 0,
-               'newwindow' => 1,
-              );
-}
+define('PRINT_LOGO_URL_DEFAULT', '');
+define('PRINT_CSS_DEFAULT', '');
+define('PRINT_URLS_DEFAULT', 1);
+define('PRINT_COMMENTS_DEFAULT', 0);
+define('PRINT_NEWWINDOW_DEFAULT', 1);
 
-/**
- * Default values of the print_html_settings variable
- */
-function print_html_settings_default() {
-  return array('show_link' => 1,
-               'node_link_visibility' => 0,
-               'node_link_pages' => '',
-               'link_class' => 'print-page',
-               'sys_link_visibility' => 1,
-               'sys_link_pages' => '<front>',
-               'book_link' => 1,
-               'new_window' => 0,
-               'sendtoprinter' => 0,
-              );
-}
+define('PRINT_HTML_SHOW_LINK_DEFAULT', 1);
+define('PRINT_HTML_NODE_LINK_VISIBILITY_DEFAULT', 0);
+define('PRINT_HTML_NODE_LINK_PAGES_DEFAULT', '');
+define('PRINT_HTML_LINK_CLASS_DEFAULT', 'print-page');
+define('PRINT_HTML_SYS_LINK_VISIBILITY_DEFAULT', 1);
+define('PRINT_HTML_SYS_LINK_PAGES_DEFAULT', '<front>');
+define('PRINT_HTML_BOOK_LINK_DEFAULT', 1);
+define('PRINT_HTML_NEW_WINDOW_DEFAULT', 0);
+define('PRINT_HTML_SENDTOPRINTER_DEFAULT', 0);
 
-/**
- * Default values of the print_sourceurl_settings variable
- *
- * @return
- *   array with the values
- */
-function print_sourceurl_settings_default() {
-  return array('enabled' => 1, 'date' => 0, 'forcenode' => 0);
-}
+define('PRINT_SOURCEURL_ENABLED_DEFAULT', 1);
+define('PRINT_SOURCEURL_DATE_DEFAULT', 0);
+define('PRINT_SOURCEURL_FORCENODE_DEFAULT', 0);
 
-/**
- * Default values of the print_robot_settings variable
- *
- * @return
- *   array with the values
- */
-function print_robot_settings_default() {
-  return array('noindex' => 1, 'nofollow' => 1, 'noarchive' => 0);
-}
+define('PRINT_ROBOTS_NOINDEX_DEFAULT', 1);
+define('PRINT_ROBOTS_NOFOLLOW_DEFAULT', 1);
+define('PRINT_ROBOTS_NOARCHIVE_DEFAULT', 0);
+
+define('PRINT_TYPE_SHOW_LINK_DEFAULT', 1);
+define('PRINT_TYPE_COMMENT_LINK_DEFAULT', 0);
 
 /**
  * Implementation of hook_perm().
@@ -126,13 +102,15 @@ function print_menu() {
  * Implementation of hook_link().
  */
 function print_link($type, $node = NULL, $teaser = FALSE) {
-  $print_html_settings = variable_get('print_html_settings', print_html_settings_default());
+  $print_html_show_link = variable_get('print_html_show_link', PRINT_HTML_SHOW_LINK_DEFAULT);
+  $print_html_node_link_visibility = variable_get('print_html_node_link_visibility', PRINT_HTML_NODE_LINK_VISIBILITY_DEFAULT);
+  $print_html_node_link_pages = variable_get('print_html_node_link_pages', PRINT_HTML_NODE_LINK_PAGES_DEFAULT);
   static $print_display_comment = FALSE;
 
   if (($print_display_comment == FALSE) && (isset($node->type))) {
     $node_type = $node->type;
-    $print_display_comment = variable_get('print_display_comment_'. $node->type, 0);
-    $print_display = variable_get('print_display_'. $node->type, 1);
+    $print_display_comment = variable_get('print_display_comment_'. $node->type, PRINT_TYPE_COMMENT_LINK_DEFAULT);
+    $print_display = variable_get('print_display_'. $node->type, PRINT_TYPE_SHOW_LINK_DEFAULT);
   }
   else {
     $node_type = '';
@@ -141,9 +119,9 @@ function print_link($type, $node = NULL, $teaser = FALSE) {
 
   // No link is shown for several motives...
   if ( !($teaser) && ($node_type != 'book') && (!isset($node->book)) &&
-      ($print_html_settings['show_link']) && user_access('access print') &&
-      !(($print_html_settings['node_link_visibility']) xor
-      (drupal_match_path("node/". $node->nid, $print_html_settings['node_link_pages']))) &&
+      ($print_html_show_link) && user_access('access print') &&
+      !(($print_html_node_link_visibility) xor
+      (drupal_match_path('node/'. $node->nid, $print_html_node_link_pages))) &&
       (($type == 'comment' && $print_display_comment) ||
       ($type == 'node' && $print_display))) {
     $links = array();
@@ -157,7 +135,7 @@ function print_link($type, $node = NULL, $teaser = FALSE) {
     $query = drupal_query_string_encode($query_arr, array('q'));
     if (empty($query)) $query = NULL;
 
-    $links['print'] = array('href' => PRINT_PATH ."/". $node->nid,
+    $links['print'] = array('href' => PRINT_PATH .'/'. $node->nid,
                             'title' => $format['text'],
                             'attributes' => $format['attributes'],
                             'html' => $format['html'],
@@ -177,13 +155,13 @@ function print_link($type, $node = NULL, $teaser = FALSE) {
 function print_link_alter(&$links, $node) {
   foreach ($links as $module => $link) {
     if (strpos($module, 'book_printer') !== FALSE) {
-      $print_html_settings = variable_get('print_html_settings', print_html_settings_default());
+      $print_html_book_link = variable_get('print_html_book_link', PRINT_HTML_BOOK_LINK_DEFAULT);
 
-      if ($print_html_settings['book_link']) {
+      if ($print_html_book_link) {
         $format = theme('print_format_link');
         $format['attributes']['title'] = $link['attributes']['title'];
 
-        $links[$module]['href'] = PRINT_PATH ."/". $link['href'];
+        $links[$module]['href'] = PRINT_PATH .'/'. $link['href'];
         $links[$module]['attributes'] = $format['attributes'];
       }
     }
@@ -197,15 +175,17 @@ function print_help($path, $arg) {
   switch ($path) {
     case 'admin/help#print':
       // Return a line-break version of the module README
-      return filter_filter('process', 1, NULL, file_get_contents(drupal_get_path('module', 'print') ."/README.txt") );
+      return filter_filter('process', 1, NULL, file_get_contents(drupal_get_path('module', 'print') .'/README.txt') );
   }
 
-  $print_html_settings = variable_get('print_html_settings', print_html_settings_default());
+  $print_html_show_link = variable_get('print_html_show_link', PRINT_HTML_SHOW_LINK_DEFAULT);
+  $print_html_sys_link_visibility = variable_get('print_html_sys_link_visibility', PRINT_HTML_SYS_LINK_VISIBILITY_DEFAULT);
+  $print_html_sys_link_pages = variable_get('print_html_sys_link_pages', PRINT_HTML_SYS_LINK_PAGES_DEFAULT);
 
-  if (($print_html_settings['show_link']) && user_access('access print') &&
-      !(($print_html_settings['sys_link_visibility']) xor
-      (drupal_match_path($path, $print_html_settings['sys_link_pages']))) &&
-      (preg_match("/^node\//i", $path) == 0)) {
+  if (($print_html_show_link) && user_access('access print') &&
+      !(($print_html_sys_link_visibility) xor
+      (drupal_match_path($path, $print_html_sys_link_pages))) &&
+      (preg_match('!^node/!i', $path) == 0)) {
     static $output = FALSE;
 
     if ($output === FALSE) {
@@ -248,13 +228,13 @@ function print_form_alter(&$form, $form_state, $form_id) {
     $form['print']['print_display'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show printer-friendly version link'),
-      '#default_value' => variable_get('print_display_'. $form['#node_type']->type, 1),
+      '#default_value' => variable_get('print_display_'. $form['#node_type']->type, PRINT_TYPE_SHOW_LINK_DEFAULT),
       '#description' => t('Displays the link to a printer-friendly version of the content. Further configuration is available on the !settings.', array('!settings' => l(t('settings page'), 'admin/settings/print' ))),
     );
     $form['print']['print_display_comment'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show printer-friendly version link in individual comments'),
-      '#default_value' => variable_get('print_display_comment_'. $form['#node_type']->type, 0),
+      '#default_value' => variable_get('print_display_comment_'. $form['#node_type']->type, PRINT_TYPE_COMMENT_LINK_DEFAULT),
       '#description' => t('Displays the link to a printer-friendly version of the comment. Further configuration is available on the !settings.', array('!settings' => l(t('settings page'), 'admin/settings/print' ))),
     );
   }
@@ -273,8 +253,8 @@ function print_form_alter(&$form, $form_state, $form_id) {
  *   array of formatted attributes
  */
 function print_fill_attributes($title = '', $class = '', $new_window = FALSE) {
-  $print_settings = variable_get('print_settings', print_settings_default());
-  $robots_settings = variable_get('print_robot_settings', print_robot_settings_default());
+  $print_newwindow = variable_get('print_newwindow', PRINT_NEWWINDOW_DEFAULT);
+  $print_robots_noindex = variable_get('print_robots_noindex', PRINT_ROBOTS_NOINDEX_DEFAULT);
 
   $attributes = array();
   $attributes['title'] = $title;
@@ -283,7 +263,7 @@ function print_fill_attributes($title = '', $class = '', $new_window = FALSE) {
   }
 
   if ($new_window) {
-    switch ($print_settings['newwindow']) {
+    switch ($print_newwindow) {
     case 0:
       $attributes['target'] = '_blank';
       break;
@@ -292,7 +272,7 @@ function print_fill_attributes($title = '', $class = '', $new_window = FALSE) {
       break;
     }
   }
-  if (!empty($robots_settings['noindex'])) {
+  if (!empty($print_robots_noindex)) {
     $attributes['rel'] = 'nofollow';
   }
   return $attributes;
@@ -341,13 +321,16 @@ function _print_format_link_aux($type = 0, $text = '', $img = '') {
  * @ingroup themeable
  */
 function theme_print_format_link() {
-  $print_html_settings = variable_get('print_html_settings', print_html_settings_default());
+  $print_html_link_class = variable_get('print_html_link_class', PRINT_HTML_LINK_CLASS_DEFAULT);
+  $print_html_new_window = variable_get('print_html_new_window', PRINT_HTML_NEW_WINDOW_DEFAULT);
+  $print_html_show_link = variable_get('print_html_show_link', PRINT_HTML_SHOW_LINK_DEFAULT);
+
   $text = t('Printer-friendly version');
   $img = drupal_get_path('module', 'print') .'/icons/print_icon.gif';
   $title = t('Display a printer-friendly version of this page.');
-  $class = strip_tags($print_html_settings['link_class']);
-  $new_window = $print_html_settings['new_window'];
-  $format = _print_format_link_aux($print_html_settings['show_link'], $text, $img);
+  $class = strip_tags($print_html_link_class);
+  $new_window = $print_html_new_window;
+  $format = _print_format_link_aux($print_html_show_link, $text, $img);
 
   return array('text' => $format['text'],
                'html' => $format['html'],
@@ -363,12 +346,12 @@ function theme_print_format_link() {
  * @ingroup themeable
  */
 function theme_print_text() {
-  return array('retrieved' => "",
-               'sourceURL' => "",
-               'published' => "",
-               'by' => "",
-               'created' => "",
-               'links' => "",
+  return array('retrieved' => '',
+               'sourceURL' => '',
+               'published' => '',
+               'by' => '',
+               'created' => '',
+               'links' => '',
               );
 }
 
@@ -387,7 +370,7 @@ function theme_print_text() {
 function print_insert_link($path = NULL) {
   if (user_access('access print')) {
     if ($path === NULL) {
-      $path = PRINT_PATH ."/". $_GET['q'];
+      $path = PRINT_PATH .'/'. $_GET['q'];
       $query = drupal_query_string_encode($_GET, array('q'));
       if (empty($query)) {
         $query = NULL;

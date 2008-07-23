@@ -6,25 +6,19 @@
  * Display printer-friendly versions of Drupal pages
  */
 
-define("PRINTPDF_PATH", "printpdf");
+define('PRINTPDF_PATH', 'printpdf');
 
-/**
- * Default values of the print_pdf_settings variable
- */
-function print_pdf_settings_default() {
-  return array('show_link' => 1,
-               'node_link_visibility' => 0,
-               'node_link_pages' => '',
-               'link_class' => 'print-pdf',
-               'sys_link_visibility' => 1,
-               'sys_link_pages' => '<front>',
-               'book_link' => 1,
-               'pdf_tool' => 0,
-               'content_disposition' => 2,
-               'paper_size' => 'A4',
-               'page_orientation' => 'portrait',
-              );
-}
+define('PRINT_PDF_SHOW_LINK_DEFAULT', 1);
+define('PRINT_PDF_NODE_LINK_VISIBILITY_DEFAULT', 0);
+define('PRINT_PDF_NODE_LINK_PAGES_DEFAULT', '');
+define('PRINT_PDF_LINK_CLASS_DEFAULT', 'print-pdf');
+define('PRINT_PDF_SYS_LINK_VISIBILITY_DEFAULT', 1);
+define('PRINT_PDF_SYS_LINK_PAGES_DEFAULT', '<front>');
+define('PRINT_PDF_BOOK_LINK_DEFAULT', 1);
+define('PRINT_PDF_PDF_TOOL_DEFAULT', 0);
+define('PRINT_PDF_CONTENT_DISPOSITION_DEFAULT', 2);
+define('PRINT_PDF_PAPER_SIZE_DEFAULT', 'A4');
+define('PRINT_PDF_PAGE_ORIENTATION_DEFAULT', 'portrait');
 
 //*******************************************************************
 // Drupal Hooks
@@ -76,8 +70,8 @@ function print_pdf_requirements($phase) {
   switch ($phase) {
     // At runtime, make sure that a PDF generation tool is selected
     case 'runtime':
-      $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
-      if (empty($print_pdf_settings['pdf_tool'])) {
+      $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
+      if (empty($print_pdf_pdf_tool)) {
         $requirements['print_pdf_tool'] = array(
           'title' => $t('Print PDF'),
           'value' => $t('No PDF tool selected. Please configure it in the <a href="@url">PDF settings page</a>.', array('@url' => url('admin/settings/print/pdf'))),
@@ -93,13 +87,16 @@ function print_pdf_requirements($phase) {
  * Implementation of hook_link().
  */
 function print_pdf_link($type, $node = NULL, $teaser = FALSE) {
-  $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
+  $print_pdf_book_link = variable_get('print_pdf_book_link', PRINT_PDF_BOOK_LINK_DEFAULT);
+  $print_pdf_show_link = variable_get('print_pdf_show_link', PRINT_PDF_SHOW_LINK_DEFAULT);
+  $print_pdf_node_link_visibility = variable_get('print_pdf_node_link_visibility', PRINT_PDF_NODE_LINK_VISIBILITY_DEFAULT);
+  $print_pdf_node_link_pages = variable_get('print_pdf_node_link_pages', PRINT_PDF_NODE_LINK_PAGES_DEFAULT);
   static $print_pdf_display_comment = FALSE;
 
   if (($print_pdf_display_comment == FALSE) && (isset($node->type))) {
     $node_type = $node->type;
-    $print_pdf_display_comment = variable_get('print_pdf_display_comment_'. $node->type, 0);
-    $print_pdf_display = variable_get('print_pdf_display_'. $node->type, 1);
+    $print_pdf_display_comment = variable_get('print_pdf_display_comment_'. $node->type, PRINT_TYPE_COMMENT_LINK_DEFAULT);
+    $print_pdf_display = variable_get('print_pdf_display_'. $node->type, PRINT_TYPE_SHOW_LINK_DEFAULT);
   }
   else {
     $node_type = '';
@@ -110,10 +107,10 @@ function print_pdf_link($type, $node = NULL, $teaser = FALSE) {
     $links = array();
     $format = theme('print_pdf_format_link');
     // Show book link
-    if (($print_pdf_settings['book_link']) && user_access('access printer-friendly version') &&
+    if (($print_pdf_book_link) && user_access('access printer-friendly version') &&
         (($node_type == 'book') || isset($node->book))) {
 
-      $links['book_pdf'] = array('href' => PRINTPDF_PATH ."/book/export/html/". $node->nid,
+      $links['book_pdf'] = array('href' => PRINTPDF_PATH .'/book/export/html/'. $node->nid,
                                  'title' => $format['text'],
                                  'attributes' => $format['attributes'],
                                  'html' => $format['html'],
@@ -123,9 +120,9 @@ function print_pdf_link($type, $node = NULL, $teaser = FALSE) {
     }
     // No link is shown for several motives...
     elseif (($node_type != 'book') && (!isset($node->book)) &&
-      ($print_pdf_settings['show_link']) && user_access('access print') &&
-      !(($print_pdf_settings['node_link_visibility']) xor
-       (drupal_match_path("node/". $node->nid, $print_pdf_settings['node_link_pages']))) &&
+      ($print_pdf_show_link) && user_access('access print') &&
+      !(($print_pdf_node_link_visibility) xor
+       (drupal_match_path('node/'. $node->nid, $print_pdf_node_link_pages))) &&
       (($type == 'comment' && $print_pdf_display_comment) ||
       ($type == 'node' && $print_pdf_display))) {
 
@@ -135,7 +132,7 @@ function print_pdf_link($type, $node = NULL, $teaser = FALSE) {
       }
       $query = drupal_query_string_encode($query_arr, array('q'));
 
-      $links['print_pdf'] = array('href' => PRINTPDF_PATH ."/". $node->nid,
+      $links['print_pdf'] = array('href' => PRINTPDF_PATH .'/'. $node->nid,
                                   'title' => $format['text'],
                                   'attributes' => $format['attributes'],
                                   'html' => $format['html'],
@@ -152,12 +149,14 @@ function print_pdf_link($type, $node = NULL, $teaser = FALSE) {
  * Implementation of hook_help().
  */
 function print_pdf_help($path, $arg) {
-  $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
+  $print_pdf_show_link = variable_get('print_pdf_show_link', PRINT_PDF_SHOW_LINK_DEFAULT);
+  $print_pdf_sys_link_visibility = variable_get('print_pdf_sys_link_visibility', PRINT_PDF_SYS_LINK_VISIBILITY_DEFAULT);
+  $print_pdf_sys_link_pages = variable_get('print_pdf_sys_link_pages', PRINT_PDF_SYS_LINK_PAGES_DEFAULT);
 
-  if (($print_pdf_settings['show_link']) && user_access('access print') &&
-      !(($print_pdf_settings['sys_link_visibility']) xor 
-       (drupal_match_path($path, $print_pdf_settings['sys_link_pages']))) &&
-      (preg_match("/^node\//i", $path) == 0)) {
+  if (($print_pdf_show_link) && user_access('access print') &&
+      !(($print_pdf_sys_link_visibility) xor 
+       (drupal_match_path($path, $print_pdf_sys_link_pages))) &&
+      (preg_match('!^node/!i', $path) == 0)) {
     static $output = FALSE;
 
     if ($output === FALSE) {
@@ -193,13 +192,13 @@ function print_pdf_form_alter(&$form, $form_state, $form_id) {
     $form['print']['print_pdf_display'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show PDF version link'),
-      '#default_value' => variable_get('print_pdf_display_'. $form['#node_type']->type, 1),
+      '#default_value' => variable_get('print_pdf_display_'. $form['#node_type']->type, PRINT_TYPE_SHOW_LINK_DEFAULT),
       '#description' => t('Displays the link to a PDF version of the content. Further configuration is available on the !settings.', array('!settings' => l(t('settings page'), 'admin/settings/print' ))),
     );
     $form['print']['print_pdf_display_comment'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show PDF version link in individual comments'),
-      '#default_value' => variable_get('print_pdf_display_comment_'. $form['#node_type']->type, 0),
+      '#default_value' => variable_get('print_pdf_display_comment_'. $form['#node_type']->type, PRINT_TYPE_COMMENT_LINK_DEFAULT),
       '#description' => t('Displays the link to a PDF version of the comment. Further configuration is available on the !settings.', array('!settings' => l(t('settings page'), 'admin/settings/print' ))),
     );
   }
@@ -213,13 +212,16 @@ function print_pdf_form_alter(&$form, $form_state, $form_id) {
  * @ingroup themeable
  */
 function theme_print_pdf_format_link() {
-  $print_pdf_settings = variable_get('print_pdf_settings', print_pdf_settings_default());
+  $print_pdf_link_class  = variable_get('print_pdf_link_class', PRINT_PDF_LINK_CLASS_DEFAULT);
+  $print_pdf_content_disposition = variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT);
+  $print_pdf_show_link = variable_get('print_pdf_show_link', PRINT_PDF_SHOW_LINK_DEFAULT);
+
   $text = t('PDF version');
   $img = drupal_get_path('module', 'print') .'/icons/pdf_icon.gif';
   $title = t('Display a PDF version of this page.');
-  $class = strip_tags($print_pdf_settings['link_class']);
-  $new_window = ($print_pdf_settings['content_disposition'] == 1);
-  $format = _print_format_link_aux($print_pdf_settings['show_link'], $text, $img);
+  $class = strip_tags($print_pdf_link_class);
+  $new_window = ($print_pdf_content_disposition == 1);
+  $format = _print_format_link_aux($print_pdf_show_link, $text, $img);
 
   return array('text' => $format['text'],
                'html' => $format['html'],
@@ -235,7 +237,7 @@ function theme_print_pdf_format_link() {
 function print_pdf_insert_link($path = NULL) {
   if (user_access('access print')) {
     if ($path === NULL) {
-      $path = PRINTPDF_PATH ."/". $_GET['q'];
+      $path = PRINTPDF_PATH .'/'. $_GET['q'];
       $query = drupal_query_string_encode($_GET, array('q'));
       if (empty($query)) {
         $query = NULL;
