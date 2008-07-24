@@ -121,8 +121,7 @@ function print_pdf_link($type, $node = NULL, $teaser = FALSE) {
     // No link is shown for several motives...
     elseif (($node_type != 'book') && (!isset($node->book)) &&
       ($print_pdf_show_link) && user_access('access print') &&
-      !(($print_pdf_node_link_visibility) xor
-       (drupal_match_path('node/'. $node->nid, $print_pdf_node_link_pages))) &&
+      _print_page_match($print_pdf_node_link_visibility, $print_pdf_node_link_pages) &&
       (($type == 'comment' && $print_pdf_display_comment) ||
       ($type == 'node' && $print_pdf_display))) {
 
@@ -154,8 +153,7 @@ function print_pdf_help($path, $arg) {
   $print_pdf_sys_link_pages = variable_get('print_pdf_sys_link_pages', PRINT_PDF_SYS_LINK_PAGES_DEFAULT);
 
   if (($print_pdf_show_link) && user_access('access print') &&
-      !(($print_pdf_sys_link_visibility) xor 
-       (drupal_match_path($path, $print_pdf_sys_link_pages))) &&
+      _print_page_match($print_pdf_sys_link_visibility, $print_pdf_sys_link_pages) &&
       (preg_match('!^node/!i', $path) == 0)) {
     static $output = FALSE;
 

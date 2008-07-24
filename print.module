@@ -120,8 +120,7 @@ function print_link($type, $node = NULL, $teaser = FALSE) {
   // No link is shown for several motives...
   if ( !($teaser) && ($node_type != 'book') && (!isset($node->book)) &&
       ($print_html_show_link) && user_access('access print') &&
-      !(($print_html_node_link_visibility) xor
-      (drupal_match_path('node/'. $node->nid, $print_html_node_link_pages))) &&
+      _print_page_match($print_html_node_link_visibility, $print_html_node_link_pages) &&
       (($type == 'comment' && $print_display_comment) ||
       ($type == 'node' && $print_display))) {
     $links = array();
@@ -183,8 +182,7 @@ function print_help($path, $arg) {
   $print_html_sys_link_pages = variable_get('print_html_sys_link_pages', PRINT_HTML_SYS_LINK_PAGES_DEFAULT);
 
   if (($print_html_show_link) && user_access('access print') &&
-      !(($print_html_sys_link_visibility) xor
-      (drupal_match_path($path, $print_html_sys_link_pages))) &&
+      _print_page_match($print_html_sys_link_visibility, $print_html_sys_link_pages) &&
       (preg_match('!^node/!i', $path) == 0)) {
     static $output = FALSE;
 
@@ -378,5 +376,32 @@ function print_insert_link($path = NULL) {
     }
     $format = theme('print_format_link');
     return '<span class="print">'. l($format['text'], $path, array('attributes' => $format['attributes'], 'query' => $query, 'absolute' => TRUE, 'html' => $format['html'])) .'</span>';
+  }
+}
+
+/**
+ * Determine if the current page is enabled according to the visibility settings
+ *
+ * @param $visibility
+ *   current visibility settings: 
+ *    0 for show on every page except the listed pages
+ *    1 for show on only the listed pages
+ * @param $pages
+ *   list of pages
+ * @return
+ *   TRUE if it is enabled, FALSE otherwise
+ */
+function _print_page_match($visibility, $pages) {
+  if ($pages) {
+    $path = drupal_get_path_alias($_GET['q']);
+    $page_match = drupal_match_path($path, $pages);
+    if ($path != $_GET['q']) {
+      $page_match = $page_match || drupal_match_path($_GET['q'], $pages);
+    }
+
+    return !($visibility xor $page_match);
+  }
+  else {
+    return TRUE;
   }
 }

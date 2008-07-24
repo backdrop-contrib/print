@@ -102,8 +102,7 @@ function print_mail_link($type, $node = NULL, $teaser = FALSE) {
     // No link is shown for several motives...
     elseif (($node_type != 'book') && (!isset($node->book)) &&
       ($print_mail_show_link) && user_access('access print') &&
-      !(($print_mail_node_link_visibility) xor
-       (drupal_match_path('node/'. $node->nid, $print_mail_node_link_pages))) &&
+      _print_page_match($print_mail_node_link_visibility, $print_mail_node_link_pages) &&
       (($type == 'comment' && $print_mail_display_comment) ||
       ($type == 'node' && $print_mail_display))) {
 
@@ -135,8 +134,7 @@ function print_mail_help($path, $arg) {
   $print_mail_sys_link_pages = variable_get('print_mail_sys_link_pages', PRINT_MAIL_SYS_LINK_PAGES_DEFAULT);
 
   if (($print_mail_show_link) && user_access('access print') &&
-      !(($print_mail_sys_link_visibility) xor 
-       (drupal_match_path($path, $print_mail_sys_link_pages))) &&
+      _print_page_match($print_mail_sys_link_visibility, $print_mail_sys_link_pages) &&
       (preg_match('!^node/!i', $path) == 0)) {
     static $output = FALSE;
 
