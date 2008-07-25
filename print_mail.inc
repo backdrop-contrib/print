@@ -104,6 +104,7 @@ function print_mail_form($form_state) {
 }
 
 function theme_print_mail_form($form) {
+  drupal_add_css(drupal_get_path('module', 'print') .'/printlinks.css');
   $content = '';
   foreach (element_children($form) as $key) {
     $tmp = drupal_render($form[$key]);
@@ -112,8 +113,7 @@ function theme_print_mail_form($form) {
       case 'fld_from_name':
       case 'txt_to_addrs':
       case 'fld_subject':
-        $tmp = str_replace('<div class="form-item"', '<div style="clear: left;" class="form-item"', $tmp);
-        $tmp = str_replace('<label', '<label style="width: 175px; float: left;"', $tmp);
+        $tmp = str_replace('<label', '<label class ="printmail-label"', $tmp);
         break;
     }
     $content .= $tmp;

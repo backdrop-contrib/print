@@ -187,9 +187,10 @@ function print_help($path, $arg) {
     static $output = FALSE;
 
     if ($output === FALSE) {
+      drupal_add_css(drupal_get_path('module', 'print') .'/printlinks.css');
       $output = TRUE;
 
-      return print_insert_link();
+      return '<span class="print-syslink">'. print_insert_link() .'</span>';
     }
   }
 }
@@ -200,10 +201,23 @@ function print_help($path, $arg) {
 function print_nodeapi(&$node, $op = 'view', $teaser, $page) {
   switch ($op) {
     case 'view':
-      if (TRUE && !$node->printing) {
-        $link = print_insert_link();
+      $print_html_show_link = variable_get('print_html_show_link', PRINT_HTML_SHOW_LINK_DEFAULT);
+      $print_html_node_link_visibility = variable_get('print_html_node_link_visibility', PRINT_HTML_NODE_LINK_VISIBILITY_DEFAULT)
+      $print_html_node_link_pages = variable_get('print_html_node_link_pages', PRINT_HTML_NODE_LINK_PAGES_DEFAULT);
+      $print_display = variable_get('print_display_'. $node->type, PRINT_TYPE_SHOW_LINK_DEFAULT);
+
+      if ((!$teaser) && (!$node->printing) && ($print_html_show_link) &&
+          user_access('access print') && ($print_display) &&
+          _print_page_match($print_html_node_link_visibility, $print_html_node_link_pages)) {
+        drupal_add_css(drupal_get_path('module', 'print') .'/printlinks.css');
+        $print_html_book_link = variable_get('print_html_book_link', PRINT_HTML_BOOK_LINK_DEFAULT);
+        if (($print_html_book_link) && user_access('access printer-friendly version') &&
+            (($node->type == 'book') || isset($node->book))) {
+          $path = PRINT_PATH .'/book/export/html/'. $node->nid;
+        }
+        $link = print_insert_link($path);
         $node->content['print_link'] = array(
-          '#value' => "<div style='float:right;clear:left;margin: 0 0 1em 2em;'>$link</div>",
+          '#value' => "<span class='print-link'>$link</span>",
           '#weight' => -1,
         );
       }
@@ -291,14 +305,14 @@ function print_fill_attributes($title = '', $class = '', $new_window = FALSE) {
  */
 function _print_format_link_aux($type = 0, $text = '', $img = '') {
   if ($type >= 2) {
-    $img = theme('image', $img, $text, '', array('style' => 'margin-right: 4px;vertical-align: middle'));
+    $img = theme('image', $img, $text, '', array('class' => 'print-icon'));
     $html = TRUE;
     switch ($type) {
     case 2:
       $text = $img;
       break;
     case 3:
-      $text = $img . $text;
+      $text = $img .'&nbsp;'. $text;
       break;
     }
   }

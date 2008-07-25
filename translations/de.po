@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Drupal Print Modul\n"
-"POT-Creation-Date: 2008-07-19 10:35+0200\n"
-"PO-Revision-Date: 2008-07-19 10:36+0100\n"
+"POT-Creation-Date: 2008-07-22 15:46+0200\n"
+"PO-Revision-Date: 2008-07-22 19:06+0100\n"
 "Last-Translator: Frank Tartler <frank.tartler@googlemail.com>\n"
 "Language-Team: Frank Tartler <frank.tartler@drupal.org>\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: print.admin.inc:27
 msgid "Logo URL"
-msgstr "Logo URL"
+msgstr "Logo-URL"
 
 #: print.admin.inc:31
 msgid "An alternative logo to display on the printer-friendly version. If left empty, the current theme's logo is used."
@@ -28,7 +28,7 @@ msgstr "Ein alternatives Logo zur Verwendung in der druckoptimierten Version. Is
 
 #: print.admin.inc:36
 msgid "Stylesheet URL"
-msgstr "CSS Stylesheet URL"
+msgstr "CSS-Stylesheet-URL"
 
 #: print.admin.inc:40
 msgid "The URL to your custom print cascading stylesheet, if any. When none is specified, the default module CSS file is used."
@@ -67,7 +67,7 @@ msgid "Choose the method used to open pages in a new window/tab."
 msgstr "Legt die Methode fest, die verwendet wird um Seiten in einem neuen Fenster/Reiter zu öffnen."
 
 #: print.admin.inc:69
-#: print.pages.inc:209
+#: print.pages.inc:210
 msgid "Source URL"
 msgstr "Quellen-URL"
 
@@ -97,7 +97,7 @@ msgstr "Drupal wird versuchen, falls vorhanden, den URL-Alias dieser Seite zu nu
 
 #: print.admin.inc:109
 msgid "Printer-friendly page link"
-msgstr "Verweis „Druckoptimierte Seite“ anzeigen"
+msgstr "Verweis ‚Druckoptimierte Seite‘ anzeigen"
 
 #: print.admin.inc:111
 #: print_mail.admin.inc:29
@@ -155,13 +155,13 @@ msgstr "Es muss eine Seite pro Zeile als Drupal-Pfade eingegeben werden. Das Zei
 #: print_mail.admin.inc:49
 #: print_pdf.admin.inc:62
 msgid "Link class"
-msgstr ""
+msgstr "Link-Klasse"
 
 #: print.admin.inc:135
 #: print_mail.admin.inc:53
 #: print_pdf.admin.inc:66
 msgid "This can be used by themers to change the link style or by jQuery modules to open in a new window (e.g. greybox or thickbox). Multiple classes can be specified, separated by spaces."
-msgstr ""
+msgstr "Dies kann beim Erstellen von Thems verwendet werden, um den Stil des Links zu ändern, oder von jQuery-Modulen zum Öffnen in einem neuen Fenster (z.B. greybox oder thickbox). Mehrere Klassen können durch Leerzeichen getrennt eingegeben werden."
 
 #: print.admin.inc:140
 #: print_mail.admin.inc:58
@@ -225,27 +225,27 @@ msgstr "„noarchive“ hinzufügen"
 msgid "Non-standard tag to instruct search engines to not show a \"Cached\" link for your printer-friendly pages. Recognized by Googlebot."
 msgstr "Nicht standardisierter Tag, weist Suchmaschinen an keinen „Cached“-Verweis für die druckoptimierte Seite anzuzeigen. Der Tag wird von Googlebot berücksichtigt."
 
-#: print.pages.inc:187
+#: print.pages.inc:188
 msgid "Published on %site_name"
 msgstr "Veröffentlicht auf %site_name"
 
-#: print.pages.inc:206
+#: print.pages.inc:207
 msgid "retrieved on %date"
 msgstr "abgerufen am %date"
 
-#: print.pages.inc:220
+#: print.pages.inc:221
 msgid "Anonymous"
 msgstr "Anonym"
 
-#: print.pages.inc:221
+#: print.pages.inc:222
 msgid "By %author"
 msgstr "Von %author"
 
-#: print.pages.inc:225
+#: print.pages.inc:226
 msgid "Created %date"
 msgstr "Erstellt %date"
 
-#: print.pages.inc:260
+#: print.pages.inc:261
 msgid "Links"
 msgstr "Verweise"
 
@@ -311,6 +311,18 @@ msgstr "Betreff"
 msgid "Your message"
 msgstr "Ihre Nachricht"
 
+#: print_mail.inc:74
+msgid "Send e-mail"
+msgstr "E-Mail senden"
+
+#: print_mail.inc:78
+msgid "Clear form"
+msgstr "Formular leeren"
+
+#: print_mail.inc:83
+msgid "Cancel"
+msgstr "Abbrechen"
+
 #: print_mail.inc:96
 msgid "Someone"
 msgstr "Jemand"
@@ -333,7 +345,7 @@ msgstr "Eine Nachricht muss eingegeben werden."
 
 #: print_mail.inc:197
 msgid "us"
-msgstr ""
+msgstr "uns"
 
 #: print_mail.inc:200
 msgid "Thank you for spreading the word about !site."
@@ -419,40 +431,40 @@ msgstr "Legt die Seitenausrichtung des erzeugten PDF fest."
 msgid "No PDF generation tool found! Please dowload a supported PHP PDF generation tool. Check this module's INSTALL.txt for more details."
 msgstr "Kein Werkzeug zum Erzeugen von PDFs gefunden. Ein unterstütztes PHP-Werkzeug zur Erzeugung von PDFs muss heruntergeladen werden. Die Datei INSTALL.TXT dieses Moduls enthält weitere Details."
 
-#: print.module:227
+#: print.module:243;100
 #: print.info:0
 #: print_mail.info:0
 #: print_pdf.info:0
 msgid "Printer-friendly pages"
 msgstr "Druckoptimierte Seiten"
 
-#: print.module:234
+#: print.module:250
 msgid "Show printer-friendly version link"
 msgstr "Verweis auf druckoptimierte Version zeigen"
 
-#: print.module:236
+#: print.module:252
 msgid "Displays the link to a printer-friendly version of the content. Further configuration is available on the !settings."
-msgstr "Zeigt den Verweis zur druckoptimierten Version des Inhalts an. Weitere Einstellungen sind möglich unter !settings."
+msgstr "Zeigt den Verweis zur druckoptimierten Version des Inhalts an. Weitere Einstellungen sind möglich in den !settings."
 
-#: print.module:236;242
-#: print_mail.module:161;167
-#: print_pdf.module:180;186
+#: print.module:252;258
+#: print_mail.module:178;184
+#: print_pdf.module:197;203
 msgid "settings page"
 msgstr "Einstellungen"
 
-#: print.module:240
+#: print.module:256
 msgid "Show printer-friendly version link in individual comments"
-msgstr "Verweis auf die druckoptimierte Version in einzelnen Kommentaren zeigen"
+msgstr "Verweis auf die druckoptimierte Version in einzelnen Kommentaren anzeigen"
 
-#: print.module:242
+#: print.module:258
 msgid "Displays the link to a printer-friendly version of the comment. Further configuration is available on the !settings."
-msgstr "Verweis zur Druckversion des Kommentars zeigen. Weitere Einstellungen sind möglich unter !settings."
+msgstr "Verweis zur Druckversion des Kommentars zeigen. Weitere Einstellungen sind möglich in den !settings."
 
-#: print.module:329
+#: print.module:345
 msgid "Printer-friendly version"
 msgstr "Druckoptimierte Version"
 
-#: print.module:331
+#: print.module:347
 msgid "Display a printer-friendly version of this page."
 msgstr "Druckoptimierte Version dieser Seite anzeigen."
 
@@ -468,10 +480,6 @@ msgstr "Einstellungen verwalten"
 #, fuzzy
 msgid "Printer-friendly"
 msgstr "druckoptimiert"
-
-#: print.module:100
-msgid "Printer-friendly Pages"
-msgstr "Druckoptimierte Seiten"
 
 #: print.module:101
 #: print.info:0
@@ -490,27 +498,27 @@ msgstr "Einstellungen"
 msgid "print"
 msgstr "Print"
 
-#: print_mail.module:159
+#: print_mail.module:176
 msgid "Show send by e-mail link"
 msgstr "‚Per E-Mail senden‘-Verweis anzeigen"
 
-#: print_mail.module:161
+#: print_mail.module:178
 msgid "Displays a link to send the content by e-mail. Further configuration is available on the !settings."
-msgstr "Zeigt einen Verweis, um den Inhalt per E-Mail zu versenden. Die weitere Konfiguration ist möglich in den !settings."
+msgstr "Zeigt einen Verweis, um den Inhalt per E-Mail zu versenden. Weitere Einstellungen sind möglich in den !settings."
 
-#: print_mail.module:165
+#: print_mail.module:182
 msgid "Show send by e-mail link in individual comments"
-msgstr "‚Per E-Mail senden‘-Verweis in einzelnen Kommentaren zeigen"
+msgstr "‚Per E-Mail senden‘-Verweis in einzelnen Kommentaren anzeigen"
 
-#: print_mail.module:167
+#: print_mail.module:184
 msgid "Displays a link to send the comment by e-mail. Further configuration is available on the !settings."
 msgstr "Zeigt einen Verweis, um den Kommentar per E-Mail zu versenden. Die weitere Konfiguration ist möglich in den !settings."
 
-#: print_mail.module:181
+#: print_mail.module:198
 msgid "Send to friend"
 msgstr "Einem Freund senden"
 
-#: print_mail.module:183
+#: print_mail.module:200
 msgid "Send this page by e-mail."
 msgstr "Diese Seite per E-Mail senden"
 
@@ -524,30 +532,30 @@ msgstr "E-Mail"
 
 #: print_mail.module:0
 msgid "print_mail"
-msgstr ""
+msgstr "print_mail"
 
-#: print_pdf.module:178
+#: print_pdf.module:195
 msgid "Show PDF version link"
 msgstr "Verweis auf PDF-Version anzeigen"
 
-#: print_pdf.module:180
+#: print_pdf.module:197
 msgid "Displays the link to a PDF version of the content. Further configuration is available on the !settings."
 msgstr "Zeigt einen Verweis auf eine PDF-Version des Inhalts. Die weitere Konfiguration ist möglich in den !settings."
 
-#: print_pdf.module:184
+#: print_pdf.module:201
 msgid "Show PDF version link in individual comments"
 msgstr "Verweis ‚PDF-Version‘ in einzelnen Kommentaren anzeigen"
 
-#: print_pdf.module:186
+#: print_pdf.module:203
 msgid "Displays the link to a PDF version of the comment. Further configuration is available on the !settings."
-msgstr "Zeigt einen Verweis auf eine PDF-Version des Kommenars. Die weitere Konfiguration ist möglich in den !settings."
+msgstr "Zeigt einen Verweis auf eine PDF-Version des Kommentars. Die weitere Konfiguration ist möglich in den !settings."
 
-#: print_pdf.module:200
+#: print_pdf.module:217
 #: print_pdf.info:0
 msgid "PDF version"
-msgstr "PDF Version"
+msgstr "PDF-Version"
 
-#: print_pdf.module:202
+#: print_pdf.module:219
 msgid "Display a PDF version of this page."
 msgstr "Zeigt eine PDF-Version dieser Seite."
 
@@ -569,7 +577,7 @@ msgstr "PDF"
 
 #: print_pdf.module:0
 msgid "print_pdf"
-msgstr ""
+msgstr "print_pdf"
 
 #: print.install:13
 msgid "Printer-friendly Page settings are available under !link"
@@ -591,6 +599,8 @@ msgstr "Ermöglicht das Senden der Seite per E-Mail"
 msgid "Adds the capability to export pages as PDF."
 msgstr "Ermöglicht, Seiten als PDF zu exportieren."
 
+#~ msgid "Printer-friendly Pages"
+#~ msgstr "Druckoptimierte Seiten"
 #~ msgid "Disabled"
 #~ msgstr "Deaktiviert"
 #~ msgid "Use Greybox Redux (requires the greybox module)"

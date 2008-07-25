@@ -36,10 +36,6 @@ a:link img, a:visited img {border: 0;}
 .print-title {}
 .print-submitted {font-size: small;}
 .print-created {font-size: small;}
-.print-taxonomy ul {
-  margin: 0;
-  padding: 0px;
-}
 .print-taxonomy {
   text-align: right;
 }

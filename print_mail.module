@@ -139,9 +139,10 @@ function print_mail_help($path, $arg) {
     static $output = FALSE;
 
     if ($output === FALSE) {
+      drupal_add_css(drupal_get_path('module', 'print') .'/printlinks.css');
       $output = TRUE;
     
-      return print_mail_insert_link();
+      return '<span class="print-syslink">'. print_mail_insert_link() .'</span>';
     }
   }
 }
@@ -152,10 +153,23 @@ function print_mail_help($path, $arg) {
 function print_mail_nodeapi(&$node, $op = 'view', $teaser, $page) {
   switch ($op) {
     case 'view':
-      if (TRUE && !$node->printing) {
-        $link = print_mail_insert_link();
+      $print_mail_show_link = variable_get('print_mail_show_link', PRINT_MAIL_SHOW_LINK_DEFAULT);
+      $print_mail_node_link_visibility = variable_get('print_mail_node_link_visibility', PRINT_MAIL_NODE_LINK_VISIBILITY_DEFAULT)
+      $print_mail_node_link_pages = variable_get('print_mail_node_link_pages', PRINT_MAIL_NODE_LINK_PAGES_DEFAULT);
+      $print_mail_display = variable_get('print_mail_display_'. $node->type, PRINT_TYPE_SHOW_LINK_DEFAULT);
+
+      if ((!$teaser) && (!$node->printing) && ($print_mail_show_link) &&
+          user_access('access print') && ($print_mail_display) &&
+          _print_page_match($print_mail_node_link_visibility, $print_mail_node_link_pages)) {
+        drupal_add_css(drupal_get_path('module', 'print') .'/printlinks.css');
+        $print_mail_book_link = variable_get('print_mail_book_link', PRINT_MAIL_BOOK_LINK_DEFAULT);
+        if (($print_mail_book_link) && user_access('access printer-friendly version') &&
+            (($node->type == 'book') || isset($node->book))) {
+          $path = PRINTMAIL_PATH .'/book/export/html/'. $node->nid;
+        }
+        $link = print_mail_insert_link($path);
         $node->content['print_mail_link'] = array(
-          '#value' => "<div style='float:right;clear:left;'>$link</div>",
+          '#value' => "<span class='print-link'>$link</span>",
           '#weight' => -2,
         );
       }
@@ -222,6 +236,6 @@ function print_mail_insert_link($path = NULL) {
       }
     }
     $format = theme('print_mail_format_link');
-    return '<span class="print">'. l($format['text'], $path, array('attributes' => $format['attributes'], 'query' => $query, 'absolute' => TRUE, 'html' => $format['html'])) .'</span>';
+    return '<span class="print_mail">'. l($format['text'], $path, array('attributes' => $format['attributes'], 'query' => $query, 'absolute' => TRUE, 'html' => $format['html'])) .'</span>';
   }
 }
