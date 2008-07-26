@@ -53,7 +53,7 @@ function print_pdf_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_pdf_settings'),
     'access arguments'  => array('administer print'),
-    'weight' => 2,
+    'weight' => 3,
     'type' => MENU_LOCAL_TASK,
     'file' => 'print_pdf.admin.inc',
   );
