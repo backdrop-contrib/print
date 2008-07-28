@@ -19,12 +19,20 @@ function print_mail_settings() {
       '#type' => 'fieldset',
     );
 
+  $form['print_mail_link_pos'] = array(
+    '#type' => 'checkboxes',
+    '#title' => t('Send by e-mail link'),
+    '#default_value' => variable_get('print_mail_link_pos', array(PRINT_MAIL_LINK_POS_DEFAULT => PRINT_MAIL_LINK_POS_DEFAULT)),
+    '#options' => array('link' => t('Links area'), 'corner' => t('Content corner')),
+    '#description' => t('Choose the location of the link(s) to the send by e-mail page. The Links area is usually below the node content, whereas the Content corner is placed in the upper-right corner of the node content. Unselect all options to disable the link. Even if the link is disabled, you can still send a node by e-mail by going to !path/nid where nid is the numeric id of the node.', array('!path' => PRINTMAIL_PATH)),
+  );
+
   $form['print_mail_show_link'] = array(
     '#type' => 'radios',
-    '#title' => t('Send by e-mail link'),
+    '#title' => t('Link style'),
     '#default_value' => variable_get('print_mail_show_link', PRINT_MAIL_SHOW_LINK_DEFAULT),
-    '#options' => array(t('None (Disabled)'), t('Text only'), t('Icon only'), t('Icon and Text')),
-    '#description' => t('Enable or disable the send by e-mail link for each node. Even if the link is disabled, you can still send a node by e-mail by going to printmail/nid where nid is the numeric id of the node.'),
+    '#options' => array(1 => t('Text only'), 2 => t('Icon only'), 3 => t('Icon and Text')),
+    '#description' => t('Select the visual style of the link.'),
   );
 
   $form['print_mail_node_link_visibility'] = array(

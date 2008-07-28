@@ -95,12 +95,20 @@ function print_html_settings() {
       '#type' => 'fieldset',
     );
 
+  $form['print_html_link_pos'] = array(
+    '#type' => 'checkboxes',
+    '#title' => t('Printer-friendly page link'),
+    '#default_value' => variable_get('print_html_link_pos', array(PRINT_HTML_LINK_POS_DEFAULT => PRINT_HTML_LINK_POS_DEFAULT)),
+    '#options' => array('link' => t('Links area'), 'corner' => t('Content corner')),
+    '#description' => t('Choose the location of the link(s) to the printer-friendly page. The Links area is usually below the node content, whereas the Content corner is placed in the upper-right corner of the node content. Unselect all options to disable the link. Even if the link is disabled, you can still view the print version of a node by going to !path/nid where nid is the numeric id of the node.', array('!path' => PRINT_PATH)),
+  );
+
   $form['print_html_show_link'] = array(
     '#type' => 'radios',
-    '#title' => t('Printer-friendly page link'),
+    '#title' => t('Link style'),
     '#default_value' => variable_get('print_html_show_link', PRINT_HTML_SHOW_LINK_DEFAULT),
-    '#options' => array(t('None (Disabled)'), t('Text only'), t('Icon only'), t('Icon and Text')),
-    '#description' => t('Enable or disable the printer-friendly page link for each node. Even if the link is disabled, you can still view the print version of a node by going to print/nid where nid is the numeric id of the node.'),
+    '#options' => array(1 => t('Text only'), 2 => t('Icon only'), 3 => t('Icon and Text')),
+    '#description' => t('Select the visual style of the link.'),
   );
 
   $form['print_html_node_link_visibility'] = array(

@@ -37,7 +37,8 @@ function print_pdf_update_6000() {
   $ret = array();
   if (isset($conf['print_pdf_settings'])) {
     $print_pdf_settings = variable_get('print_pdf_settings', '');
-    variable_set('print_pdf_show_link', $print_pdf_settings['show_link']);
+    variable_set('print_pdf_link_pos', array('link' => ($print_pdf_settings['show_link'] ? 'link' : 0) ));
+    variable_set('print_pdf_show_link', max(1, $print_pdf_settings['show_link']));
     variable_set('print_pdf_node_link_visibility', $print_pdf_settings['node_link_visibility']);
     variable_set('print_pdf_node_link_pages', $print_pdf_settings['node_link_pages']);
     variable_set('print_pdf_link_class', $print_pdf_settings['link_class']);

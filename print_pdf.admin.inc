@@ -32,12 +32,20 @@ function print_pdf_settings() {
       '#required' => TRUE,
     );
 
+    $form['print_pdf_link_pos'] = array(
+      '#type' => 'checkboxes',
+      '#title' => t('PDF version link'),
+      '#default_value' => variable_get('print_pdf_link_pos', array(PRINT_PDF_LINK_POS_DEFAULT => PRINT_PDF_LINK_POS_DEFAULT)),
+      '#options' => array('link' => t('Links area'), 'corner' => t('Content corner')),
+      '#description' => t('Choose the location of the link(s) to the PDF version. The Links area is usually below the node content, whereas the Content corner is placed in the upper-right corner of the node content. Unselect all options to disable the link. Even if the link is disabled, you can still view the PDF version of a node by going to !path/nid where nid is the numeric id of the node.', array('!path' => PRINTPDF_PATH)),
+    );
+
     $form['print_pdf_show_link'] = array(
       '#type' => 'radios',
-      '#title' => t('PDF version link'),
+      '#title' => t('Link style'),
       '#default_value' => variable_get('print_pdf_show_link', PRINT_PDF_SHOW_LINK_DEFAULT),
-      '#options' => array(t('None (Disabled)'), t('Text only'), t('Icon only'), t('Icon and Text')),
-      '#description' => t('Enable or disable the PDF version link for each node. Even if the link is disabled, you can still view the PDF version of a node by going to printpdf/nid where nid is the numeric id of the node.'),
+      '#options' => array(1 => t('Text only'), 2 => t('Icon only'), 3 => t('Icon and Text')),
+      '#description' => t('Select the visual style of the link.'),
     );
 
     $form['print_pdf_node_link_visibility'] = array(

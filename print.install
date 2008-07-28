@@ -75,7 +75,8 @@ function print_update_6000() {
   }
   if (isset($conf['print_html_settings'])) {
     $print_html_settings = variable_get('print_html_settings', '');
-    variable_set('print_html_show_link', $print_html_settings['show_link']);
+    variable_set('print_html_link_pos', array('link' => ($print_html_settings['show_link'] ? 'link' : 0) ));
+    variable_set('print_html_show_link', max(1, $print_html_settings['show_link']));
     variable_set('print_html_node_link_visibility', $print_html_settings['node_link_visibility']);
     variable_set('print_html_node_link_pages', $print_html_settings['node_link_pages']);
     variable_set('print_html_link_class', $print_html_settings['link_class']);

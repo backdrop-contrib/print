@@ -35,7 +35,8 @@ function print_mail_update_6000() {
   $ret = array();
   if (isset($conf['print_mail_settings'])) {
     $print_mail_settings = variable_get('print_mail_settings', '');
-    variable_set('print_mail_show_link', $print_mail_settings['show_link']);
+    variable_set('print_mail_link_pos', array('link' => ($print_html_settings['show_link'] ? 'link' : 0) ));
+    variable_set('print_mail_show_link', max(1, $print_mail_settings['show_link']));
     variable_set('print_mail_node_link_visibility', $print_mail_settings['node_link_visibility']);
     variable_set('print_mail_node_link_pages', $print_mail_settings['node_link_pages']);
     variable_set('print_mail_link_class', $print_mail_settings['link_class']);
