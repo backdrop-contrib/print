@@ -180,7 +180,7 @@ function print_nodeapi(&$node, $op = 'view', $teaser, $page) {
   switch ($op) {
     case 'view':
       $allowed_type = print_link_allowed(array('node' => $node, 'teaser' => $teaser));
-      if (($allowed_type != FALSE) && (preg_match('!^print/!i', $_GET['q']) == 0)) {
+      if (($allowed_type != FALSE) && (preg_match('!^print!i', $_GET['q']) == 0)) {
         drupal_add_css(drupal_get_path('module', 'print') .'/printlinks.css');
         if ($allowed_type === PRINT_ALLOW_BOOK_LINK) {
           $path = PRINT_PATH .'/book/export/html/'. $node->nid;
@@ -352,7 +352,7 @@ function theme_print_text() {
 function print_insert_link($path = NULL) {
   if (user_access('access print')) {
     if ($path === NULL) {
-      $path = PRINT_PATH .'/'. $_GET['q'];
+      $path = PRINT_PATH .'/'. preg_replace('!^node/!', '', $_GET['q']);
       $query = drupal_query_string_encode($_GET, array('q'));
       if (empty($query)) {
         $query = NULL;
