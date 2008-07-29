@@ -89,7 +89,7 @@ function print_mail_link($type, $node = NULL, $teaser = FALSE) {
       if ($type == 'comment') {
         $query_arr['comment'] = $node->cid;
       }
-      $query = drupal_query_string_encode($query_arr, array('q'));
+      $query = print_query_string_encode($query_arr, array('q'));
 
       $links['print_mail'] = array('href' => PRINTMAIL_PATH .'/'. $node->nid,
                                   'title' => $format['text'],
@@ -199,7 +199,7 @@ function print_mail_insert_link($path = NULL) {
   if (user_access('access print')) {
     if ($path === NULL) {
       $path = PRINTMAIL_PATH .'/'. preg_replace('!^node/!', '', $_GET['q']);
-      $query = drupal_query_string_encode($_GET, array('q'));
+      $query = print_query_string_encode($_GET, array('q'));
       if (empty($query)) {
         $query = NULL;
       }

@@ -117,7 +117,7 @@ function print_link($type, $node = NULL, $teaser = FALSE) {
     if ($type == 'comment') {
       $query_arr['comment'] = $node->cid;
     }
-    $query = drupal_query_string_encode($query_arr, array('q'));
+    $query = print_query_string_encode($query_arr, array('q'));
     if (empty($query)) $query = NULL;
 
     $links['print'] = array('href' => PRINT_PATH .'/'. $node->nid,
@@ -359,7 +359,7 @@ function print_insert_link($path = NULL) {
   if (user_access('access print')) {
     if ($path === NULL) {
       $path = PRINT_PATH .'/'. preg_replace('!^node/!', '', $_GET['q']);
-      $query = drupal_query_string_encode($_GET, array('q'));
+      $query = print_query_string_encode($_GET, array('q'));
       if (empty($query)) {
         $query = NULL;
       }
@@ -373,7 +373,7 @@ function print_insert_link($path = NULL) {
  * Determine if the current page is enabled according to the visibility settings
  *
  * @param $visibility
- *   current visibility settings: 
+ *   current visibility settings:
  *    0 for show on every page except the listed pages
  *    1 for show on only the listed pages
  * @param $pages
@@ -425,7 +425,7 @@ function print_link_allowed($args) {
     $print_html_node_link_visibility = variable_get('print_html_node_link_visibility', PRINT_HTML_NODE_LINK_VISIBILITY_DEFAULT);
     $print_html_node_link_pages = variable_get('print_html_node_link_pages', PRINT_HTML_NODE_LINK_PAGES_DEFAULT);
 
-    if ($node->printing || 
+    if ($node->printing ||
         !_print_page_match($print_html_node_link_visibility, $print_html_node_link_pages)) {
       // Page not in visibility list or we are working!
       return FALSE;
@@ -436,7 +436,7 @@ function print_link_allowed($args) {
     }
     else {
       // Node link
-      if (isset($node_type) && 
+      if (isset($node_type) &&
           !variable_get('print_display_'. $node_type, PRINT_TYPE_SHOW_LINK_DEFAULT)) {
         // Link for this node type is disabled
         return FALSE;
@@ -464,4 +464,27 @@ function print_link_allowed($args) {
 
     return _print_page_match($print_html_sys_link_visibility, $print_html_sys_link_pages);
   }
+}
+
+/**
+ * Parse an array into a valid urlencoded query string.
+ * Modified from drupal_query_string_encode to prevent re-encoding of
+ * encoded original.
+ *
+ * @param $query
+ *   The array to be processed e.g. $_GET
+ * @param $exclude
+ *   The array filled with keys to be excluded.
+ * @return
+ *   urlencoded string which can be appended to/as the URL query string
+ */
+function print_query_string_encode($query, $exclude = array()) {
+  $params = array();
+  foreach ($query as $key => $value) {
+    if (in_array($key, $exclude)) {
+      continue;
+    }
+    $params[] = $key .'='. rawurlencode($value);
+  }
+  return implode('&', $params);
 }

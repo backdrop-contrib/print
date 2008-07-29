@@ -102,6 +102,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   $keys = implode(' ', explode("\n", trim(strip_tags($print['taxonomy']))));
   $pdf->SetKeywords($keys);
   $pdf->setPDFVersion('1.6');
+  $pdf->setUserRights();
 
   // set header data
   $pdf->SetHeaderData('', 0, $print['title'], strip_tags($print['site_name']));
@@ -120,6 +121,9 @@ function _print_pdf_tcpdf($print, $html, $filename) {
 
   // set image scale factor
   $pdf->setImageScale(4);
+
+  // set image compression quality
+  $pdf->setJPEGQuality(100);
 
   //initialize document
   $pdf->AliasNbPages();
