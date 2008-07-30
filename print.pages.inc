@@ -132,6 +132,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   // print module settings
   $print_css = variable_get('print_css', PRINT_CSS_DEFAULT);
   $print_urls = variable_get('print_urls', PRINT_URLS_DEFAULT);
+  $print_logo_options = variable_get('print_logo_options', PRINT_LOGO_OPTIONS_DEFAULT);
   $print_logo_url = variable_get('print_logo_url', PRINT_LOGO_URL_DEFAULT);
   $print_html_sendtoprinter = variable_get('print_html_sendtoprinter', PRINT_HTML_SENDTOPRINTER_DEFAULT);
   $print_sourceurl_enabled = variable_get('print_sourceurl_enabled', PRINT_SOURCEURL_ENABLED_DEFAULT);
@@ -187,7 +188,17 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
 
   $print['sendtoprinter'] = $print_html_sendtoprinter ? ' onload="window.print();"' : '';
 
-  $logo_url = !empty($print_logo_url) ? strip_tags($print_logo_url) : theme_get_setting('logo');
+  switch ($print_logo_options) {
+    case 0: // none
+      $logo_url = 0;
+      break;
+    case 1: // theme's
+      $logo_url = theme_get_setting('logo');
+      break;
+    case 2: // user-specifed
+      $logo_url = strip_tags($print_logo_url);
+      break;
+  }
   $print['logo'] = $logo_url ? "<img class='print-logo' src='$logo_url' alt='' />\n" : '';
 
   $published_site = variable_get('site_name', 0);

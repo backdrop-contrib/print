@@ -19,16 +19,31 @@ function print_main_settings() {
       '#type' => 'fieldset',
     );
 
-  $form['print_logo_url'] = array(
+  $form['print_settings']['print_logo_options'] = array(
+    '#type' => 'radios',
+    '#title' => t('Logo options'),
+    '#options' => array(t('None (Disabled)'), t("Current theme's logo"), t('User-specified')),
+    '#default_value' => variable_get('print_logo_options', PRINT_LOGO_OPTIONS_DEFAULT),
+    '#description' => t("Select the type of logo to display on the printer-friendly version. In case of a user-specified location, insert the path or URL below."),
+  );
+
+  $form['print_settings']['print_logo_url'] = array(
     '#type' => 'textfield',
     '#title' => t('Logo URL'),
     '#default_value' => variable_get('print_logo_url', PRINT_LOGO_URL_DEFAULT),
     '#size' => 60,
     '#maxlength' => 250,
-    '#description' => t("An alternative logo to display on the printer-friendly version. If left empty, the current theme's logo is used."),
   );
 
-  $form['print_css'] = array(
+  $form['print_settings']['print_logo_upload'] = array(
+    '#type' => 'file',
+    '#title' => t('Upload logo'),
+    '#size' => 60,
+    '#maxlength' => 250,
+    '#description' => t("If you don't have direct file access to the server, use this field to upload your logo."),
+  );
+
+  $form['print_settings']['print_css'] = array(
     '#type' => 'textfield',
     '#title' => t('Stylesheet URL'),
     '#default_value' => variable_get('print_css', PRINT_CSS_DEFAULT),
@@ -38,21 +53,21 @@ function print_main_settings() {
                       t('Macros: %b (base path: "%base"), %t (path to theme: "%theme")', array('%base' => base_path(), '%theme' => path_to_theme())),
   );
 
-  $form['print_urls'] = array(
+  $form['print_settings']['print_urls'] = array(
     '#type' => 'checkbox',
     '#title' => t('Printer-friendly URLs list'),
     '#default_value' => variable_get('print_urls', PRINT_URLS_DEFAULT),
     '#description' => t('If set, a list of the destination URLs for the page links will be displayed at the bottom of the page.'),
   );
 
-  $form['print_comments'] = array(
+  $form['print_settings']['print_comments'] = array(
     '#type' => 'checkbox',
     '#title' => t('Include comments in printer-friendly version'),
     '#default_value' => variable_get('print_comments', PRINT_COMMENTS_DEFAULT),
     '#description' => t('When this option is active, user comments are also included in the printer-friendly version. Requires the comment module.'),
   );
 
-  $form['print_newwindow'] = array(
+  $form['print_settings']['print_newwindow'] = array(
     '#type' => 'radios',
     '#title' => t('New window method'),
     '#options' => array(t('Use HTML target (does not validate as XHTML Strict)'), t('Use Javascript (requires browser support)')),
@@ -61,34 +76,56 @@ function print_main_settings() {
   );
 
   $form['print_sourceurl_settings'] = array(
-      '#type' => 'fieldset',
-      '#title' => t('Source URL'),
-      '#collapsible' => TRUE,
-      '#collapsed' => TRUE,
+    '#type' => 'fieldset',
+    '#title' => t('Source URL'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
   );
 
-  $form['print_sourceurl_enabled'] = array(
+  $form['print_sourceurl_settings']['print_sourceurl_enabled'] = array(
     '#type' => 'checkbox',
     '#title' => t('Display source URL'),
     '#default_value' => variable_get('print_sourceurl_enabled', PRINT_SOURCEURL_ENABLED_DEFAULT),
     '#description' => t('When this option is selected, the URL for the original page will be displayed at the bottom of the printer-friendly version.'),
   );
 
-  $form['print_sourceurl_date'] = array(
+  $form['print_sourceurl_settings']['print_sourceurl_date'] = array(
     '#type' => 'checkbox',
     '#title' => t('Add current time/date to the source URL'),
     '#default_value' => variable_get('print_sourceurl_date', PRINT_SOURCEURL_DATE_DEFAULT),
     '#description' => t('Display the current date and time in the Source URL line.'),
   );
 
-  $form['print_sourceurl_forcenode'] = array(
+  $form['print_sourceurl_settings']['print_sourceurl_forcenode'] = array(
     '#type' => 'checkbox',
     '#title' => t('Force use of node ID in source URL'),
     '#default_value' => variable_get('print_sourceurl_forcenode', PRINT_SOURCEURL_FORCENODE_DEFAULT),
     '#description' => t("Drupal will attempt to use the page's defined alias in case there is one. To force the use of the fixed URL, activate this option."),
   );
 
+  $form['#attributes'] = array('enctype' => "multipart/form-data");
+  $form['#validate'][] = '_print_main_settings_validate';
+
   return system_settings_form($form);
+}
+
+/**
+ * Validate print_main_settings form.
+ */
+function _print_main_settings_validate($form, &$form_state) {
+  // Check for a new uploaded logo, and use that instead.
+  if ($file = file_save_upload('print_logo_upload', array('file_validate_is_image' => array()))) {
+    $parts = pathinfo($file->filename);
+    $filename = 'print_logo.'. strtolower($parts['extension']);
+
+    // The image was saved using file_save_upload() and was added to the
+    // files table as a temporary file. We'll make a copy and let the garbage
+    // collector delete the original upload.
+    if (file_copy($file, $filename, FILE_EXISTS_REPLACE)) {
+      $form_state['values']['print_logo_options'] = 2;
+      $form_state['values']['print_logo_url'] = base_path() . $file->filepath;
+    }
+  }
 }
 
 function print_html_settings() {
@@ -96,7 +133,7 @@ function print_html_settings() {
       '#type' => 'fieldset',
     );
 
-  $form['print_html_link_pos'] = array(
+  $form['print_html_settings']['print_html_link_pos'] = array(
     '#type' => 'checkboxes',
     '#title' => t('Printer-friendly page link'),
     '#default_value' => variable_get('print_html_link_pos', array(PRINT_HTML_LINK_POS_DEFAULT => PRINT_HTML_LINK_POS_DEFAULT)),
@@ -104,7 +141,7 @@ function print_html_settings() {
     '#description' => t('Choose the location of the link(s) to the printer-friendly page. The Links area is usually below the node content, whereas the Content corner is placed in the upper-right corner of the node content. Unselect all options to disable the link. Even if the link is disabled, you can still view the print version of a node by going to !path/nid where nid is the numeric id of the node.', array('!path' => PRINT_PATH)),
   );
 
-  $form['print_html_show_link'] = array(
+  $form['print_html_settings']['print_html_show_link'] = array(
     '#type' => 'radios',
     '#title' => t('Link style'),
     '#default_value' => variable_get('print_html_show_link', PRINT_HTML_SHOW_LINK_DEFAULT),
@@ -112,21 +149,21 @@ function print_html_settings() {
     '#description' => t('Select the visual style of the link.'),
   );
 
-  $form['print_html_node_link_visibility'] = array(
+  $form['print_html_settings']['print_html_node_link_visibility'] = array(
     '#type' => 'radios',
     '#title' => t('Link visibility'),
     '#default_value' => variable_get('print_html_node_link_visibility', PRINT_HTML_NODE_LINK_VISIBILITY_DEFAULT),
     '#options' => array(t('Show on every page except the listed pages.'), t('Show on only the listed pages.')),
   );
 
-  $form['print_html_node_link_pages'] = array(
+  $form['print_html_settings']['print_html_node_link_pages'] = array(
     '#type' => 'textarea',
     '#default_value' => variable_get('print_html_node_link_pages', PRINT_HTML_NODE_LINK_PAGES_DEFAULT),
     '#rows' => 3,
     '#description' => t("Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>')),
   );
 
-  $form['print_html_link_class'] = array(
+  $form['print_html_settings']['print_html_link_class'] = array(
     '#type' => 'textfield',
     '#title' => t('Link class'),
     '#default_value' => variable_get('print_html_link_class', PRINT_HTML_LINK_CLASS_DEFAULT),
@@ -135,14 +172,14 @@ function print_html_settings() {
     '#description' => t('This can be used by themers to change the link style or by jQuery modules to open in a new window (e.g. greybox or thickbox). Multiple classes can be specified, separated by spaces.'),
   );
 
-  $form['print_html_sys_link_visibility'] = array(
+  $form['print_html_settings']['print_html_sys_link_visibility'] = array(
     '#type' => 'radios',
     '#title' => t('Show link in system (non-content) pages'),
     '#default_value' => variable_get('print_html_sys_link_visibility', PRINT_HTML_SYS_LINK_VISIBILITY_DEFAULT),
     '#options' => array(t('Show on every page except the listed pages.'), t('Show on only the listed pages.')),
   );
 
-  $form['print_html_sys_link_pages'] = array(
+  $form['print_html_settings']['print_html_sys_link_pages'] = array(
     '#type' => 'textarea',
     '#default_value' => variable_get('print_html_sys_link_pages', PRINT_HTML_SYS_LINK_PAGES_DEFAULT),
     '#rows' => 3,
@@ -150,21 +187,21 @@ function print_html_settings() {
                       t("Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>')),
   );
 
-  $form['print_html_book_link'] = array(
+  $form['print_html_settings']['print_html_book_link'] = array(
     '#type' => 'checkbox',
     '#title' => t('Take control of the book module printer-friendly link'),
     '#default_value' => variable_get('print_html_book_link', PRINT_HTML_BOOK_LINK_DEFAULT),
     '#description' => t('Activate this to have the printer-friendly link in book nodes handled by this module. Requires the (core) book module.'),
   );
 
-  $form['print_html_new_window'] = array(
+  $form['print_html_settings']['print_html_new_window'] = array(
     '#type' => 'checkbox',
     '#title' => t('Open the printer-friendly version in a new window'),
     '#default_value' => variable_get('print_html_new_window', PRINT_HTML_NEW_WINDOW_DEFAULT),
     '#description' => t('Setting this option will make the printer-friendly version open in a new window/tab.'),
   );
 
-  $form['print_html_sendtoprinter'] = array(
+  $form['print_html_settings']['print_html_sendtoprinter'] = array(
     '#type' => 'checkbox',
     '#title' => t('Send to printer'),
     '#default_value' => variable_get('print_html_sendtoprinter', PRINT_HTML_SENDTOPRINTER_DEFAULT),
@@ -178,21 +215,21 @@ function print_html_settings() {
       '#collapsed' => FALSE,
   );
 
-  $form['print_robots_noindex'] = array(
+  $form['print_robots_settings']['print_robots_noindex'] = array(
     '#type' => 'checkbox',
     '#title' => t('Add noindex'),
     '#default_value' => variable_get('print_robots_noindex', PRINT_ROBOTS_NOINDEX_DEFAULT),
     '#description' => t('Instruct robots to not index printer-friendly pages. Recommended for good search engine karma.'),
   );
 
-  $form['print_robots_nofollow'] = array(
+  $form['print_robots_settings']['print_robots_nofollow'] = array(
     '#type' => 'checkbox',
     '#title' => t('Add nofollow'),
     '#default_value' => variable_get('print_robots_nofollow', PRINT_ROBOTS_NOFOLLOW_DEFAULT),
     '#description' => t('Instruct robots to not follow outgoing links on printer-friendly pages.'),
   );
 
-  $form['print_robots_noarchive'] = array(
+  $form['print_robots_settings']['print_robots_noarchive'] = array(
     '#type' => 'checkbox',
     '#title' => t('Add noarchive'),
     '#default_value' => variable_get('print_robots_noarchive', PRINT_ROBOTS_NOARCHIVE_DEFAULT),

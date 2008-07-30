@@ -11,6 +11,7 @@
 
 define('PRINT_PATH', 'print');
 
+define('PRINT_LOGO_OPTIONS_DEFAULT', 1);
 define('PRINT_LOGO_URL_DEFAULT', '');
 define('PRINT_CSS_DEFAULT', '');
 define('PRINT_URLS_DEFAULT', 1);

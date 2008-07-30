@@ -102,7 +102,6 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   $keys = implode(' ', explode("\n", trim(strip_tags($print['taxonomy']))));
   $pdf->SetKeywords($keys);
   $pdf->setPDFVersion('1.6');
-  $pdf->setUserRights();
 
   // set header data
   $pdf->SetHeaderData('', 0, $print['title'], strip_tags($print['site_name']));
@@ -132,7 +131,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   $pdf->AddPage();
 
   preg_match('!<body>(.*)</body>!sim', $html, $matches);
-  $matches[1] = preg_replace('/.*?(<[^<]*?print-content.*?>)/sim', '$1', $matches[1]);
+  $matches[1] = strstr($matches[1], '<div class="print-content">');
 
   $pdf->SetFont($font_name, 'B', $font_size * 1.3);
   $pdf->writeHTML($print['title']);
