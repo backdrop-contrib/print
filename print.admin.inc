@@ -34,7 +34,8 @@ function print_main_settings() {
     '#default_value' => variable_get('print_css', PRINT_CSS_DEFAULT),
     '#size' => 60,
     '#maxlength' => 64,
-    '#description' => t('The URL to your custom print cascading stylesheet, if any. When none is specified, the default module CSS file is used.'),
+    '#description' => t('The URL to your custom print cascading stylesheet, if any. When none is specified, the default module CSS file is used.') .'<br />'.
+                      t('Macros: %b (base path: "%base"), %t (path to theme: "%theme")', array('%base' => base_path(), '%theme' => path_to_theme())),
   );
 
   $form['print_urls'] = array(
