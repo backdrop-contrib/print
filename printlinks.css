@@ -15,6 +15,10 @@ img.print-icon {
   vertical-align: middle;
 }
 
+img.print-icon-margin {
+  margin-right: 4px;
+}
+
 label.printmail-label {
   width: 175px;
   float: left;

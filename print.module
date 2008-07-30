@@ -282,14 +282,13 @@ function print_fill_attributes($title = '', $class = '', $new_window = FALSE) {
  */
 function _print_format_link_aux($type = 0, $text = '', $img = '') {
   if ($type >= 2) {
-    $img = theme('image', $img, $text, '', array('class' => 'print-icon'));
     $html = TRUE;
     switch ($type) {
     case 2:
-      $text = $img;
+      $text = theme('image', $img, $text, '', array('class' => 'print-icon'));
       break;
     case 3:
-      $text = $img .'&nbsp;'. $text;
+      $text = theme('image', $img, $text, '', array('class' => 'print-icon print-icon-margin')). $text;
       break;
     }
   }
