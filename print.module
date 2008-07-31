@@ -288,7 +288,7 @@ function _print_format_link_aux($type = 0, $text = '', $img = '') {
       $text = theme('image', $img, $text, '', array('class' => 'print-icon'));
       break;
     case 3:
-      $text = theme('image', $img, $text, '', array('class' => 'print-icon print-icon-margin')). $text;
+      $text = theme('image', $img, $text, '', array('class' => 'print-icon print-icon-margin')) . $text;
       break;
     }
   }

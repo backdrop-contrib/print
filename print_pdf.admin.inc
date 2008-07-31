@@ -19,11 +19,12 @@ function print_pdf_settings() {
   $pdf_tools = _print_pdf_tools();
 
   if ($pdf_tools != -1) {
-    $form['print_pdf_settings'] = array(
-        '#type' => 'fieldset',
-      );
+    $form['settings'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('PDF options'),
+    );
 
-    $form['print_pdf_settings']['print_pdf_pdf_tool'] = array(
+    $form['settings']['print_pdf_pdf_tool'] = array(
       '#type' => 'radios',
       '#title' => t('PDF generation tool'),
       '#options' => $pdf_tools,
@@ -32,7 +33,7 @@ function print_pdf_settings() {
       '#required' => TRUE,
     );
 
-    $form['print_pdf_settings']['print_pdf_link_pos'] = array(
+    $form['settings']['print_pdf_link_pos'] = array(
       '#type' => 'checkboxes',
       '#title' => t('PDF version link'),
       '#default_value' => variable_get('print_pdf_link_pos', array(PRINT_PDF_LINK_POS_DEFAULT => PRINT_PDF_LINK_POS_DEFAULT)),
@@ -40,7 +41,14 @@ function print_pdf_settings() {
       '#description' => t('Choose the location of the link(s) to the PDF version. The Links area is usually below the node content, whereas the Content corner is placed in the upper-right corner of the node content. Unselect all options to disable the link. Even if the link is disabled, you can still view the PDF version of a node by going to !path/nid where nid is the numeric id of the node.', array('!path' => PRINTPDF_PATH)),
     );
 
-    $form['print_pdf_settings']['print_pdf_show_link'] = array(
+    $form['settings']['adv_link'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Advanced link options'),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+    );
+
+    $form['settings']['adv_link']['print_pdf_show_link'] = array(
       '#type' => 'radios',
       '#title' => t('Link style'),
       '#default_value' => variable_get('print_pdf_show_link', PRINT_PDF_SHOW_LINK_DEFAULT),
@@ -48,21 +56,21 @@ function print_pdf_settings() {
       '#description' => t('Select the visual style of the link.'),
     );
 
-    $form['print_pdf_settings']['print_pdf_node_link_visibility'] = array(
+    $form['settings']['adv_link']['print_pdf_node_link_visibility'] = array(
       '#type' => 'radios',
       '#title' => t('Link visibility'),
       '#default_value' => variable_get('print_pdf_node_link_visibility', PRINT_PDF_NODE_LINK_VISIBILITY_DEFAULT),
       '#options' => array(t('Show on every page except the listed pages.'), t('Show on only the listed pages.')),
     );
 
-    $form['print_pdf_settings']['print_pdf_node_link_pages'] = array(
+    $form['settings']['adv_link']['print_pdf_node_link_pages'] = array(
       '#type' => 'textarea',
       '#default_value' => variable_get('print_pdf_node_link_pages', PRINT_PDF_NODE_LINK_PAGES_DEFAULT),
       '#rows' => 3,
       '#description' => t("Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>')),
     );
 
-    $form['print_pdf_settings']['print_pdf_link_class'] = array(
+    $form['settings']['adv_link']['print_pdf_link_class'] = array(
       '#type' => 'textfield',
       '#title' => t('Link class'),
       '#default_value' => variable_get('print_pdf_link_class', PRINT_PDF_LINK_CLASS_DEFAULT),
@@ -71,14 +79,14 @@ function print_pdf_settings() {
       '#description' => t('This can be used by themers to change the link style or by jQuery modules to open in a new window (e.g. greybox or thickbox). Multiple classes can be specified, separated by spaces.'),
     );
 
-    $form['print_pdf_settings']['print_pdf_sys_link_visibility'] = array(
+    $form['settings']['adv_link']['print_pdf_sys_link_visibility'] = array(
       '#type' => 'radios',
       '#title' => t('Show link in system (non-content) pages'),
       '#default_value' => variable_get('print_pdf_sys_link_visibility', PRINT_PDF_SYS_LINK_VISIBILITY_DEFAULT),
       '#options' => array(t('Show on every page except the listed pages.'), t('Show on only the listed pages.')),
     );
 
-    $form['print_pdf_settings']['print_pdf_sys_link_pages'] = array(
+    $form['settings']['adv_link']['print_pdf_sys_link_pages'] = array(
       '#type' => 'textarea',
       '#default_value' => variable_get('print_pdf_sys_link_pages', PRINT_PDF_SYS_LINK_PAGES_DEFAULT),
       '#rows' => 3,
@@ -86,14 +94,14 @@ function print_pdf_settings() {
                         t("Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>')),
     );
 
-    $form['print_pdf_settings']['print_pdf_book_link'] = array(
+    $form['settings']['print_pdf_book_link'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show link in book nodes'),
       '#default_value' => variable_get('print_pdf_book_link', PRINT_PDF_BOOK_LINK_DEFAULT),
       '#description' => t('Activate this to add a PDF version link in book nodes. Requires the (core) book module.'),
     );
 
-    $form['print_pdf_settings']['print_pdf_content_disposition'] = array(
+    $form['settings']['print_pdf_content_disposition'] = array(
       '#type' => 'radios',
       '#title' => t('Open PDF in'),
       '#options' => array(t('Same browser window'), t('New browser window'), t('Save dialog')),
@@ -101,7 +109,7 @@ function print_pdf_settings() {
       '#description' => t("Select the desired method for opening the PDF in the user's browser."),
     );
 
-    $form['print_pdf_settings']['print_pdf_paper_size'] = array(
+    $form['settings']['print_pdf_paper_size'] = array(
       '#type' => 'select',
       '#title' => t('Paper size'),
       '#options' => array('4A0' => '4A0', '2A0' => '2A0', 'A0' => 'A0',
@@ -123,7 +131,7 @@ function print_pdf_settings() {
       '#description' => t('Choose the paper size of the generated PDF.'),
     );
 
-    $form['print_pdf_settings']['print_pdf_page_orientation'] = array(
+    $form['settings']['print_pdf_page_orientation'] = array(
       '#type' => 'select',
       '#title' => t('Page orientation'),
       '#options' => array('portrait' => t('Portrait'), 'landscape' => t('Landscape')),
@@ -132,7 +140,7 @@ function print_pdf_settings() {
     );
   }
   else {
-    $form['print_pdf_settings']['print_pdf_settings'] = array(
+    $form['settings'] = array(
       '#type' => 'markup',
       '#value' => '<p>'. t("No PDF generation tool found! Please dowload a supported PHP PDF generation tool. Check this module's INSTALL.txt for more details.") .'</p>',
     );

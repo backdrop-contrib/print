@@ -23,7 +23,9 @@ function print_mail_form($form_state) {
   $form = array();
 
   // Remove the printmail/ prefix
-  $path = substr($_GET['q'], strpos($_GET['q'], '/')+1);
+  $path = explode('/', $_GET['q']);
+  unset($path[0]);
+  $path = implode('/', $path);
   if (is_numeric($path)) {
     $path = 'node/'. $path;
   }
