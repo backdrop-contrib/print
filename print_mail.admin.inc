@@ -88,6 +88,14 @@ function print_mail_settings() {
     '#description' => t('Activate this to add a send by e-mail link in book nodes. Requires the (core) book module.'),
   );
 
+  $form['settings']['print_mail_hourly_threshold'] = array(
+    '#type' => 'select',
+    '#title' => t('Hourly threshold'),
+    '#default_value' => variable_get('print_mail_hourly_threshold', PRINT_MAIL_HOURLY_THRESHOLD),
+    '#options' => drupal_map_assoc(array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50)),
+    '#description' => t('The maximum number of e-mails a user can send per hour.'),
+  );
+
   $form['settings']['print_mail_teaser_default'] = array(
     '#type' => 'checkbox',
     '#title' => t('Send only the teaser'),

@@ -18,6 +18,17 @@ require_once(drupal_get_path('module', 'print') .'/print.pages.inc');
  */
 function print_mail_form($form_state) {
   global $user;
+
+  $print_mail_hourly_threshold = variable_get('print_mail_hourly_threshold', PRINT_MAIL_HOURLY_THRESHOLD);
+
+  if (!flood_is_allowed('print_mail', $print_mail_hourly_threshold)) {
+    $form['flood'] = array(
+      '#type' => 'markup',
+      '#value' => '<p>'. t('You cannot send more than %number messages per hour. Please try again later.', array('%number' => $print_mail_hourly_threshold)) .'</p>',
+    );
+    return $form;
+  }
+
   $print_mail_teaser_default = variable_get('print_mail_teaser_default', PRINT_MAIL_TEASER_DEFAULT_DEFAULT);
   $print_mail_teaser_choice = variable_get('print_mail_teaser_choice', PRINT_MAIL_TEASER_CHOICE_DEFAULT);
   $form = array();
@@ -188,7 +199,12 @@ function print_mail_form_validate($form, &$form_state) {
 function print_mail_form_submit($form, &$form_state) {
   global $language;
 
-  $from = $form_state['values']['fld_from_name'] .' <'. $form_state['values']['fld_from_addr'] .'>';
+  if (!empty($form_state['values']['fld_from_name'])) {
+    $from = $form_state['values']['fld_from_name'] .' <'. $form_state['values']['fld_from_addr'] .'>';
+  }
+  else {
+    $from = $form_state['values']['fld_from_addr'];
+  }
   $to = $form_state['values']['txt_to_addrs'];
   $params = array();
   $params['subject'] = $form_state['values']['fld_subject'];
@@ -197,9 +213,11 @@ function print_mail_form_submit($form, &$form_state) {
   $params['cid'] = $form_state['values']['cid'];
   $params['teaser'] = $form_state['values']['chk_teaser'];
 
-  $site_name = variable_get('site_name', t('us'));
-  $ret = drupal_mail('print_mail', 'sendpage', $to, $language, $params, $from, TRUE);
+  $ret = drupal_mail('print_mail', 'sendpage', $to, language_default(), $params, $from, TRUE);
   if ($ret['result']) {
+    flood_register_event('print_mail');
+    watchdog('print_mail', '%name [%from] sent %page to [%to]', array('%name' => $form_state['values']['fld_from_name'], '%from' => $form_state['values']['fld_from_addr'], '%page' => $form_state['values']['path'], '%to' => $to));
+    $site_name = variable_get('site_name', t('us'));
     drupal_set_message(t('Thank you for spreading the word about !site.', array('!site' => $site_name)));
   }
   $form_state['redirect'] = $form_state['values']['path'];
