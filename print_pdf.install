@@ -12,6 +12,7 @@
 function print_pdf_uninstall() {
   variable_del('print_pdf_settings');
   variable_del('print_pdf_show_link');
+  variable_del('print_pdf_link_pos');
   variable_del('print_pdf_node_link_visibility');
   variable_del('print_pdf_node_link_pages');
   variable_del('print_pdf_link_class');

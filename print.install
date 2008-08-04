@@ -25,6 +25,7 @@ function print_uninstall() {
   variable_del('print_html_settings');
   variable_del('print_robot_settings');
   variable_del('print_logo_url');
+  variable_del('print_logo_options');
   variable_del('print_css');
   variable_del('print_urls');
   variable_del('print_comments');
@@ -33,6 +34,7 @@ function print_uninstall() {
   variable_del('print_sourceurl_date');
   variable_del('print_sourceurl_forcenode');
   variable_del('print_html_show_link');
+  variable_del('print_html_link_pos');
   variable_del('print_html_node_link_visibility');
   variable_del('print_html_node_link_pages');
   variable_del('print_html_link_class');
