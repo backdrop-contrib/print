@@ -580,13 +580,15 @@ function _print_generate_path($path, $teaser = FALSE, $message = NULL) {
     return;
   }
 
-  switch ($node->body) {
-  case MENU_NOT_FOUND:
-    return drupal_not_found();
-    break;
-  case MENU_ACCESS_DENIED:
-    return drupal_access_denied();
-    break;
+  if (is_int($node->body)) {
+    switch ($node->body) {
+      case MENU_NOT_FOUND:
+        return drupal_not_found();
+        break;
+      case MENU_ACCESS_DENIED:
+        return drupal_access_denied();
+        break;
+    }
   }
 
   // Delete any links area
