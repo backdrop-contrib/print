@@ -130,7 +130,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   // add a page
   $pdf->AddPage();
 
-  preg_match('!<body>(.*)</body>!sim', $html, $matches);
+  preg_match('!<body.*?>(.*)</body>!sim', $html, $matches);
   $matches[1] = strstr($matches[1], '<div class="print-content">');
 
   $pdf->SetFont($font_name, 'B', $font_size * 1.3);
