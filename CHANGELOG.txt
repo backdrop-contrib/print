@@ -1,4 +1,51 @@
+August 4, 2008
+        Enable flood control of the send by e-mail functionality
+        Fix #290262 by Asif99: sys pages starting with 2 or 3 would return error 404
+        Fix #290587: When send to printer was enabled, the generated PDF was empty
+August 2, 2008
+        Update Hungarian translation by aries
+August 1, 2008
+        Simplify settings form by using more collapsible fieldsets
+        Added RTL link CSS
+        Remove some coder warnings
+July 30, 2008
+        Fix #282385: Add CSS margin between icon and text
+        Fix #288064: Large books sometimes resulted in blank PDFs
+        Fix #261338: Enable selection of none, theme or user-defined logo. Added also capability to upload logo directly from the settings form.
+        Fix PDF bug that prevented correct PDF generation introduced in the last patch.
+        Move the setting form elements back to the defined fieldsets.
+        Fix #280949: Add macros to the CSS input
+        Fix #285496: prevent re-encoding of the encoded query
+        Fix some minor coder warnings
+        Add some TCPDF calls for better quality output
+July 29, 2008
+        Add option to select location of the links
+July 28, 2008
+        Further improvements to the link enabled detection routines
+        Fix print*_insert_link functions to point to print*/nn and not print*/node/nn
+July 27, 2008
+        Improve link enabled detection routines
+July 25, 2008
+        Prepare a new link area in the upper right corner of the content
+        Replaced all inline styles with a core-loaded CSS file
+        Updated German translation
+July 24, 2008
+        Fix visibility so that it works both with the internal and the aliased paths
+July 23, 2008
+        Re-engineer the variables to no longer use the #tree hierarchy
+July 22, 2008
+        Increase mail form label width to avoid line wrapping
+        Enable translation of mail form buttons text
+July 21, 2008
+        Fix obscure pattern matching bug for sites that still use index.php in the URL
+        Moved taxonomy to lower right corner
+        Remove DOS CR+LF
+July 17, 2008
+        Slightly better current path discovery in the PDF and Web mods
+        Fix #283799: Allow icons in book links
 July 16, 2008
+        Fix #283423: correct the CSS path inclusion when sending by mail
+        Vietnamese translation by thehong.
         Updated all translations
         Misc fixes from the coder module
 July 15, 2008

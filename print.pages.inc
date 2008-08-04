@@ -414,7 +414,9 @@ function _print_friendly_urls($url = 0) {
       return count($urls);
     }
   }
-  return $urls;
+  $ret = $urls;
+  $urls = array();
+  return $ret;
 }
 
 /**
