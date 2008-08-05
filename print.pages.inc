@@ -336,7 +336,7 @@ function _print_rewrite_urls($matches) {
     if (preg_match('/^(?:href|src)\s*?=/i', $attribs[$i]) > 0) {
       // We may need to rewrite the URL, so let's isolate it
       preg_match('/.*?=(.*)/is', $attribs[$i], $urls);
-      $url = trim($urls[1], ' \t\n\r\0\x0B"\'');
+      $url = trim($urls[1], " \t\n\r\0\x0B\"'");
 
       if (strpos($url, '://') || preg_match('/^mailto:.*?@.*?\..*?$/iu', $url)) {
         // URL is absolute, do nothing
