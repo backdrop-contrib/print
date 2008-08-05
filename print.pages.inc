@@ -311,31 +311,18 @@ function _print_rewrite_urls($matches) {
 
   // Get value of Printer-friendly URLs setting
   $print_urls = variable_get('print_urls', PRINT_URLS_DEFAULT);
-  $pfurls = (!empty($print_urls));
-
-  //Temporarily convert spaces to %20 so that it isn't split below
-  $in_string = FALSE;
-  $length = strlen($matches[1]);
-  for ($i=0; $i < $length; $i++) {
-    if ($matches[1][$i] == '"') {
-      $in_string = !$in_string;
-    }
-    if (($matches[1][$i] == ' ') && ($in_string)) {
-      $matches[1] = substr_replace($matches[1], '%20', $i, 1);
-    }
-  }
-  // remove whitespace immediately before and after the '=' sign
-  $matches[1] = preg_replace('/\s*=\s*/', '=', $matches[1]);
 
   // first, split the html into the different tag attributes
-  $attribs = preg_split('/\s+/m', $matches[1]);
+  $pattern = '/\s*(\w+\s*=\s*"(?:\\\"|[^"])*")\s*|\s*(\w+\s*=\s*\'(?:\\\'|[^\'])*\')\s*|\s*(\w+\s*=\s\w+)\s*|\s+/im';
+  $attribs = preg_split($pattern, $matches[1], -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+  foreach ($attribs as $key => $value) {
+    $attribs[$key] = preg_replace('/(\w)\s*=\s*(.*)/', '$1=$2', $value);
+  }
 
   $size = count($attribs);
   for ($i=1; $i < $size; $i++) {
     // If the attribute is href or src, we may need to rewrite the URL in the value
-    if (preg_match('/^(?:href|src)\s*?=/i', $attribs[$i]) > 0) {
-      // We may need to rewrite the URL, so let's isolate it
-      preg_match('/.*?=(.*)/is', $attribs[$i], $urls);
+    if (preg_match('/^(?:href|src)\s*?=(.*)/i', $attribs[$i], $urls) > 0) {
       $url = trim($urls[1], " \t\n\r\0\x0B\"'");
 
       if (strpos($url, '://') || preg_match('/^mailto:.*?@.*?\..*?$/iu', $url)) {
@@ -345,7 +332,7 @@ function _print_rewrite_urls($matches) {
       else {
         if ($url[0] == '#') {
           // URL is an anchor tag
-          if ($pfurls) {
+          if (!empty($print_urls)) {
             $path = explode('/', $_GET['q']);
             unset($path[0]);
             $path = implode('/', $path);
@@ -366,26 +353,22 @@ function _print_rewrite_urls($matches) {
             // If it starts with '/' just append it to the server name
             $newurl = $base_root .'/'. trim(urldecode($url), '/');
           }
-          elseif ((!$clean_url) && (preg_match('/^(?:index.php)?\?q=.*/i', $url))) {
+          elseif ((!$clean_url) && (preg_match('/^(?:index.php)?\?q=/i', $url))) {
             // If Clean URLs is disabled, and it starts with q=?, just prepend with the base URL
             $newurl = $base_url .'/'. trim(urldecode($url), '/');
           }
           else {
             $newurl = url(trim(urldecode($url), '/'), array('absolute' => TRUE));
           }
-          $matches[1] = str_replace($url, $newurl, $matches[1]);
         }
       }
     }
   }
 
-  //Revert all %20 in strings back to spaces
-  $matches[1] = str_replace('%20', ' ', $matches[1]);
-
   $ret = '<'. $matches[1] .'>';
   if (count($matches) == 4) {
     $ret .= $matches[2] . $matches[3];
-    if (($pfurls) && (isset($newurl))) {
+    if ((!empty($print_urls)) && (isset($newurl))) {
       $ret .= ' <span class="print-footnote">['. _print_friendly_urls(trim(stripslashes($newurl))) .']</span>';
     }
   }
