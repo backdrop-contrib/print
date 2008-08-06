@@ -1,15 +1,18 @@
 <?php
 // $Id$
 
-class PrintBasicTest extends DrupalTestCase {
+class PrintBasicTest extends DrupalWebTestCase {
   protected $web_user;
   protected $getq;
 
-  function get_info() {
+  /**
+   * Implementation of getInfo().
+   */
+  function getInfo() {
     return array(
       'name' => t('Printer-friendly pages basic tests'),
-      'desc' => t('Test basic Printer-friendly pages module functionality.'),
-      'group' => 'Printer-friendly pages',
+      'description' => t('Test basic Printer-friendly pages module functionality.'),
+      'group' => t('Printer-friendly pages'),
     );
   }
 
@@ -17,6 +20,8 @@ class PrintBasicTest extends DrupalTestCase {
    * Implementation of setUp().
    */
   function setUp() {
+    parent::setUp();
+
     // User to set up print.
 //    $this->web_user = $this->drupalCreateUserRolePerm(array('administer print'));
 
@@ -25,8 +30,6 @@ class PrintBasicTest extends DrupalTestCase {
 
     $this->getq = $_GET['q'];
     $_GET['q'] = 'print/'. $_GET['q'];
-
-    parent::setUp();
   }
 
   /**
@@ -53,14 +56,17 @@ class PrintBasicTest extends DrupalTestCase {
     $url[1] = '#here';
     $url[2] = '/relative/to/host';
     $url[3] = 'relative/to/base';
+    $url[4] = 'index.php?q=sample/path';
     $rel_url[0] = $url[0];
     $rel_url[1] = $_GET['q'] .$url[1];
     $rel_url[2] = $url[2];
     $rel_url[3] = $url[3];
+    $rel_url[4] = $url[4];
     $abs_url[0] = $url[0];
     $abs_url[1] = $base_url .'/'. $this->getq . $url[1];
     $abs_url[2] = $base_root . $url[2];
     $abs_url[3] = $base_url .'/'. $url[3];
+    $abs_url[4] = $base_url .'/'. $url[4];
 
     $size = count($url);
     for ($i = 0; $i < $size; $i++) {

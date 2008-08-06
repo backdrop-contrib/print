@@ -162,7 +162,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   }
   // Add CCK's CSS file to properly display the fields
   if (module_exists('content')) {
-    $css_files[] = base_path() . drupal_get_path('module', 'content') .'/content.css';
+    $css_files[] = base_path() . drupal_get_path('module', 'content') .'/theme/content.css';
   }
 
   // If we are sending a message via e-mail, the CSS must be embedded
@@ -313,19 +313,19 @@ function _print_rewrite_urls($matches) {
   $print_urls = variable_get('print_urls', PRINT_URLS_DEFAULT);
 
   // first, split the html into the different tag attributes
-  $pattern = '/\s*(\w+\s*=\s*"(?:\\\"|[^"])*")\s*|\s*(\w+\s*=\s*\'(?:\\\'|[^\'])*\')\s*|\s*(\w+\s*=\s\w+)\s*|\s+/im';
+  $pattern = '!\s*(\w+\s*=\s*"(?:\\\"|[^"])*")\s*|\s*(\w+\s*=\s*\'(?:\\\'|[^\'])*\')\s*|\s*(\w+\s*=\s\w+)\s*|\s+!im';
   $attribs = preg_split($pattern, $matches[1], -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
   foreach ($attribs as $key => $value) {
-    $attribs[$key] = preg_replace('/(\w)\s*=\s*(.*)/', '$1=$2', $value);
+    $attribs[$key] = preg_replace('!(\w)\s*=\s*(.*)!', '$1=$2', $value);
   }
 
   $size = count($attribs);
   for ($i=1; $i < $size; $i++) {
     // If the attribute is href or src, we may need to rewrite the URL in the value
-    if (preg_match('/^(?:href|src)\s*?=(.*)/i', $attribs[$i], $urls) > 0) {
+    if (preg_match('!^(?:href|src)\s*?=(.*)!i', $attribs[$i], $urls) > 0) {
       $url = trim($urls[1], " \t\n\r\0\x0B\"'");
 
-      if (strpos($url, '://') || preg_match('/^mailto:.*?@.*?\..*?$/iu', $url)) {
+      if (strpos($url, '://') || preg_match('!^mailto:.*?@.*?\..*?$!iu', $url)) {
         // URL is absolute, do nothing
         $newurl = urldecode($url);
       }
@@ -348,13 +348,12 @@ function _print_rewrite_urls($matches) {
         }
         else {
           // URL is relative, convert it into absolute URL
-          $clean_url = (bool)variable_get('clean_url', '0');
           if ($url[0] == '/') {
             // If it starts with '/' just append it to the server name
             $newurl = $base_root .'/'. trim(urldecode($url), '/');
           }
-          elseif ((!$clean_url) && (preg_match('/^(?:index.php)?\?q=/i', $url))) {
-            // If Clean URLs is disabled, and it starts with q=?, just prepend with the base URL
+          elseif (preg_match('!^(?:index.php)?\?q=!i', $url)) {
+            // If it starts with ?q=, just prepend with the base URL
             $newurl = $base_url .'/'. trim(urldecode($url), '/');
           }
           else {
