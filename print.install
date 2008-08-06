@@ -61,6 +61,7 @@ function print_update_6000() {
   $ret = array();
   if (isset($conf['print_settings'])) {
     $print_settings = variable_get('print_settings', '');
+    variable_set('print_logo_options', ($print_settings['logo_url'] ? 2 : 1));
     variable_set('print_logo_url', $print_settings['logo_url']);
     variable_set('print_css', $print_settings['css']);
     variable_set('print_urls', $print_settings['urls']);

@@ -111,7 +111,7 @@ function print_main_settings() {
     '#description' => t("Drupal will attempt to use the page's defined alias in case there is one. To force the use of the fixed URL, activate this option."),
   );
 
-  $form['#attributes'] = array('enctype' => "multipart/form-data");
+  $form['#attributes'] = array('enctype' => 'multipart/form-data');
   $form['#validate'][] = '_print_main_settings_validate';
 
   return system_settings_form($form);
