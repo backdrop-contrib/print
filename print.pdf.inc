@@ -104,22 +104,22 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   $pdf->SetKeywords($keys);
   $pdf->setPDFVersion('1.6');
 
+  $ratio = 0;
+  $logofile = '';
   $logo_ret = preg_match('!src\s*=\s*(\'.*?\'|".*?"|[^\s]*)!i', $print['logo'], $matches);
   if ($logo_ret) {
     $logo = trim($matches[1], '\'"');
     $path_parts = pathinfo($logo);
     $newfilename = 'print_pdf_logo_'. user_password(8) .'.'. $path_parts['extension'];
-    copy($logo, K_PATH_IMAGES . $newfilename);
-    $size = getimagesize(K_PATH_IMAGES . $newfilename);
-    $ratio = $size[0] / $size[1];
-  }
-  else {
-    $newfilename = '';
-    $ratio = 0;
+    if (copy($logo, K_PATH_IMAGES . $newfilename)) {
+      $size = getimagesize(K_PATH_IMAGES . $newfilename);
+      $ratio = $size[0] / $size[1];
+      $logofile = $newfilename;
+    }
   }
 
   // set header data
-  $pdf->SetHeaderData($newfilename, 10 * $ratio, $print['title'], strip_tags($print['site_name']));
+  $pdf->SetHeaderData($logofile, 10 * $ratio, $print['title'], strip_tags($print['site_name']));
 
   // set footer data
   $pdf->SetFooterData($print['footer_message']);
