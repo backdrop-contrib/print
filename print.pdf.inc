@@ -86,6 +86,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   define('K_SMALL_RATIO', 2/3);
 
   require_once($print_pdf_pdf_tool);
+  require_once('print_pdf.class.inc');
 
   $font_name = 'dejavusans';
   $font_size = 10;
@@ -93,7 +94,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   $orientation = strtoupper($print_pdf_page_orientation{0});
 
   // create new PDF document
-  $pdf = new TCPDF($orientation , 'mm', $print_pdf_paper_size, TRUE);
+  $pdf = new PrintTCPDF($orientation , 'mm', $print_pdf_paper_size, TRUE);
 
   // set document information
   $pdf->SetAuthor(strip_tags($print['submitted']));
@@ -103,12 +104,31 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   $pdf->SetKeywords($keys);
   $pdf->setPDFVersion('1.6');
 
+  $logo_ret = preg_match('!src\s*=\s*(\'.*?\'|".*?"|[^\s]*)!i', $print['logo'], $matches);
+  if ($logo_ret) {
+    $logo = trim($matches[1], '\'"');
+    $path_parts = pathinfo($logo);
+    $newfilename = 'print_pdf_logo_'. user_password(8) .'.'. $path_parts['extension'];
+    copy($logo, K_PATH_IMAGES . $newfilename);
+    $size = getimagesize(K_PATH_IMAGES . $newfilename);
+    $ratio = $size[0] / $size[1];
+  }
+  else {
+    $newfilename = '';
+    $ratio = 0;
+  }
+
   // set header data
-  $pdf->SetHeaderData('', 0, $print['title'], strip_tags($print['site_name']));
+  $pdf->SetHeaderData($newfilename, 10 * $ratio, $print['title'], strip_tags($print['site_name']));
+
+  // set footer data
+  $pdf->SetFooterData($print['footer_message']);
 
   // set header and footer fonts
   $pdf->setHeaderFont(Array($font_name, '', $font_size));
   $pdf->setFooterFont(Array($font_name, '', 8));
+
+  $pdf->SetFont($font_name, '', $font_size);
 
   // set margins
   $pdf->SetMargins(15, 27, 15);
@@ -131,23 +151,24 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   $pdf->AddPage();
 
   preg_match('!<body.*?>(.*)</body>!sim', $html, $matches);
-  $matches[1] = strstr($matches[1], '<div class="print-content">');
+  $pattern = "!(?:<div>{$print['logo']}</div>|<div.*?>{$print['footer_message']}</div>|<div class=\"print-(?:site_name|breadcrumb)\">.*?</div>|<hr class=\"print-hr\" />)!i";
+  $matches[1] = preg_replace($pattern, '', $matches[1]);
 
-  $pdf->SetFont($font_name, 'B', $font_size * 1.3);
-  $pdf->writeHTML($print['title']);
-
-  if ($print['submitted']) {
-    $pdf->Ln(2);
-    $pdf->SetFont($font_name, 'B', $font_size);
-    $pdf->writeHTML($print['submitted']);
-    $pdf->SetFont($font_name, '', $font_size);
-    $pdf->writeHTML($print['created']);
+  $paragraphs = preg_split('!(<p\s*/?>|</p>)!i', $matches[1], -1, PREG_SPLIT_NO_EMPTY);
+  foreach($paragraphs as $value) {
+    $par = trim($value);
+    if (!empty($par)) {
+      $pdf->writeHTML($par .'<br />');
+    }
   }
 
-  $pdf->SetFont($font_name, '', $font_size);
-  $pdf->writeHTML($matches[1]);
+  // reset pointer to the last page
+  $pdf->lastPage();
 
   //Close and output PDF document
   $output_dest = ($print_pdf_content_disposition == 2) ? 'D' : 'I';
   $pdf->Output($filename, $output_dest);
+  if (!empty($newfilename)) {
+    unlink(K_PATH_IMAGES . $newfilename);
+  }
 }

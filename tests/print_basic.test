@@ -58,10 +58,10 @@ class PrintBasicTest extends DrupalWebTestCase {
     $url[3] = 'relative/to/base';
     $url[4] = 'index.php?q=sample/path';
     $rel_url[0] = $url[0];
-    $rel_url[1] = $_GET['q'] .$url[1];
-    $rel_url[2] = $url[2];
-    $rel_url[3] = $url[3];
-    $rel_url[4] = $url[4];
+    $rel_url[1] = $_GET['q'] . $url[1];
+    $rel_url[2] = $base_root . $url[2];
+    $rel_url[3] = $base_url .'/'. $url[3];
+    $rel_url[4] = $base_url .'/'. $url[4];
     $abs_url[0] = $url[0];
     $abs_url[1] = $base_url .'/'. $this->getq . $url[1];
     $abs_url[2] = $base_root . $url[2];

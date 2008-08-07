@@ -235,7 +235,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   if (isset($node->type)) {
     $node_type = $node->type;
 
-    if (theme_get_setting('toggle_node_info_$node_type')) {
+    if (theme_get_setting("toggle_node_info_$node_type")) {
       $by_author = ($node->name ? $node->name : variable_get('anonymous', t('Anonymous')));
       $by = (empty($themed['by'])) ? t('By %author', array('%author' => $by_author)) : ($themed['by'] .' '. $by_author);
       $print['submitted'] = $by;
@@ -313,7 +313,7 @@ function _print_rewrite_urls($matches) {
   $print_urls = variable_get('print_urls', PRINT_URLS_DEFAULT);
 
   // first, split the html into the different tag attributes
-  $pattern = '!\s*(\w+\s*=\s*"(?:\\\"|[^"])*")\s*|\s*(\w+\s*=\s*\'(?:\\\'|[^\'])*\')\s*|\s*(\w+\s*=\s\w+)\s*|\s+!im';
+  $pattern = '!\s*(\w+\s*=\s*"(?:\\\"|[^"])*")\s*|\s*(\w+\s*=\s*\'(?:\\\\\'|[^\'])*\')\s*|\s*(\w+\s*=\s*\w+)\s*|\s+!';
   $attribs = preg_split($pattern, $matches[1], -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
   foreach ($attribs as $key => $value) {
     $attribs[$key] = preg_replace('!(\w)\s*=\s*(.*)!', '$1=$2', $value);
@@ -359,6 +359,7 @@ function _print_rewrite_urls($matches) {
           else {
             $newurl = url(trim(urldecode($url), '/'), array('absolute' => TRUE));
           }
+          $matches[1] = str_replace($url, $newurl, $matches[1]);
         }
       }
     }
