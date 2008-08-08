@@ -1,6 +1,14 @@
 <?php
 // $Id$
 
+/**
+ * @file
+ * print module simpletest tests
+ *
+ * This file includes the defined tests for the Printer-friendly pages
+ * module.
+ */
+
 class PrintBasicTest extends DrupalWebTestCase {
   protected $web_user;
   protected $getq;
@@ -8,7 +16,7 @@ class PrintBasicTest extends DrupalWebTestCase {
   /**
    * Implementation of getInfo().
    */
-  function getInfo() {
+  public function getInfo() {
     return array(
       'name' => t('Printer-friendly pages basic tests'),
       'description' => t('Test basic Printer-friendly pages module functionality.'),
@@ -19,7 +27,7 @@ class PrintBasicTest extends DrupalWebTestCase {
   /**
    * Implementation of setUp().
    */
-  function setUp() {
+  public function setUp() {
     parent::setUp();
 
     // User to set up print.
@@ -35,13 +43,13 @@ class PrintBasicTest extends DrupalWebTestCase {
   /**
    * Implementation of tearDown().
    */
-  function tearDown() {
+  public function tearDown() {
     $_GET['q'] = $this->getq;
 
     parent::tearDown();
   }
-  
-  function testPrintRewriteUrls() {
+
+  public function testPrintRewriteUrls() {
     global $base_url, $base_root;
 
     //Must require it, since this function gets called via Drupal's dynamic loading

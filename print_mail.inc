@@ -116,6 +116,14 @@ function print_mail_form($form_state) {
   return $form;
 }
 
+/**
+ * Theme function for the send by-email form submission.
+ *
+ * Adds a class to the form labels. This class is used to place the label on
+ * the left of the input fields.
+ *
+ * @ingroup forms
+ */
 function theme_print_mail_form($form) {
   drupal_add_css(drupal_get_path('module', 'print') .'/printlinks.css');
   $content = '';

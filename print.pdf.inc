@@ -11,6 +11,14 @@
 
 require_once(drupal_get_path('module', 'print') .'/print.pages.inc');
 
+/**
+ * Generate a PDF version of the printer-friendly page
+ *
+ * @see print_controller()
+ * @see _print_get_template()
+ * @see _print_pdf_dompdf()
+ * @see _print_pdf_tcpdf()
+ */
 function print_pdf_controller() {
   $args = func_get_args();
   // Remove the printpdf/ prefix
@@ -43,6 +51,17 @@ function print_pdf_controller() {
   }
 }
 
+/**
+ * Generate the PDF file using the dompdf library
+ *
+ * @param $print
+ *   array containing the configured data
+ * @param $html
+ *   contents of the post-processed template already with the node data
+ * @param $filename
+ *   name of the PDF file to be generated
+ * @see print_pdf_controller()
+ */
 function _print_pdf_dompdf($print, $html, $filename) {
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
   $print_pdf_paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
@@ -59,7 +78,7 @@ function _print_pdf_dompdf($print, $html, $filename) {
   $dompdf = new DOMPDF();
   $dompdf->set_base_path($path);
   $dompdf->set_host($host);
-  $dompdf->set_paper(strtolower($print_pdf_paper_size), $print_pdf_page_orientation);
+  $dompdf->set_paper(drupal_strtolower($print_pdf_paper_size), $print_pdf_page_orientation);
   $dompdf->set_protocol($protocol);
 
   $dompdf->load_html($html);
@@ -68,6 +87,17 @@ function _print_pdf_dompdf($print, $html, $filename) {
   $dompdf->stream($filename, array('Attachment' => ($print_pdf_content_disposition == 2)));
 }
 
+/**
+ * Generate the PDF file using the TCPDF library
+ *
+ * @param $print
+ *   array containing the configured data
+ * @param $html
+ *   contents of the post-processed template already with the node data
+ * @param $filename
+ *   name of the PDF file to be generated
+ * @see print_pdf_controller()
+ */
 function _print_pdf_tcpdf($print, $html, $filename) {
   global $base_url, $base_root;
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
@@ -91,7 +121,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   require_once('print_pdf.class.inc');
 
   $font = Array('dejavusans', '', 10);
-  $orientation = strtoupper($print_pdf_page_orientation[0]);
+  $orientation = drupal_strtoupper($print_pdf_page_orientation[0]);
 
   // create new PDF document
   $pdf = new PrintTCPDF($orientation , 'mm', $print_pdf_paper_size, TRUE);
@@ -124,6 +154,17 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   $pdf->Output($filename, $output_dest);
 }
 
+/**
+ * Format the TCPDF header
+ *
+ * @param $pdf
+ *   current TCPDF object
+ * @param $html
+ *   contents of the body of the HTML from the original node
+ * @param $font
+ *   array with the font definition (font name, styles and size)
+ * @see theme_print_pdf_tcpdf_header()
+ */
 function _print_pdf_tcpdf_header_aux(&$pdf, &$html, $font) {
   preg_match('!<div class="print-logo">(.*?)</div>!si', $html, $tpl_logo);
   preg_match('!<h1 class="print-title">(.*?)</h1>!si', $html, $tpl_title);
@@ -146,6 +187,13 @@ function _print_pdf_tcpdf_header_aux(&$pdf, &$html, $font) {
   $pdf->SetHeaderData($logo, 10 * $ratio, $tpl_title[1], strip_tags($tpl_site_name[1]));
 }
 
+/**
+ * Format the TCPDF page settings (margins, etc)
+ *
+ * @param $pdf
+ *   current TCPDF object
+ * @see theme_print_pdf_tcpdf_page()
+ */
 function _print_pdf_tcpdf_page_aux(&$pdf) {
   // set margins
   $pdf->SetMargins(15, 20, 15);
@@ -157,6 +205,17 @@ function _print_pdf_tcpdf_page_aux(&$pdf) {
   $pdf->setJPEGQuality(100);
 }
 
+/**
+ * Format the TCPDF page content
+ *
+ * @param $pdf
+ *   current TCPDF object
+ * @param $html
+ *   contents of the body of the HTML from the original node
+ * @param $font
+ *   array with the font definition (font name, styles and size)
+ * @see theme_print_pdf_tcpdf_content()
+ */
 function _print_pdf_tcpdf_content_aux(&$pdf, &$html, $font) {
   // set content font
   $pdf->setFont($font[0], $font[1], $font[2]);
@@ -171,7 +230,7 @@ function _print_pdf_tcpdf_content_aux(&$pdf, &$html, $font) {
   $matches[1] = preg_replace('!(<p\s*/>|</p>)!i', '<br />', $matches[1]);
   $matches[1] = str_replace(array('<div', 'div>'), array('<p', 'p>'), $matches[1]);
   $paragraphs = preg_split('!(<p[^>]*?>|</p>)!i', $matches[1], -1, PREG_SPLIT_NO_EMPTY);
-  foreach($paragraphs as $value) {
+  foreach ($paragraphs as $value) {
     $par = trim($value);
     if (!empty($par)) {
       $pdf->writeHTML($par);
@@ -179,6 +238,17 @@ function _print_pdf_tcpdf_content_aux(&$pdf, &$html, $font) {
   }
 }
 
+/**
+ * Format the TCPDF footer contents
+ *
+ * @param $pdf
+ *   current TCPDF object
+ * @param $html
+ *   contents of the body of the HTML from the original node
+ * @param $font
+ *   array with the font definition (font name, styles and size)
+ * @see theme_print_pdf_tcpdf_footer()
+ */
 function _print_pdf_tcpdf_footer_aux(&$pdf, &$html, $font) {
   preg_match('!<div class="print-footer">(.*?)</div>!si', $html, $tpl_footer);
 
@@ -189,4 +259,28 @@ function _print_pdf_tcpdf_footer_aux(&$pdf, &$html, $font) {
   $pdf->SetFooterMargin(10);
   // set footer data
   $pdf->SetFooterData($tpl_footer[1]);
+}
+
+/**
+ * Format the TCPDF footer layout
+ *
+ * @param $pdf
+ *   current TCPDF object
+ * @see theme_print_pdf_tcpdf_footer2()
+ */
+function _print_pdf_tcpdf_footer2_aux(&$pdf) {
+  //Position at 1.5 cm from bottom
+  $pdf->writeHTMLCell(0, 15, 0, -15, $pdf->footer, 0, 0, 0, TRUE, 'C');
+
+  $ormargins = $pdf->getOriginalMargins();
+  $pagenumtxt = t('Page') .' '. $pdf->PageNo() .' / {nb}';
+  //Print page number
+  if ($pdf->getRTL()) {
+    $pdf->SetX($ormargins['right']);
+    $pdf->Cell(0, 10, $pagenumtxt, 'T', 0, 'L');
+  }
+  else {
+    $pdf->SetX($ormargins['left']);
+    $pdf->Cell(0, 10, $pagenumtxt, 'T', 0, 'R');
+  }
 }

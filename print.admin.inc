@@ -124,7 +124,7 @@ function _print_main_settings_validate($form, &$form_state) {
   // Check for a new uploaded logo, and use that instead.
   if ($file = file_save_upload('print_logo_upload', array('file_validate_is_image' => array()))) {
     $parts = pathinfo($file->filename);
-    $filename = 'print_logo.'. strtolower($parts['extension']);
+    $filename = 'print_logo.'. drupal_strtolower($parts['extension']);
 
     // The image was saved using file_save_upload() and was added to the
     // files table as a temporary file. We'll make a copy and let the garbage
@@ -136,6 +136,11 @@ function _print_main_settings_validate($form, &$form_state) {
   }
 }
 
+/**
+ * Menu callback for the Printer-friendly pages HTML settings form.
+ *
+ * @ingroup forms
+ */
 function print_html_settings() {
   $form['settings'] = array(
     '#type' => 'fieldset',
