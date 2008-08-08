@@ -30,7 +30,7 @@ a:visited {color: #000;}
 a:hover {color: #00f;}
 a:link img, a:visited img {border: 0;}
 .print-footnote {font-size: xx-small;}
-.print-logo {border: 0;}
+img.print-logo {border: 0;}
 .print-site_name {}
 .print-breadcrumb {font-size: x-small;}
 .print-title {}

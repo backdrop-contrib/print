@@ -33,6 +33,18 @@ function print_pdf_theme() {
     'print_pdf_format_link' => array(
       'arguments' => array(),
     ),
+    'print_pdf_tcpdf_header' => array(
+      'arguments' => array(),
+    ),
+    'print_pdf_tcpdf_page' => array(
+      'arguments' => array(),
+    ),
+    'print_pdf_tcpdf_content' => array(
+      'arguments' => array(),
+    ),
+    'print_pdf_tcpdf_footer' => array(
+      'arguments' => array(),
+    ),
   );
 }
 
@@ -243,7 +255,8 @@ function print_pdf_insert_link($path = NULL) {
  *   PRINT_ALLOW_BOOK_LINK if a link is allowed in a book node
  */
 function print_pdf_link_allowed($args) {
-  if ($args['teaser'] || !user_access('access print')) {
+  $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
+  if ($args['teaser'] || !user_access('access print') || (empty($print_pdf_pdf_tool))) {
     // If showing only the teaser or the user is not allowed or link is disabled
     return FALSE;
   }
@@ -299,4 +312,20 @@ function print_pdf_link_allowed($args) {
 
     return _print_page_match($print_pdf_sys_link_visibility, $print_pdf_sys_link_pages);
   }
+}
+
+function theme_print_pdf_tcpdf_header(&$pdf, &$html, $font) {
+  _print_pdf_tcpdf_header_aux($pdf, $html, $font);
+}
+
+function theme_print_pdf_tcpdf_page(&$pdf) {
+  _print_pdf_tcpdf_page_aux($pdf);
+}
+
+function theme_print_pdf_tcpdf_content(&$pdf, &$html, $font) {
+  _print_pdf_tcpdf_content_aux($pdf, $html, $font);
+}
+
+function theme_print_pdf_tcpdf_footer(&$pdf, &$html, $font) {
+  _print_pdf_tcpdf_footer_aux($pdf, $html, $font);
 }

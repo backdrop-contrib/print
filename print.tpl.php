@@ -11,7 +11,7 @@
   </head>
   <body<?php  print $print['sendtoprinter'] ?>>
     <?php if (!empty($print['message'])) print '<div class="print-message">'. $print['message'] .'</div><p />' ?>
-    <div><?php  print $print['logo'] ?></div>
+    <div class="print-logo"><?php  print $print['logo'] ?></div>
     <div class="print-site_name"><?php  print $print['site_name'] ?></div>
     <p />
     <div class="print-breadcrumb"><?php  print $print['breadcrumb'] ?></div>

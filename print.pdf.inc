@@ -69,29 +69,29 @@ function _print_pdf_dompdf($print, $html, $filename) {
 }
 
 function _print_pdf_tcpdf($print, $html, $filename) {
-  global $base_url;
+  global $base_url, $base_root;
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
   $print_pdf_paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
   $print_pdf_page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
   $print_pdf_content_disposition = variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT);
 
+  $pdf_tool_path = realpath(dirname($print_pdf_pdf_tool));
+
   define('K_TCPDF_EXTERNAL_CONFIG', TRUE);
-  define('K_PATH_MAIN', realpath(dirname($print_pdf_pdf_tool)) .'/');
-  define('K_PATH_URL', $base_url .'/'. dirname($print_pdf_pdf_tool) .'/');
-  define('K_PATH_FONTS', K_PATH_MAIN .'fonts/');
-  define('K_PATH_CACHE', K_PATH_MAIN .'cache/');
-  define('K_PATH_IMAGES', K_PATH_MAIN .'images/');
-  define('K_BLANK_IMAGE', K_PATH_IMAGES .'_blank.png');
+  define('K_PATH_MAIN', $_SERVER['DOCUMENT_ROOT']);
+  define('K_PATH_URL', $base_root);
+  define('K_PATH_FONTS', $pdf_tool_path .'/fonts/');
+  define('K_PATH_CACHE', $pdf_tool_path .'/cache/');
+  define('K_PATH_IMAGES', '');
+  define('K_BLANK_IMAGE', $pdf_tool_path .'/images/_blank.png');
   define('K_CELL_HEIGHT_RATIO', 1.25);
   define('K_SMALL_RATIO', 2/3);
 
   require_once($print_pdf_pdf_tool);
   require_once('print_pdf.class.inc');
 
-  $font_name = 'dejavusans';
-  $font_size = 10;
-
-  $orientation = strtoupper($print_pdf_page_orientation{0});
+  $font = Array('dejavusans', '', 10);
+  $orientation = strtoupper($print_pdf_page_orientation[0]);
 
   // create new PDF document
   $pdf = new PrintTCPDF($orientation , 'mm', $print_pdf_paper_size, TRUE);
@@ -104,45 +104,9 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   $pdf->SetKeywords($keys);
   $pdf->setPDFVersion('1.6');
 
-  $ratio = 0;
-  $logofile = '';
-  $logo_ret = preg_match('!src\s*=\s*(\'.*?\'|".*?"|[^\s]*)!i', $print['logo'], $matches);
-  if ($logo_ret) {
-    $logo = trim($matches[1], '\'"');
-    $path_parts = pathinfo($logo);
-    $newfilename = 'print_pdf_logo_'. user_password(8) .'.'. $path_parts['extension'];
-    if (copy($logo, K_PATH_IMAGES . $newfilename)) {
-      $size = getimagesize(K_PATH_IMAGES . $newfilename);
-      $ratio = $size[0] / $size[1];
-      $logofile = $newfilename;
-    }
-  }
-
-  // set header data
-  $pdf->SetHeaderData($logofile, 10 * $ratio, $print['title'], strip_tags($print['site_name']));
-
-  // set footer data
-  $pdf->SetFooterData($print['footer_message']);
-
-  // set header and footer fonts
-  $pdf->setHeaderFont(Array($font_name, '', $font_size));
-  $pdf->setFooterFont(Array($font_name, '', 8));
-
-  $pdf->SetFont($font_name, '', $font_size);
-
-  // set margins
-  $pdf->SetMargins(15, 27, 15);
-  $pdf->SetHeaderMargin(5);
-  $pdf->SetFooterMargin(10);
-
-  // set auto page breaks
-  $pdf->SetAutoPageBreak(TRUE, 25);
-
-  // set image scale factor
-  $pdf->setImageScale(4);
-
-  // set image compression quality
-  $pdf->setJPEGQuality(100);
+  theme('print_pdf_tcpdf_header', $pdf, $html, $font);
+  theme('print_pdf_tcpdf_footer', $pdf, $html, $font);
+  theme('print_pdf_tcpdf_page', $pdf);
 
   //initialize document
   $pdf->AliasNbPages();
@@ -150,17 +114,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   // add a page
   $pdf->AddPage();
 
-  preg_match('!<body.*?>(.*)</body>!sim', $html, $matches);
-  $pattern = "!(?:<div>{$print['logo']}</div>|<div.*?>{$print['footer_message']}</div>|<div class=\"print-(?:site_name|breadcrumb)\">.*?</div>|<hr class=\"print-hr\" />)!i";
-  $matches[1] = preg_replace($pattern, '', $matches[1]);
-
-  $paragraphs = preg_split('!(<p\s*/?>|</p>)!i', $matches[1], -1, PREG_SPLIT_NO_EMPTY);
-  foreach($paragraphs as $value) {
-    $par = trim($value);
-    if (!empty($par)) {
-      $pdf->writeHTML($par .'<br />');
-    }
-  }
+  theme('print_pdf_tcpdf_content', $pdf, $html, $font);
 
   // reset pointer to the last page
   $pdf->lastPage();
@@ -168,7 +122,71 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   //Close and output PDF document
   $output_dest = ($print_pdf_content_disposition == 2) ? 'D' : 'I';
   $pdf->Output($filename, $output_dest);
-  if (!empty($newfilename)) {
-    unlink(K_PATH_IMAGES . $newfilename);
+}
+
+function _print_pdf_tcpdf_header_aux(&$pdf, &$html, $font) {
+  preg_match('!<div class="print-logo">(.*?)</div>!si', $html, $tpl_logo);
+  preg_match('!<h1 class="print-title">(.*?)</h1>!si', $html, $tpl_title);
+  preg_match('!<div class="print-site_name">(.*?)</div>!si', $html, $tpl_site_name);
+
+  $ratio = 0;
+  $logo = '';
+  $logo_ret = preg_match('!src\s*=\s*(\'.*?\'|".*?"|[^\s]*)!i', $tpl_logo[1], $matches);
+  if ($logo_ret) {
+    $logo = trim($matches[1], '\'"');
+    $size = getimagesize($logo);
+    $ratio = $size[0] / $size[1];
   }
+
+  // set header font
+  $pdf->setHeaderFont($font);
+  // set header margin
+  $pdf->SetHeaderMargin(5);
+  // set header data
+  $pdf->SetHeaderData($logo, 10 * $ratio, $tpl_title[1], strip_tags($tpl_site_name[1]));
+}
+
+function _print_pdf_tcpdf_page_aux(&$pdf) {
+  // set margins
+  $pdf->SetMargins(15, 20, 15);
+  // set auto page breaks
+  $pdf->SetAutoPageBreak(TRUE, 15);
+  // set image scale factor
+  $pdf->setImageScale(4);
+  // set image compression quality
+  $pdf->setJPEGQuality(100);
+}
+
+function _print_pdf_tcpdf_content_aux(&$pdf, &$html, $font) {
+  // set content font
+  $pdf->setFont($font[0], $font[1], $font[2]);
+
+  preg_match('!<body.*?>(.*)</body>!sim', $html, $matches);
+  $pattern = '!(?:<div class="print-(?:logo|site_name|breadcrumb|footer)">.*?</div>|<hr class="print-hr" />)!si';
+  $matches[1] = preg_replace($pattern, '', $matches[1]);
+
+//  $pdf->writeHTML($matches[1]);
+
+  // Since TCPDF's writeHTML is so bad with <p>, do everything possible to make it look nice
+  $matches[1] = preg_replace('!(<p\s*/>|</p>)!i', '<br />', $matches[1]);
+  $matches[1] = str_replace(array('<div', 'div>'), array('<p', 'p>'), $matches[1]);
+  $paragraphs = preg_split('!(<p[^>]*?>|</p>)!i', $matches[1], -1, PREG_SPLIT_NO_EMPTY);
+  foreach($paragraphs as $value) {
+    $par = trim($value);
+    if (!empty($par)) {
+      $pdf->writeHTML($par);
+    }
+  }
+}
+
+function _print_pdf_tcpdf_footer_aux(&$pdf, &$html, $font) {
+  preg_match('!<div class="print-footer">(.*?)</div>!si', $html, $tpl_footer);
+
+  // set footer font
+  $font[2] *= 0.8;
+  $pdf->setFooterFont($font);
+  // set footer margin
+  $pdf->SetFooterMargin(10);
+  // set footer data
+  $pdf->SetFooterData($tpl_footer[1]);
 }
