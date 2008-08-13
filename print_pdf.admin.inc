@@ -163,7 +163,19 @@ function print_pdf_settings() {
     );
   }
 
+  $form['#validate'][] = '_print_pdf_settings_validate';
+
   return system_settings_form($form);
+}
+
+/**
+ * Validate print_pdf_settings form.
+ */
+function _print_pdf_settings_validate($form, &$form_state) {
+  $font_size = $form_state['values']['print_pdf_font_size'];
+  if ($font_size < 1) {
+    form_set_error('print_pdf_font_size', t("Font size must be at least 1."));
+  }
 }
 
 /**
