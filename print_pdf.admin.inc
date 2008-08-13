@@ -144,7 +144,7 @@ function print_pdf_settings() {
       '#default_value' => variable_get('print_pdf_font_family', PRINT_PDF_FONT_FAMILY_DEFAULT),
       '#size' => 60,
       '#maxlength' => 250,
-      '#description' => t('(TCPDF only) Set the font family to be used. Examples: %examples.', array ('%examples' => 'helvetica, times, courier, dejavusans, dejavuserif, freesans, freeserif, freemono')) .'<br />'.
+      '#description' => t('(TCPDF only) Set the font family to be used. Examples: %examples.', array('%examples' => 'helvetica, times, courier, dejavusans, dejavuserif, freesans, freeserif, freemono')) .'<br />'.
                         t("CAUTION: TCPDF embeds the complete font in the generated PDF. If you're not using Unicode, then helvetica or times are safe choices that will keep the PDF small. Unicode fonts can increase the size of the PDF to the 1MB region."),
     );
     $form['settings']['print_pdf_font_size'] = array(
