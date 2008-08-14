@@ -5,8 +5,7 @@
  * @file
  * print module simpletest tests
  *
- * This file includes the defined tests for the Printer-friendly pages
- * module.
+ * This file includes the defined tests for the print module.
  */
 
 class PrintBasicTest extends DrupalWebTestCase {
@@ -18,9 +17,9 @@ class PrintBasicTest extends DrupalWebTestCase {
    */
   public function getInfo() {
     return array(
-      'name' => t('Printer-friendly pages basic tests'),
-      'description' => t('Test basic Printer-friendly pages module functionality.'),
-      'group' => t('Printer-friendly pages'),
+      'name' => t('Printer, e-mail and PDF versions tests'),
+      'description' => t('Unit tests for the print, print_mail and print_pdf modules.'),
+      'group' => t('Printer, e-mail and PDF versions'),
     );
   }
 

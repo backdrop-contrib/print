@@ -125,7 +125,7 @@ function print_mail_form($form_state) {
  * @ingroup forms
  */
 function theme_print_mail_form($form) {
-  drupal_add_css(drupal_get_path('module', 'print') .'/printlinks.css');
+  drupal_add_css(drupal_get_path('module', 'print') .'/css/printlinks.css');
   $content = '';
   foreach (element_children($form) as $key) {
     $tmp = drupal_render($form[$key]);
