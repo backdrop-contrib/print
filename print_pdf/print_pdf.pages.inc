@@ -118,7 +118,12 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   define('K_SMALL_RATIO', 2/3);
 
   require_once($print_pdf_pdf_tool);
-  require_once('print_pdf.class.inc');
+  if (version_compare(PHP_VERSION, '5.0.0', '>')) {
+    require_once('print_pdf.class.inc');
+  }
+  else {
+    require_once('print_pdf.class_php4.inc');
+  }
 
   $font = Array(
     variable_get('print_pdf_font_family', PRINT_PDF_FONT_FAMILY_DEFAULT),
@@ -254,7 +259,7 @@ function _print_pdf_tcpdf_content_aux(&$pdf, &$html, $font) {
  * @see theme_print_pdf_tcpdf_footer()
  */
 function _print_pdf_tcpdf_footer_aux(&$pdf, &$html, $font) {
-  preg_match('!<div class="print-footer">(.*?)</div>!si', $html, $tpl_footer);
+  preg_match('!<div class="print-footer">.*<div class="content">(.*?)</div>!si', $html, $tpl_footer);
 
   // set footer font
   $font[2] *= 0.8;
@@ -274,10 +279,10 @@ function _print_pdf_tcpdf_footer_aux(&$pdf, &$html, $font) {
  */
 function _print_pdf_tcpdf_footer2_aux(&$pdf) {
   //Position at 1.5 cm from bottom
-  $pdf->writeHTMLCell(0, 15, 0, -15, $pdf->footer, 0, 0, 0, TRUE, 'C');
+  $pdf->writeHTMLCell(0, 15, 15, 0, $pdf->footer, 0, 0, 0, TRUE, '');
 
   $ormargins = $pdf->getOriginalMargins();
-  $pagenumtxt = t('Page') .' '. $pdf->PageNo() .' / {nb}';
+  $pagenumtxt = t('Page') .' '. $pdf->PageNo() .' / '. $pdf->getAliasNbPages();
   //Print page number
   if ($pdf->getRTL()) {
     $pdf->SetX($ormargins['right']);
