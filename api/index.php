@@ -1,6 +1,11 @@
 <?php
 // $Id$
 
+/**
+ * @file
+ * Homepage of the API reference
+ */
+
 /** @mainpage Developer Documentation
  * Welcome to the module developer's documentation. The interesting functions for
  * themers are those that start with 'theme_'.

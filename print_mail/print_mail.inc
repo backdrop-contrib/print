@@ -205,8 +205,6 @@ function print_mail_form_validate($form, &$form_state) {
  * @ingroup forms
  */
 function print_mail_form_submit($form, &$form_state) {
-  global $language;
-
   if (!empty($form_state['values']['fld_from_name'])) {
     $from = $form_state['values']['fld_from_name'] .' <'. $form_state['values']['fld_from_addr'] .'>';
   }

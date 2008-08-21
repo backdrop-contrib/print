@@ -99,7 +99,7 @@ function _print_pdf_dompdf($print, $html, $filename) {
  * @see print_pdf_controller()
  */
 function _print_pdf_tcpdf($print, $html, $filename) {
-  global $base_url, $base_root;
+  global $base_url;
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
   $print_pdf_paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
   $print_pdf_page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
@@ -108,8 +108,8 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   $pdf_tool_path = realpath(dirname($print_pdf_pdf_tool));
 
   define('K_TCPDF_EXTERNAL_CONFIG', TRUE);
-  define('K_PATH_MAIN', $_SERVER['DOCUMENT_ROOT']);
-  define('K_PATH_URL', $base_root);
+  define('K_PATH_MAIN', dirname($_SERVER['SCRIPT_FILENAME']));
+  define('K_PATH_URL', $base_url);
   define('K_PATH_FONTS', $pdf_tool_path .'/fonts/');
   define('K_PATH_CACHE', $pdf_tool_path .'/cache/');
   define('K_PATH_IMAGES', '');
