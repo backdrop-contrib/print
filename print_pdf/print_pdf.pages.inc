@@ -81,14 +81,6 @@ function _print_pdf_dompdf($print, $html, $filename) {
   $dompdf->set_paper(drupal_strtolower($print_pdf_paper_size), $print_pdf_page_orientation);
   $dompdf->set_protocol($protocol);
 
-$text = '<script type="text/php">
-if ( isset($pdf) ) {
-  $font = Font_Metrics::get_font("verdana", "bold");
-  $pdf->page_text(72, 18, "Fancy Header", $font, 20, array(0,0,0));
-}
-</script>';
-  $html = str_replace("<body>", "<body>" . $text, $html);
-
   $dompdf->load_html($html);
 
   $dompdf->render();
@@ -126,7 +118,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   define('K_SMALL_RATIO', 2/3);
 
   require_once($print_pdf_pdf_tool);
-  if (version_compare(PHP_VERSION, '5.0.0', '>')) {
+  if (strpos(PDF_PRODUCER, 'PHP4') === FALSE) {
     require_once('print_pdf.class.inc');
   }
   else {
