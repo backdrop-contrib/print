@@ -220,12 +220,11 @@ function print_mail_insert_link($path = NULL) {
  *   PRINT_ALLOW_BOOK_LINK if a link is allowed in a book node
  */
 function print_mail_link_allowed($args) {
-  if ($args['teaser'] || !user_access('access print')) {
+  if (!empty($args['teaser']) || !user_access('access print')) {
     // If showing only the teaser or the user is not allowed or link is disabled
     return FALSE;
   }
-  $node = $args['node'];
-  if (isset($node) && $node) {
+  if (!empty($args['node'])) {
     static $node_type = FALSE;
     if (($node_type === FALSE) && isset($node->type)) {
       $node_type = $node->type;
@@ -237,12 +236,12 @@ function print_mail_link_allowed($args) {
     $print_mail_node_link_visibility = variable_get('print_mail_node_link_visibility', PRINT_MAIL_NODE_LINK_VISIBILITY_DEFAULT);
     $print_mail_node_link_pages = variable_get('print_mail_node_link_pages', PRINT_MAIL_NODE_LINK_PAGES_DEFAULT);
 
-    if ($node->printing || 
+    if (!empty($node->printing) || 
         !_print_page_match($print_mail_node_link_visibility, $print_mail_node_link_pages)) {
       // Page not in visibility list or we are working!
       return FALSE;
     }
-    elseif (($args['type'] == 'comment') && isset($node_type)) {
+    elseif (isset($args['type']) && ($args['type'] == 'comment') && isset($node_type)) {
       // Link is for a comment, return the configured setting
       return variable_get('print_mail_display_comment_'. $node_type, PRINT_TYPE_COMMENT_LINK_DEFAULT);
     }
