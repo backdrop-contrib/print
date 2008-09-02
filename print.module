@@ -489,7 +489,7 @@ function print_query_string_encode($query, $exclude = array(), $parent = '') {
     }
 
     if (is_array($value)) {
-      $params[] = drupal_query_string_encode($value, $exclude, $key);
+      $params[] = print_query_string_encode($value, $exclude, $key);
     }
     else {
       $params[] = $key .'='. rawurlencode($value);
