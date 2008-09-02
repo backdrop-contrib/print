@@ -268,6 +268,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   }
 
   // Display the collected links at the bottom of the page. Code once taken from Kjartan Mannes' project.module
+  $print['pfp_links'] = '';
   if (!empty($print_urls)) {
     $urls = _print_friendly_urls();
     $max = count($urls);
