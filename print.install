@@ -99,3 +99,12 @@ function print_update_6000() {
   }
   return $ret;
 }
+
+/**
+ * Update to version 6.x-1.0
+ */
+function print_update_6001() {
+  $ret = array();
+  menu_rebuild();
+  return $ret;
+}
