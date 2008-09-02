@@ -326,7 +326,7 @@ function print_pdf_link_allowed($args) {
  * @ingroup themeable
  */
 function theme_print_pdf_tcpdf_header(&$pdf, &$html, $font) {
-  _print_pdf_tcpdf_header_aux($pdf, $html, $font);
+  return _print_pdf_tcpdf_header_aux($pdf, $html, $font);
 }
 
 /**
@@ -337,7 +337,7 @@ function theme_print_pdf_tcpdf_header(&$pdf, &$html, $font) {
  * @ingroup themeable
  */
 function theme_print_pdf_tcpdf_page(&$pdf) {
-  _print_pdf_tcpdf_page_aux($pdf);
+  return _print_pdf_tcpdf_page_aux($pdf);
 }
 
 /**
@@ -352,7 +352,7 @@ function theme_print_pdf_tcpdf_page(&$pdf) {
  * @ingroup themeable
  */
 function theme_print_pdf_tcpdf_content(&$pdf, &$html, $font) {
-  _print_pdf_tcpdf_content_aux($pdf, $html, $font);
+  return _print_pdf_tcpdf_content_aux($pdf, $html, $font);
 }
 
 /**
@@ -367,7 +367,7 @@ function theme_print_pdf_tcpdf_content(&$pdf, &$html, $font) {
  * @ingroup themeable
  */
 function theme_print_pdf_tcpdf_footer(&$pdf, &$html, $font) {
-  _print_pdf_tcpdf_footer_aux($pdf, $html, $font);
+  return _print_pdf_tcpdf_footer_aux($pdf, $html, $font);
 }
 
 /**
@@ -378,5 +378,5 @@ function theme_print_pdf_tcpdf_footer(&$pdf, &$html, $font) {
  * @ingroup themeable
  */
 function theme_print_pdf_tcpdf_footer2(&$pdf) {
-  _print_pdf_tcpdf_footer2_aux($pdf);
+  return _print_pdf_tcpdf_footer2_aux($pdf);
 }

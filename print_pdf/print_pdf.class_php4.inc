@@ -19,6 +19,6 @@ class PrintTCPDF extends TCPDF {
 
   //Page footer
   function Footer() {
-    theme('print_pdf_tcpdf_footer2', $this);
+    $this = theme('print_pdf_tcpdf_footer2', $this);
   }
 }

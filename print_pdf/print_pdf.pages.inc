@@ -119,10 +119,10 @@ function _print_pdf_tcpdf($print, $html, $filename) {
 
   require_once($print_pdf_pdf_tool);
   if (strpos(PDF_PRODUCER, 'PHP4') === FALSE) {
-    require_once('print_pdf.class.inc');
+    require_once(drupal_get_path('module', 'print_pdf') .'/print_pdf.class.inc');
   }
   else {
-    require_once('print_pdf.class_php4.inc');
+    require_once(drupal_get_path('module', 'print_pdf') .'/print_pdf.class_php4.inc');
   }
 
   $font = Array(
@@ -143,9 +143,9 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   $pdf->SetKeywords($keys);
   $pdf->setPDFVersion('1.6');
 
-  theme('print_pdf_tcpdf_header', $pdf, $html, $font);
-  theme('print_pdf_tcpdf_footer', $pdf, $html, $font);
-  theme('print_pdf_tcpdf_page', $pdf);
+  $pdf = theme('print_pdf_tcpdf_header', $pdf, $html, $font);
+  $pdf = theme('print_pdf_tcpdf_footer', $pdf, $html, $font);
+  $pdf = theme('print_pdf_tcpdf_page', $pdf);
 
   //initialize document
   $pdf->AliasNbPages();
@@ -153,7 +153,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   // add a page
   $pdf->AddPage();
 
-  theme('print_pdf_tcpdf_content', $pdf, $html, $font);
+  $pdf = theme('print_pdf_tcpdf_content', $pdf, $html, $font);
 
   // reset pointer to the last page
   $pdf->lastPage();
@@ -194,6 +194,8 @@ function _print_pdf_tcpdf_header_aux(&$pdf, &$html, $font) {
   $pdf->SetHeaderMargin(5);
   // set header data
   $pdf->SetHeaderData($logo, 10 * $ratio, $tpl_title[1], strip_tags($tpl_site_name[1]));
+
+  return $pdf;
 }
 
 /**
@@ -212,6 +214,8 @@ function _print_pdf_tcpdf_page_aux(&$pdf) {
   $pdf->setImageScale(4);
   // set image compression quality
   $pdf->setJPEGQuality(100);
+
+  return $pdf;
 }
 
 /**
@@ -245,6 +249,8 @@ function _print_pdf_tcpdf_content_aux(&$pdf, &$html, $font) {
       $pdf->writeHTML($par);
     }
   }
+
+  return $pdf;
 }
 
 /**
@@ -268,6 +274,8 @@ function _print_pdf_tcpdf_footer_aux(&$pdf, &$html, $font) {
   $pdf->SetFooterMargin(10);
   // set footer data
   $pdf->SetFooterData($tpl_footer[1]);
+
+  return $pdf;
 }
 
 /**
@@ -292,4 +300,6 @@ function _print_pdf_tcpdf_footer2_aux(&$pdf) {
     $pdf->SetX($ormargins['left']);
     $pdf->Cell(0, 10, $pagenumtxt, 'T', 0, 'R');
   }
+
+  return $pdf;
 }
