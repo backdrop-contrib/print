@@ -4,24 +4,24 @@
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:
 #  print.admin.inc,v 1.19 2008/08/08 22:02:34 jcnventura
-#  print.pages.inc,v 1.36 2008/08/07 00:39:25 jcnventura
-#  print_mail.admin.inc,v 1.9 2008/08/04 19:10:07 jcnventura
-#  print_pdf.admin.inc,v 1.19 2008/08/13 18:19:02 jcnventura
-#  print.pdf.inc,v 1.25 2008/08/13 11:36:51 jcnventura
-#  print_mail.inc,v 1.13 2008/08/08 22:02:34 jcnventura
-#  print_mail.module,v 1.17 2008/08/07 00:39:25 jcnventura
-#  print.module,v 1.66 2008/08/07 00:39:25 jcnventura
-#  print.info,v 1.5 2008/05/06 23:22:10 jcnventura
-#  print_mail.info,v 1.1 2008/05/26 17:10:10 jcnventura
-#  print_pdf.info,v 1.3 2008/04/22 20:41:05 jcnventura
-#  print_pdf.module,v 1.31 2008/08/13 11:36:51 jcnventura
+#  print.pages.inc,v 1.37 2008/08/14 12:00:28 jcnventura
+#  print_mail.admin.inc,v 1.1 2008/08/14 12:00:29 jcnventura
+#  print_pdf.admin.inc,v 1.1 2008/08/14 12:00:30 jcnventura
+#  print.module,v 1.69 2008/09/01 21:29:43 jcnventura
+#  print.info,v 1.6 2008/08/14 12:00:28 jcnventura
+#  print_mail.info,v 1.1 2008/08/14 12:00:29 jcnventura
+#  print_pdf.info,v 1.1 2008/08/14 12:00:30 jcnventura
+#  print_mail.module,v 1.2 2008/09/01 21:18:32 jcnventura
+#  print_pdf.module,v 1.2 2008/09/01 21:18:32 jcnventura
 #  print.install,v 1.9 2008/08/06 00:18:45 jcnventura
+#  print_mail.inc,v 1.2 2008/08/21 01:19:47 jcnventura
+#  print_pdf.pages.inc,v 1.5 2008/09/01 23:52:59 jcnventura
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2008-08-13 21:41+0200\n"
+"POT-Creation-Date: 2008-09-02 03:26+0200\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -150,11 +150,11 @@ msgstr ""
 msgid "Printer-friendly page link"
 msgstr ""
 
-#: print.admin.inc:154 print_mail.admin.inc:27 print_pdf.admin.inc:40
+#: print.admin.inc:154 print_mail/print_mail.admin.inc:27 print_pdf/print_pdf.admin.inc:40
 msgid "Links area"
 msgstr ""
 
-#: print.admin.inc:154 print_mail.admin.inc:27 print_pdf.admin.inc:40
+#: print.admin.inc:154 print_mail/print_mail.admin.inc:27 print_pdf/print_pdf.admin.inc:40
 msgid "Content corner"
 msgstr ""
 
@@ -162,55 +162,55 @@ msgstr ""
 msgid "Choose the location of the link(s) to the printer-friendly page. The Links area is usually below the node content, whereas the Content corner is placed in the upper-right corner of the node content. Unselect all options to disable the link. Even if the link is disabled, you can still view the print version of a node by going to !path/nid where nid is the numeric id of the node."
 msgstr ""
 
-#: print.admin.inc:160 print_mail.admin.inc:33 print_pdf.admin.inc:46
+#: print.admin.inc:160 print_mail/print_mail.admin.inc:33 print_pdf/print_pdf.admin.inc:46
 msgid "Advanced link options"
 msgstr ""
 
-#: print.admin.inc:167 print_mail.admin.inc:40 print_pdf.admin.inc:53
+#: print.admin.inc:167 print_mail/print_mail.admin.inc:40 print_pdf/print_pdf.admin.inc:53
 msgid "Link style"
 msgstr ""
 
-#: print.admin.inc:169 print_mail.admin.inc:42 print_pdf.admin.inc:55
+#: print.admin.inc:169 print_mail/print_mail.admin.inc:42 print_pdf/print_pdf.admin.inc:55
 msgid "Text only"
 msgstr ""
 
-#: print.admin.inc:169 print_mail.admin.inc:42 print_pdf.admin.inc:55
+#: print.admin.inc:169 print_mail/print_mail.admin.inc:42 print_pdf/print_pdf.admin.inc:55
 msgid "Icon only"
 msgstr ""
 
-#: print.admin.inc:169 print_mail.admin.inc:42 print_pdf.admin.inc:55
+#: print.admin.inc:169 print_mail/print_mail.admin.inc:42 print_pdf/print_pdf.admin.inc:55
 msgid "Icon and Text"
 msgstr ""
 
-#: print.admin.inc:170 print_mail.admin.inc:43 print_pdf.admin.inc:56
+#: print.admin.inc:170 print_mail/print_mail.admin.inc:43 print_pdf/print_pdf.admin.inc:56
 msgid "Select the visual style of the link."
 msgstr ""
 
-#: print.admin.inc:175 print_mail.admin.inc:48 print_pdf.admin.inc:61
+#: print.admin.inc:175 print_mail/print_mail.admin.inc:48 print_pdf/print_pdf.admin.inc:61
 msgid "Link visibility"
 msgstr ""
 
-#: print.admin.inc:177;200 print_mail.admin.inc:50;73 print_pdf.admin.inc:63;86
+#: print.admin.inc:177;200 print_mail/print_mail.admin.inc:50;73 print_pdf/print_pdf.admin.inc:63;86
 msgid "Show on every page except the listed pages."
 msgstr ""
 
-#: print.admin.inc:177;200 print_mail.admin.inc:50;73 print_pdf.admin.inc:63;86
+#: print.admin.inc:177;200 print_mail/print_mail.admin.inc:50;73 print_pdf/print_pdf.admin.inc:63;86
 msgid "Show on only the listed pages."
 msgstr ""
 
-#: print.admin.inc:184;208 print_mail.admin.inc:57;81 print_pdf.admin.inc:70;94
+#: print.admin.inc:184;208 print_mail/print_mail.admin.inc:57;81 print_pdf/print_pdf.admin.inc:70;94
 msgid "Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page."
 msgstr ""
 
-#: print.admin.inc:189 print_mail.admin.inc:62 print_pdf.admin.inc:75
+#: print.admin.inc:189 print_mail/print_mail.admin.inc:62 print_pdf/print_pdf.admin.inc:75
 msgid "Link class"
 msgstr ""
 
-#: print.admin.inc:193 print_mail.admin.inc:66 print_pdf.admin.inc:79
+#: print.admin.inc:193 print_mail/print_mail.admin.inc:66 print_pdf/print_pdf.admin.inc:79
 msgid "This can be used by themers to change the link style or by jQuery modules to open in a new window (e.g. greybox or thickbox). Multiple classes can be specified, separated by spaces."
 msgstr ""
 
-#: print.admin.inc:198 print_mail.admin.inc:71 print_pdf.admin.inc:84
+#: print.admin.inc:198 print_mail/print_mail.admin.inc:71 print_pdf/print_pdf.admin.inc:84
 msgid "Show link in system (non-content) pages"
 msgstr ""
 
@@ -294,244 +294,8 @@ msgstr ""
 msgid "Links"
 msgstr ""
 
-#: print.pdf.inc:280
-msgid "Page"
-msgstr ""
-
-#: print_mail.admin.inc:20
-msgid "Send by e-mail options"
-msgstr ""
-
-#: print_mail.admin.inc:25
-msgid "Send by e-mail link"
-msgstr ""
-
-#: print_mail.admin.inc:28
-msgid "Choose the location of the link(s) to the send by e-mail page. The Links area is usually below the node content, whereas the Content corner is placed in the upper-right corner of the node content. Unselect all options to disable the link. Even if the link is disabled, you can still send a node by e-mail by going to !path/nid where nid is the numeric id of the node."
-msgstr ""
-
-#: print_mail.admin.inc:80
-msgid "Setting this option will add a send by-email link on pages created by Drupal or the enabled modules."
-msgstr ""
-
-#: print_mail.admin.inc:86 print_pdf.admin.inc:99
-msgid "Show link in book nodes"
-msgstr ""
-
-#: print_mail.admin.inc:88
-msgid "Activate this to add a send by e-mail link in book nodes. Requires the (core) book module."
-msgstr ""
-
-#: print_mail.admin.inc:93
-msgid "Hourly threshold"
-msgstr ""
-
-#: print_mail.admin.inc:96
-msgid "The maximum number of e-mails a user can send per hour."
-msgstr ""
-
-#: print_mail.admin.inc:101 print_mail.inc:78
-msgid "Send only the teaser"
-msgstr ""
-
-#: print_mail.admin.inc:103
-msgid "If selected, the default choice will be to send only the node's teaser instead of the full content."
-msgstr ""
-
-#: print_mail.admin.inc:108
-msgid "Enable teaser/full mode choice"
-msgstr ""
-
-#: print_mail.admin.inc:110
-msgid "If checked, the user will be able to choose between sending the full content or only the teaser at send time."
-msgstr ""
-
-#: print_mail.inc:27
-msgid "You cannot send more than %number messages per hour. Please try again later."
-msgstr ""
-
-#: print_mail.inc:49
-msgid "Your e-mail"
-msgstr ""
-
-#: print_mail.inc:54
-msgid "Your name"
-msgstr ""
-
-#: print_mail.inc:59
-msgid "Send to"
-msgstr ""
-
-#: print_mail.inc:62
-msgid "Enter multiple addresses separated by commas and/or different lines."
-msgstr ""
-
-#: print_mail.inc:66
-msgid "Subject"
-msgstr ""
-
-#: print_mail.inc:71
-msgid "Your message"
-msgstr ""
-
-#: print_mail.inc:88
-msgid "Send e-mail"
-msgstr ""
-
-#: print_mail.inc:92
-msgid "Clear form"
-msgstr ""
-
-#: print_mail.inc:97
-msgid "Cancel"
-msgstr ""
-
-#: print_mail.inc:110
-msgid "Someone"
-msgstr ""
-
-#: print_mail.inc:112
-msgid "an interesting site"
-msgstr ""
-
-#: print_mail.inc:113
-msgid "!user has sent you a message from !site"
-msgstr ""
-
-#: print_mail.inc:187
-msgid "You must enter a subject."
-msgstr ""
-
-#: print_mail.inc:191
-msgid "You must enter a message."
-msgstr ""
-
-#: print_mail.inc:228
-msgid "us"
-msgstr ""
-
-#: print_mail.inc:229
-msgid "Thank you for spreading the word about !site."
-msgstr ""
-
-#: print_mail.inc:240
-msgid "Message from sender:"
-msgstr ""
-
-#: print_mail.inc:270
-msgid "The form has been reset to the default values."
-msgstr ""
-
-#: print_mail.inc:227 print_mail.module:0
-msgid "print_mail"
-msgstr ""
-
-#: print_mail.inc:227
-msgid "%name [%from] sent %page to [%to]"
-msgstr ""
-
-#: print_pdf.admin.inc:24
-msgid "PDF options"
-msgstr ""
-
-#: print_pdf.admin.inc:29
-msgid "PDF generation tool"
-msgstr ""
-
-#: print_pdf.admin.inc:32
-msgid "This option selects the PDF generation tool being used by this module to create the PDF version."
-msgstr ""
-
-#: print_pdf.admin.inc:38
-msgid "PDF version link"
-msgstr ""
-
-#: print_pdf.admin.inc:41
-msgid "Choose the location of the link(s) to the PDF version. The Links area is usually below the node content, whereas the Content corner is placed in the upper-right corner of the node content. Unselect all options to disable the link. Even if the link is disabled, you can still view the PDF version of a node by going to !path/nid where nid is the numeric id of the node."
-msgstr ""
-
-#: print_pdf.admin.inc:93
-msgid "Setting this option will add a PDF version page link on pages created by Drupal or the enabled modules."
-msgstr ""
-
-#: print_pdf.admin.inc:101
-msgid "Activate this to add a PDF version link in book nodes. Requires the (core) book module."
-msgstr ""
-
-#: print_pdf.admin.inc:106
-msgid "Open PDF in"
-msgstr ""
-
-#: print_pdf.admin.inc:107
-msgid "Same browser window"
-msgstr ""
-
-#: print_pdf.admin.inc:107
-msgid "New browser window"
-msgstr ""
-
-#: print_pdf.admin.inc:107
-msgid "Save dialog"
-msgstr ""
-
-#: print_pdf.admin.inc:109
-msgid "Select the desired method for opening the PDF in the user's browser."
-msgstr ""
-
-#: print_pdf.admin.inc:114
-msgid "Paper size"
-msgstr ""
-
-#: print_pdf.admin.inc:131
-msgid "Choose the paper size of the generated PDF."
-msgstr ""
-
-#: print_pdf.admin.inc:136
-msgid "Page orientation"
-msgstr ""
-
-#: print_pdf.admin.inc:137
-msgid "Portrait"
-msgstr ""
-
-#: print_pdf.admin.inc:137
-msgid "Landscape"
-msgstr ""
-
-#: print_pdf.admin.inc:139
-msgid "Choose the page orientation of the generated PDF."
-msgstr ""
-
-#: print_pdf.admin.inc:143
-msgid "Font Family"
-msgstr ""
-
-#: print_pdf.admin.inc:147
-msgid "(TCPDF only) Set the font family to be used. Examples: %examples."
-msgstr ""
-
-#: print_pdf.admin.inc:148
-msgid "CAUTION: TCPDF embeds the complete font in the generated PDF. If you're not using Unicode, then helvetica or times are safe choices that will keep the PDF small. Unicode fonts can increase the size of the PDF to the 1MB region."
-msgstr ""
-
-#: print_pdf.admin.inc:152
-msgid "Font Size"
-msgstr ""
-
-#: print_pdf.admin.inc:156
-msgid "(TCPDF only) Set the font size to be used for normal text. This is the base value for the scaling applied to other text styles."
-msgstr ""
-
-#: print_pdf.admin.inc:162
-msgid "No PDF generation tool found! Please dowload a supported PHP PDF generation tool. Check this module's INSTALL.txt for more details."
-msgstr ""
-
-#: print_pdf.admin.inc:177
-msgid "Font size must be at least 1."
-msgstr ""
-
-#: print.module:212;81 print.info:0 print_mail.info:0 print_pdf.info:0
-msgid "Printer-friendly pages"
+#: print.module:212 print.info:0 print_mail/print_mail.info:0 print_pdf/print_pdf.info:0
+msgid "Printer, e-mail and PDF versions"
 msgstr ""
 
 #: print.module:219
@@ -542,7 +306,7 @@ msgstr ""
 msgid "Displays the link to a printer-friendly version of the content. Further configuration is available on the !settings."
 msgstr ""
 
-#: print.module:221;227 print_mail.module:161;167 print_pdf.module:196;202
+#: print.module:221;227 print_mail/print_mail.module:157;163 print_pdf/print_pdf.module:192;198
 msgid "settings page"
 msgstr ""
 
@@ -574,6 +338,10 @@ msgstr ""
 msgid "Printer-friendly"
 msgstr ""
 
+#: print.module:81
+msgid "Printer-friendly pages"
+msgstr ""
+
 #: print.module:82 print.info:0
 msgid "Adds a printer-friendly version link to content and administrative pages."
 msgstr ""
@@ -590,82 +358,6 @@ msgstr ""
 msgid "print"
 msgstr ""
 
-#: print_mail.module:159
-msgid "Show send by e-mail link"
-msgstr ""
-
-#: print_mail.module:161
-msgid "Displays a link to send the content by e-mail. Further configuration is available on the !settings."
-msgstr ""
-
-#: print_mail.module:165
-msgid "Show send by e-mail link in individual comments"
-msgstr ""
-
-#: print_mail.module:167
-msgid "Displays a link to send the comment by e-mail. Further configuration is available on the !settings."
-msgstr ""
-
-#: print_mail.module:183
-msgid "Send to friend"
-msgstr ""
-
-#: print_mail.module:185
-msgid "Send this page by e-mail."
-msgstr ""
-
-#: print_mail.module:49
-msgid "Send page by e-mail"
-msgstr ""
-
-#: print_mail.module:57
-msgid "e-mail"
-msgstr ""
-
-#: print_pdf.module:194
-msgid "Show PDF version link"
-msgstr ""
-
-#: print_pdf.module:196
-msgid "Displays the link to a PDF version of the content. Further configuration is available on the !settings."
-msgstr ""
-
-#: print_pdf.module:200
-msgid "Show PDF version link in individual comments"
-msgstr ""
-
-#: print_pdf.module:202
-msgid "Displays the link to a PDF version of the comment. Further configuration is available on the !settings."
-msgstr ""
-
-#: print_pdf.module:219 print_pdf.info:0
-msgid "PDF version"
-msgstr ""
-
-#: print_pdf.module:221
-msgid "Display a PDF version of this page."
-msgstr ""
-
-#: (duplicate) print_pdf.module:94 
-msgid "Print PDF"
-msgstr ""
-
-#: (duplicate) print_pdf.module:95 
-msgid "No PDF tool selected. Please configure it in the <a href=\"@url\">PDF settings page</a>."
-msgstr ""
-
-#: print_pdf.module:63
-msgid "Printer-friendly PDF"
-msgstr ""
-
-#: print_pdf.module:70
-msgid "PDF"
-msgstr ""
-
-#: print_pdf.module:0
-msgid "print_pdf"
-msgstr ""
-
 #: (duplicate) print.install:14 
 msgid "Printer-friendly Page settings are available under !link"
 msgstr ""
@@ -674,15 +366,327 @@ msgstr ""
 msgid "Printer-friendly pages (core)"
 msgstr ""
 
-#: print_mail.info:0
+#: print_mail/print_mail.admin.inc:20
+msgid "Send by e-mail options"
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:25
+msgid "Send by e-mail link"
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:28
+msgid "Choose the location of the link(s) to the send by e-mail page. The Links area is usually below the node content, whereas the Content corner is placed in the upper-right corner of the node content. Unselect all options to disable the link. Even if the link is disabled, you can still send a node by e-mail by going to !path/nid where nid is the numeric id of the node."
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:80
+msgid "Setting this option will add a send by-email link on pages created by Drupal or the enabled modules."
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:86 print_pdf/print_pdf.admin.inc:99
+msgid "Show link in book nodes"
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:88
+msgid "Activate this to add a send by e-mail link in book nodes. Requires the (core) book module."
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:93
+msgid "Hourly threshold"
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:96
+msgid "The maximum number of e-mails a user can send per hour."
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:101 print_mail/print_mail.inc:78
+msgid "Send only the teaser"
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:103
+msgid "If selected, the default choice will be to send only the node's teaser instead of the full content."
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:108
+msgid "Enable teaser/full mode choice"
+msgstr ""
+
+#: print_mail/print_mail.admin.inc:110
+msgid "If checked, the user will be able to choose between sending the full content or only the teaser at send time."
+msgstr ""
+
+#: print_mail/print_mail.inc:27
+msgid "You cannot send more than %number messages per hour. Please try again later."
+msgstr ""
+
+#: print_mail/print_mail.inc:49
+msgid "Your e-mail"
+msgstr ""
+
+#: print_mail/print_mail.inc:54
+msgid "Your name"
+msgstr ""
+
+#: print_mail/print_mail.inc:59
+msgid "Send to"
+msgstr ""
+
+#: print_mail/print_mail.inc:62
+msgid "Enter multiple addresses separated by commas and/or different lines."
+msgstr ""
+
+#: print_mail/print_mail.inc:66
+msgid "Subject"
+msgstr ""
+
+#: print_mail/print_mail.inc:71
+msgid "Your message"
+msgstr ""
+
+#: print_mail/print_mail.inc:88
+msgid "Send e-mail"
+msgstr ""
+
+#: print_mail/print_mail.inc:92
+msgid "Clear form"
+msgstr ""
+
+#: print_mail/print_mail.inc:97
+msgid "Cancel"
+msgstr ""
+
+#: print_mail/print_mail.inc:110
+msgid "Someone"
+msgstr ""
+
+#: print_mail/print_mail.inc:112
+msgid "an interesting site"
+msgstr ""
+
+#: print_mail/print_mail.inc:113
+msgid "!user has sent you a message from !site"
+msgstr ""
+
+#: print_mail/print_mail.inc:187
+msgid "You must enter a subject."
+msgstr ""
+
+#: print_mail/print_mail.inc:191
+msgid "You must enter a message."
+msgstr ""
+
+#: print_mail/print_mail.inc:226
+msgid "us"
+msgstr ""
+
+#: print_mail/print_mail.inc:227
+msgid "Thank you for spreading the word about !site."
+msgstr ""
+
+#: print_mail/print_mail.inc:238
+msgid "Message from sender:"
+msgstr ""
+
+#: print_mail/print_mail.inc:268
+msgid "The form has been reset to the default values."
+msgstr ""
+
+#: print_mail/print_mail.inc:225 print_mail/print_mail.module:0
+msgid "print_mail"
+msgstr ""
+
+#: print_mail/print_mail.inc:225
+msgid "%name [%from] sent %page to [%to]"
+msgstr ""
+
+#: print_mail/print_mail.module:155
+msgid "Show send by e-mail link"
+msgstr ""
+
+#: print_mail/print_mail.module:157
+msgid "Displays a link to send the content by e-mail. Further configuration is available on the !settings."
+msgstr ""
+
+#: print_mail/print_mail.module:161
+msgid "Show send by e-mail link in individual comments"
+msgstr ""
+
+#: print_mail/print_mail.module:163
+msgid "Displays a link to send the comment by e-mail. Further configuration is available on the !settings."
+msgstr ""
+
+#: print_mail/print_mail.module:179
+msgid "Send to friend"
+msgstr ""
+
+#: print_mail/print_mail.module:181
+msgid "Send this page by e-mail."
+msgstr ""
+
+#: print_mail/print_mail.module:45
+msgid "Send page by e-mail"
+msgstr ""
+
+#: print_mail/print_mail.module:53
+msgid "e-mail"
+msgstr ""
+
+#: print_mail/print_mail.info:0
 msgid "Send by e-mail"
 msgstr ""
 
-#: print_mail.info:0
+#: print_mail/print_mail.info:0
 msgid "Provides the capability to send the web page by e-mail"
 msgstr ""
 
-#: print_pdf.info:0
+#: print_pdf/print_pdf.admin.inc:24
+msgid "PDF options"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:29
+msgid "PDF generation tool"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:32
+msgid "This option selects the PDF generation tool being used by this module to create the PDF version."
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:38
+msgid "PDF version link"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:41
+msgid "Choose the location of the link(s) to the PDF version. The Links area is usually below the node content, whereas the Content corner is placed in the upper-right corner of the node content. Unselect all options to disable the link. Even if the link is disabled, you can still view the PDF version of a node by going to !path/nid where nid is the numeric id of the node."
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:93
+msgid "Setting this option will add a PDF version page link on pages created by Drupal or the enabled modules."
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:101
+msgid "Activate this to add a PDF version link in book nodes. Requires the (core) book module."
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:106
+msgid "Open PDF in"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:107
+msgid "Same browser window"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:107
+msgid "New browser window"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:107
+msgid "Save dialog"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:109
+msgid "Select the desired method for opening the PDF in the user's browser."
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:114
+msgid "Paper size"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:131
+msgid "Choose the paper size of the generated PDF."
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:136
+msgid "Page orientation"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:137
+msgid "Portrait"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:137
+msgid "Landscape"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:139
+msgid "Choose the page orientation of the generated PDF."
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:143
+msgid "Font Family"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:147
+msgid "(TCPDF only) Set the font family to be used. Examples: %examples."
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:148
+msgid "CAUTION: TCPDF embeds the complete font in the generated PDF. If you're not using Unicode, then helvetica or times are safe choices that will keep the PDF small. Unicode fonts can increase the size of the PDF to the 1MB region."
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:152
+msgid "Font Size"
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:156
+msgid "(TCPDF only) Set the font size to be used for normal text. This is the base value for the scaling applied to other text styles."
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:162
+msgid "No PDF generation tool found! Please dowload a supported PHP PDF generation tool. Check this module's INSTALL.txt for more details."
+msgstr ""
+
+#: print_pdf/print_pdf.admin.inc:177
+msgid "Font size must be at least 1."
+msgstr ""
+
+#: print_pdf/print_pdf.pages.inc:293
+msgid "Page"
+msgstr ""
+
+#: print_pdf/print_pdf.module:190
+msgid "Show PDF version link"
+msgstr ""
+
+#: print_pdf/print_pdf.module:192
+msgid "Displays the link to a PDF version of the content. Further configuration is available on the !settings."
+msgstr ""
+
+#: print_pdf/print_pdf.module:196
+msgid "Show PDF version link in individual comments"
+msgstr ""
+
+#: print_pdf/print_pdf.module:198
+msgid "Displays the link to a PDF version of the comment. Further configuration is available on the !settings."
+msgstr ""
+
+#: print_pdf/print_pdf.module:215 print_pdf/print_pdf.info:0
+msgid "PDF version"
+msgstr ""
+
+#: print_pdf/print_pdf.module:217
+msgid "Display a PDF version of this page."
+msgstr ""
+
+#: (duplicate) print_pdf/print_pdf.module:90 
+msgid "Print PDF"
+msgstr ""
+
+#: (duplicate) print_pdf/print_pdf.module:91 
+msgid "No PDF tool selected. Please configure it in the <a href=\"@url\">PDF settings page</a>."
+msgstr ""
+
+#: print_pdf/print_pdf.module:59
+msgid "Printer-friendly PDF"
+msgstr ""
+
+#: print_pdf/print_pdf.module:66
+msgid "PDF"
+msgstr ""
+
+#: print_pdf/print_pdf.module:0
+msgid "print_pdf"
+msgstr ""
+
+#: print_pdf/print_pdf.info:0
 msgid "Adds the capability to export pages as PDF."
 msgstr ""
 
