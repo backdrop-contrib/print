@@ -414,6 +414,8 @@ function print_link_allowed($args) {
   }
   if (!empty($args['node'])) {
     static $node_type = FALSE;
+
+    $node = $args['node'];
     if (($node_type === FALSE) && isset($node->type)) {
       $node_type = $node->type;
     }
