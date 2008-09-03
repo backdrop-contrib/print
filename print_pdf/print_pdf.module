@@ -265,11 +265,13 @@ function print_pdf_link_allowed($args) {
     static $node_type = FALSE;
 
     $node = $args['node'];
-    if (($node_type === FALSE) && isset($node->type)) {
-      $node_type = $node->type;
-    }
-    else {
-      $node_type = '';
+    if ($node_type === FALSE) {
+      if (isset($node->type)) {
+        $node_type = $node->type;
+      }
+      else {
+        $node_type = '';
+      }
     }
     // Node
     $print_pdf_node_link_visibility = variable_get('print_pdf_node_link_visibility', PRINT_PDF_NODE_LINK_VISIBILITY_DEFAULT);
