@@ -31,6 +31,9 @@ function print_pdf_theme() {
     'print_pdf_format_link' => array(
       'arguments' => array(),
     ),
+    'print_pdf_dompdf_footer' => array(
+      'arguments' => array(),
+    ),
     'print_pdf_tcpdf_header' => array(
       'arguments' => array(),
     ),
@@ -316,6 +319,17 @@ function print_pdf_link_allowed($args) {
 
     return _print_page_match($print_pdf_sys_link_visibility, $print_pdf_sys_link_pages);
   }
+}
+
+/**
+ * Format the dompdf footer contents
+ *
+ * @param $html
+ *   contents of the body of the HTML from the original node
+ * @ingroup themeable
+ */
+function theme_print_pdf_dompdf_footer(&$html) {
+  return _print_pdf_dompdf_footer_aux($html);
 }
 
 /**

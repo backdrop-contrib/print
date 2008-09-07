@@ -81,6 +81,8 @@ function _print_pdf_dompdf($print, $html, $filename) {
   $dompdf->set_paper(drupal_strtolower($print_pdf_paper_size), $print_pdf_page_orientation);
   $dompdf->set_protocol($protocol);
 
+  $html = theme('print_pdf_dompdf_footer', $html);
+
   $dompdf->load_html($html);
 
   $dompdf->render();
@@ -161,6 +163,49 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   //Close and output PDF document
   $output_dest = ($print_pdf_content_disposition == 2) ? 'D' : 'I';
   $pdf->Output($filename, $output_dest);
+}
+
+/**
+ * Format the dompdf footer contents
+ *
+ * @param $html
+ *   contents of the body of the HTML from the original node
+ * @see theme_print_pdf_tcpdf_footer()
+ */
+function _print_pdf_dompdf_footer_aux(&$html) {
+  preg_match('!<div class="print-footer">(.*?)</div>!si', $html, $tpl_footer);
+  $html = str_replace($tpl_footer[0], '', $html);
+
+  $text = '<script type="text/php">
+    if (isset($pdf)) {
+      $font = Font_Metrics::get_font("verdana");;
+      $size = 10;
+      $color = array(0,0,0);
+      $text_height = Font_Metrics::get_font_height($font, $size);
+
+      $w = $pdf->get_width();
+      $h = $pdf->get_height();
+
+      $footer = $pdf->open_object();
+
+      // Draw a line along the bottom
+      $y = $h - 25;
+      $pdf->line(15, $y, $w - 15, $y, $color, 1);
+
+      $y += $text_height / 2;
+      $pdf->page_text(15, $y, \''. strip_tags($tpl_footer[1]) .'\', $font, $size, $color);
+
+      $pdf->close_object();
+      $pdf->add_object($footer, "all");
+
+      // Center the text
+      $width = Font_Metrics::get_text_width("Page 1 of 2", $font, $size);
+      $pagenumtxt = t("Page !n of !total", array("!n" => "{PAGE_NUM}", "!total" => "{PAGE_COUNT}"));
+      $pdf->page_text($w - 15 - $width, $y, $pagenumtxt, $font, $size, $color);
+    }
+  </script>';
+
+  return str_replace("<body>", "<body>" . $text, $html);
 }
 
 /**
@@ -265,7 +310,8 @@ function _print_pdf_tcpdf_content_aux(&$pdf, &$html, $font) {
  * @see theme_print_pdf_tcpdf_footer()
  */
 function _print_pdf_tcpdf_footer_aux(&$pdf, &$html, $font) {
-  preg_match('!<div class="print-footer">.*<div class="content">(.*?)</div>!si', $html, $tpl_footer);
+  preg_match('!<div class="print-footer">(.*?)</div>!si', $html, $tpl_footer);
+  $footer = trim(preg_replace('!</?div[^>]*?>!i', '', $tpl_footer[1]));
 
   // set footer font
   $font[2] *= 0.8;
@@ -273,7 +319,7 @@ function _print_pdf_tcpdf_footer_aux(&$pdf, &$html, $font) {
   // set footer margin
   $pdf->SetFooterMargin(10);
   // set footer data
-  $pdf->SetFooterData($tpl_footer[1]);
+  $pdf->SetFooterData($footer);
 
   return $pdf;
 }
@@ -290,7 +336,7 @@ function _print_pdf_tcpdf_footer2_aux(&$pdf) {
   $pdf->writeHTMLCell(0, 15, 15, 0, $pdf->footer, 0, 0, 0, TRUE, '');
 
   $ormargins = $pdf->getOriginalMargins();
-  $pagenumtxt = t('Page') .' '. $pdf->PageNo() .' / '. $pdf->getAliasNbPages();
+  $pagenumtxt = t('Page !n of !total', array('!n' => $pdf->PageNo(), '!total' => $pdf->getAliasNbPages()));
   //Print page number
   if ($pdf->getRTL()) {
     $pdf->SetX($ormargins['right']);

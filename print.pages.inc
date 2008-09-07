@@ -138,6 +138,8 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   $print_sourceurl_enabled = variable_get('print_sourceurl_enabled', PRINT_SOURCEURL_ENABLED_DEFAULT);
   $print_sourceurl_forcenode = variable_get('print_sourceurl_forcenode', PRINT_SOURCEURL_FORCENODE_DEFAULT);
   $print_sourceurl_date = variable_get('print_sourceurl_date', PRINT_SOURCEURL_DATE_DEFAULT);
+  $print_footer_options = variable_get('print_footer_options', PRINT_FOOTER_OPTIONS_DEFAULT);
+  $print_footer_user = variable_get('print_footer_user', PRINT_FOOTER_USER_DEFAULT);
 
   $print['language'] = $language->language;
   $print['title'] = $node->title;
@@ -200,6 +202,20 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
       break;
   }
   $print['logo'] = $logo_url ? "<img class='print-logo' src='$logo_url' alt='' />\n" : '';
+
+  switch ($print_footer_options) {
+    case 0: // none
+      $footer = '';
+      break;
+    case 1: // theme's
+      $footer = filter_xss_admin(variable_get('site_footer', FALSE)) ."\n". theme('blocks', 'footer');
+      $logo_url = theme_get_setting('logo');
+      break;
+    case 2: // user-specifed
+      $footer = $print_footer_user;
+      break;
+  }
+  $print['footer_message'] = $footer;
 
   $published_site = variable_get('site_name', 0);
   if ($published_site) {
@@ -290,7 +306,6 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   $print['content'] = $node->body;
   $print['node'] = $node;
   $print['message'] = $message;
-  $print['footer_message'] = filter_xss_admin(variable_get('site_footer', FALSE)) ."\n". theme('blocks', 'footer') ;
 
   return $print;
 }

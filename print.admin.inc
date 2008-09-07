@@ -83,6 +83,29 @@ function print_main_settings() {
     '#description' => t("If you don't have direct file access to the server, use this field to upload your logo."),
   );
 
+  $form['settings']['footer'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Footer options'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  $form['settings']['footer']['print_footer_options'] = array(
+    '#type' => 'radios',
+    '#title' => t('Footer type'),
+    '#options' => array(t('None (Disabled)'), t("Site's footer"), t('User-specified')),
+    '#default_value' => variable_get('print_footer_options', PRINT_FOOTER_OPTIONS_DEFAULT),
+    '#description' => t("Select the type of footer to display on the printer-friendly version. In case of a user-specified footer, insert it below."),
+  );
+
+  $form['settings']['footer']['print_footer_user'] = array(
+    '#type' => 'textfield',
+    '#title' => t('User-specified'),
+    '#default_value' => variable_get('print_footer_user', PRINT_FOOTER_USER_DEFAULT),
+    '#size' => 60,
+    '#maxlength' => 250,
+  );
+
   $form['settings']['print_sourceurl_settings'] = array(
     '#type' => 'fieldset',
     '#title' => t('Source URL'),
