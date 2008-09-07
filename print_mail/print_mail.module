@@ -256,7 +256,7 @@ function print_mail_link_allowed($args) {
         // Link for this node type is disabled
         return FALSE;
       }
-      elseif (($node_type == 'book') || isset($node->book)) {
+      elseif (isset($node->book)) {
         // Node is a book;
         $print_mail_book_link = variable_get('print_mail_book_link', PRINT_MAIL_BOOK_LINK_DEFAULT);
         if (!$print_mail_book_link || !user_access('access printer-friendly version')) {
