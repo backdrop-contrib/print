@@ -150,30 +150,34 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   $print['base_href'] = "<base href='". $print['url'] ."' />\n";
   $print['favicon'] = theme_get_setting('toggle_favicon') ? "<link rel='shortcut icon' href='". theme_get_setting('favicon') ."' type='image/x-icon' />\n" : '';
 
-  $css_files = array();
   if (!empty($print_css)) {
     $replace_pairs = array('%b' => base_path(), '%t' => path_to_theme());
-    $css_files[] = strip_tags(strtr($print_css, $replace_pairs));
+    $user_css = strip_tags(strtr($print_css, $replace_pairs));
   }
   else {
-    $css_files[] = base_path() . drupal_get_path('module', 'print') .'/css/print.css';
+    drupal_add_css(drupal_get_path('module', 'print') .'/css/print.css');
   }
-  // If the current language is RTL add the RTL stylesheet.
-  if (defined('LANGUAGE_RTL') && $language->direction == LANGUAGE_RTL) {
-    $css_files[] = base_path() . drupal_get_path('module', 'print') .'/css/print-rtl.css';
-  }
-  // Add CCK's CSS file to properly display the fields
-  if (module_exists('content')) {
-    $css_files[] = base_path() . drupal_get_path('module', 'content') .'/theme/content.css';
+  $drupal_css = drupal_add_css();
+  foreach ($drupal_css as $key => $types) {
+    // Unset the theme's CSS
+    $drupal_css[$key]['theme'] = array();
   }
 
   // If we are sending a message via e-mail, the CSS must be embedded
   if (!empty($message)) {
     $style = '';
-    $pattern = '!^'. base_path() .'!';
-    foreach ($css_files as $filename) {
+    $css_files = array();
+    foreach ($drupal_css as $types) {
+      foreach ($types as $values) {
+        $css_files = array_merge($css_files, array_keys($values));
+      }
+    }
+    if (!empty($print_css)) {
       // Convert to a local path, by removing the base_path
-      $filename = preg_replace($pattern, '', $filename);
+      $pattern = '!^'. base_path() .'!';
+      $css_files[] = preg_replace($pattern, '', $user_css);
+    }
+    foreach ($css_files as $filename) {
       $res = file_get_contents($filename, TRUE);
       if ($res != FALSE) {
         $style .= $res;
@@ -182,9 +186,9 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
     $print['css'] = "<style type='text/css' media='all'>$style</style>\n";
   }
   else {
-    $print['css'] = '';
-    foreach ($css_files as $value) {
-      $print['css'] .= "<link type='text/css' rel='stylesheet' media='all' href='$value' />\n";
+    $print['css'] = drupal_get_css($drupal_css);
+    if (!empty($print_css)) {
+      $print['css'] .= "<link type='text/css' rel='stylesheet' media='all' href='$user_css' />\n";
     }
   }
 
