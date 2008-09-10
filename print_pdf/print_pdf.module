@@ -173,6 +173,9 @@ function print_pdf_nodeapi(&$node, $op = 'view', $teaser, $page) {
         if ($allowed_type === PRINT_ALLOW_BOOK_LINK) {
           $path = PRINTPDF_PATH .'/book/export/html/'. $node->nid;
         }
+        else {
+          $path = NULL;
+        }
         $link = print_pdf_insert_link($path);
         $node->content['print_pdf_link'] = array(
           '#value' => "<span class='print-link'>$link</span>",
@@ -241,6 +244,9 @@ function print_pdf_insert_link($path = NULL) {
       if (empty($query)) {
         $query = NULL;
       }
+    }
+    else {
+      $query = NULL;
     }
     $format = theme('print_pdf_format_link');
     return '<span class="print_pdf">'. l($format['text'], $path, array('attributes' => $format['attributes'], 'query' => $query, 'absolute' => TRUE, 'html' => $format['html'])) .'</span>';
