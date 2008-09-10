@@ -49,19 +49,6 @@ When updating from a previous version, just remove the print directory and
 follow the instructions above. Make sure that you backup any costumization
 to the print.tpl.php and print.css files.
 
-CONFIGURATION
--------------
-
-Configure access rules: Administer > User management > Access control
-  (admin/user/access)
- access print: Enable access to the PF page and display of the PF link in
-               other pages. (default: disabled) 
- administer print: Enable access to the module settings page. 
-                   (default: disabled)
-
-Configure the module: Administer > Site configuration > Printer-friendly
-    (admin/settings/print)
-
 ROBOTS
 ------
 
