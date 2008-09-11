@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Drupal Printer Friendly Pages V6.x-1.0-rc9\n"
-"POT-Creation-Date: 2008-09-10 22:57+0200\n"
-"PO-Revision-Date: 2008-09-11 01:29+0100\n"
-"Last-Translator: \n"
+"Project-Id-Version: Drupal Printer Friendly Pages V6.x-1.0\n"
+"POT-Creation-Date: 2008-09-11 18:28+0200\n"
+"PO-Revision-Date: 2008-09-11 18:32+0100\n"
+"Last-Translator: Frank Tartler <frank.tartler@googlemail.com>\n"
 "Language-Team: Frank Tartler <frank.tartler@drupal.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -104,19 +104,19 @@ msgstr "Falls kein direkter Dateizugriff auf den Server besteht, kann dieses Fel
 
 #: print.admin.inc:88
 msgid "Footer options"
-msgstr ""
+msgstr "Fußzeilen-Optionen"
 
 #: print.admin.inc:95
 msgid "Footer type"
-msgstr ""
+msgstr "Fußzeilen-Typ"
 
 #: print.admin.inc:96
 msgid "Site's footer"
-msgstr ""
+msgstr "Fußzeile der Website"
 
 #: print.admin.inc:98
 msgid "Select the type of footer to display on the printer-friendly version. In case of a user-specified footer, insert it below."
-msgstr ""
+msgstr "Auswahl des Fußzeilen-Typs, der auf der druckoptimierten Version angezeigt wird. Im Falle einer benutzerdefinierten Fußzeile unten eingeben."
 
 #: print.admin.inc:111
 #: print.pages.inc:248

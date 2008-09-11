@@ -34,7 +34,7 @@ dompdf support:
 
 TCPDF support:
   TCPDF seems to be more actively developed than dompdf, but it's support
-  for CSS is considerably worse.
+  for CSS is considerably worse. This module requires TCPDF >= 4.0.000.
 
   1. Download TCPDF from http://sourceforge.net/projects/tcpdf/
   2. Extract the contents of the downloaded package into the print module
