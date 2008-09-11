@@ -57,8 +57,10 @@ print.tpl.php or the css/print.css files.
 API
 ---
 
-The following function is available to content developers that prefer to
-place the printer-friendly link in a custom location. It is advisable to
+print_insert_link(), print_mail_insert_link(), print_pdf_insert_link()
+
+The *_insert_link functions are available to content developers that prefer
+to place the printer-friendly link in a custom location. It is advisable to
 disable the regular Printer-friendly link so that it is not shown in both
 locations.
 
@@ -80,12 +82,33 @@ THEMEABLE FUNCTIONS
 
 The following themeable functions are defined:
 
-  theme_print_format_link()
-  Returns an array of formatted attributes for the Printer-friendly link.
+  * theme_print_format_link()
+  * theme_print_mail_format_link()
+  * theme_print_pdf_format_link()
+      Returns an array of formatted attributes for the Printer-friendly
+      link.
 
-  theme_print_text()
-  Returns an array of costumized text strings used in the printer-friendly
-  page.
+  * theme_print_text()
+    Returns an array of costumized text strings used in the printer-friendly
+    page.
+
+  * print_pdf_dompdf_footer($html)
+    Format the dompdf footer contents
+
+  * print_pdf_tcpdf_header($pdf, $html, $font)
+    Format the TCPDF header
+
+  * print_pdf_tcpdf_page($pdf)
+    Format the TCPDF page settings (margins, etc)
+
+  * print_pdf_tcpdf_content($pdf, $html, $font)
+    Format the TCPDF page content
+
+  * print_pdf_tcpdf_footer($pdf, $html, $font)
+    Format the TCPDF footer contents
+
+  * print_pdf_tcpdf_footer2($pdf)
+    Format the TCPDF footer layout
 
 MORE INFORMATION
 ----------------
@@ -97,3 +120,5 @@ ACKNOWLEDGMENTS
 ---------------
 The print, pdf and mail icons are copyright Plone Foundation. Thanks for
 letting me use them!
+
+// $Id$
