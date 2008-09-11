@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Drupal Printer Friendly Pages V6.x-1.0\n"
 "POT-Creation-Date: 2008-09-11 18:28+0200\n"
-"PO-Revision-Date: 2008-09-11 18:45+0100\n"
+"PO-Revision-Date: 2008-09-11 18:48+0100\n"
 "Last-Translator: Frank Tartler <frank.tartler@googlemail.com>\n"
 "Language-Team: Frank Tartler <frank.tartler@drupal.org>\n"
 "MIME-Version: 1.0\n"
@@ -141,7 +141,7 @@ msgstr "Zeige Datum und Uhrzeit in der Quellen-URL-Zeile an."
 
 #: print.admin.inc:132
 msgid "Force use of node ID in source URL"
-msgstr "Erzwinge die Verwendung der Node ID in der Quellen-URL."
+msgstr "Erzwingt die Verwendung der Beitrags-ID in der Quellen-URL."
 
 #: print.admin.inc:134
 msgid "Drupal will attempt to use the page's defined alias in case there is one. To force the use of the fixed URL, activate this option."
