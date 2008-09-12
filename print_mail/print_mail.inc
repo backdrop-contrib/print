@@ -24,7 +24,7 @@ function print_mail_form($form_state) {
   if (!flood_is_allowed('print_mail', $print_mail_hourly_threshold)) {
     $form['flood'] = array(
       '#type' => 'markup',
-      '#value' => '<p>'. t('You cannot send more than %number messages per hour. Please try again later.', array('%number' => $print_mail_hourly_threshold)) .'</p>',
+      '#markup' => '<p>'. t('You cannot send more than %number messages per hour. Please try again later.', array('%number' => $print_mail_hourly_threshold)) .'</p>',
     );
     return $form;
   }

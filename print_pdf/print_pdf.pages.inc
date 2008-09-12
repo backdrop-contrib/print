@@ -124,7 +124,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
     require_once(drupal_get_path('module', 'print_pdf') .'/print_pdf.class.inc');
   }
   else {
-    require_once(drupal_get_path('module', 'print_pdf') .'/print_pdf.class_php4.inc');
+    // Use only the PHP5 version of TCPDF
   }
 
   $font = Array(

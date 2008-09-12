@@ -49,7 +49,10 @@ define('PRINT_ALLOW_BOOK_LINK', 2);
  * Implementation of hook_perm().
  */
 function print_perm() {
-  return array('access print', 'administer print');
+  return array(
+    'access print' => t('Access the printer-friendly page'),
+    'administer print' => t('Perform maintenance tasks for the print module'),
+  );
 }
 
 /**
@@ -77,7 +80,6 @@ function print_menu() {
     'page callback' => 'print_controller_html',
     'access arguments' => array('access print'),
     'type' => MENU_CALLBACK,
-    'file' => 'print.pages.inc',
   );
   $items['admin/settings/print'] = array(
     'title' => 'Printer-friendly pages',
@@ -85,7 +87,6 @@ function print_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_html_settings'),
     'access arguments'  => array('administer print'),
-    'file' => 'print.admin.inc',
   );
   $items['admin/settings/print/html'] = array(
     'title' => 'Web page',
@@ -99,7 +100,6 @@ function print_menu() {
     'access arguments'  => array('administer print'),
     'weight' => 10,
     'type' => MENU_LOCAL_TASK,
-    'file' => 'print.admin.inc',
   );
 
   return $items;

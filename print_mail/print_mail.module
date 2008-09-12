@@ -47,7 +47,6 @@ function print_mail_menu() {
     'page arguments' => array('print_mail_form'),
     'access arguments' => array('access print'),
     'type' => MENU_CALLBACK,
-    'file' => 'print_mail.inc',
   );
   $items['admin/settings/print/mail'] = array(
     'title' => 'e-mail',
@@ -56,7 +55,6 @@ function print_mail_menu() {
     'access arguments'  => array('administer print'),
     'weight' => 2,
     'type' => MENU_LOCAL_TASK,
-    'file' => 'print_mail.admin.inc',
   );
 
   return $items;

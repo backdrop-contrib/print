@@ -2,5 +2,8 @@
 name = "Send by e-mail"
 description = "Provides the capability to send the web page by e-mail"
 dependencies[] = print
-core=6.x
+core=7.x
 package = "Printer, e-mail and PDF versions"
+files[] = print_mail.module
+files[] = print_mail.inc
+files[] = print_mail.admin.inc

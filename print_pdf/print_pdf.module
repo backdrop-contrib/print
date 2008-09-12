@@ -63,7 +63,6 @@ function print_pdf_menu() {
     'page callback' => 'print_pdf_controller',
     'access arguments' => array('access print'),
     'type' => MENU_CALLBACK,
-    'file' => 'print_pdf.pages.inc',
   );
   $items['admin/settings/print/pdf'] = array(
     'title' => 'PDF',
@@ -72,7 +71,6 @@ function print_pdf_menu() {
     'access arguments'  => array('administer print'),
     'weight' => 3,
     'type' => MENU_LOCAL_TASK,
-    'file' => 'print_pdf.admin.inc',
   );
 
   return $items;
