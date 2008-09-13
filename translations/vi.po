@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: print\n"
 "POT-Creation-Date: 2008-09-10 22:57+0200\n"
-"PO-Revision-Date: 2008-09-11 01:36+0100\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2008-09-13 14:02+0700\n"
+"Last-Translator: The Hong Truong <thehongtt@gmail.com>\n"
 "Language-Team: Vietnamese <thehong@toila.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,7 +19,7 @@ msgstr ""
 
 #: print.admin.inc:20
 msgid "Common Settings"
-msgstr ""
+msgstr "Các thiết lập chung"
 
 #: print.admin.inc:25
 msgid "Stylesheet URL"
@@ -67,11 +67,11 @@ msgstr "Chọn phương thức được sử dụng để mở các trang trong 
 
 #: print.admin.inc:57
 msgid "Logo options"
-msgstr ""
+msgstr "Các tùy chọn cho biểu huy"
 
 #: print.admin.inc:64
 msgid "Logo type"
-msgstr ""
+msgstr "Kiểu biểu huy"
 
 #: print.admin.inc:65;96
 msgid "None (Disabled)"
@@ -79,7 +79,7 @@ msgstr "Không (bị vô hiệu)"
 
 #: print.admin.inc:65
 msgid "Current theme's logo"
-msgstr ""
+msgstr "Biểu huy hiện tại của giao diện"
 
 #: print.admin.inc:65;96;103
 msgid "User-specified"
@@ -95,7 +95,7 @@ msgstr "Logo URL"
 
 #: print.admin.inc:80
 msgid "Upload logo"
-msgstr ""
+msgstr "Tải biểu huy lên"
 
 #: print.admin.inc:83
 msgid "If you don't have direct file access to the server, use this field to upload your logo."
@@ -158,7 +158,7 @@ msgstr "Liên kết trang bản in"
 #: print_mail/print_mail.admin.inc:27
 #: print_pdf/print_pdf.admin.inc:40
 msgid "Links area"
-msgstr ""
+msgstr "Vị trí các liên kết"
 
 #: print.admin.inc:177
 #: print_mail/print_mail.admin.inc:27
@@ -333,7 +333,7 @@ msgstr "Các liên kết"
 #: print_mail/print_mail.info:0
 #: print_pdf/print_pdf.info:0
 msgid "Printer, e-mail and PDF versions"
-msgstr ""
+msgstr "Các phiên bản ở dạng trang in, email và PDF"
 
 #: print.module:224
 msgid "Show printer-friendly version link"
@@ -388,11 +388,11 @@ msgstr "Thên link đến bản in vào các trang nội dung và các trang đi
 
 #: print.module:91
 msgid "Web page"
-msgstr ""
+msgstr "Trang web"
 
 #: print.module:96
 msgid "Settings"
-msgstr ""
+msgstr "Thiết lập"
 
 #: print.module:0
 msgid "print"
@@ -409,7 +409,7 @@ msgstr "Các trang bản in"
 
 #: print_mail/print_mail.admin.inc:20
 msgid "Send by e-mail options"
-msgstr ""
+msgstr "Các tùy chọn gửi qua email"
 
 #: print_mail/print_mail.admin.inc:25
 msgid "Send by e-mail link"
@@ -443,7 +443,7 @@ msgstr ""
 #: print_mail/print_mail.admin.inc:101
 #: print_mail/print_mail.inc:78
 msgid "Send only the teaser"
-msgstr ""
+msgstr "Chỉ gửi bản cắt"
 
 #: print_mail/print_mail.admin.inc:103
 msgid "If selected, the default choice will be to send only the node's teaser instead of the full content."
@@ -451,7 +451,7 @@ msgstr ""
 
 #: print_mail/print_mail.admin.inc:108
 msgid "Enable teaser/full mode choice"
-msgstr ""
+msgstr "Kích hoạt tùy chọn chế độ bản cắt và bản đầy đủ"
 
 #: print_mail/print_mail.admin.inc:110
 msgid "If checked, the user will be able to choose between sending the full content or only the teaser at send time."
@@ -463,31 +463,31 @@ msgstr ""
 
 #: print_mail/print_mail.inc:49
 msgid "Your e-mail"
-msgstr ""
+msgstr "Địa chỉ email của bạn"
 
 #: print_mail/print_mail.inc:54
 msgid "Your name"
-msgstr ""
+msgstr "Tên của bạn"
 
 #: print_mail/print_mail.inc:59
 msgid "Send to"
-msgstr ""
+msgstr "Gửi đến"
 
 #: print_mail/print_mail.inc:62
 msgid "Enter multiple addresses separated by commas and/or different lines."
-msgstr ""
+msgstr "Nhập vào cùng lúc nhiều địa chỉ ngăn cách nhau bởi dấu phẩy hoặc xuống dòng mới."
 
 #: print_mail/print_mail.inc:66
 msgid "Subject"
-msgstr ""
+msgstr "Chủ đề"
 
 #: print_mail/print_mail.inc:71
 msgid "Your message"
-msgstr ""
+msgstr "Thông điệp của bạn"
 
 #: print_mail/print_mail.inc:88
 msgid "Send e-mail"
-msgstr ""
+msgstr "Gửi email"
 
 #: print_mail/print_mail.inc:92
 msgid "Clear form"
@@ -495,7 +495,7 @@ msgstr ""
 
 #: print_mail/print_mail.inc:97
 msgid "Cancel"
-msgstr ""
+msgstr "Hủy"
 
 #: print_mail/print_mail.inc:110
 msgid "Someone"
@@ -503,35 +503,35 @@ msgstr ""
 
 #: print_mail/print_mail.inc:112
 msgid "an interesting site"
-msgstr ""
+msgstr "website hay"
 
 #: print_mail/print_mail.inc:113
 msgid "!user has sent you a message from !site"
-msgstr ""
+msgstr "!user gửi cho bạn một thông điêp từ website !site"
 
 #: print_mail/print_mail.inc:187
 msgid "You must enter a subject."
-msgstr ""
+msgstr "Bạn phải nhập vào một chủ đề."
 
 #: print_mail/print_mail.inc:191
 msgid "You must enter a message."
-msgstr ""
+msgstr "Bạn phải nhập vào một thông điệp"
 
 #: print_mail/print_mail.inc:226
 msgid "us"
-msgstr ""
+msgstr "chúng tôi"
 
 #: print_mail/print_mail.inc:227
 msgid "Thank you for spreading the word about !site."
-msgstr ""
+msgstr "Cảm ơn bạn đã giúp quảng bá website !site"
 
 #: print_mail/print_mail.inc:238
 msgid "Message from sender:"
-msgstr ""
+msgstr "Thông điệp từ người gửi:"
 
 #: print_mail/print_mail.inc:268
 msgid "The form has been reset to the default values."
-msgstr ""
+msgstr "Biểu mẫu đã được thiết lập về các giá trị mặc định."
 
 #: print_mail/print_mail.inc:225
 #: print_mail/print_mail.module:0
@@ -560,23 +560,23 @@ msgstr ""
 
 #: print_mail/print_mail.module:182
 msgid "Send to friend"
-msgstr ""
+msgstr "Gửi cho bạn bè"
 
 #: print_mail/print_mail.module:184
 msgid "Send this page by e-mail."
-msgstr ""
+msgstr "Gửi trang web này qua email."
 
 #: print_mail/print_mail.module:45
 msgid "Send page by e-mail"
-msgstr ""
+msgstr "Gửi trang web qua email"
 
 #: print_mail/print_mail.module:53
 msgid "e-mail"
-msgstr ""
+msgstr "e-mail"
 
 #: print_mail/print_mail.info:0
 msgid "Send by e-mail"
-msgstr ""
+msgstr "Gửi qua email"
 
 #: print_mail/print_mail.info:0
 msgid "Provides the capability to send the web page by e-mail"
@@ -584,7 +584,7 @@ msgstr ""
 
 #: print_pdf/print_pdf.admin.inc:24
 msgid "PDF options"
-msgstr ""
+msgstr "Các tùy chọn PDF"
 
 #: print_pdf/print_pdf.admin.inc:29
 msgid "PDF generation tool"
@@ -616,11 +616,11 @@ msgstr ""
 
 #: print_pdf/print_pdf.admin.inc:107
 msgid "Same browser window"
-msgstr ""
+msgstr "Cùng cửa sổ trình duyệt"
 
 #: print_pdf/print_pdf.admin.inc:107
 msgid "New browser window"
-msgstr ""
+msgstr "Cửa sổ trình duyệt mới"
 
 #: print_pdf/print_pdf.admin.inc:107
 msgid "Save dialog"
@@ -632,7 +632,7 @@ msgstr ""
 
 #: print_pdf/print_pdf.admin.inc:114
 msgid "Paper size"
-msgstr ""
+msgstr "Kích cỡ trang in"
 
 #: print_pdf/print_pdf.admin.inc:131
 msgid "Choose the paper size of the generated PDF."
@@ -668,7 +668,7 @@ msgstr ""
 
 #: print_pdf/print_pdf.admin.inc:152
 msgid "Font Size"
-msgstr ""
+msgstr "Cỡ chữ"
 
 #: print_pdf/print_pdf.admin.inc:156
 msgid "(TCPDF only) Set the font size to be used for normal text. This is the base value for the scaling applied to other text styles."
@@ -680,7 +680,7 @@ msgstr ""
 
 #: print_pdf/print_pdf.admin.inc:177
 msgid "Font size must be at least 1."
-msgstr ""
+msgstr "Cỡ chữ phải có giá trị nhỏ nhất là 1."
 
 #: print_pdf/print_pdf.pages.inc:339
 msgid "Page !n of !total"
@@ -705,15 +705,15 @@ msgstr ""
 #: print_pdf/print_pdf.module:221
 #: print_pdf/print_pdf.info:0
 msgid "PDF version"
-msgstr ""
+msgstr "Phiên bản PDF"
 
 #: print_pdf/print_pdf.module:223
 msgid "Display a PDF version of this page."
-msgstr ""
+msgstr "Trình bày bản PDF của trang này."
 
 #: (duplicate) print_pdf/print_pdf.module:93
 msgid "Print PDF"
-msgstr ""
+msgstr "In PDF"
 
 #: (duplicate) print_pdf/print_pdf.module:94
 msgid "No PDF tool selected. Please configure it in the <a href=\"@url\">PDF settings page</a>."
@@ -721,15 +721,15 @@ msgstr ""
 
 #: print_pdf/print_pdf.module:62
 msgid "Printer-friendly PDF"
-msgstr ""
+msgstr "Bản in PDF"
 
 #: print_pdf/print_pdf.module:69
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #: print_pdf/print_pdf.module:0
 msgid "print_pdf"
-msgstr ""
+msgstr "print_pdf"
 
 #: print_pdf/print_pdf.info:0
 msgid "Adds the capability to export pages as PDF."
