@@ -172,7 +172,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
  *   contents of the body of the HTML from the original node
  * @see theme_print_pdf_tcpdf_footer()
  */
-function _print_pdf_dompdf_footer_aux(&$html) {
+function theme_print_pdf_dompdf_footer(&$html) {
   preg_match('!<div class="print-footer">(.*?)</div>!si', $html, $tpl_footer);
   $html = str_replace($tpl_footer[0], '', $html);
 
@@ -219,7 +219,7 @@ function _print_pdf_dompdf_footer_aux(&$html) {
  *   array with the font definition (font name, styles and size)
  * @see theme_print_pdf_tcpdf_header()
  */
-function _print_pdf_tcpdf_header_aux(&$pdf, &$html, $font) {
+function theme_print_pdf_tcpdf_header(&$pdf, &$html, $font) {
   preg_match('!<div class="print-logo">(.*?)</div>!si', $html, $tpl_logo);
   preg_match('!<h1 class="print-title">(.*?)</h1>!si', $html, $tpl_title);
   preg_match('!<div class="print-site_name">(.*?)</div>!si', $html, $tpl_site_name);
@@ -250,7 +250,7 @@ function _print_pdf_tcpdf_header_aux(&$pdf, &$html, $font) {
  *   current TCPDF object
  * @see theme_print_pdf_tcpdf_page()
  */
-function _print_pdf_tcpdf_page_aux(&$pdf) {
+function theme_print_pdf_tcpdf_page(&$pdf) {
   // set margins
   $pdf->SetMargins(15, 20, 15);
   // set auto page breaks
@@ -274,7 +274,7 @@ function _print_pdf_tcpdf_page_aux(&$pdf) {
  *   array with the font definition (font name, styles and size)
  * @see theme_print_pdf_tcpdf_content()
  */
-function _print_pdf_tcpdf_content_aux(&$pdf, &$html, $font) {
+function theme_print_pdf_tcpdf_content(&$pdf, &$html, $font) {
   // set content font
   $pdf->setFont($font[0], $font[1], $font[2]);
 
@@ -309,7 +309,7 @@ function _print_pdf_tcpdf_content_aux(&$pdf, &$html, $font) {
  *   array with the font definition (font name, styles and size)
  * @see theme_print_pdf_tcpdf_footer()
  */
-function _print_pdf_tcpdf_footer_aux(&$pdf, &$html, $font) {
+function theme_print_pdf_tcpdf_footer(&$pdf, &$html, $font) {
   preg_match('!<div class="print-footer">(.*?)</div>!si', $html, $tpl_footer);
   $footer = trim(preg_replace('!</?div[^>]*?>!i', '', $tpl_footer[1]));
 
@@ -331,7 +331,7 @@ function _print_pdf_tcpdf_footer_aux(&$pdf, &$html, $font) {
  *   current TCPDF object
  * @see theme_print_pdf_tcpdf_footer2()
  */
-function _print_pdf_tcpdf_footer2_aux(&$pdf) {
+function theme_print_pdf_tcpdf_footer2(&$pdf) {
   //Position at 1.5 cm from bottom
   $pdf->writeHTMLCell(0, 15, 15, 0, $pdf->footer, 0, 0, 0, TRUE, '');
 

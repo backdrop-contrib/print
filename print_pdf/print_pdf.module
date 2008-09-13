@@ -33,21 +33,27 @@ function print_pdf_theme() {
     ),
     'print_pdf_dompdf_footer' => array(
       'arguments' => array(),
+      'file' => 'print_pdf.pages.inc',
     ),
     'print_pdf_tcpdf_header' => array(
       'arguments' => array(),
+      'file' => 'print_pdf.pages.inc',
     ),
     'print_pdf_tcpdf_page' => array(
       'arguments' => array(),
+      'file' => 'print_pdf.pages.inc',
     ),
     'print_pdf_tcpdf_content' => array(
       'arguments' => array(),
+      'file' => 'print_pdf.pages.inc',
     ),
     'print_pdf_tcpdf_footer' => array(
       'arguments' => array(),
+      'file' => 'print_pdf.pages.inc',
     ),
     'print_pdf_tcpdf_footer2' => array(
       'arguments' => array(),
+      'file' => 'print_pdf.pages.inc',
     ),
   );
 }
@@ -323,82 +329,4 @@ function print_pdf_link_allowed($args) {
 
     return _print_page_match($print_pdf_sys_link_visibility, $print_pdf_sys_link_pages);
   }
-}
-
-/**
- * Format the dompdf footer contents
- *
- * @param $html
- *   contents of the body of the HTML from the original node
- * @ingroup themeable
- */
-function theme_print_pdf_dompdf_footer(&$html) {
-  return _print_pdf_dompdf_footer_aux($html);
-}
-
-/**
- * Format the TCPDF header
- *
- * @param $pdf
- *   current TCPDF object
- * @param $html
- *   contents of the body of the HTML from the original node
- * @param $font
- *   array with the font definition (font name, styles and size)
- * @ingroup themeable
- */
-function theme_print_pdf_tcpdf_header(&$pdf, &$html, $font) {
-  return _print_pdf_tcpdf_header_aux($pdf, $html, $font);
-}
-
-/**
- * Format the TCPDF page settings (margins, etc)
- *
- * @param $pdf
- *   current TCPDF object
- * @ingroup themeable
- */
-function theme_print_pdf_tcpdf_page(&$pdf) {
-  return _print_pdf_tcpdf_page_aux($pdf);
-}
-
-/**
- * Format the TCPDF page content
- *
- * @param $pdf
- *   current TCPDF object
- * @param $html
- *   contents of the body of the HTML from the original node
- * @param $font
- *   array with the font definition (font name, styles and size)
- * @ingroup themeable
- */
-function theme_print_pdf_tcpdf_content(&$pdf, &$html, $font) {
-  return _print_pdf_tcpdf_content_aux($pdf, $html, $font);
-}
-
-/**
- * Format the TCPDF footer contents
- *
- * @param $pdf
- *   current TCPDF object
- * @param $html
- *   contents of the body of the HTML from the original node
- * @param $font
- *   array with the font definition (font name, styles and size)
- * @ingroup themeable
- */
-function theme_print_pdf_tcpdf_footer(&$pdf, &$html, $font) {
-  return _print_pdf_tcpdf_footer_aux($pdf, $html, $font);
-}
-
-/**
- * Format the TCPDF footer layout
- *
- * @param $pdf
- *   current TCPDF object
- * @ingroup themeable
- */
-function theme_print_pdf_tcpdf_footer2(&$pdf) {
-  return _print_pdf_tcpdf_footer2_aux($pdf);
 }
