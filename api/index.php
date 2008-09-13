@@ -6,7 +6,7 @@
  * Homepage of the API reference
  */
 
-/** @mainpage Printer, e-mail and PDF versions HEAD
+/** @mainpage Printer, e-mail and PDF versions
  * Welcome to the module developer's documentation. The interesting functions for
  * themers are those that start with 'theme_'.
  *
@@ -25,7 +25,6 @@
  *   - @link print_pdf.module Module main file @endlink
  *   - @link print_pdf.admin.inc Settings form @endlink
  *   - @link print_pdf.pages.inc PDF generation @endlink
- *   - @link print_pdf.class.inc Auxiliary PHP5 class @endlink
- *   - @link print_pdf.class_php4.inc Auxiliary PHP4 class @endlink
+ *   - @link print_pdf.class.inc Auxiliary class @endlink
  *   - @link print_pdf.install (Un)Install routines @endlink
  */
