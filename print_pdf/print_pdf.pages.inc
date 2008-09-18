@@ -282,18 +282,12 @@ function theme_print_pdf_tcpdf_content(&$pdf, &$html, $font) {
   $pattern = '!(?:<div class="print-(?:logo|site_name|breadcrumb|footer)">.*?</div>|<hr class="print-hr" />)!si';
   $matches[1] = preg_replace($pattern, '', $matches[1]);
 
-//  $pdf->writeHTML($matches[1]);
 
   // Since TCPDF's writeHTML is so bad with <p>, do everything possible to make it look nice
   $matches[1] = preg_replace('!(<p\s*/>|</p>)!i', '<br />', $matches[1]);
-  $matches[1] = str_replace(array('<div', 'div>'), array('<p', 'p>'), $matches[1]);
-  $paragraphs = preg_split('!(<p[^>]*?>|</p>)!i', $matches[1], -1, PREG_SPLIT_NO_EMPTY);
-  foreach ($paragraphs as $value) {
-    $par = trim($value);
-    if (!empty($par)) {
-      $pdf->writeHTML($par);
-    }
-  }
+  $matches[1] = str_replace(array('<div', 'div>'), array('<span', 'span><br />'), $matches[1]);
+
+  $pdf->writeHTML($matches[1]);
 
   return $pdf;
 }
