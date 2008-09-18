@@ -48,7 +48,7 @@ function print_mail_menu() {
     'access arguments' => array('access print'),
     'type' => MENU_CALLBACK,
   );
-  $items['admin/settings/print/mail'] = array(
+  $items['admin/settings/print/email'] = array(
     'title' => 'e-mail',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_mail_settings'),
