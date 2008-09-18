@@ -193,7 +193,7 @@ function theme_print_pdf_dompdf_footer(&$html) {
       $pdf->line(15, $y, $w - 15, $y, $color, 1);
 
       $y += $text_height / 2;
-      $pdf->page_text(15, $y, \''. strip_tags($tpl_footer[1]) .'\', $font, $size, $color);
+      $pdf->page_text(15, $y, \''. addslashes(strip_tags($tpl_footer[1])) .'\', $font, $size, $color);
 
       $pdf->close_object();
       $pdf->add_object($footer, "all");
