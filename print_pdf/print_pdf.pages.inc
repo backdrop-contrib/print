@@ -23,7 +23,7 @@ function print_pdf_controller() {
   $args = func_get_args();
   // Remove the printpdf/ prefix
   $path = implode('/', $args);
-  $cid = isset($_GET['comment']) ? $_GET['comment'] : NULL;
+  $cid = isset($_GET['comment']) ? (int)$_GET['comment'] : NULL;
 
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
 

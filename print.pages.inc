@@ -20,7 +20,7 @@ function print_controller_html() {
   $args = func_get_args();
   // Remove the print/ prefix
   $path = implode('/', $args);
-  $cid = isset($_GET['comment']) ? $_GET['comment'] : NULL;
+  $cid = isset($_GET['comment']) ? (int)$_GET['comment'] : NULL;
 
   $print = print_controller($path, $cid);
   $node = $print['node'];
@@ -238,7 +238,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
     else {
       $url = $base_url .'/'. (((bool)variable_get('clean_url', '0')) ? '' : '?q=') . $path;
     }
-    if ($cid) {
+    if (is_int($cid)) {
       $url .= '#comment-$cid';
     }
     $retrieved_date = format_date(time(), 'small');

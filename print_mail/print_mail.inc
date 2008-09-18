@@ -40,9 +40,9 @@ function print_mail_form($form_state) {
   if (is_numeric($path)) {
     $path = 'node/'. $path;
   }
-  $cid = isset($_GET['comment']) ? $_GET['comment'] : NULL;
+  $cid = isset($_GET['comment']) ? (int)$_GET['comment'] : NULL;
   $form['path'] = array('#type' => 'value', '#value' => $path);
-  $forn['cid'] =  array('#type' => 'value', '#value' => $cid);
+  $form['cid'] =  array('#type' => 'value', '#value' => $cid);
 
   $form['fld_from_addr'] = array(
     '#type' => 'textfield',
