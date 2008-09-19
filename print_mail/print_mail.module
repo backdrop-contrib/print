@@ -30,7 +30,6 @@ function print_mail_theme() {
     ),
     'print_mail_form' => array(
       'arguments' => array('form'),
-      'file' => 'print_mail.inc',
     ),
   );
 }
