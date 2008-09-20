@@ -496,13 +496,6 @@ function _print_generate_node($nid, $cid = NULL, $teaser = FALSE, $message = NUL
   unset($node->pages);
   unset($node->page_count);
 
-  if ($teaser) {
-    unset($node->body);
-  }
-  else {
-    unset($node->teaser);
-  }
-  $node = (object)$node;
   if ($cid === NULL) {
     // Adapted (simplified) version of node_view for Drupal 5.x
     //Render the node content
