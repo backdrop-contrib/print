@@ -484,9 +484,15 @@ function _print_get_template($format = NULL, $type = NULL) {
 function _print_generate_node($nid, $cid = NULL, $teaser = FALSE, $message = NULL) {
   // We can take a node id
   $node = node_load(array('nid' => $nid));
-  if (!node_access('view', $node)) {
+  if (!$node) {
+    // Node not found
+    drupal_not_found();
+    return;
+  }
+  elseif (!node_access('view', $node)) {
     // Access is denied
-    return drupal_access_denied();
+    drupal_access_denied();
+    return;
   }
   drupal_set_title($node->title);
 
@@ -497,7 +503,7 @@ function _print_generate_node($nid, $cid = NULL, $teaser = FALSE, $message = NUL
   unset($node->page_count);
 
   if ($cid === NULL) {
-    // Adapted (simplified) version of node_view for Drupal 5.x
+    // Adapted (simplified) version of node_view
     //Render the node content
     $node = node_build_content($node, $teaser, TRUE);
     // Disable fivestar widget output
@@ -505,7 +511,16 @@ function _print_generate_node($nid, $cid = NULL, $teaser = FALSE, $message = NUL
     // Disable service links module output
     unset($node->content['service_links']);
 
-    $node->body = drupal_render($node->content);
+    $content = drupal_render($node->content);
+    if ($teaser) {
+      $node->teaser = $content;
+      unset($node->body);
+    }
+    else {
+      $node->body = $content;
+      unset($node->teaser);
+    }
+
     //TODO the following was part of the fix for http://drupal.org/node/254863
     //check if it is reproducible and find the exact condition which
     //triggered it
@@ -538,7 +553,7 @@ function _print_generate_node($nid, $cid = NULL, $teaser = FALSE, $message = NUL
     $node->body .= $comments;
   }
 
-  node_invoke_nodeapi($node, 'alter', FALSE, TRUE);
+  node_invoke_nodeapi($node, 'alter', $teaser, TRUE);
 
   // Convert the a href elements
   $pattern = '!<(a\s[^>]*?)>(.*?)(</a>)!is';
@@ -581,10 +596,12 @@ function _print_generate_path($path, $teaser = FALSE, $message = NULL) {
   if (is_int($node->body)) {
     switch ($node->body) {
       case MENU_NOT_FOUND:
-        return drupal_not_found();
+        drupal_not_found();
+        return;
         break;
       case MENU_ACCESS_DENIED:
-        return drupal_access_denied();
+        drupal_access_denied();
+        return;
         break;
     }
   }
@@ -618,9 +635,15 @@ function _print_generate_path($path, $teaser = FALSE, $message = NULL) {
  */
 function _print_generate_book($nid, $teaser = FALSE, $message = NULL) {
   $node = node_load(array('nid' => $nid));
-  if (!node_access('view', $node) || (!user_access('access printer-friendly version'))) {
+  if (!$node) {
+    // Node not found
+    drupal_not_found();
+    return;
+  }
+  elseif (!node_access('view', $node) || (!user_access('access printer-friendly version'))) {
     // Access is denied
-    return drupal_access_denied();
+    drupal_access_denied();
+    return;
   }
 
   $tree = book_menu_subtree_data($node->book);
