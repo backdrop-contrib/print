@@ -241,7 +241,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
     if (is_int($cid)) {
       $url .= '#comment-$cid';
     }
-    $retrieved_date = format_date(time(), 'small');
+    $retrieved_date = format_date(REQUEST_TIME, 'small');
     $retrieved = (empty($themed['retrieved'])) ? t('retrieved on %date', array('%date' => $retrieved_date)) : ($themed['retrieved'] .' '. $retrieved_date);
     $print['printdate'] = $print_sourceurl_date ? " ($retrieved)" : '';
 
