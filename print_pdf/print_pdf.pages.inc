@@ -69,6 +69,9 @@ function _print_pdf_dompdf($print, $html, $filename) {
   $print_pdf_content_disposition = variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT);
   require_once($print_pdf_pdf_tool);
 
+  // dompdf seems to have problems with something in system.css so let's not use it
+  $html = preg_replace('!<link.*?modules/system/system.css.*?/>!', '', $html);
+
   $url_array  = parse_url($print['url']);
 
   $protocol = $url_array['scheme'] .'://';
