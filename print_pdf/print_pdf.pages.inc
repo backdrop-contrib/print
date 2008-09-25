@@ -28,6 +28,10 @@ function print_pdf_controller() {
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
 
   $print = print_controller($path, $cid);
+  if ($print === FALSE) {
+    return;
+  }
+
   // Img elements must be set to absolute
   $pattern = '!<(img\s[^>]*?)>!is';
   $print['content'] = preg_replace_callback($pattern, '_print_rewrite_urls', $print['content']);

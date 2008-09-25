@@ -238,6 +238,9 @@ function print_mail_mail($key, &$message, $params) {
       $sender_message = t('Message from sender:') .'<br /><br /><em>'. nl2br($params['message']) .'</em>';
 
       $print = print_controller($params['path'], $params['cid'], $params['teaser'], $sender_message);
+      if ($print === FALSE) {
+        return;
+      }
 
       // Img elements must be set to absolute
 //      $pattern = '!<(img\s[^>]*?)>!is';
