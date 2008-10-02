@@ -127,6 +127,7 @@ function print_pdf_link($type, $node = NULL, $teaser = FALSE) {
         $query_arr['comment'] = $node->cid;
       }
       $query = print_query_string_encode($query_arr, array('q'));
+      if (empty($query)) $query = NULL;
 
       if ($print_pdf_link_use_alias) {
         $path = drupal_get_path_alias('node/'. $node->nid);
