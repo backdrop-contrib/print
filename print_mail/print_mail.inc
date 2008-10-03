@@ -226,7 +226,7 @@ function print_mail_form_submit($form, &$form_state) {
     $site_name = variable_get('site_name', t('us'));
     drupal_set_message(t('Thank you for spreading the word about !site.', array('!site' => $site_name)));
   }
-  $form_state['redirect'] = $form_state['values']['path'];
+  $form_state['redirect'] = preg_replace('!^book/export/html/!', 'node/', $form_state['values']['path']);
 }
 
 /**
@@ -277,6 +277,6 @@ function print_mail_form_reset($form, &$form_state) {
  * @ingroup forms
  */
 function print_mail_form_cancel($form, &$form_state) {
-  $form_state['redirect'] = $form_state['values']['path'];
+  $form_state['redirect'] = preg_replace('!^book/export/html/!', 'node/', $form_state['values']['path']);
 }
 
