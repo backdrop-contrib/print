@@ -107,6 +107,42 @@ function print_menu() {
 }
 
 /**
+ * Implementation of hook_block().
+ */
+function print_block($op = 'list', $delta = 0, $edit = array()) {
+  switch ($op) {
+    case 'list':
+      $block[$delta]['info'] = t('Printer, e-mail and PDF versions');
+      return $block;
+      break;
+    case 'configure':
+      return '';
+    case 'save':
+      return;
+    case 'view':
+      $nid = preg_replace('!^node/!', '', $_GET['q']);
+      if (is_numeric($nid)) {
+        $node = node_load(array('nid' => $nid));
+      }
+      else {
+        $node = NULL;
+      }
+      $funcs = get_defined_functions();
+      $block['content'] = '';
+      foreach ($funcs['user'] as $func) {
+        if (preg_match('!^print.*?_insert_link$!', $func)) {
+          $link = $func(NULL, $node);
+          if (!empty($link)) {
+            $block['content'] .= $link .'<br />';
+          }
+        }
+      }
+      return $block;
+      break;
+    }
+}
+
+/**
  * Implementation of hook_link().
  */
 function print_link($type, $node = NULL, $teaser = FALSE) {
@@ -176,43 +212,36 @@ function print_help($path, $arg) {
   }
 
   $print_html_link_pos = variable_get('print_html_link_pos', array(PRINT_HTML_LINK_POS_DEFAULT => PRINT_HTML_LINK_POS_DEFAULT));
-  if (print_link_allowed(array('path' => $path)) && (preg_match('!^node/!i', $path) == 0) &&
+  if ((preg_match('!^node/!i', $path) == 0) &&
       !(empty($print_html_link_pos['link']) && empty($print_html_link_pos['corner']))) {
     static $output = FALSE;
 
     if ($output === FALSE) {
-      drupal_add_css(drupal_get_path('module', 'print') .'/css/printlinks.css');
       $output = TRUE;
 
-      return '<span class="print-syslink">'. print_insert_link() .'</span>';
+      $link = print_insert_link();
+      if ($link) {
+        return "<span class='print-syslink'>$link</span>";
+      }
     }
   }
 }
 
 /**
- * Implementation of hook_nodeapi().
+ * Implementation of hook_nodeapi_view().
  */
-function print_nodeapi(&$node, $op = 'view', $teaser, $page) {
-  switch ($op) {
-    case 'view':
+function print_nodeapi_view(&$node, $teaser, $page) {
       $print_html_link_pos = variable_get('print_html_link_pos', array(PRINT_HTML_LINK_POS_DEFAULT => PRINT_HTML_LINK_POS_DEFAULT));
-      $allowed_type = print_link_allowed(array('node' => $node, 'teaser' => $teaser));
-      if (($allowed_type != FALSE) && !empty($print_html_link_pos['corner']) &&
+      if (($teaser === FALSE) && !empty($print_html_link_pos['corner']) &&
           (preg_match('!^print!i', $_GET['q']) == 0)) {
-        drupal_add_css(drupal_get_path('module', 'print') .'/css/printlinks.css');
-        if ($allowed_type === PRINT_ALLOW_BOOK_LINK) {
-          $path = PRINT_PATH .'/book/export/html/'. $node->nid;
+        $link = print_insert_link(NULL, $node);
+        if ($link) {
+          $node->content['print_link'] = array(
+            '#markup' => "<span class='print-link'>$link</span>",
+            '#weight' => -1,
+          );
         }
-        else {
-          $path = NULL;
-        }
-        $link = print_insert_link($path);
-        $node->content['print_link'] = array(
-          '#value' => "<span class='print-link'>$link</span>",
-          '#weight' => -1,
-        );
       }
-  }
 }
 
 /**
@@ -299,10 +328,10 @@ function _print_format_link_aux($type = 0, $text = '', $img = '') {
     $html = TRUE;
     switch ($type) {
     case 2:
-      $text = theme('image', $img, $text, '', array('class' => 'print-icon'));
+      $text = theme('image', $img, $text, $text, array('class' => 'print-icon'));
       break;
     case 3:
-      $text = theme('image', $img, $text, '', array('class' => 'print-icon print-icon-margin')) . $text;
+      $text = theme('image', $img, $text, $text, array('class' => 'print-icon print-icon-margin')) . $text;
       break;
     }
   }
@@ -366,19 +395,41 @@ function theme_print_text() {
  * @param $path
  *   path of the original page (optional). If not specified, the current URL
  *   is used
+ * @param $node
+ *   an optional node object, to be used in defining the path, if used, the
+ *   path argument is irrelevant
  * @return
  *   string with the HTML link to the printer-friendly page
  */
-function print_insert_link($path = NULL) {
-  if (user_access('access print')) {
+function print_insert_link($path = NULL, $node = NULL) {
+  if ($node !== NULL) {
+    $nid = $node->nid;
+    $path = 'node/'. $nid;
+    $allowed_type = print_link_allowed(array('node' => $node));
+  }
+  else {
     if ($path === NULL) {
-      $print_html_link_use_alias = variable_get('print_html_link_use_alias', PRINT_HTML_LINK_USE_ALIAS_DEFAULT);
+      $nid = preg_replace('!^node/!', '', $_GET['q']);
+      $path = $_GET['q'];
+    }
+    else {
+      $nid = NULL;
+    }
+    $allowed_type = print_link_allowed(array('path' => $path));
+  }
 
-      if ($print_html_link_use_alias) {
-        $path = drupal_get_path_alias($_GET['q']);
+  if ($allowed_type) {
+    if ($nid !== NULL) {
+      if ($allowed_type === PRINT_ALLOW_BOOK_LINK) {
+        $path = 'book/export/html/'. $nid;
       }
       else {
-        $path = preg_replace('!^node/!', '', $_GET['q']);
+        if (variable_get('print_html_link_use_alias', PRINT_HTML_LINK_USE_ALIAS_DEFAULT)) {
+          $path = drupal_get_path_alias($path);
+        }
+        else {
+          $path = $nid;
+        }
       }
       $path = PRINT_PATH .'/'. $path;
       $query = print_query_string_encode($_GET, array('q'));
@@ -389,8 +440,12 @@ function print_insert_link($path = NULL) {
     else {
       $query = NULL;
     }
+    drupal_add_css(drupal_get_path('module', 'print') .'/css/printlinks.css');
     $format = theme('print_format_link');
     return '<span class="print">'. l($format['text'], $path, array('attributes' => $format['attributes'], 'query' => $query, 'absolute' => TRUE, 'html' => $format['html'])) .'</span>';
+  }
+  else {
+    return FALSE;
   }
 }
 
@@ -436,6 +491,12 @@ function print_link_allowed($args) {
   if (!empty($args['teaser']) || !user_access('access print')) {
     // If showing only the teaser or the user is not allowed or link is disabled
     return FALSE;
+  }
+  if (!empty($args['path'])) {
+    $nid = preg_replace('!^node/!', '', drupal_get_normal_path($args['path']));
+    if (is_numeric($nid)) {
+      $args['node'] = node_load(array('nid' => $nid));
+    }
   }
   if (!empty($args['node'])) {
     static $node_type = FALSE;

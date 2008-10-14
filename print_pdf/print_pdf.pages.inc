@@ -20,6 +20,8 @@ require_once(drupal_get_path('module', 'print') .'/print.pages.inc');
  * @see _print_pdf_tcpdf()
  */
 function print_pdf_controller() {
+  global $base_url;
+
   $args = func_get_args();
   // Remove the printpdf/ prefix
   $path = implode('/', $args);
@@ -37,6 +39,15 @@ function print_pdf_controller() {
   $print['content'] = preg_replace_callback($pattern, '_print_rewrite_urls', $print['content']);
   $print['logo'] = preg_replace_callback($pattern, '_print_rewrite_urls', $print['logo']);
   $print['footer_message'] = preg_replace_callback($pattern, '_print_rewrite_urls', $print['footer_message']);
+  // And converted from private to public paths
+  $file_downloads = variable_get('file_downloads', FILE_DOWNLOADS_PUBLIC);
+  if ($file_downloads == FILE_DOWNLOADS_PRIVATE) {
+    $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?${base_url}/)system/files(/[^>]*?>)!is";
+    $replacement = '$1'. file_directory_path() .'$2';
+    $print['content'] = preg_replace($pattern, $replacement, $print['content']);
+    $print['logo'] = preg_replace($pattern, $replacement, $print['logo']);
+    $print['footer_message'] = preg_replace($pattern, $replacement, $print['footer_message']);
+  }
 
   $node = $print['node'];
   ob_start();
