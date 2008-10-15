@@ -9,7 +9,7 @@
  * functions that interface with the PDF generation packages.
  */
 
-require_once(drupal_get_path('module', 'print') .'/print.pages.inc');
+require_once(DRUPAL_ROOT .'/'. drupal_get_path('module', 'print') .'/print.pages.inc');
 
 /**
  * Generate a PDF version of the printer-friendly page
@@ -51,7 +51,7 @@ function print_pdf_controller() {
 
   $node = $print['node'];
   ob_start();
-  include_once(_print_get_template('pdf', $print['type']));
+  include_once(DRUPAL_ROOT .'/'. _print_get_template('pdf', $print['type']));
   $html = ob_get_contents();
   ob_end_clean();
 
@@ -82,7 +82,7 @@ function _print_pdf_dompdf($print, $html, $filename) {
   $print_pdf_paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
   $print_pdf_page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
   $print_pdf_content_disposition = variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT);
-  require_once($print_pdf_pdf_tool);
+  require_once(DRUPAL_ROOT .'/'. $print_pdf_pdf_tool);
 
   // dompdf seems to have problems with something in system.css so let's not use it
   $html = preg_replace('!<link.*?modules/system/system.css.*?/>!', '', $html);
@@ -137,9 +137,9 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   define('K_CELL_HEIGHT_RATIO', 1.25);
   define('K_SMALL_RATIO', 2/3);
 
-  require_once($print_pdf_pdf_tool);
+  require_once(DRUPAL_ROOT .'/'. $print_pdf_pdf_tool);
   if (strpos(PDF_PRODUCER, 'PHP4') === FALSE) {
-    require_once(drupal_get_path('module', 'print_pdf') .'/print_pdf.class.inc');
+    require_once(DRUPAL_ROOT .'/'. drupal_get_path('module', 'print_pdf') .'/print_pdf.class.inc');
   }
   else {
     // Use only the PHP5 version of TCPDF

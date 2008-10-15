@@ -52,7 +52,7 @@ class PrintBasicTest extends DrupalWebTestCase {
     global $base_url, $base_root;
 
     //Must require it, since this function gets called via Drupal's dynamic loading
-    require_once(drupal_get_path('module', 'print') .'/print.pages.inc');
+    require_once(DRUPAL_ROOT .'/'. drupal_get_path('module', 'print') .'/print.pages.inc');
 
     $pattern = '!<(a\s[^>]*?)>(.*?)(</a>)!is';
     $footnote = ' <span class="print-footnote">[1]</span>';

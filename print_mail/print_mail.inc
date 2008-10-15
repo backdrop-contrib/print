@@ -9,7 +9,7 @@
  * mail form display, validation and submit hooks.
  */
 
-require_once(drupal_get_path('module', 'print') .'/print.pages.inc');
+require_once(DRUPAL_ROOT .'/'. drupal_get_path('module', 'print') .'/print.pages.inc');
 
 /**
  * Menu callback for the send by e-mail form.
@@ -250,7 +250,7 @@ function print_mail_mail($key, &$message, $params) {
 
       $node = $print['node'];
       ob_start();
-      include_once(_print_get_template('mail', $print['type']));
+      include_once(DRUPAL_ROOT .'/'. _print_get_template('mail', $print['type']));
       $html = ob_get_contents();
       ob_end_clean();
 

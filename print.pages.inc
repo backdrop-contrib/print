@@ -25,7 +25,7 @@ function print_controller_html() {
   $print = print_controller($path, $cid);
   if ($print !== FALSE) {
     $node = $print['node'];
-    include_once(_print_get_template('html', $print['type']));
+    include_once(DRUPAL_ROOT .'/'. _print_get_template('html', $print['type']));
   }
 }
 
