@@ -152,7 +152,7 @@ function _print_main_settings_validate($form, &$form_state) {
     // The image was saved using file_save_upload() and was added to the
     // files table as a temporary file. We'll make a copy and let the garbage
     // collector delete the original upload.
-    if (file_copy($file, $filename, FILE_EXISTS_REPLACE)) {
+    if (file_unmanaged_copy($file, $filename, FILE_EXISTS_REPLACE)) {
       $form_state['values']['print_logo_options'] = 2;
       $form_state['values']['print_logo_url'] = base_path() . $file->filepath;
     }
