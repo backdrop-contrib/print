@@ -1,5 +1,5 @@
 <?php
-/* $Id$ */
+// $Id$
 
 /**
  * @file
@@ -78,7 +78,7 @@ function print_mail_link($type, $node = NULL, $teaser = FALSE) {
                                  'title' => $format['text'],
                                  'attributes' => $format['attributes'],
                                  'html' => $format['html'],
-                                );
+      );
 
       return $links;
     }
@@ -102,7 +102,7 @@ function print_mail_link($type, $node = NULL, $teaser = FALSE) {
                                   'attributes' => $format['attributes'],
                                   'html' => $format['html'],
                                   'query' => $query,
-                                 );
+      );
 
       return $links;
     }
