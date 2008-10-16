@@ -168,12 +168,13 @@ function print_link($type, $node = NULL, $teaser = FALSE) {
       $path = $node->nid;
     }
 
-    $links['print'] = array('href' => PRINT_PATH .'/'. $path,
-                            'title' => $format['text'],
-                            'attributes' => $format['attributes'],
-                            'html' => $format['html'],
-                            'query' => $query,
-                      );
+    $links['print_html'] = array(
+      'href' => PRINT_PATH .'/'. $path,
+      'title' => $format['text'],
+      'attributes' => $format['attributes'],
+      'html' => $format['html'],
+      'query' => $query,
+    );
 
     return $links;
   }
@@ -442,7 +443,7 @@ function print_insert_link($path = NULL, $node = NULL) {
     }
     drupal_add_css(drupal_get_path('module', 'print') .'/css/printlinks.css');
     $format = theme('print_format_link');
-    return '<span class="print">'. l($format['text'], $path, array('attributes' => $format['attributes'], 'query' => $query, 'absolute' => TRUE, 'html' => $format['html'])) .'</span>';
+    return '<span class="print_html">'. l($format['text'], $path, array('attributes' => $format['attributes'], 'query' => $query, 'absolute' => TRUE, 'html' => $format['html'])) .'</span>';
   }
   else {
     return FALSE;
