@@ -142,7 +142,8 @@ function _print_pdf_tcpdf($print, $html, $filename) {
     require_once(DRUPAL_ROOT .'/'. drupal_get_path('module', 'print_pdf') .'/print_pdf.class.inc');
   }
   else {
-    // Use only the PHP5 version of TCPDF
+    drupal_set_message(t("The PHP4 version of TCPDF is not supported. Please upgrade it."), 'error', FALSE);
+    drupal_goto($_GET['q']);
   }
 
   $font = Array(

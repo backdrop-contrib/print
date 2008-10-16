@@ -84,19 +84,18 @@ function print_mail_form($form_state) {
   }
 
   $form['btn_submit'] = array(
+    '#name' => 'submit',
     '#type' => 'submit',
     '#value' => t('Send e-mail'),
   );
   $form['btn_clear'] = array(
-    '#type' => 'submit',
-    '#value' => t('Clear form'),
-    '#validate' => array('print_mail_form_reset'),
+    '#type' => 'markup',
+    '#markup' => '<input type="reset" name="clear" value="'. t('Clear form') .'" class="form-submit" />',
   );
   $form['btn_cancel'] = array(
+    '#name' => 'cancel',
     '#type' => 'submit',
     '#value' => t('Cancel'),
-    '#validate' => array(),
-    '#submit' => array('print_mail_form_cancel'),
   );
 
   if ($user->uid != 0) {
@@ -260,17 +259,6 @@ function print_mail_mail($key, &$message, $params) {
     break;
   }
 }
-
-/**
- * Process the send by-email form reset submission.
- *
- * @ingroup forms
- */
-function print_mail_form_reset($form, &$form_state) {
-  $form_state['rebuild'] = TRUE;
-  drupal_set_message(t('The form has been reset to the default values.'));
-}
-
 /**
  * Process the send by-email form cancel submission.
  *
