@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: drupalprint\n"
-"POT-Creation-Date: 2008-09-10 22:57+0200\n"
-"PO-Revision-Date: 2008-09-11 01:35+0100\n"
+"POT-Creation-Date: 2008-10-16 11:56+0200\n"
+"PO-Revision-Date: 2008-10-16 12:09+0100\n"
 "Last-Translator: \n"
 "Language-Team: Slovak <sk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -115,7 +115,7 @@ msgid "Select the type of footer to display on the printer-friendly version. In 
 msgstr ""
 
 #: print.admin.inc:111
-#: print.pages.inc:248
+#: print.pages.inc:250
 msgid "Source URL"
 msgstr "Adresa zdroja"
 
@@ -250,144 +250,156 @@ msgid "Setting this option will add a printer-friendly version page link on page
 msgstr "Nastavenie tejto možnosti pridá printer-friendly verziu odkazom na stránku na strákach vytvorených Drupal-om alebo zapnutých moduloch."
 
 #: print.admin.inc:236
+#: print_mail/print_mail.admin.inc:86
+#: print_pdf/print_pdf.admin.inc:99
+msgid "Use URL alias instead of node ID"
+msgstr ""
+
+#: print.admin.inc:238
+#: print_mail/print_mail.admin.inc:88
+#: print_pdf/print_pdf.admin.inc:101
+msgid "Enabling this will create the link using the URL alias instead of the node ID."
+msgstr ""
+
+#: print.admin.inc:243
 msgid "Take control of the book module printer-friendly link"
 msgstr "Preberte kontrolu knihy modulu printer-friendly odkazu"
 
-#: print.admin.inc:238
+#: print.admin.inc:245
 msgid "Activate this to have the printer-friendly link in book nodes handled by this module. Requires the (core) book module."
 msgstr "Aktivujte toto, ak chcete mať printer-friendly odkaz v zaknihovaných uzloch spravovaných týmto modulom. Vyžaduje (jadro) knižný modul."
 
-#: print.admin.inc:243
+#: print.admin.inc:250
 msgid "Open the printer-friendly version in a new window"
 msgstr "Verziu pre tlač otvoriť v novom okne"
 
-#: print.admin.inc:245
+#: print.admin.inc:252
 msgid "Setting this option will make the printer-friendly version open in a new window/tab."
 msgstr "Nastavenie tejto voľby spraví printer-friendly verziu otvorenú v novom okne/záložke."
 
-#: print.admin.inc:250
+#: print.admin.inc:257
 msgid "Send to printer"
 msgstr "Poslať do frontu tlačiarne"
 
-#: print.admin.inc:252
+#: print.admin.inc:259
 msgid "Automatically calls the browser's print function when the printer-friendly version is displayed."
 msgstr "Po zobrazení verzie pre tlač automaticky zavolá funkciu pre tlač."
 
-#: print.admin.inc:257
+#: print.admin.inc:264
 msgid "Robots META tags"
 msgstr "META značky pre robotov"
 
-#: print.admin.inc:264
+#: print.admin.inc:271
 msgid "Add noindex"
 msgstr "Pridať noindex"
 
-#: print.admin.inc:266
+#: print.admin.inc:273
 msgid "Instruct robots to not index printer-friendly pages. Recommended for good search engine karma."
 msgstr "Nariaď robotom neindexovať stránky printer-friendly. Odporúčané pre dobrú karmu vyhľadávacieho enginu."
 
-#: print.admin.inc:271
+#: print.admin.inc:278
 msgid "Add nofollow"
 msgstr "Pridať nofollox"
 
-#: print.admin.inc:273
+#: print.admin.inc:280
 msgid "Instruct robots to not follow outgoing links on printer-friendly pages."
 msgstr "Nariaď robotom, aby nenasledovali odchádzajúce odkazy na stránkach printer-friendly."
 
-#: print.admin.inc:278
+#: print.admin.inc:285
 msgid "Add noarchive"
 msgstr "Pridať noarchive"
 
-#: print.admin.inc:280
+#: print.admin.inc:287
 msgid "Non-standard tag to instruct search engines to not show a \"Cached\" link for your printer-friendly pages. Recognized by Googlebot."
 msgstr "Neštandardný príznak inštruoval vyhľadávací engine nezobrazovať \"cachované\" odkazy na stránkach printer-friendly. Rozpoznané Googlebotom."
 
-#: print.pages.inc:226
+#: print.pages.inc:228
 msgid "Published on %site_name"
 msgstr "Zverejnené na %site_name"
 
-#: print.pages.inc:245
+#: print.pages.inc:247
 msgid "retrieved on %date"
 msgstr "získaný %date"
 
-#: print.pages.inc:259
+#: print.pages.inc:261
 msgid "Anonymous"
 msgstr "Anonym"
 
-#: print.pages.inc:260
+#: print.pages.inc:262
 msgid "By %author"
 msgstr "Autor %author"
 
-#: print.pages.inc:264
+#: print.pages.inc:266
 msgid "Created %date"
 msgstr "Vytvorené %date"
 
-#: print.pages.inc:300
+#: print.pages.inc:302
 msgid "Links"
 msgstr "Odkazy"
 
-#: print.module:217
+#: print.module:115;258
 #: print.info:0
 #: print_mail/print_mail.info:0
 #: print_pdf/print_pdf.info:0
 msgid "Printer, e-mail and PDF versions"
 msgstr ""
 
-#: print.module:224
+#: print.module:265
 msgid "Show printer-friendly version link"
 msgstr "Pridať odkaz \"Verzia pre tlač\""
 
-#: print.module:226
+#: print.module:267
 msgid "Displays the link to a printer-friendly version of the content. Further configuration is available on the !settings."
 msgstr "Zobrazí odkaz na printer-friendly verziu obsahu. Ďaľšia konfigurácia je možná v !nastaveniach."
 
-#: print.module:226;232
-#: print_mail/print_mail.module:160;166
-#: print_pdf/print_pdf.module:198;204
+#: print.module:267;273
+#: print_mail/print_mail.module:168;174
+#: print_pdf/print_pdf.module:212;218
 msgid "settings page"
 msgstr "Nastavenia"
 
-#: print.module:230
+#: print.module:271
 msgid "Show printer-friendly version link in individual comments"
 msgstr "Ukáž printer-friendly verziu odkazu v samostatných komentároch"
 
-#: print.module:232
+#: print.module:273
 msgid "Displays the link to a printer-friendly version of the comment. Further configuration is available on the !settings."
 msgstr "Zobrazí odkaz na printer-friendly verziu komentára. Ďaľšia konfigurácia je možná v !nastaveniach."
 
-#: print.module:321
+#: print.module:362
 msgid "Printer-friendly version"
 msgstr "Verzia pre tlač"
 
-#: print.module:323
+#: print.module:364
 msgid "Display a printer-friendly version of this page."
 msgstr "Zobraziť verziu pre tlač na tejto stránke."
 
-#: print.module:52
+#: print.module:53
 msgid "access print"
 msgstr "prístupový bod"
 
-#: print.module:52
+#: print.module:53
 msgid "administer print"
 msgstr "riadiť tlač"
 
-#: print.module:76
+#: print.module:77
 msgid "Printer-friendly"
 msgstr "Verzia pre tlač"
 
-#: print.module:83
+#: print.module:84
 msgid "Printer-friendly pages"
 msgstr "Stránky s verziou pre tlač"
 
-#: print.module:84
+#: print.module:85
 #: print.info:0
 msgid "Adds a printer-friendly version link to content and administrative pages."
 msgstr "Pridá printer-friendly verziu odkazu na stránky obsahu a administratívy."
 
-#: print.module:91
+#: print.module:92
 msgid "Web page"
 msgstr "Web stránka"
 
-#: print.module:96
+#: print.module:97
 msgid "Settings"
 msgstr "Nastavenia"
 
@@ -419,37 +431,37 @@ msgstr ""
 msgid "Setting this option will add a send by-email link on pages created by Drupal or the enabled modules."
 msgstr ""
 
-#: print_mail/print_mail.admin.inc:86
-#: print_pdf/print_pdf.admin.inc:99
+#: print_mail/print_mail.admin.inc:93
+#: print_pdf/print_pdf.admin.inc:106
 msgid "Show link in book nodes"
 msgstr "Ukáž odkaz v zaknihovaných uzloch"
 
-#: print_mail/print_mail.admin.inc:88
+#: print_mail/print_mail.admin.inc:95
 msgid "Activate this to add a send by e-mail link in book nodes. Requires the (core) book module."
 msgstr ""
 
-#: print_mail/print_mail.admin.inc:93
+#: print_mail/print_mail.admin.inc:100
 msgid "Hourly threshold"
 msgstr ""
 
-#: print_mail/print_mail.admin.inc:96
+#: print_mail/print_mail.admin.inc:103
 msgid "The maximum number of e-mails a user can send per hour."
 msgstr ""
 
-#: print_mail/print_mail.admin.inc:101
+#: print_mail/print_mail.admin.inc:108
 #: print_mail/print_mail.inc:78
 msgid "Send only the teaser"
 msgstr ""
 
-#: print_mail/print_mail.admin.inc:103
+#: print_mail/print_mail.admin.inc:110
 msgid "If selected, the default choice will be to send only the node's teaser instead of the full content."
 msgstr ""
 
-#: print_mail/print_mail.admin.inc:108
+#: print_mail/print_mail.admin.inc:115
 msgid "Enable teaser/full mode choice"
 msgstr ""
 
-#: print_mail/print_mail.admin.inc:110
+#: print_mail/print_mail.admin.inc:117
 msgid "If checked, the user will be able to choose between sending the full content or only the teaser at send time."
 msgstr ""
 
@@ -481,92 +493,88 @@ msgstr ""
 msgid "Your message"
 msgstr ""
 
-#: print_mail/print_mail.inc:88
+#: print_mail/print_mail.inc:89
 msgid "Send e-mail"
 msgstr ""
 
-#: print_mail/print_mail.inc:92
+#: print_mail/print_mail.inc:93
 msgid "Clear form"
 msgstr ""
 
-#: print_mail/print_mail.inc:97
+#: print_mail/print_mail.inc:98
 msgid "Cancel"
 msgstr ""
 
-#: print_mail/print_mail.inc:110
+#: print_mail/print_mail.inc:109
 msgid "Someone"
 msgstr ""
 
-#: print_mail/print_mail.inc:112
+#: print_mail/print_mail.inc:111
 msgid "an interesting site"
 msgstr ""
 
-#: print_mail/print_mail.inc:113
+#: print_mail/print_mail.inc:112
 msgid "!user has sent you a message from !site"
 msgstr ""
 
-#: print_mail/print_mail.inc:187
+#: print_mail/print_mail.inc:186
 msgid "You must enter a subject."
 msgstr ""
 
-#: print_mail/print_mail.inc:191
+#: print_mail/print_mail.inc:190
 msgid "You must enter a message."
 msgstr ""
 
-#: print_mail/print_mail.inc:226
+#: print_mail/print_mail.inc:225
 msgid "us"
 msgstr ""
 
-#: print_mail/print_mail.inc:227
+#: print_mail/print_mail.inc:226
 msgid "Thank you for spreading the word about !site."
 msgstr ""
 
-#: print_mail/print_mail.inc:238
+#: print_mail/print_mail.inc:237
 msgid "Message from sender:"
 msgstr ""
 
-#: print_mail/print_mail.inc:268
-msgid "The form has been reset to the default values."
-msgstr ""
-
-#: print_mail/print_mail.inc:225
+#: print_mail/print_mail.inc:224
 #: print_mail/print_mail.module:0
 msgid "print_mail"
 msgstr ""
 
-#: print_mail/print_mail.inc:225
+#: print_mail/print_mail.inc:224
 msgid "%name [%from] sent %page to [%to]"
 msgstr ""
 
-#: print_mail/print_mail.module:158
+#: print_mail/print_mail.module:166
 msgid "Show send by e-mail link"
 msgstr ""
 
-#: print_mail/print_mail.module:160
+#: print_mail/print_mail.module:168
 msgid "Displays a link to send the content by e-mail. Further configuration is available on the !settings."
 msgstr ""
 
-#: print_mail/print_mail.module:164
+#: print_mail/print_mail.module:172
 msgid "Show send by e-mail link in individual comments"
 msgstr ""
 
-#: print_mail/print_mail.module:166
+#: print_mail/print_mail.module:174
 msgid "Displays a link to send the comment by e-mail. Further configuration is available on the !settings."
 msgstr ""
 
-#: print_mail/print_mail.module:182
+#: print_mail/print_mail.module:190
 msgid "Send to friend"
 msgstr ""
 
-#: print_mail/print_mail.module:184
+#: print_mail/print_mail.module:192
 msgid "Send this page by e-mail."
 msgstr ""
 
-#: print_mail/print_mail.module:45
+#: print_mail/print_mail.module:46
 msgid "Send page by e-mail"
 msgstr ""
 
-#: print_mail/print_mail.module:53
+#: print_mail/print_mail.module:54
 msgid "e-mail"
 msgstr ""
 
@@ -602,124 +610,124 @@ msgstr ""
 msgid "Setting this option will add a PDF version page link on pages created by Drupal or the enabled modules."
 msgstr "Nastavenie tejto možnosti pridá PDF verziu stránky odkazu na stránkach vytvorených Drupal-om alebo na zapnuté moduly."
 
-#: print_pdf/print_pdf.admin.inc:101
+#: print_pdf/print_pdf.admin.inc:108
 msgid "Activate this to add a PDF version link in book nodes. Requires the (core) book module."
 msgstr "Aktivujte toto, ak chcete mať PDF verziu odkazu v zaknihovaných uzloch. Vyžaduje (jadro) knižný modul."
 
-#: print_pdf/print_pdf.admin.inc:106
+#: print_pdf/print_pdf.admin.inc:113
 msgid "Open PDF in"
 msgstr ""
 
-#: print_pdf/print_pdf.admin.inc:107
+#: print_pdf/print_pdf.admin.inc:114
 msgid "Same browser window"
 msgstr ""
 
-#: print_pdf/print_pdf.admin.inc:107
+#: print_pdf/print_pdf.admin.inc:114
 msgid "New browser window"
 msgstr ""
 
-#: print_pdf/print_pdf.admin.inc:107
+#: print_pdf/print_pdf.admin.inc:114
 msgid "Save dialog"
 msgstr ""
 
-#: print_pdf/print_pdf.admin.inc:109
+#: print_pdf/print_pdf.admin.inc:116
 msgid "Select the desired method for opening the PDF in the user's browser."
 msgstr ""
 
-#: print_pdf/print_pdf.admin.inc:114
+#: print_pdf/print_pdf.admin.inc:121
 msgid "Paper size"
 msgstr ""
 
-#: print_pdf/print_pdf.admin.inc:131
+#: print_pdf/print_pdf.admin.inc:138
 msgid "Choose the paper size of the generated PDF."
 msgstr ""
 
-#: print_pdf/print_pdf.admin.inc:136
+#: print_pdf/print_pdf.admin.inc:143
 msgid "Page orientation"
 msgstr ""
 
-#: print_pdf/print_pdf.admin.inc:137
+#: print_pdf/print_pdf.admin.inc:144
 msgid "Portrait"
 msgstr ""
 
-#: print_pdf/print_pdf.admin.inc:137
+#: print_pdf/print_pdf.admin.inc:144
 msgid "Landscape"
 msgstr ""
 
-#: print_pdf/print_pdf.admin.inc:139
+#: print_pdf/print_pdf.admin.inc:146
 msgid "Choose the page orientation of the generated PDF."
 msgstr ""
 
-#: print_pdf/print_pdf.admin.inc:143
+#: print_pdf/print_pdf.admin.inc:150
 msgid "Font Family"
 msgstr ""
 
-#: print_pdf/print_pdf.admin.inc:147
+#: print_pdf/print_pdf.admin.inc:154
 msgid "(TCPDF only) Set the font family to be used. Examples: %examples."
 msgstr ""
 
-#: print_pdf/print_pdf.admin.inc:148
+#: print_pdf/print_pdf.admin.inc:155
 msgid "CAUTION: TCPDF embeds the complete font in the generated PDF. If you're not using Unicode, then helvetica or times are safe choices that will keep the PDF small. Unicode fonts can increase the size of the PDF to the 1MB region."
 msgstr ""
 
-#: print_pdf/print_pdf.admin.inc:152
+#: print_pdf/print_pdf.admin.inc:159
 msgid "Font Size"
 msgstr ""
 
-#: print_pdf/print_pdf.admin.inc:156
+#: print_pdf/print_pdf.admin.inc:163
 msgid "(TCPDF only) Set the font size to be used for normal text. This is the base value for the scaling applied to other text styles."
 msgstr ""
 
-#: print_pdf/print_pdf.admin.inc:162
+#: print_pdf/print_pdf.admin.inc:169
 msgid "No PDF generation tool found! Please dowload a supported PHP PDF generation tool. Check this module's INSTALL.txt for more details."
 msgstr "Žiadny PDF generačný nástroj nebol nájdený! Stiahnite prosím PHP PDF generačný nástroj. Pre viac detailov si môžete skontrolovať INSTALL.txt modulu."
 
-#: print_pdf/print_pdf.admin.inc:177
+#: print_pdf/print_pdf.admin.inc:184
 msgid "Font size must be at least 1."
 msgstr ""
 
-#: print_pdf/print_pdf.pages.inc:339
+#: print_pdf/print_pdf.pages.inc:351
 msgid "Page !n of !total"
 msgstr ""
 
-#: print_pdf/print_pdf.module:196
+#: print_pdf/print_pdf.module:210
 msgid "Show PDF version link"
 msgstr "Ukáž PDF verziu odkazu"
 
-#: print_pdf/print_pdf.module:198
+#: print_pdf/print_pdf.module:212
 msgid "Displays the link to a PDF version of the content. Further configuration is available on the !settings."
 msgstr "Zobrazí odkaz na PDF verziu obsahu. Ďaľšia konfigurácia je možná v !nastaveniach."
 
-#: print_pdf/print_pdf.module:202
+#: print_pdf/print_pdf.module:216
 msgid "Show PDF version link in individual comments"
 msgstr "Ukáž PDF verziu odkazu v samostatných odkazoch"
 
-#: print_pdf/print_pdf.module:204
+#: print_pdf/print_pdf.module:218
 msgid "Displays the link to a PDF version of the comment. Further configuration is available on the !settings."
 msgstr "Zobrazí odkaz na PDF verzii komentára. Ďaľšia konfigurácia je možná v !nastaveniach."
 
-#: print_pdf/print_pdf.module:221
+#: print_pdf/print_pdf.module:235
 #: print_pdf/print_pdf.info:0
 msgid "PDF version"
 msgstr "PDF verzia"
 
-#: print_pdf/print_pdf.module:223
+#: print_pdf/print_pdf.module:237
 msgid "Display a PDF version of this page."
 msgstr "Zobrazí PDF verziu tejto stránky"
 
-#: (duplicate) print_pdf/print_pdf.module:93
+#: (duplicate) print_pdf/print_pdf.module:100
 msgid "Print PDF"
 msgstr ""
 
-#: (duplicate) print_pdf/print_pdf.module:94
+#: (duplicate) print_pdf/print_pdf.module:101
 msgid "No PDF tool selected. Please configure it in the <a href=\"@url\">PDF settings page</a>."
 msgstr ""
 
-#: print_pdf/print_pdf.module:62
+#: print_pdf/print_pdf.module:69
 msgid "Printer-friendly PDF"
 msgstr "Printer-friendly PDF"
 
-#: print_pdf/print_pdf.module:69
+#: print_pdf/print_pdf.module:76
 msgid "PDF"
 msgstr "PDF"
 

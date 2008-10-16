@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Drupal Printer Friendly Pages V6.x-1.0\n"
-"POT-Creation-Date: 2008-09-11 18:28+0200\n"
-"PO-Revision-Date: 2008-09-11 18:48+0100\n"
-"Last-Translator: Frank Tartler <frank.tartler@googlemail.com>\n"
+"Project-Id-Version: Drupal Printer Friendly Pages V6.x-1.0-rc9\n"
+"POT-Creation-Date: 2008-10-16 11:56+0200\n"
+"PO-Revision-Date: 2008-10-16 12:05+0100\n"
+"Last-Translator: \n"
 "Language-Team: Frank Tartler <frank.tartler@drupal.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -40,7 +40,7 @@ msgstr "Druckoptimierte URL-Liste"
 
 #: print.admin.inc:37
 msgid "If set, a list of the destination URLs for the page links will be displayed at the bottom of the page."
-msgstr "Wenn aktiviert, werden die Ziel-URLs von Links im Text am Ende der Seite aufgeführt."
+msgstr "Wenn aktiviert, werden die Ziel-URLs von Verweisen im Text am Ende der Seite aufgeführt."
 
 #: print.admin.inc:42
 msgid "Include comments in printer-friendly version"
@@ -104,22 +104,22 @@ msgstr "Falls kein direkter Dateizugriff auf den Server besteht, kann dieses Fel
 
 #: print.admin.inc:88
 msgid "Footer options"
-msgstr "Fußzeilen-Optionen"
+msgstr ""
 
 #: print.admin.inc:95
 msgid "Footer type"
-msgstr "Fußzeilen-Typ"
+msgstr ""
 
 #: print.admin.inc:96
 msgid "Site's footer"
-msgstr "Fußzeile der Website"
+msgstr ""
 
 #: print.admin.inc:98
 msgid "Select the type of footer to display on the printer-friendly version. In case of a user-specified footer, insert it below."
-msgstr "Auswahl des Fußzeilen-Typs, der auf der druckoptimierten Version angezeigt wird. Im Falle einer benutzerdefinierten Fußzeile unten eingeben."
+msgstr ""
 
 #: print.admin.inc:111
-#: print.pages.inc:248
+#: print.pages.inc:250
 msgid "Source URL"
 msgstr "Quellen-URL"
 
@@ -141,7 +141,7 @@ msgstr "Zeige Datum und Uhrzeit in der Quellen-URL-Zeile an."
 
 #: print.admin.inc:132
 msgid "Force use of node ID in source URL"
-msgstr "Erzwingt die Verwendung der Beitrags-ID in der Quellen-URL."
+msgstr "Erzwinge die Verwendung der Node ID in der Quellen-URL."
 
 #: print.admin.inc:134
 msgid "Drupal will attempt to use the page's defined alias in case there is one. To force the use of the fixed URL, activate this option."
@@ -153,13 +153,13 @@ msgstr "Webseiten-Optionen"
 
 #: print.admin.inc:175
 msgid "Printer-friendly page link"
-msgstr "Link ‚Druckoptimierte Seite‘ anzeigen"
+msgstr "Verweis ‚Druckoptimierte Seite‘ anzeigen"
 
 #: print.admin.inc:177
 #: print_mail/print_mail.admin.inc:27
 #: print_pdf/print_pdf.admin.inc:40
 msgid "Links area"
-msgstr "Link-Bereich"
+msgstr "Verweis-Bereich"
 
 #: print.admin.inc:177
 #: print_mail/print_mail.admin.inc:27
@@ -169,19 +169,19 @@ msgstr "Inhaltsecke"
 
 #: print.admin.inc:178
 msgid "Choose the location of the link(s) to the printer-friendly page. The Links area is usually below the node content, whereas the Content corner is placed in the upper-right corner of the node content. Unselect all options to disable the link. Even if the link is disabled, you can still view the print version of a node by going to !path/nid where nid is the numeric id of the node."
-msgstr "Auswahl der Stelle für die Links auf die druckoptimierte Seite. Der Link-Bereich ist normalerweise unter dem Inhalt des Beitrags, wogegen die Inhaltsecke in der Ecke rechts-oben vom Inhalt des Beitrags platziert ist. Wenn alle Optionen deaktiviert werden, wird der Link deaktiviert. Selbst wenn dieser Link deaktivert ist, kann die Druckversion eines Beitrags über die Adresszeile mit den Argumenten print/nid (nid = ID des Knotens) angezeigt werden."
+msgstr "Auswahl der Stelle für die Verweise auf die druckoptimierte Seite. Der Verweise-Bereich ist normalerweise unter dem Inhalt des Beitrags, wogegen die Inhaltsecke in der Ecke rechts-oben vom Inhalt des Beitrags platziert ist. Wenn alle Optionen deaktiviert werden, wird der Verweis deaktiviert. Selbst wenn dieser Verweis deaktivert ist, kann die Druckversion eines Beitrags über die Adresszeile mit den Argumenten print/nid (nid = ID des Knotens) angezeigt werden."
 
 #: print.admin.inc:183
 #: print_mail/print_mail.admin.inc:33
 #: print_pdf/print_pdf.admin.inc:46
 msgid "Advanced link options"
-msgstr "Erweiterte Link-Optionen"
+msgstr "Erweiterte Verweis-Optionen"
 
 #: print.admin.inc:190
 #: print_mail/print_mail.admin.inc:40
 #: print_pdf/print_pdf.admin.inc:53
 msgid "Link style"
-msgstr "Link-Stil"
+msgstr "Verweis-Stil"
 
 #: print.admin.inc:192
 #: print_mail/print_mail.admin.inc:42
@@ -205,13 +205,13 @@ msgstr "Symbol und Text"
 #: print_mail/print_mail.admin.inc:43
 #: print_pdf/print_pdf.admin.inc:56
 msgid "Select the visual style of the link."
-msgstr "Auswahl des optischen Stils des Links."
+msgstr "Auswahl der optischen Stils des Verweises"
 
 #: print.admin.inc:198
 #: print_mail/print_mail.admin.inc:48
 #: print_pdf/print_pdf.admin.inc:61
 msgid "Link visibility"
-msgstr "Link-Sichtbarkeit"
+msgstr "Sichtbarkeit des Verweises"
 
 #: print.admin.inc:200;223
 #: print_mail/print_mail.admin.inc:50;73
@@ -247,151 +247,163 @@ msgstr "Dies kann beim Erstellen von Thems verwendet werden, um den Stil des Lin
 #: print_mail/print_mail.admin.inc:71
 #: print_pdf/print_pdf.admin.inc:84
 msgid "Show link in system (non-content) pages"
-msgstr "Zeigt einen Link auf allen System-Seiten (nicht Inhalt) an"
+msgstr "Zeigt einen Verweis auf allen System-Seiten (nicht Inhalt) an"
 
 #: print.admin.inc:230
 msgid "Setting this option will add a printer-friendly version page link on pages created by Drupal or the enabled modules."
-msgstr "Diese Option fügt einen Link zu einer druckoptimierten Version auf Seiten ein, die von Drupal oder aktivierten Modulen erzeugt wurden."
+msgstr "Diese Option fügt einen Verweis auf eine druckoptimierte Version auf Seiten ein, die von Drupal oder aktivierten Modulen erzeugten wurden."
 
 #: print.admin.inc:236
-msgid "Take control of the book module printer-friendly link"
-msgstr "Den Link zur druckoptimierten Version im Modul ‚Book‘ steuern"
+#: print_mail/print_mail.admin.inc:86
+#: print_pdf/print_pdf.admin.inc:99
+msgid "Use URL alias instead of node ID"
+msgstr ""
 
 #: print.admin.inc:238
-msgid "Activate this to have the printer-friendly link in book nodes handled by this module. Requires the (core) book module."
-msgstr "Wenn aktiviert, wird der Link zu einer druckoptimierte Version in Buch-Beiträgen durch dieses Modul verwaltet. Erfordert das (Kern-) Modul ‚Book‘."
+#: print_mail/print_mail.admin.inc:88
+#: print_pdf/print_pdf.admin.inc:101
+msgid "Enabling this will create the link using the URL alias instead of the node ID."
+msgstr ""
 
 #: print.admin.inc:243
+msgid "Take control of the book module printer-friendly link"
+msgstr "Den Verweis zur druckoptimierten Version im Modul ‚Book‘ steuern"
+
+#: print.admin.inc:245
+msgid "Activate this to have the printer-friendly link in book nodes handled by this module. Requires the (core) book module."
+msgstr "Wenn aktiviert, wird der Verweis auf eine druckoptimierte Version in Buch-Beiträgen durch dieses Modul verwaltet. Erfordert das (Kern-) Modul ‚Book‘."
+
+#: print.admin.inc:250
 msgid "Open the printer-friendly version in a new window"
 msgstr "Öffnet die druckoptimierte Version in einem neuen Fenster"
 
-#: print.admin.inc:245
+#: print.admin.inc:252
 msgid "Setting this option will make the printer-friendly version open in a new window/tab."
 msgstr "Ist diese Option aktiviert, wird die druckoptimierte Version in einem neuen Browserfenster/Reiter geöffnet."
 
-#: print.admin.inc:250
+#: print.admin.inc:257
 msgid "Send to printer"
 msgstr "An Drucker senden"
 
-#: print.admin.inc:252
+#: print.admin.inc:259
 msgid "Automatically calls the browser's print function when the printer-friendly version is displayed."
 msgstr "Ruft automatisch die Druckfunktion des Browsers auf wenn die druckoptimierte Version angezeigt wird."
 
-#: print.admin.inc:257
+#: print.admin.inc:264
 msgid "Robots META tags"
 msgstr "META-Tags für Robots von Suchmaschinen"
 
-#: print.admin.inc:264
+#: print.admin.inc:271
 msgid "Add noindex"
 msgstr "„noindex“ hinzufügen"
 
-#: print.admin.inc:266
+#: print.admin.inc:273
 msgid "Instruct robots to not index printer-friendly pages. Recommended for good search engine karma."
 msgstr "Weist Suchmaschinen-Robots an, druckoptimierte Versionen nicht zu indexieren. Die Aktivierung wird empfohlen."
 
-#: print.admin.inc:271
+#: print.admin.inc:278
 msgid "Add nofollow"
 msgstr "„nofollow“ hinzufügen"
 
-#: print.admin.inc:273
+#: print.admin.inc:280
 msgid "Instruct robots to not follow outgoing links on printer-friendly pages."
-msgstr "Weist Suchmaschinen-Robots an, Links auf druckoptimierte Seiten nicht zu folgen."
+msgstr "Weist Suchmaschinen-Robots an, Verweisen auf druckoptimierte Seiten nicht zu folgen."
 
-#: print.admin.inc:278
+#: print.admin.inc:285
 msgid "Add noarchive"
 msgstr "„noarchive“ hinzufügen"
 
-#: print.admin.inc:280
+#: print.admin.inc:287
 msgid "Non-standard tag to instruct search engines to not show a \"Cached\" link for your printer-friendly pages. Recognized by Googlebot."
-msgstr "Nicht standardisierter Tag, weist Suchmaschinen an keinen „Cached“-Link für die druckoptimierte Seite anzuzeigen. Der Tag wird von Googlebot berücksichtigt."
+msgstr "Nicht standardisierter Tag, weist Suchmaschinen an keinen „Cached“-Verweis für die druckoptimierte Seite anzuzeigen. Der Tag wird von Googlebot berücksichtigt."
 
-#: print.pages.inc:226
+#: print.pages.inc:228
 msgid "Published on %site_name"
 msgstr "Veröffentlicht auf %site_name"
 
-#: print.pages.inc:245
+#: print.pages.inc:247
 msgid "retrieved on %date"
 msgstr "abgerufen am %date"
 
-#: print.pages.inc:259
+#: print.pages.inc:261
 msgid "Anonymous"
 msgstr "Anonym"
 
-#: print.pages.inc:260
+#: print.pages.inc:262
 msgid "By %author"
 msgstr "Von %author"
 
-#: print.pages.inc:264
+#: print.pages.inc:266
 msgid "Created %date"
 msgstr "Erstellt %date"
 
-#: print.pages.inc:300
+#: print.pages.inc:302
 msgid "Links"
-msgstr "Links"
+msgstr "Verweise"
 
-#: print.module:217
+#: print.module:115;258
 #: print.info:0
 #: print_mail/print_mail.info:0
 #: print_pdf/print_pdf.info:0
 msgid "Printer, e-mail and PDF versions"
 msgstr "Drucker, E-Mail und PDF-Versionen"
 
-#: print.module:224
+#: print.module:265
 msgid "Show printer-friendly version link"
-msgstr "Link zu druckoptimierter Version zeigen"
+msgstr "Verweis auf druckoptimierte Version zeigen"
 
-#: print.module:226
+#: print.module:267
 msgid "Displays the link to a printer-friendly version of the content. Further configuration is available on the !settings."
-msgstr "Zeigt den Link zur druckoptimierten Version des Inhalts an. Weitere Einstellungen sind möglich in den !settings."
+msgstr "Zeigt den Verweis zur druckoptimierten Version des Inhalts an. Weitere Einstellungen sind möglich in den !settings."
 
-#: print.module:226;232
-#: print_mail/print_mail.module:160;166
-#: print_pdf/print_pdf.module:198;204
+#: print.module:267;273
+#: print_mail/print_mail.module:168;174
+#: print_pdf/print_pdf.module:212;218
 msgid "settings page"
 msgstr "Einstellungen"
 
-#: print.module:230
+#: print.module:271
 msgid "Show printer-friendly version link in individual comments"
-msgstr "Link zur druckoptimierten Version in einzelnen Kommentaren anzeigen"
+msgstr "Verweis auf die druckoptimierte Version in einzelnen Kommentaren anzeigen"
 
-#: print.module:232
+#: print.module:273
 msgid "Displays the link to a printer-friendly version of the comment. Further configuration is available on the !settings."
-msgstr "Link zur Druckversion des Kommentars zeigen. Weitere Einstellungen sind möglich in den !settings."
+msgstr "Verweis zur Druckversion des Kommentars zeigen. Weitere Einstellungen sind möglich in den !settings."
 
-#: print.module:321
+#: print.module:362
 msgid "Printer-friendly version"
 msgstr "Druckoptimierte Version"
 
-#: print.module:323
+#: print.module:364
 msgid "Display a printer-friendly version of this page."
 msgstr "Druckoptimierte Version dieser Seite anzeigen."
 
-#: print.module:52
+#: print.module:53
 msgid "access print"
 msgstr "Zugriff auf Druckversion"
 
-#: print.module:52
+#: print.module:53
 msgid "administer print"
 msgstr "Einstellungen verwalten"
 
-#: print.module:76
+#: print.module:77
 msgid "Printer-friendly"
 msgstr "druckoptimiert"
 
-#: print.module:83
+#: print.module:84
 msgid "Printer-friendly pages"
 msgstr "Druckoptimierte Seiten"
 
-#: print.module:84
+#: print.module:85
 #: print.info:0
 msgid "Adds a printer-friendly version link to content and administrative pages."
-msgstr "Fügt bei Inhalten und den Verwaltungsseiten einen Link ‚Druckoptimierte Version‘ ein."
+msgstr "Fügt bei Inhalten und den Verwaltungsseiten einen Verweis ‚Druckoptimierte Version‘ ein."
 
-#: print.module:91
+#: print.module:92
 msgid "Web page"
 msgstr "Webseite"
 
-#: print.module:96
+#: print.module:97
 msgid "Settings"
 msgstr "Einstellungen"
 
@@ -413,47 +425,47 @@ msgstr "‚Als E-Mail senden‘-Optionen"
 
 #: print_mail/print_mail.admin.inc:25
 msgid "Send by e-mail link"
-msgstr "Link ‚Als E-Mail senden‘"
+msgstr "Verweis ‚Als E-Mail senden‘"
 
 #: print_mail/print_mail.admin.inc:28
 msgid "Choose the location of the link(s) to the send by e-mail page. The Links area is usually below the node content, whereas the Content corner is placed in the upper-right corner of the node content. Unselect all options to disable the link. Even if the link is disabled, you can still send a node by e-mail by going to !path/nid where nid is the numeric id of the node."
-msgstr "Auswahl der Stelle für den ‚Als E-Mail senden‘-Link. Der Link-Bereich ist normalerweise unter dem Inhalt des Beitrags, wogegen die Inhaltsecke in der Ecke rechts-oben vom Inhalt des Beitrags platziert ist. Wenn alle Optionen deaktiviert werden, wird der Link deaktiviert. Selbst wenn der Link deaktiviert ist, kann die PDF-Version eines Beitrags immer noch betrachtet werden, indem printpdf/nid eingegeben wird, wobei nid die ID des Beitrags ist."
+msgstr "Auswahl der Stelle für den ‚Als E-Mail senden‘-Verweis. Der Verweise-Bereich ist normalerweise unter dem Inhalt des Beitrags, wogegen die Inhaltsecke in der Ecke rechts-oben vom Inhalt des Beitrags platziert ist. Wenn alle Optionen deaktiviert werden, wird der Verweis deaktiviert. Selbst wenn der Verweis deaktiviert ist, kann die PDF-Version eines Beitrags immer noch betrachtet werden, indem printpdf/nid eingegeben wird, wobei nid die ID des Beitrags ist."
 
 #: print_mail/print_mail.admin.inc:80
 msgid "Setting this option will add a send by-email link on pages created by Drupal or the enabled modules."
-msgstr "Das Setzen dieser Option fügt einen ‚Als E-Mail senden‘-Link auf Seiten hinzu, die von Drupal oder aktivierten Modulen erstellt wurden."
-
-#: print_mail/print_mail.admin.inc:86
-#: print_pdf/print_pdf.admin.inc:99
-msgid "Show link in book nodes"
-msgstr "Link auf Buchseiten anzeigen"
-
-#: print_mail/print_mail.admin.inc:88
-msgid "Activate this to add a send by e-mail link in book nodes. Requires the (core) book module."
-msgstr "Dies fügt, wenn aktiviert, einen ‚Als E-Mail senden‘-Link auf Buchseiten ein. Erfordert das (Kern-) Modul Book."
+msgstr "Das Setzen dieser Option fügt einen ‚Als E-Mail senden‘-Verweis auf Seiten hinzu, die von Drupal oder aktivierten Modulen erstellt wurden."
 
 #: print_mail/print_mail.admin.inc:93
+#: print_pdf/print_pdf.admin.inc:106
+msgid "Show link in book nodes"
+msgstr "Verweis auf Buchseiten anzeigen"
+
+#: print_mail/print_mail.admin.inc:95
+msgid "Activate this to add a send by e-mail link in book nodes. Requires the (core) book module."
+msgstr "Dies fügt, wenn aktiviert, einen ‚Als E-Mail senden‘-Verweis auf Buchseiten ein. Erfordert das (Kern-) Buch-Modul"
+
+#: print_mail/print_mail.admin.inc:100
 msgid "Hourly threshold"
 msgstr "Stündlicher Grenzwert"
 
-#: print_mail/print_mail.admin.inc:96
+#: print_mail/print_mail.admin.inc:103
 msgid "The maximum number of e-mails a user can send per hour."
 msgstr "Die maximale Anzahl an E-Mails, die ein Benutzer pro Stunde senden kann."
 
-#: print_mail/print_mail.admin.inc:101
+#: print_mail/print_mail.admin.inc:108
 #: print_mail/print_mail.inc:78
 msgid "Send only the teaser"
 msgstr "Nur den Anrisstext senden"
 
-#: print_mail/print_mail.admin.inc:103
+#: print_mail/print_mail.admin.inc:110
 msgid "If selected, the default choice will be to send only the node's teaser instead of the full content."
 msgstr "Wenn ausgewählt, so ist die Standardauswahl, dass nur der Anrisstext und nicht der vollständige Inhalt gesendet wird."
 
-#: print_mail/print_mail.admin.inc:108
+#: print_mail/print_mail.admin.inc:115
 msgid "Enable teaser/full mode choice"
 msgstr "Auswahl zwischen Anrisstext-Modus on vollständigem Modus aktivieren"
 
-#: print_mail/print_mail.admin.inc:110
+#: print_mail/print_mail.admin.inc:117
 msgid "If checked, the user will be able to choose between sending the full content or only the teaser at send time."
 msgstr "Wenn aktiviert, kann der Benutzer beim Senden auswählen, ob der vollständige Inhhalt oder nur der Anrisstext gesendet wird."
 
@@ -485,92 +497,88 @@ msgstr "Betreff"
 msgid "Your message"
 msgstr "Ihre Nachricht"
 
-#: print_mail/print_mail.inc:88
+#: print_mail/print_mail.inc:89
 msgid "Send e-mail"
 msgstr "E-Mail senden"
 
-#: print_mail/print_mail.inc:92
+#: print_mail/print_mail.inc:93
 msgid "Clear form"
 msgstr "Formular leeren"
 
-#: print_mail/print_mail.inc:97
+#: print_mail/print_mail.inc:98
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: print_mail/print_mail.inc:110
+#: print_mail/print_mail.inc:109
 msgid "Someone"
 msgstr "Jemand"
 
-#: print_mail/print_mail.inc:112
+#: print_mail/print_mail.inc:111
 msgid "an interesting site"
 msgstr "eine interessante Website"
 
-#: print_mail/print_mail.inc:113
+#: print_mail/print_mail.inc:112
 msgid "!user has sent you a message from !site"
 msgstr "Nachricht der Website !site von !user"
 
-#: print_mail/print_mail.inc:187
+#: print_mail/print_mail.inc:186
 msgid "You must enter a subject."
 msgstr "Ein Betreff muss eingegeben werden."
 
-#: print_mail/print_mail.inc:191
+#: print_mail/print_mail.inc:190
 msgid "You must enter a message."
 msgstr "Eine Nachricht muss eingegeben werden."
 
-#: print_mail/print_mail.inc:226
+#: print_mail/print_mail.inc:225
 msgid "us"
 msgstr "uns"
 
-#: print_mail/print_mail.inc:227
+#: print_mail/print_mail.inc:226
 msgid "Thank you for spreading the word about !site."
 msgstr "Danke für das Weitersagen von !site."
 
-#: print_mail/print_mail.inc:238
+#: print_mail/print_mail.inc:237
 msgid "Message from sender:"
 msgstr "Nachricht des Absenders:"
 
-#: print_mail/print_mail.inc:268
-msgid "The form has been reset to the default values."
-msgstr "Das Formular wurde auf die Standardwerte zurückgesetzt."
-
-#: print_mail/print_mail.inc:225
+#: print_mail/print_mail.inc:224
 #: print_mail/print_mail.module:0
 msgid "print_mail"
 msgstr "print_mail"
 
-#: print_mail/print_mail.inc:225
+#: print_mail/print_mail.inc:224
 msgid "%name [%from] sent %page to [%to]"
 msgstr "%name [%from] hat %page an [%to] gesendet"
 
-#: print_mail/print_mail.module:158
-msgid "Show send by e-mail link"
-msgstr "‚Per E-Mail senden‘-Link anzeigen"
-
-#: print_mail/print_mail.module:160
-msgid "Displays a link to send the content by e-mail. Further configuration is available on the !settings."
-msgstr "Zeigt einen Link, um den Inhalt per E-Mail zu versenden. Weitere Einstellungen sind möglich in den !settings."
-
-#: print_mail/print_mail.module:164
-msgid "Show send by e-mail link in individual comments"
-msgstr "‚Per E-Mail senden‘-Link in einzelnen Kommentaren anzeigen"
-
 #: print_mail/print_mail.module:166
-msgid "Displays a link to send the comment by e-mail. Further configuration is available on the !settings."
-msgstr "Zeigt einen Link, um den Kommentar per E-Mail zu versenden. Die weitere Konfiguration ist möglich in den !settings."
+msgid "Show send by e-mail link"
+msgstr "‚Per E-Mail senden‘-Verweis anzeigen"
 
-#: print_mail/print_mail.module:182
+#: print_mail/print_mail.module:168
+msgid "Displays a link to send the content by e-mail. Further configuration is available on the !settings."
+msgstr "Zeigt einen Verweis, um den Inhalt per E-Mail zu versenden. Weitere Einstellungen sind möglich in den !settings."
+
+#: print_mail/print_mail.module:172
+msgid "Show send by e-mail link in individual comments"
+msgstr "‚Per E-Mail senden‘-Verweis in einzelnen Kommentaren anzeigen"
+
+#: print_mail/print_mail.module:174
+msgid "Displays a link to send the comment by e-mail. Further configuration is available on the !settings."
+msgstr "Zeigt einen Verweis, um den Kommentar per E-Mail zu versenden. Die weitere Konfiguration ist möglich in den !settings."
+
+#: print_mail/print_mail.module:190
 msgid "Send to friend"
 msgstr "Einem Freund senden"
 
-#: print_mail/print_mail.module:184
+#: print_mail/print_mail.module:192
 msgid "Send this page by e-mail."
 msgstr "Diese Seite per E-Mail senden"
 
-#: print_mail/print_mail.module:45
+#: print_mail/print_mail.module:46
 msgid "Send page by e-mail"
 msgstr "Seite per E-Mail senden"
 
-#: print_mail/print_mail.module:53
+#: print_mail/print_mail.module:54
 msgid "e-mail"
 msgstr "E-Mail"
 
@@ -596,134 +604,134 @@ msgstr "Diese Option legt das Werkzeug zur PDF-Erzeugung fest, das vom Modul ver
 
 #: print_pdf/print_pdf.admin.inc:38
 msgid "PDF version link"
-msgstr "Link ‚PDF-Version‘"
+msgstr "Verweis ‚PDF-Version‘"
 
 #: print_pdf/print_pdf.admin.inc:41
 msgid "Choose the location of the link(s) to the PDF version. The Links area is usually below the node content, whereas the Content corner is placed in the upper-right corner of the node content. Unselect all options to disable the link. Even if the link is disabled, you can still view the PDF version of a node by going to !path/nid where nid is the numeric id of the node."
-msgstr "Auswahl der Stelle für den Link ‚PDF-Version‘ für jeden Beitrag. Der Link-Bereich ist normalerweise unter dem Inhalt des Beitrags, wogegen die Inhaltsecke in der Ecke rechts-oben vom Inhalt des Beitrags platziert ist. Wenn alle Optionen deaktiviert werden, wird der Link deaktiviert. Selbst wenn der Link deaktiviert ist, kann die PDF-Version eines Beitrags immer noch betrachtet werden, indem printpdf/nid eingegeben wird, wobei nid die ID des Beitrags ist."
+msgstr "Auswahl der Stelle für den Verweis ‚PDF-Version‘ für jeden Beitrag. Der Verweise-Bereich ist normalerweise unter dem Inhalt des Beitrags, wogegen die Inhaltsecke in der Ecke rechts-oben vom Inhalt des Beitrags platziert ist. Wenn alle Optionen deaktiviert werden, wird der Verweis deaktiviert. Selbst wenn der Verweis deaktiviert ist, kann die PDF-Version eines Beitrags immer noch betrachtet werden, indem printpdf/nid eingegeben wird, wobei nid die ID des Beitrags ist."
 
 #: print_pdf/print_pdf.admin.inc:93
 msgid "Setting this option will add a PDF version page link on pages created by Drupal or the enabled modules."
-msgstr "Das Setzen dieser Option fügt einen ‚PDF-Version‘-Link auf Seiten ein, die von Drupal oder den aktivierten Modulen erzeugt wurden."
+msgstr "Das Setzen dieser Option fügt einen ‚PDF-Version‘-Verweis auf Seiten ein, die von Drupal oder den aktivierten Modulen erzeugt wurden."
 
-#: print_pdf/print_pdf.admin.inc:101
+#: print_pdf/print_pdf.admin.inc:108
 msgid "Activate this to add a PDF version link in book nodes. Requires the (core) book module."
-msgstr "Dies fügt, wenn aktiviert, einen ‚PDF-Version‘-Link auf Buchseiten ein. Erfordert das (Kern-) Modul ‚Book‘."
+msgstr "Dies fügt, wenn aktiviert, einen ‚PDF-Version‘-Verweis auf Buchseiten ein. Erfordert das (Kern-) Modul ‚Book‘."
 
-#: print_pdf/print_pdf.admin.inc:106
+#: print_pdf/print_pdf.admin.inc:113
 msgid "Open PDF in"
 msgstr "PDF öffnen in"
 
-#: print_pdf/print_pdf.admin.inc:107
+#: print_pdf/print_pdf.admin.inc:114
 msgid "Same browser window"
 msgstr "gleichem Browser-Fenster"
 
-#: print_pdf/print_pdf.admin.inc:107
+#: print_pdf/print_pdf.admin.inc:114
 msgid "New browser window"
 msgstr "neuem Browser-Fenster"
 
-#: print_pdf/print_pdf.admin.inc:107
+#: print_pdf/print_pdf.admin.inc:114
 msgid "Save dialog"
 msgstr "Speichern-Dialog"
 
-#: print_pdf/print_pdf.admin.inc:109
+#: print_pdf/print_pdf.admin.inc:116
 msgid "Select the desired method for opening the PDF in the user's browser."
 msgstr "Legt die gewünschte Methode für das Öffnen des PDF im Browser des Benutzers fest."
 
-#: print_pdf/print_pdf.admin.inc:114
+#: print_pdf/print_pdf.admin.inc:121
 msgid "Paper size"
 msgstr "Papiergröße"
 
-#: print_pdf/print_pdf.admin.inc:131
+#: print_pdf/print_pdf.admin.inc:138
 msgid "Choose the paper size of the generated PDF."
 msgstr "Legt die Papiergröße des erzeugten PDF fest."
 
-#: print_pdf/print_pdf.admin.inc:136
+#: print_pdf/print_pdf.admin.inc:143
 msgid "Page orientation"
 msgstr "Seitenausrichtung"
 
-#: print_pdf/print_pdf.admin.inc:137
+#: print_pdf/print_pdf.admin.inc:144
 msgid "Portrait"
 msgstr "Hochformat"
 
-#: print_pdf/print_pdf.admin.inc:137
+#: print_pdf/print_pdf.admin.inc:144
 msgid "Landscape"
 msgstr "Querformat"
 
-#: print_pdf/print_pdf.admin.inc:139
+#: print_pdf/print_pdf.admin.inc:146
 msgid "Choose the page orientation of the generated PDF."
 msgstr "Legt die Seitenausrichtung des erzeugten PDF fest."
 
-#: print_pdf/print_pdf.admin.inc:143
+#: print_pdf/print_pdf.admin.inc:150
 msgid "Font Family"
 msgstr "Schriftenfamilie"
 
-#: print_pdf/print_pdf.admin.inc:147
+#: print_pdf/print_pdf.admin.inc:154
 msgid "(TCPDF only) Set the font family to be used. Examples: %examples."
 msgstr "(nur TCPDF) Einstellung der Schriftfamilie, die verwendet werden soll. Beispiele: %examples"
 
-#: print_pdf/print_pdf.admin.inc:148
+#: print_pdf/print_pdf.admin.inc:155
 msgid "CAUTION: TCPDF embeds the complete font in the generated PDF. If you're not using Unicode, then helvetica or times are safe choices that will keep the PDF small. Unicode fonts can increase the size of the PDF to the 1MB region."
 msgstr "ACHTUNG: TCPDF bettet die gesamte Schriftart in das erzeugte PDF ein. Wenn Unicode nicht verwendet wird, dann sind Helvetica oder Times eine gute Wahl, die PDFs klein zu halten. Unicode-Schriftarten können die Größe des PDF um bis zu 1 MB erhöhen."
 
-#: print_pdf/print_pdf.admin.inc:152
+#: print_pdf/print_pdf.admin.inc:159
 msgid "Font Size"
 msgstr "Schriftgröße"
 
-#: print_pdf/print_pdf.admin.inc:156
+#: print_pdf/print_pdf.admin.inc:163
 msgid "(TCPDF only) Set the font size to be used for normal text. This is the base value for the scaling applied to other text styles."
 msgstr "(nur TCPDF) Einstellung der Schriftgröße für normalen Text. Dies ist der Basiswert beim Skalieren auf andere Schriftstile."
 
-#: print_pdf/print_pdf.admin.inc:162
+#: print_pdf/print_pdf.admin.inc:169
 msgid "No PDF generation tool found! Please dowload a supported PHP PDF generation tool. Check this module's INSTALL.txt for more details."
 msgstr "Kein Werkzeug zum Erzeugen von PDFs gefunden. Ein unterstütztes PHP-Werkzeug zur Erzeugung von PDFs muss heruntergeladen werden. Die Datei INSTALL.TXT dieses Moduls enthält weitere Details."
 
-#: print_pdf/print_pdf.admin.inc:177
+#: print_pdf/print_pdf.admin.inc:184
 msgid "Font size must be at least 1."
 msgstr "Schriftgröße muss mindestens 1 sein."
 
-#: print_pdf/print_pdf.pages.inc:339
+#: print_pdf/print_pdf.pages.inc:351
 msgid "Page !n of !total"
 msgstr "Seite !n von !total"
 
-#: print_pdf/print_pdf.module:196
+#: print_pdf/print_pdf.module:210
 msgid "Show PDF version link"
-msgstr "Link zu PDF-Version anzeigen"
+msgstr "Verweis auf PDF-Version anzeigen"
 
-#: print_pdf/print_pdf.module:198
+#: print_pdf/print_pdf.module:212
 msgid "Displays the link to a PDF version of the content. Further configuration is available on the !settings."
-msgstr "Zeigt einen Link zu einer PDF-Version des Inhalts. Die weitere Konfiguration ist möglich in den !settings."
+msgstr "Zeigt einen Verweis auf eine PDF-Version des Inhalts. Die weitere Konfiguration ist möglich in den !settings."
 
-#: print_pdf/print_pdf.module:202
+#: print_pdf/print_pdf.module:216
 msgid "Show PDF version link in individual comments"
-msgstr "Link ‚PDF-Version‘ in einzelnen Kommentaren anzeigen"
+msgstr "Verweis ‚PDF-Version‘ in einzelnen Kommentaren anzeigen"
 
-#: print_pdf/print_pdf.module:204
+#: print_pdf/print_pdf.module:218
 msgid "Displays the link to a PDF version of the comment. Further configuration is available on the !settings."
-msgstr "Zeigt einen Link zu einer PDF-Version des Kommentars. Die weitere Konfiguration ist möglich in den !settings."
+msgstr "Zeigt einen Verweis auf eine PDF-Version des Kommentars. Die weitere Konfiguration ist möglich in den !settings."
 
-#: print_pdf/print_pdf.module:221
+#: print_pdf/print_pdf.module:235
 #: print_pdf/print_pdf.info:0
 msgid "PDF version"
 msgstr "PDF-Version"
 
-#: print_pdf/print_pdf.module:223
+#: print_pdf/print_pdf.module:237
 msgid "Display a PDF version of this page."
 msgstr "Zeigt eine PDF-Version dieser Seite."
 
-#: (duplicate) print_pdf/print_pdf.module:93
+#: (duplicate) print_pdf/print_pdf.module:100
 msgid "Print PDF"
 msgstr "PDF drucken"
 
-#: (duplicate) print_pdf/print_pdf.module:94
+#: (duplicate) print_pdf/print_pdf.module:101
 msgid "No PDF tool selected. Please configure it in the <a href=\"@url\">PDF settings page</a>."
 msgstr "Kein PDF-Werkzeug ausgewählt. Es muss auf der Seite <a href=\"@url\">PDF-Einstellungen</a>. konfiguriert werden."
 
-#: print_pdf/print_pdf.module:62
+#: print_pdf/print_pdf.module:69
 msgid "Printer-friendly PDF"
 msgstr "Druckeroptimiertes PDF"
 
-#: print_pdf/print_pdf.module:69
+#: print_pdf/print_pdf.module:76
 msgid "PDF"
 msgstr "PDF"
 
@@ -735,6 +743,8 @@ msgstr "print_pdf"
 msgid "Adds the capability to export pages as PDF."
 msgstr "Ermöglicht, Seiten als PDF zu exportieren."
 
+#~ msgid "The form has been reset to the default values."
+#~ msgstr "Das Formular wurde auf die Standardwerte zurückgesetzt."
 #~ msgid "Page"
 #~ msgstr "Seite"
 #~ msgid "Printer-friendly Pages"

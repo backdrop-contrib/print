@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2008-09-10 22:57+0200\n"
-"PO-Revision-Date: 2008-09-11 01:34+0100\n"
+"POT-Creation-Date: 2008-10-16 11:56+0200\n"
+"PO-Revision-Date: 2008-10-16 12:09+0100\n"
 "Last-Translator: \n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -116,7 +116,7 @@ msgid "Select the type of footer to display on the printer-friendly version. In 
 msgstr "Seleccione o tipo de rodapé para ser mostrado na versão para imprimir. Em caso de um rodapé especificado pelo utilizador, introduza-o em baixo."
 
 #: print.admin.inc:111
-#: print.pages.inc:248
+#: print.pages.inc:250
 msgid "Source URL"
 msgstr "URL de origem"
 
@@ -251,144 +251,156 @@ msgid "Setting this option will add a printer-friendly version page link on page
 msgstr "Esta opção, ao ser activada, adiciona uma ligação à versão para impressão em paǵinas criadas pelo Drupal ou pelos módulos activos."
 
 #: print.admin.inc:236
+#: print_mail/print_mail.admin.inc:86
+#: print_pdf/print_pdf.admin.inc:99
+msgid "Use URL alias instead of node ID"
+msgstr "Usar nome alternativo em vez do número da página."
+
+#: print.admin.inc:238
+#: print_mail/print_mail.admin.inc:88
+#: print_pdf/print_pdf.admin.inc:101
+msgid "Enabling this will create the link using the URL alias instead of the node ID."
+msgstr "Ao activar esta opção irá criar uma ligação usando o nome alternativo em vez do número da página."
+
+#: print.admin.inc:243
 msgid "Take control of the book module printer-friendly link"
 msgstr "Assumir controle da ligação à versão para imprimir do módulo Livro"
 
-#: print.admin.inc:238
+#: print.admin.inc:245
 msgid "Activate this to have the printer-friendly link in book nodes handled by this module. Requires the (core) book module."
 msgstr "Active isto para que a ligação à versão para imprimir em páginas de tipo livro seja tratada por este módulo. Requer o módulo (core) book."
 
-#: print.admin.inc:243
+#: print.admin.inc:250
 msgid "Open the printer-friendly version in a new window"
 msgstr "Abrir a versão para imprimir numa nova janela"
 
-#: print.admin.inc:245
+#: print.admin.inc:252
 msgid "Setting this option will make the printer-friendly version open in a new window/tab."
 msgstr "Activando esta opção irá fazer a versão para imprimir abrir numa nova janela ou separador."
 
-#: print.admin.inc:250
+#: print.admin.inc:257
 msgid "Send to printer"
 msgstr "Enviar para a impressora"
 
-#: print.admin.inc:252
+#: print.admin.inc:259
 msgid "Automatically calls the browser's print function when the printer-friendly version is displayed."
 msgstr "Chama automaticamente a função do navegador para enviar a versão para imprimir na impressora."
 
-#: print.admin.inc:257
+#: print.admin.inc:264
 msgid "Robots META tags"
 msgstr "Etiquetas meta para Robots (motores de pesquisa)"
 
-#: print.admin.inc:264
+#: print.admin.inc:271
 msgid "Add noindex"
 msgstr "Especificar noindex"
 
-#: print.admin.inc:266
+#: print.admin.inc:273
 msgid "Instruct robots to not index printer-friendly pages. Recommended for good search engine karma."
 msgstr "Impede os robots de indexar as páginas de versão para imprimir. Recomendado para um bom karma com os motores de pesquisa."
 
-#: print.admin.inc:271
+#: print.admin.inc:278
 msgid "Add nofollow"
 msgstr "Especificar nofollow"
 
-#: print.admin.inc:273
+#: print.admin.inc:280
 msgid "Instruct robots to not follow outgoing links on printer-friendly pages."
 msgstr "Indica aos robots para não seguir as hiperligações de saída nas páginas de versão para imprimir."
 
-#: print.admin.inc:278
+#: print.admin.inc:285
 msgid "Add noarchive"
 msgstr "Especificar noarchive"
 
-#: print.admin.inc:280
+#: print.admin.inc:287
 msgid "Non-standard tag to instruct search engines to not show a \"Cached\" link for your printer-friendly pages. Recognized by Googlebot."
 msgstr "Etiqueta não-standard que indica aos motores de pesquisa que não se deve mostrar uma ligação para a versão \"em cache\" das páginas de versão para imprimir. Reconhecido pelo Googlebot."
 
-#: print.pages.inc:226
+#: print.pages.inc:228
 msgid "Published on %site_name"
 msgstr "Publicado em %site_name"
 
-#: print.pages.inc:245
+#: print.pages.inc:247
 msgid "retrieved on %date"
 msgstr "acedido em %date"
 
-#: print.pages.inc:259
+#: print.pages.inc:261
 msgid "Anonymous"
 msgstr "Anónimo"
 
-#: print.pages.inc:260
+#: print.pages.inc:262
 msgid "By %author"
 msgstr "Por %author"
 
-#: print.pages.inc:264
+#: print.pages.inc:266
 msgid "Created %date"
 msgstr "Criado %date"
 
-#: print.pages.inc:300
+#: print.pages.inc:302
 msgid "Links"
 msgstr "Ligações"
 
-#: print.module:217
+#: print.module:115;258
 #: print.info:0
 #: print_mail/print_mail.info:0
 #: print_pdf/print_pdf.info:0
 msgid "Printer, e-mail and PDF versions"
 msgstr "Versão para imprimir, e-mail e PDF"
 
-#: print.module:224
+#: print.module:265
 msgid "Show printer-friendly version link"
 msgstr "Mostrar ligação para a versão para imprimir"
 
-#: print.module:226
+#: print.module:267
 msgid "Displays the link to a printer-friendly version of the content. Further configuration is available on the !settings."
 msgstr "Mostra uma ligação para a versão para imprimir do conteúdo. Configuravel também em !settings"
 
-#: print.module:226;232
-#: print_mail/print_mail.module:160;166
-#: print_pdf/print_pdf.module:198;204
+#: print.module:267;273
+#: print_mail/print_mail.module:168;174
+#: print_pdf/print_pdf.module:212;218
 msgid "settings page"
 msgstr "página de configuração"
 
-#: print.module:230
+#: print.module:271
 msgid "Show printer-friendly version link in individual comments"
 msgstr "Mostrar ligação para a versão para imprimir em cada comentário"
 
-#: print.module:232
+#: print.module:273
 msgid "Displays the link to a printer-friendly version of the comment. Further configuration is available on the !settings."
 msgstr "Mostra uma ligação para a versão para imprimir do comentário. Configuravel também em !settings"
 
-#: print.module:321
+#: print.module:362
 msgid "Printer-friendly version"
 msgstr "Versão para imprimir"
 
-#: print.module:323
+#: print.module:364
 msgid "Display a printer-friendly version of this page."
 msgstr "Mostrar uma versão para imprimir desta página"
 
-#: print.module:52
+#: print.module:53
 msgid "access print"
 msgstr "acesso a print"
 
-#: print.module:52
+#: print.module:53
 msgid "administer print"
 msgstr "administrar print"
 
-#: print.module:76
+#: print.module:77
 msgid "Printer-friendly"
 msgstr "Versão para imprimir"
 
-#: print.module:83
+#: print.module:84
 msgid "Printer-friendly pages"
 msgstr "Versões para imprimir"
 
-#: print.module:84
+#: print.module:85
 #: print.info:0
 msgid "Adds a printer-friendly version link to content and administrative pages."
 msgstr "Adiciona às páginas de conteúdo e administração uma ligação para a versão para imprimir"
 
-#: print.module:91
+#: print.module:92
 msgid "Web page"
 msgstr "Página da Rede"
 
-#: print.module:96
+#: print.module:97
 msgid "Settings"
 msgstr "Configuração"
 
@@ -420,37 +432,37 @@ msgstr "Escolha a localização da(s) ligação(-ões) para envio por correio el
 msgid "Setting this option will add a send by-email link on pages created by Drupal or the enabled modules."
 msgstr "Esta opção, ao ser activada, adiciona uma ligação para envio por correio electrónico em páginas criadas pelo Drupal ou pelos módulos activos."
 
-#: print_mail/print_mail.admin.inc:86
-#: print_pdf/print_pdf.admin.inc:99
+#: print_mail/print_mail.admin.inc:93
+#: print_pdf/print_pdf.admin.inc:106
 msgid "Show link in book nodes"
 msgstr "Mostrar ligação em páginas de tipo livro"
 
-#: print_mail/print_mail.admin.inc:88
+#: print_mail/print_mail.admin.inc:95
 msgid "Activate this to add a send by e-mail link in book nodes. Requires the (core) book module."
 msgstr "Active isto para que a ligação para envio por correio electrónico em páginas de tipo livro seja tratada por este módulo. Requer o módulo (core) book."
 
-#: print_mail/print_mail.admin.inc:93
+#: print_mail/print_mail.admin.inc:100
 msgid "Hourly threshold"
 msgstr "Limite horário"
 
-#: print_mail/print_mail.admin.inc:96
+#: print_mail/print_mail.admin.inc:103
 msgid "The maximum number of e-mails a user can send per hour."
 msgstr "O número máximo de correios electrónicos que um utilizador pode enviar por hora."
 
-#: print_mail/print_mail.admin.inc:101
+#: print_mail/print_mail.admin.inc:108
 #: print_mail/print_mail.inc:78
 msgid "Send only the teaser"
 msgstr "Enviar apenas o início"
 
-#: print_mail/print_mail.admin.inc:103
+#: print_mail/print_mail.admin.inc:110
 msgid "If selected, the default choice will be to send only the node's teaser instead of the full content."
 msgstr "Se escolhido, a opção por omissão será para enviar apenas o início do nó em vez do conteúdo integral."
 
-#: print_mail/print_mail.admin.inc:108
+#: print_mail/print_mail.admin.inc:115
 msgid "Enable teaser/full mode choice"
 msgstr "Activar escoha de modo início/completo"
 
-#: print_mail/print_mail.admin.inc:110
+#: print_mail/print_mail.admin.inc:117
 msgid "If checked, the user will be able to choose between sending the full content or only the teaser at send time."
 msgstr "Se escolhido, o utilizador será capaz de escolher entre enviar o conteúdo integral ou só a o início na altura do envio."
 
@@ -482,92 +494,88 @@ msgstr "Assunto"
 msgid "Your message"
 msgstr "A sua mensagem"
 
-#: print_mail/print_mail.inc:88
+#: print_mail/print_mail.inc:89
 msgid "Send e-mail"
 msgstr "Enviar por correio electrónico"
 
-#: print_mail/print_mail.inc:92
+#: print_mail/print_mail.inc:93
 msgid "Clear form"
 msgstr "Limpar formulário"
 
-#: print_mail/print_mail.inc:97
+#: print_mail/print_mail.inc:98
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: print_mail/print_mail.inc:110
+#: print_mail/print_mail.inc:109
 msgid "Someone"
 msgstr "Algúem"
 
-#: print_mail/print_mail.inc:112
+#: print_mail/print_mail.inc:111
 msgid "an interesting site"
 msgstr "um sítio interessante"
 
-#: print_mail/print_mail.inc:113
+#: print_mail/print_mail.inc:112
 msgid "!user has sent you a message from !site"
 msgstr "!user enviou-lhe uma mensagem de !site"
 
-#: print_mail/print_mail.inc:187
+#: print_mail/print_mail.inc:186
 msgid "You must enter a subject."
 msgstr "Tem de introduzir um assunto."
 
-#: print_mail/print_mail.inc:191
+#: print_mail/print_mail.inc:190
 msgid "You must enter a message."
 msgstr "Tem de introduzir uma mensagem."
 
-#: print_mail/print_mail.inc:226
+#: print_mail/print_mail.inc:225
 msgid "us"
 msgstr "nós"
 
-#: print_mail/print_mail.inc:227
+#: print_mail/print_mail.inc:226
 msgid "Thank you for spreading the word about !site."
 msgstr "Obrigado por espalhar a palavra sobre !site."
 
-#: print_mail/print_mail.inc:238
+#: print_mail/print_mail.inc:237
 msgid "Message from sender:"
 msgstr "Mensagem do emissor:"
 
-#: print_mail/print_mail.inc:268
-msgid "The form has been reset to the default values."
-msgstr "O formulário foi reposto com os valores por omissão."
-
-#: print_mail/print_mail.inc:225
+#: print_mail/print_mail.inc:224
 #: print_mail/print_mail.module:0
 msgid "print_mail"
 msgstr "print_mail"
 
-#: print_mail/print_mail.inc:225
+#: print_mail/print_mail.inc:224
 msgid "%name [%from] sent %page to [%to]"
 msgstr "%name [%from] enviou a %page para [%to]"
 
-#: print_mail/print_mail.module:158
+#: print_mail/print_mail.module:166
 msgid "Show send by e-mail link"
 msgstr "Mostrar ligação para envio por correio electrónico"
 
-#: print_mail/print_mail.module:160
+#: print_mail/print_mail.module:168
 msgid "Displays a link to send the content by e-mail. Further configuration is available on the !settings."
 msgstr "Mostra uma ligação para envio por correio electrónico do conteúdo. Configurável também em !settings"
 
-#: print_mail/print_mail.module:164
+#: print_mail/print_mail.module:172
 msgid "Show send by e-mail link in individual comments"
 msgstr "Mostrar ligação para envio por correio electrónico em cada comentário"
 
-#: print_mail/print_mail.module:166
+#: print_mail/print_mail.module:174
 msgid "Displays a link to send the comment by e-mail. Further configuration is available on the !settings."
 msgstr "Mostra uma ligação para envio por correio electrónico do comentário. Configurável também em !settings"
 
-#: print_mail/print_mail.module:182
+#: print_mail/print_mail.module:190
 msgid "Send to friend"
 msgstr "Enviar a um amigo"
 
-#: print_mail/print_mail.module:184
+#: print_mail/print_mail.module:192
 msgid "Send this page by e-mail."
 msgstr "Enviar esta página por correio electrónico."
 
-#: print_mail/print_mail.module:45
+#: print_mail/print_mail.module:46
 msgid "Send page by e-mail"
 msgstr "Enviar página por correio electrónico"
 
-#: print_mail/print_mail.module:53
+#: print_mail/print_mail.module:54
 msgid "e-mail"
 msgstr "correio electrónico"
 
@@ -603,124 +611,124 @@ msgstr "Escolha a localização da(s) ligação(-ões) à versão PDF. A área d
 msgid "Setting this option will add a PDF version page link on pages created by Drupal or the enabled modules."
 msgstr "Esta opção, ao ser activada, adiciona uma ligação à versão PDF em páginas criadas pelo Drupal ou pelos módulos activos."
 
-#: print_pdf/print_pdf.admin.inc:101
+#: print_pdf/print_pdf.admin.inc:108
 msgid "Activate this to add a PDF version link in book nodes. Requires the (core) book module."
 msgstr "Active isto para que a ligação à versão PDF em páginas de tipo livro seja tratada por este módulo. Requer o módulo (core) book."
 
-#: print_pdf/print_pdf.admin.inc:106
+#: print_pdf/print_pdf.admin.inc:113
 msgid "Open PDF in"
 msgstr "Abrir PDF em"
 
-#: print_pdf/print_pdf.admin.inc:107
+#: print_pdf/print_pdf.admin.inc:114
 msgid "Same browser window"
 msgstr "Mesma janela"
 
-#: print_pdf/print_pdf.admin.inc:107
+#: print_pdf/print_pdf.admin.inc:114
 msgid "New browser window"
 msgstr "Nova janela"
 
-#: print_pdf/print_pdf.admin.inc:107
+#: print_pdf/print_pdf.admin.inc:114
 msgid "Save dialog"
 msgstr "Opção para gravar"
 
-#: print_pdf/print_pdf.admin.inc:109
+#: print_pdf/print_pdf.admin.inc:116
 msgid "Select the desired method for opening the PDF in the user's browser."
 msgstr "Escolha o método desejado para abrir a versão PDF no browser do utilizador."
 
-#: print_pdf/print_pdf.admin.inc:114
+#: print_pdf/print_pdf.admin.inc:121
 msgid "Paper size"
 msgstr "Tamanho do papel"
 
-#: print_pdf/print_pdf.admin.inc:131
+#: print_pdf/print_pdf.admin.inc:138
 msgid "Choose the paper size of the generated PDF."
 msgstr "Escolha o tamanho do papel do PDF criado."
 
-#: print_pdf/print_pdf.admin.inc:136
+#: print_pdf/print_pdf.admin.inc:143
 msgid "Page orientation"
 msgstr "Orientação do papel"
 
-#: print_pdf/print_pdf.admin.inc:137
+#: print_pdf/print_pdf.admin.inc:144
 msgid "Portrait"
 msgstr "Retrato"
 
-#: print_pdf/print_pdf.admin.inc:137
+#: print_pdf/print_pdf.admin.inc:144
 msgid "Landscape"
 msgstr "Paisagem"
 
-#: print_pdf/print_pdf.admin.inc:139
+#: print_pdf/print_pdf.admin.inc:146
 msgid "Choose the page orientation of the generated PDF."
 msgstr "Escolha a orientação das páginas no PDF criado."
 
-#: print_pdf/print_pdf.admin.inc:143
+#: print_pdf/print_pdf.admin.inc:150
 msgid "Font Family"
 msgstr "Tipo de Letra"
 
-#: print_pdf/print_pdf.admin.inc:147
+#: print_pdf/print_pdf.admin.inc:154
 msgid "(TCPDF only) Set the font family to be used. Examples: %examples."
 msgstr "(só para TCPDF) Escolha o tipo de letra a ser usado. Exemplos: %examples."
 
-#: print_pdf/print_pdf.admin.inc:148
+#: print_pdf/print_pdf.admin.inc:155
 msgid "CAUTION: TCPDF embeds the complete font in the generated PDF. If you're not using Unicode, then helvetica or times are safe choices that will keep the PDF small. Unicode fonts can increase the size of the PDF to the 1MB region."
 msgstr "ATENÇÃO: TCPDF inclui toda a fonte no PDF gerado. Se não usa Unicode, então helvetica ou times são escolhas seguras que mantêm o PDF pequeno. Fontes Unicode podem aumentar o tamanho do PDF para a região do 1MB."
 
-#: print_pdf/print_pdf.admin.inc:152
+#: print_pdf/print_pdf.admin.inc:159
 msgid "Font Size"
 msgstr "Tamanho da Letra"
 
-#: print_pdf/print_pdf.admin.inc:156
+#: print_pdf/print_pdf.admin.inc:163
 msgid "(TCPDF only) Set the font size to be used for normal text. This is the base value for the scaling applied to other text styles."
 msgstr "(só para TCPDF) Escolha o tamanho de letra a ser usado para texto normal. Este é o valor base usado para as escalas usadas em outros estilos de texto."
 
-#: print_pdf/print_pdf.admin.inc:162
+#: print_pdf/print_pdf.admin.inc:169
 msgid "No PDF generation tool found! Please dowload a supported PHP PDF generation tool. Check this module's INSTALL.txt for more details."
 msgstr "Não foi encontrada uma ferramenta de criação de PDF. Por favor, descarregue uma das ferramentas PHP de criação de PDFs suportada. Veja o ficheiro INSTALL.txt deste módulo para mais detalhes."
 
-#: print_pdf/print_pdf.admin.inc:177
+#: print_pdf/print_pdf.admin.inc:184
 msgid "Font size must be at least 1."
 msgstr "O tamanho da letra tem de ser pelo menos 1."
 
-#: print_pdf/print_pdf.pages.inc:339
+#: print_pdf/print_pdf.pages.inc:351
 msgid "Page !n of !total"
 msgstr "Página !n de !total"
 
-#: print_pdf/print_pdf.module:196
+#: print_pdf/print_pdf.module:210
 msgid "Show PDF version link"
 msgstr "Mostrar ligação para a versão PDF"
 
-#: print_pdf/print_pdf.module:198
+#: print_pdf/print_pdf.module:212
 msgid "Displays the link to a PDF version of the content. Further configuration is available on the !settings."
 msgstr "Mostra uma ligação para a versão PDF do conteúdo. Configurável também em !settings"
 
-#: print_pdf/print_pdf.module:202
+#: print_pdf/print_pdf.module:216
 msgid "Show PDF version link in individual comments"
 msgstr "Mostrar ligação para a versão PDF em cada comentário"
 
-#: print_pdf/print_pdf.module:204
+#: print_pdf/print_pdf.module:218
 msgid "Displays the link to a PDF version of the comment. Further configuration is available on the !settings."
 msgstr "Mostra uma ligação para a versão PDF do comentário. Configurável também em !settings"
 
-#: print_pdf/print_pdf.module:221
+#: print_pdf/print_pdf.module:235
 #: print_pdf/print_pdf.info:0
 msgid "PDF version"
 msgstr "Versão PDF"
 
-#: print_pdf/print_pdf.module:223
+#: print_pdf/print_pdf.module:237
 msgid "Display a PDF version of this page."
 msgstr "Mostrar uma versão PDF desta página"
 
-#: (duplicate) print_pdf/print_pdf.module:93
+#: (duplicate) print_pdf/print_pdf.module:100
 msgid "Print PDF"
 msgstr "Versão PDF"
 
-#: (duplicate) print_pdf/print_pdf.module:94
+#: (duplicate) print_pdf/print_pdf.module:101
 msgid "No PDF tool selected. Please configure it in the <a href=\"@url\">PDF settings page</a>."
 msgstr "Nenhuma ferramenta PDF foi ainda seleccionada. Por favor configure uma na <a href=\"@url\">página de configuração de PDF</a>."
 
-#: print_pdf/print_pdf.module:62
+#: print_pdf/print_pdf.module:69
 msgid "Printer-friendly PDF"
 msgstr "Versão PDF"
 
-#: print_pdf/print_pdf.module:69
+#: print_pdf/print_pdf.module:76
 msgid "PDF"
 msgstr "PDF"
 
@@ -732,6 +740,8 @@ msgstr "print_pdf"
 msgid "Adds the capability to export pages as PDF."
 msgstr "Adiciona a capacidade de exportar páginas como PDF."
 
+#~ msgid "The form has been reset to the default values."
+#~ msgstr "O formulário foi reposto com os valores por omissão."
 #~ msgid "Page"
 #~ msgstr "Página"
 #~ msgid "Printer-friendly Pages"
