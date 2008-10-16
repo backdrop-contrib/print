@@ -50,6 +50,16 @@ function print_controller_html() {
  * @see _print_generate_book()
  */
 function print_controller($path, $cid, $teaser = FALSE, $message = NULL) {
+  if (empty($path)) {
+    // If no path was provided, let's try to generate a page for the referer
+    global $base_url;
+
+    $ref = $_SERVER['HTTP_REFERER'];
+    $path = preg_replace("!^$base_url/!", '', $ref);
+    if ($path === $ref) {
+      $path = '';
+    }
+  }
   if (!is_numeric($path)) {
     // Indirect call with print/alias
     // If there is a path alias with these arguments, generate a printer-friendly version for it
