@@ -30,7 +30,6 @@ function print_pdf_settings() {
       '#options' => $pdf_tools,
       '#default_value' => variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT),
       '#description' => t('This option selects the PDF generation tool being used by this module to create the PDF version.'),
-      '#required' => TRUE,
     );
 
     $form['settings']['print_pdf_link_pos'] = array(
@@ -179,8 +178,10 @@ function print_pdf_settings() {
  * Validate print_pdf_settings form.
  */
 function _print_pdf_settings_validate($form, &$form_state) {
-  $font_size = $form_state['values']['print_pdf_font_size'];
-  if ($font_size < 1) {
+  if (empty($form_state['values']['print_pdf_pdf_tool'])) {
+    form_set_error('print_pdf_pdf_tool', t("No PDF tool selected"));
+  }
+  if ($form_state['values']['print_pdf_font_size'] < 1) {
     form_set_error('print_pdf_font_size', t("Font size must be at least 1."));
   }
 }
@@ -198,14 +199,14 @@ function _print_pdf_tools() {
   $num_tools = count($tools);
 
   if ($num_tools == 0) {
-    variable_set('print_pdf_show_link', 0);
+    variable_set('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
     return -1;
   }
   else {
     // Instead of array_combine(), use this to maintain PHP4 compatibility
     $tools2 = array();
     foreach ($tools as $key => $val) {
-      $tools2[$val] = $tools[$key];
+      $tools2[$val] = $val;
     }
 
     return $tools2;

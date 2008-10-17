@@ -89,8 +89,9 @@ function print_pdf_requirements($phase) {
       $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
       if (empty($print_pdf_pdf_tool)) {
         $requirements['print_pdf_tool'] = array(
-          'title' => $t('Print PDF'),
-          'value' => $t('No PDF tool selected. Please configure it in the <a href="@url">PDF settings page</a>.', array('@url' => url('admin/settings/print/pdf'))),
+          'title' => $t('PDF version'),
+          'value' => $t('No PDF tool selected'),
+          'description' => $t('Please configure it in the <a href="@url">PDF settings page</a>.', array('@url' => url('admin/settings/print/pdf'))),
           'severity' => REQUIREMENT_ERROR,
         );
       }
