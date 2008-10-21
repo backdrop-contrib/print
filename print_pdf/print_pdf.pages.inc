@@ -101,7 +101,7 @@ function _print_pdf_dompdf($print, $html, $filename) {
 
   $html = theme('print_pdf_dompdf_footer', $html);
 
-  $dompdf->load_html($html);
+  $dompdf->load_html(utf8_decode($html));
 
   $dompdf->render();
   $dompdf->stream($filename, array('Attachment' => ($print_pdf_content_disposition == 2)));
