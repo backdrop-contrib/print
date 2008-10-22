@@ -102,10 +102,10 @@ function _print_pdf_dompdf($print, $html, $filename) {
   $html = theme('print_pdf_dompdf_footer', $html);
 
   // Convert from UTF-8 to ISO-8859-1 and then to HTML entities
-  $allEntities = get_html_translation_table(HTML_ENTITIES, ENT_NOQUOTES);
-  $specialEntities = get_html_translation_table(HTML_SPECIALCHARS, ENT_NOQUOTES);
-  $noTags = array_diff($allEntities, $specialEntities);
-  $html = strtr(utf8_decode($html), $noTags);
+  $all_entities = get_html_translation_table(HTML_ENTITIES, ENT_NOQUOTES);
+  $special_entities = get_html_translation_table(HTML_SPECIALCHARS, ENT_NOQUOTES);
+  $no_tags = array_diff($all_entities, $special_entities);
+  $html = strtr(utf8_decode($html), $no_tags);
 
   $dompdf->load_html($html);
 
