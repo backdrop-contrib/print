@@ -101,7 +101,13 @@ function _print_pdf_dompdf($print, $html, $filename) {
 
   $html = theme('print_pdf_dompdf_footer', $html);
 
-  $dompdf->load_html(utf8_decode($html));
+  // Convert from UTF-8 to ISO-8859-1 and then to HTML entities
+  $allEntities = get_html_translation_table(HTML_ENTITIES, ENT_NOQUOTES);
+  $specialEntities = get_html_translation_table(HTML_SPECIALCHARS, ENT_NOQUOTES);
+  $noTags = array_diff($allEntities, $specialEntities);
+  $html = strtr(utf8_decode($html), $noTags);
+
+  $dompdf->load_html($html);
 
   $dompdf->render();
   $dompdf->stream($filename, array('Attachment' => ($print_pdf_content_disposition == 2)));

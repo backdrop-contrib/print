@@ -215,7 +215,7 @@ function print_mail_form_submit($form, &$form_state) {
   $params['subject'] = $form_state['values']['fld_subject'];
   $params['message'] = $form_state['values']['txt_message'];
   $params['path'] = $form_state['values']['path'];
-  $params['cid'] = isset($form_state['values']['cid']) ? $form_state['values']['cid'] : '';
+  $params['cid'] = isset($form_state['values']['cid']) ? $form_state['values']['cid'] : NULL;
   $params['teaser'] = $form_state['values']['chk_teaser'];
 
   $ret = drupal_mail('print_mail', 'sendpage', $to, language_default(), $params, $from, TRUE);
