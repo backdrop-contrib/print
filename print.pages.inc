@@ -506,7 +506,7 @@ function _print_generate_node($nid, $cid = NULL, $teaser = FALSE, $message = NUL
     drupal_access_denied();
     return FALSE;
   }
-  drupal_set_title($node->title);
+  drupal_set_title($node->title, PASS_THROUGH);
 
   //alert other modules that we are generating a printer-friendly page, so they can choose to show/hide info
   $node->printing = TRUE;
