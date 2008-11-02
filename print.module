@@ -51,8 +51,14 @@ define('PRINT_ALLOW_BOOK_LINK', 2);
  */
 function print_perm() {
   return array(
-    'access print' => t('Access the printer-friendly page'),
-    'administer print' => t('Perform maintenance tasks for the print module'),
+    'access print' => array(
+      'title' => t('Access the printer-friendly page'),
+      'description' => t('View the printer-friendly pages and the links to them in the original pages.'),
+    ),
+    'administer print' => array(
+      'title' => t('Administer the module'),
+      'description' => t('Perform maintenance tasks for the print module.'),
+    ),
   );
 }
 
