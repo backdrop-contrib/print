@@ -314,12 +314,14 @@ function print_mail_link_allowed($args) {
       elseif (isset($node->book)) {
         // Node is a book;
         $print_mail_book_link = variable_get('print_mail_book_link', PRINT_MAIL_BOOK_LINK_DEFAULT);
-        if (!$print_mail_book_link || !user_access('access printer-friendly version')) {
-          // Book link is disabled
-          return FALSE;
-        }
-        else {
-          return PRINT_ALLOW_BOOK_LINK;
+        switch ($print_mail_book_link) {
+          case 1:
+            if (user_access('access printer-friendly version')) {
+              return PRINT_ALLOW_BOOK_LINK;
+            }
+            break;
+          case 2:
+            return PRINT_ALLOW_NORMAL_LINK;
         }
       }
       else {
@@ -334,4 +336,5 @@ function print_mail_link_allowed($args) {
 
     return _print_page_match($print_mail_sys_link_visibility, $print_mail_sys_link_pages);
   }
+  return FALSE;
 }

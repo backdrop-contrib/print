@@ -43,6 +43,22 @@ function print_mail_settings() {
     '#description' => t('Select the visual style of the link.'),
   );
 
+  $form['settings']['adv_link']['print_mail_link_use_alias'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use URL alias instead of node ID'),
+    '#default_value' => variable_get('print_mail_link_use_alias', PRINT_MAIL_LINK_USE_ALIAS_DEFAULT),
+    '#description' => t('Enabling this will create the link using the URL alias instead of the node ID.'),
+  );
+
+  $form['settings']['adv_link']['print_mail_link_class'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Link class'),
+    '#default_value' => variable_get('print_mail_link_class', PRINT_MAIL_LINK_CLASS_DEFAULT),
+    '#size' => 60,
+    '#maxlength' => 250,
+    '#description' => t('This can be used by themers to change the link style or by jQuery modules to open in a new window (e.g. greybox or thickbox). Multiple classes can be specified, separated by spaces.'),
+  );
+
   $form['settings']['adv_link']['print_mail_node_link_visibility'] = array(
     '#type' => 'radios',
     '#title' => t('Link visibility'),
@@ -55,15 +71,6 @@ function print_mail_settings() {
     '#default_value' => variable_get('print_mail_node_link_pages', PRINT_MAIL_NODE_LINK_PAGES_DEFAULT),
     '#rows' => 3,
     '#description' => t("Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>')),
-  );
-
-  $form['settings']['adv_link']['print_mail_link_class'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Link class'),
-    '#default_value' => variable_get('print_mail_link_class', PRINT_MAIL_LINK_CLASS_DEFAULT),
-    '#size' => 60,
-    '#maxlength' => 250,
-    '#description' => t('This can be used by themers to change the link style or by jQuery modules to open in a new window (e.g. greybox or thickbox). Multiple classes can be specified, separated by spaces.'),
   );
 
   $form['settings']['adv_link']['print_mail_sys_link_visibility'] = array(
@@ -81,18 +88,11 @@ function print_mail_settings() {
                       t("Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>')),
   );
 
-  $form['settings']['adv_link']['print_mail_link_use_alias'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Use URL alias instead of node ID'),
-    '#default_value' => variable_get('print_mail_link_use_alias', PRINT_MAIL_LINK_USE_ALIAS_DEFAULT),
-    '#description' => t('Enabling this will create the link using the URL alias instead of the node ID.'),
-  );
-
   $form['settings']['print_mail_book_link'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Show link in book nodes'),
+    '#type' => 'radios',
+    '#title' => t('Link in book hierarchy nodes'),
     '#default_value' => variable_get('print_mail_book_link', PRINT_MAIL_BOOK_LINK_DEFAULT),
-    '#description' => t('Activate this to add a send by e-mail link in book nodes. Requires the (core) book module.'),
+    '#options' => array(t('No link'), t('Current page and sub-pages'), t('Current page only')),
   );
 
   $form['settings']['print_mail_hourly_threshold'] = array(

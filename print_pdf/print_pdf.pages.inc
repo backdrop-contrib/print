@@ -42,8 +42,8 @@ function print_pdf_controller() {
   // And converted from private to public paths
   $file_downloads = variable_get('file_downloads', FILE_DOWNLOADS_PUBLIC);
   if ($file_downloads == FILE_DOWNLOADS_PRIVATE) {
-    $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?${base_url}/)system/files(/[^>]*?>)!is";
-    $replacement = '$1'. file_directory_path() .'$2';
+    $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/system/files(/[^>]*?>)!is";
+    $replacement = '$1file://'. file_directory_path() .'$2';
     $print['content'] = preg_replace($pattern, $replacement, $print['content']);
     $print['logo'] = preg_replace($pattern, $replacement, $print['logo']);
     $print['footer_message'] = preg_replace($pattern, $replacement, $print['footer_message']);
@@ -255,7 +255,7 @@ function theme_print_pdf_tcpdf_header(&$pdf, &$html, $font) {
   if ($logo_ret) {
     $logo = trim($matches[1], '\'"');
     $size = getimagesize($logo);
-    $ratio = $size[0] / $size[1];
+    $ratio = $size ? ($size[0] / $size[1]) : 0;
   }
 
   // set header font
