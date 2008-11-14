@@ -42,7 +42,7 @@ function print_pdf_controller() {
   // And converted from private to public paths
   $file_downloads = variable_get('file_downloads', FILE_DOWNLOADS_PUBLIC);
   if ($file_downloads == FILE_DOWNLOADS_PRIVATE) {
-    $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/system/files(/[^>]*?>)!is";
+    $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?system/files(/[^>]*?>)!is";
     $replacement = '$1file://'. file_directory_path() .'$2';
     $print['content'] = preg_replace($pattern, $replacement, $print['content']);
     $print['logo'] = preg_replace($pattern, $replacement, $print['logo']);
@@ -306,7 +306,6 @@ function theme_print_pdf_tcpdf_content(&$pdf, &$html, $font) {
   preg_match('!<body.*?>(.*)</body>!sim', $html, $matches);
   $pattern = '!(?:<div class="print-(?:logo|site_name|breadcrumb|footer)">.*?</div>|<hr class="print-hr" />)!si';
   $matches[1] = preg_replace($pattern, '', $matches[1]);
-
 
   // Since TCPDF's writeHTML is so bad with <p>, do everything possible to make it look nice
   $matches[1] = preg_replace('!(<p\s*/>|</p>)!i', '<br />', $matches[1]);

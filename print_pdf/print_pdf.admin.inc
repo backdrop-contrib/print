@@ -170,7 +170,6 @@ function print_pdf_settings() {
     );
   }
 
-
   return system_settings_form($form);
 }
 
