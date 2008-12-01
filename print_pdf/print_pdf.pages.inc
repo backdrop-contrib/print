@@ -99,7 +99,8 @@ function _print_pdf_dompdf($print, $html, $filename) {
   $dompdf->set_paper(drupal_strtolower($print_pdf_paper_size), $print_pdf_page_orientation);
   $dompdf->set_protocol($protocol);
 
-  $html = theme('print_pdf_dompdf_footer', $html);
+// dompdf can't handle footers cleanly, so disable the following
+//  $html = theme('print_pdf_dompdf_footer', $html);
 
   // Convert from UTF-8 to ISO-8859-1 and then to HTML entities
   $all_entities = get_html_translation_table(HTML_ENTITIES, ENT_NOQUOTES);
