@@ -36,6 +36,7 @@ function print_pdf_uninstall() {
   variable_del('print_pdf_font_size');
   variable_del('print_pdf_link_text');
   variable_del('print_pdf_link_use_alias');
+  variable_del('print_pdf_filename');
   $settings = db_query("SELECT name FROM {variable} WHERE name LIKE 'print\_pdf\_display\_%'");
   foreach ($settings as $variable) {
     variable_del($variable->name);

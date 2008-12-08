@@ -25,6 +25,7 @@ define('PRINT_PDF_PAPER_SIZE_DEFAULT', 'A4');
 define('PRINT_PDF_PAGE_ORIENTATION_DEFAULT', 'portrait');
 define('PRINT_PDF_FONT_FAMILY_DEFAULT', 'dejavusans');
 define('PRINT_PDF_FONT_SIZE_DEFAULT', 10);
+define('PRINT_PDF_FILENAME_DEFAULT', '[site-name] - [title] - [mod-yyyy]-[mod-mm]-[mod-dd]');
 
 /**
  * Implementation of hook_init().

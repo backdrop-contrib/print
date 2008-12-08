@@ -55,11 +55,18 @@ function print_pdf_controller() {
   $html = ob_get_contents();
   ob_end_clean();
 
+  $pdf_filename = variable_get('print_pdf_filename', PRINT_PDF_FILENAME_DEFAULT);
+  if (function_exists('token_replace') && !empty($pdf_filename)) {
+    $pdf_filename = token_replace($pdf_filename, 'node', $node) .'.pdf';
+  }
+  else {
+    $pdf_filename = str_replace('/', '_', $path) .'.pdf';
+  }
   if (basename($print_pdf_pdf_tool) == 'dompdf_config.inc.php') {
-    _print_pdf_dompdf($print, $html, $path .'.pdf');
+    _print_pdf_dompdf($print, $html, $pdf_filename);
   }
   elseif (basename($print_pdf_pdf_tool) == 'tcpdf.php') {
-    _print_pdf_tcpdf($print, $html, $path .'.pdf');
+    _print_pdf_tcpdf($print, $html, $pdf_filename);
   }
   else {
     return drupal_not_found();
