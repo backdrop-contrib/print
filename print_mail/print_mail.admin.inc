@@ -43,6 +43,13 @@ function print_mail_settings() {
     '#description' => t('Select the visual style of the link.'),
   );
 
+  $form['settings']['adv_link']['print_mail_link_text'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Link text'),
+    '#default_value' => variable_get('print_mail_link_text', t('Send to friend')),
+    '#description' => t("Text used in the link to the send by-email form."),
+  );
+
   $form['settings']['adv_link']['print_mail_link_use_alias'] = array(
     '#type' => 'checkbox',
     '#title' => t('Use URL alias instead of node ID'),
@@ -84,7 +91,7 @@ function print_mail_settings() {
     '#type' => 'textarea',
     '#default_value' => variable_get('print_mail_sys_link_pages', PRINT_MAIL_SYS_LINK_PAGES_DEFAULT),
     '#rows' => 3,
-    '#description' => t('Setting this option will add a send by-email link on pages created by Drupal or the enabled modules.') .'<br />'.
+    '#description' => t('Setting this option will add a send by e-mail link on pages created by Drupal or the enabled modules.') .'<br />'.
                       t("Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>')),
   );
 
@@ -115,6 +122,32 @@ function print_mail_settings() {
     '#title' => t('Enable teaser/full mode choice'),
     '#default_value' => variable_get('print_mail_teaser_choice', PRINT_MAIL_TEASER_CHOICE_DEFAULT),
     '#description' => t('If checked, the user will be able to choose between sending the full content or only the teaser at send time.'),
+  );
+
+  $form['settings']['print_mail_text'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Text strings'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  $form['settings']['print_mail_text']['print_mail_text_subject'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Message Subject'),
+    '#default_value' => variable_get('print_mail_text_subject', t('!user has sent you a message from !site')),
+    '#description' => t("e-mail subject line. The sender's name will appear in place of !user in the subject. The web site name will be inserted in place of !site."),
+  );
+  $form['settings']['print_mail_text']['print_mail_text_message'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Message Preamble'),
+    '#default_value' => variable_get('print_mail_text_message', t('Message from sender')),
+    '#description' => t('e-mail message preamble. The sender will be able to add their own message after this.'),
+  );
+  $form['settings']['print_mail_text']['print_mail_text_confirmation'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Thank You Message'),
+    '#default_value' => variable_get('print_mail_text_confirmation', t('Thank you for spreading the word about !site.')),
+    '#description' => t('This message will be displayed after the user successfully submits the form.'),
   );
 
   return system_settings_form($form);

@@ -8,6 +8,8 @@
 
 define('PRINTMAIL_PATH', 'printmail');
 
+define('PRINT_MAIL_FORMAT', 'mail');
+
 define('PRINT_MAIL_LINK_POS_DEFAULT', 'link');
 define('PRINT_MAIL_SHOW_LINK_DEFAULT', 1);
 define('PRINT_MAIL_NODE_LINK_VISIBILITY_DEFAULT', 0);
@@ -58,6 +60,39 @@ function print_mail_menu() {
   );
 
   return $items;
+}
+
+/**
+ * Implementation of hook_block().
+ */
+function print_mail_block($op = 'list', $delta = 0, $edit = array()) {
+  switch ($op) {
+    case 'list':
+      $block[0]['info'] = t('Most emailed');
+      return $block;
+      break;
+    case 'configure':
+      return '';
+    case 'save':
+      return;
+    case 'view':
+      switch ($delta) {
+      case 0:
+        $block['subject'] = t('Most emailed');
+        $result = db_query_range("SELECT path FROM {print_mail_page_counter} ORDER BY sentcount DESC", 0, 3)
+                    ->fetchAll();
+        if (count($result)) {
+          $block['content'] = '<div class="item-list"><ul>';
+          foreach ($result as $obj) {
+            $block['content'] .= '<li>'. l(_print_get_title($obj->path), $obj->path) .'</li>';
+          }
+          $block['content'] .= '</ul></div>';
+        }
+        break;
+      }
+      return $block;
+      break;
+    }
 }
 
 /**
@@ -136,6 +171,10 @@ function print_mail_help($path, $arg) {
  * Implementation of hook_nodeapi_view().
  */
 function print_mail_nodeapi_view(&$node, $teaser, $page) {
+      // Insert content corner links
+      if ($teaser === FALSE) {
+        _print_mail_set_node_fields($node);
+      }
       $print_mail_link_pos = variable_get('print_mail_link_pos', array(PRINT_MAIL_LINK_POS_DEFAULT => PRINT_MAIL_LINK_POS_DEFAULT));
       if (($teaser === FALSE) && !empty($print_mail_link_pos['corner']) &&
           (preg_match('!^print!i', $_GET['q']) == 0)) {
@@ -150,23 +189,111 @@ function print_mail_nodeapi_view(&$node, $teaser, $page) {
 }
 
 /**
+ * Implementation of hook_nodeapi_prepare().
+ */
+function print_mail_nodeapi_prepare(&$node, $teaser, $page) {
+  _print_mail_set_node_fields($node);
+}
+
+/**
+ * Implementation of hook_nodeapi_update().
+ */
+function print_mail_nodeapi_update(&$node, $teaser, $page) {
+  _print_mail_node_conf_modify($node->nid, $node->print_mail_display, $node->print_mail_display_comment, $node->print_mail_display_urllist);
+}
+
+/**
+ * Implementation of hook_nodeapi_delete().
+ */
+function print_mail_nodeapi_delete(&$node, $teaser, $page) {
+  db_delete('print_mail_node_conf')
+    ->condition('nid', $node->nid)
+    ->execute();
+  db_delete('print_mail_page_counter')
+    ->condition('path', $node->path)
+    ->execute();
+}
+
+/**
  * Implementation of hook_form_alter().
  */
 function print_mail_form_alter(&$form, $form_state, $form_id) {
   // Add the node-type settings option to activate the mail version link
-  if ($form_id == 'node_type_form') {
+  if (($form_id == 'node_type_form') || !empty($form['#node_edit_form'])) {
+    $form['print']['mail_label'] = array(
+      '#type' => 'markup',
+      '#markup' => '<p><strong>'. t('Send by e-mail') .'</strong></p>',
+    );
+
     $form['print']['print_mail_display'] = array(
       '#type' => 'checkbox',
-      '#title' => t('Show send by e-mail link'),
-      '#default_value' => variable_get('print_mail_display_'. $form['#node_type']->type, PRINT_TYPE_SHOW_LINK_DEFAULT),
-      '#description' => t('Displays a link to send the content by e-mail. Further configuration is available on the !settings.', array('!settings' => l(t('settings page'), 'admin/settings/print' ))),
+      '#title' => t('Show link'),
     );
     $form['print']['print_mail_display_comment'] = array(
       '#type' => 'checkbox',
-      '#title' => t('Show send by e-mail link in individual comments'),
-      '#default_value' => variable_get('print_mail_display_comment_'. $form['#node_type']->type, PRINT_TYPE_COMMENT_LINK_DEFAULT),
-      '#description' => t('Displays a link to send the comment by e-mail. Further configuration is available on the !settings.', array('!settings' => l(t('settings page'), 'admin/settings/print' ))),
+      '#title' => t('Show link in individual comments'),
     );
+    $form['print']['print_mail_display_urllist'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show Printer-friendly URLs list'),
+    );
+
+    if ($form_id == 'node_type_form') {
+      $form['print']['print_mail_display']['#default_value'] = variable_get('print_mail_display_'. $form['#node_type']->type, PRINT_TYPE_SHOW_LINK_DEFAULT);
+      $form['print']['print_mail_display_comment']['#default_value'] = variable_get('print_mail_display_comment_'. $form['#node_type']->type, PRINT_TYPE_COMMENT_LINK_DEFAULT);
+      $form['print']['print_mail_display_urllist']['#default_value'] = variable_get('print_mail_display_urllist_'. $form['#node_type']->type, PRINT_TYPE_URLLIST_DEFAULT);
+    }
+    else {
+      $form['print']['print_mail_display']['#default_value'] = $form['#node']->print_mail_display;
+      $form['print']['print_mail_display_comment']['#default_value'] = $form['#node']->print_mail_display_comment;
+      $form['print']['print_mail_display_urllist']['#default_value'] = $form['#node']->print_mail_display_urllist;
+    }
+  }
+}
+
+/**
+ * Auxiliary function to assign the per-node settings to the node object fields
+ *
+ * @param $node
+ *   node to be modified
+ */
+function _print_mail_set_node_fields(&$node) {
+  $res = db_query("SELECT link, comments, url_list FROM {print_mail_node_conf} WHERE nid = :nid", array(':nid' => $node->nid))
+           ->fetch();
+  $node->print_mail_display = $res ? intval($res->link) : PRINT_TYPE_SHOW_LINK_DEFAULT;
+  $node->print_mail_display_comment = $res ? intval($res->comments) : PRINT_TYPE_COMMENT_LINK_DEFAULT;
+  $node->print_mail_display_urllist = $res ? intval($res->url_list) : PRINT_TYPE_URLLIST_DEFAULT;
+}
+
+/**
+ * Update the print_mail_node_conf table to reflect the given attributes
+ * If updating to the default values, delete the record.
+ *
+ * @param $nid
+ *   value of the nid field (primary key)
+ * @param $link
+ *   value of the link field (0 or 1)
+ * @param $comments
+ *   value of the comments field (0 or 1)
+ * @param $url_list
+ *   value of the url_list field (0 or 1)
+ */
+function _print_mail_node_conf_modify($nid, $link, $comments, $url_list) {
+  if (($link == PRINT_TYPE_SHOW_LINK_DEFAULT) && ($comments == PRINT_TYPE_COMMENT_LINK_DEFAULT) &&
+      ($url_list == PRINT_TYPE_URLLIST_DEFAULT)) {
+    db_delete('print_mail_node_conf')
+      ->condition('nid', $nid)
+      ->execute();
+  }
+  else {
+    db_merge('print_mail_node_conf')
+      ->key(array('nid' => $nid))
+      ->fields(array(
+        'link' => $link,
+        'comments' => $comments,
+        'url_list' => $url_list,
+      ))
+      ->execute();
   }
 }
 
@@ -180,13 +307,13 @@ function print_mail_form_alter(&$form, $form_state, $form_id) {
 function theme_print_mail_format_link() {
   $print_mail_link_class  = variable_get('print_mail_link_class', PRINT_MAIL_LINK_CLASS_DEFAULT);
   $print_mail_show_link = variable_get('print_mail_show_link', PRINT_MAIL_SHOW_LINK_DEFAULT);
+  $print_mail_link_text = variable_get('print_mail_link_text', t('Send to friend'));
 
-  $text = t('Send to friend');
   $img = drupal_get_path('module', 'print') .'/icons/mail_icon.gif';
   $title = t('Send this page by e-mail.');
   $class = strip_tags($print_mail_link_class);
   $new_window = FALSE;
-  $format = _print_format_link_aux($print_mail_show_link, $text, $img);
+  $format = _print_format_link_aux($print_mail_show_link, $print_mail_link_text, $img);
 
   return array('text' => $format['text'],
                'html' => $format['html'],
@@ -302,12 +429,18 @@ function print_mail_link_allowed($args) {
     }
     elseif (isset($args['type']) && ($args['type'] == 'comment') && isset($node_type)) {
       // Link is for a comment, return the configured setting
-      return variable_get('print_mail_display_comment_'. $node_type, PRINT_TYPE_COMMENT_LINK_DEFAULT);
+      $res = db_query("SELECT comments FROM {print_mail_node_conf} WHERE nid = :nid", array(':nid' => $node->nid))
+               ->fetch();
+      $print_display_comment = $res ? intval($res->comments) : PRINT_TYPE_COMMENT_LINK_DEFAULT;
+      if (($print_display_comment) ||
+          variable_get('print_mail_display_comment_'. $node_type, PRINT_TYPE_COMMENT_LINK_DEFAULT)) {
+        return PRINT_ALLOW_NORMAL_LINK;
+      }
     }
     else {
       // Node link
-      if (isset($node_type) &&
-          !variable_get('print_mail_display_'. $node_type, PRINT_TYPE_SHOW_LINK_DEFAULT)) {
+      if ((!$node->print_mail_display) || (isset($node_type) &&
+          !variable_get('print_mail_display_'. $node_type, PRINT_TYPE_SHOW_LINK_DEFAULT))) {
         // Link for this node type is disabled
         return FALSE;
       }

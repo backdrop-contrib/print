@@ -55,6 +55,13 @@ function print_pdf_settings() {
       '#description' => t('Select the visual style of the link.'),
     );
 
+    $form['settings']['adv_link']['print_pdf_link_text'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Link text'),
+      '#default_value' => variable_get('print_pdf_link_text', t('PDF version')),
+      '#description' => t("Text used in the link to the PDF version."),
+    );
+
     $form['settings']['adv_link']['print_pdf_link_use_alias'] = array(
       '#type' => 'checkbox',
       '#title' => t('Use URL alias instead of node ID'),

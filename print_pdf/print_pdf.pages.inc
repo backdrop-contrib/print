@@ -29,7 +29,7 @@ function print_pdf_controller() {
 
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
 
-  $print = print_controller($path, $cid);
+  $print = print_controller($path, $cid, PRINT_PDF_FORMAT);
   if ($print === FALSE) {
     return;
   }
@@ -51,7 +51,7 @@ function print_pdf_controller() {
 
   $node = $print['node'];
   ob_start();
-  include_once(DRUPAL_ROOT .'/'. _print_get_template('pdf', $print['type']));
+  include_once(DRUPAL_ROOT .'/'. _print_get_template(PRINT_PDF_FORMAT, $print['type']));
   $html = ob_get_contents();
   ob_end_clean();
 
@@ -64,6 +64,16 @@ function print_pdf_controller() {
   else {
     return drupal_not_found();
   }
+
+  $nodepath = drupal_get_normal_path($node->path);
+  db_merge('print_pdf_page_counter')
+    ->key(array('path' => $nodepath))
+    ->fields(array(
+        'totalcount' => 1,
+        'timestamp' => REQUEST_TIME,
+    ))
+    ->expression('totalcount', 'totalcount + :inc', array(':inc' => 1))
+    ->execute();
 }
 
 /**
@@ -309,7 +319,7 @@ function theme_print_pdf_tcpdf_content(&$pdf, &$html, $font) {
   $matches[1] = preg_replace($pattern, '', $matches[1]);
 
   // Since TCPDF's writeHTML is so bad with <p>, do everything possible to make it look nice
-  $matches[1] = preg_replace('!(<p\s*/>|</p>)!i', '<br />', $matches[1]);
+  $matches[1] = preg_replace('!(<p>|<p\s*/>|</p>)!i', '<br />', $matches[1]);
   $matches[1] = str_replace(array('<div', 'div>'), array('<span', 'span><br />'), $matches[1]);
 
   $pdf->writeHTML($matches[1]);

@@ -8,6 +8,8 @@
 
 define('PRINTPDF_PATH', 'printpdf');
 
+define('PRINT_PDF_FORMAT', 'pdf');
+
 define('PRINT_PDF_LINK_POS_DEFAULT', 'link');
 define('PRINT_PDF_SHOW_LINK_DEFAULT', 1);
 define('PRINT_PDF_NODE_LINK_VISIBILITY_DEFAULT', 0);
@@ -28,7 +30,10 @@ define('PRINT_PDF_FONT_SIZE_DEFAULT', 10);
  * Implementation of hook_init().
  */
 function print_pdf_init() {
-  $GLOBALS['conf']['cache'] = FALSE;
+  // Disable cache on the generated PDF page, as the cache isn't working for PDFs
+  if (preg_match('!^'.PRINTPDF_PATH.'!i', $_GET['q']) === 1) {
+    $GLOBALS['conf']['cache'] = FALSE;
+  }
 }
 
 /**
@@ -82,6 +87,39 @@ function print_pdf_menu() {
   );
 
   return $items;
+}
+
+/**
+ * Implementation of hook_block().
+ */
+function print_pdf_block($op = 'list', $delta = 0, $edit = array()) {
+  switch ($op) {
+    case 'list':
+      $block[0]['info'] = t('Most PDFd');
+      return $block;
+      break;
+    case 'configure':
+      return '';
+    case 'save':
+      return;
+    case 'view':
+      switch ($delta) {
+      case 0:
+        $block['subject'] = t('Most PDFd');
+        $result = db_query_range("SELECT path FROM {print_pdf_page_counter} ORDER BY totalcount DESC", 0, 3)
+                    ->fetchAll();
+        if (count($result)) {
+          $block['content'] = '<div class="item-list"><ul>';
+          foreach ($result as $obj) {
+            $block['content'] .= '<li>'. l(_print_get_title($obj->path), $obj->path) .'</li>';
+          }
+          $block['content'] .= '</ul></div>';
+        }
+        break;
+      }
+      return $block;
+      break;
+    }
 }
 
 /**
@@ -183,6 +221,10 @@ function print_pdf_help($path, $arg) {
  * Implementation of hook_nodeapi_view().
  */
 function print_pdf_nodeapi_view(&$node, $teaser, $page) {
+      // Insert content corner links
+      if ($teaser === FALSE) {
+        _print_pdf_set_node_fields($node);
+      }
       $print_pdf_link_pos = variable_get('print_pdf_link_pos', array(PRINT_PDF_LINK_POS_DEFAULT => PRINT_PDF_LINK_POS_DEFAULT));
       if (($teaser === FALSE) && !empty($print_pdf_link_pos['corner']) &&
           (preg_match('!^print!i', $_GET['q']) == 0)) {
@@ -197,23 +239,111 @@ function print_pdf_nodeapi_view(&$node, $teaser, $page) {
 }
 
 /**
+ * Implementation of hook_nodeapi_prepare().
+ */
+function print_pdf_nodeapi_prepare(&$node, $teaser, $page) {
+  _print_pdf_set_node_fields($node);
+}
+
+/**
+ * Implementation of hook_nodeapi_update().
+ */
+function print_pdf_nodeapi_update(&$node, $teaser, $page) {
+  _print_pdf_node_conf_modify($node->nid, $node->print_pdf_display, $node->print_pdf_display_comment, $node->print_pdf_display_urllist);
+}
+
+/**
+ * Implementation of hook_nodeapi_delete().
+ */
+function print_pdf_nodeapi_delete(&$node, $teaser, $page) {
+  db_delete('print_pdf_node_conf')
+    ->condition('nid', $node->nid)
+    ->execute();
+  db_delete('print_pdf_page_counter')
+    ->condition('path', $node->path)
+    ->execute();
+}
+
+/**
  * Implementation of hook_form_alter().
  */
 function print_pdf_form_alter(&$form, $form_state, $form_id) {
   // Add the node-type settings option to activate the PDF version link
-  if ($form_id == 'node_type_form') {
+  if (($form_id == 'node_type_form') || !empty($form['#node_edit_form'])) {
+    $form['print']['pdf_label'] = array(
+      '#type' => 'markup',
+      '#markup' => '<p><strong>'. t('PDF version') .'</strong></p>',
+    );
+
     $form['print']['print_pdf_display'] = array(
       '#type' => 'checkbox',
-      '#title' => t('Show PDF version link'),
-      '#default_value' => variable_get('print_pdf_display_'. $form['#node_type']->type, PRINT_TYPE_SHOW_LINK_DEFAULT),
-      '#description' => t('Displays the link to a PDF version of the content. Further configuration is available on the !settings.', array('!settings' => l(t('settings page'), 'admin/settings/print' ))),
+      '#title' => t('Show link'),
     );
     $form['print']['print_pdf_display_comment'] = array(
       '#type' => 'checkbox',
-      '#title' => t('Show PDF version link in individual comments'),
-      '#default_value' => variable_get('print_pdf_display_comment_'. $form['#node_type']->type, PRINT_TYPE_COMMENT_LINK_DEFAULT),
-      '#description' => t('Displays the link to a PDF version of the comment. Further configuration is available on the !settings.', array('!settings' => l(t('settings page'), 'admin/settings/print' ))),
+      '#title' => t('Show link in individual comments'),
     );
+    $form['print']['print_pdf_display_urllist'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show Printer-friendly URLs list'),
+    );
+
+    if ($form_id == 'node_type_form') {
+      $form['print']['print_pdf_display']['#default_value'] = variable_get('print_pdf_display_'. $form['#node_type']->type, PRINT_TYPE_SHOW_LINK_DEFAULT);
+      $form['print']['print_pdf_display_comment']['#default_value'] = variable_get('print_pdf_display_comment_'. $form['#node_type']->type, PRINT_TYPE_COMMENT_LINK_DEFAULT);
+      $form['print']['print_pdf_display_urllist']['#default_value'] = variable_get('print_pdf_display_urllist_'. $form['#node_type']->type, PRINT_TYPE_URLLIST_DEFAULT);
+    }
+    else {
+      $form['print']['print_pdf_display']['#default_value'] = $form['#node']->print_pdf_display;
+      $form['print']['print_pdf_display_comment']['#default_value'] = $form['#node']->print_pdf_display_comment;
+      $form['print']['print_pdf_display_urllist']['#default_value'] = $form['#node']->print_pdf_display_urllist;
+    }
+  }
+}
+
+/**
+ * Auxiliary function to assign the per-node settings to the node object fields
+ *
+ * @param $node
+ *   node to be modified
+ */
+function _print_pdf_set_node_fields(&$node) {
+  $res = db_query("SELECT link, comments, url_list FROM {print_pdf_node_conf} WHERE nid = :nid", array(':nid' => $node->nid))
+           ->fetch();
+  $node->print_pdf_display = $res ? intval($res->link) : PRINT_TYPE_SHOW_LINK_DEFAULT;
+  $node->print_pdf_display_comment = $res ? intval($res->comments) : PRINT_TYPE_COMMENT_LINK_DEFAULT;
+  $node->print_pdf_display_urllist = $res ? intval($res->url_list) : PRINT_TYPE_URLLIST_DEFAULT;
+}
+
+/**
+ * Update the print_pdf_node_conf table to reflect the given attributes
+ * If updating to the default values, delete the record.
+ *
+ * @param $nid
+ *   value of the nid field (primary key)
+ * @param $link
+ *   value of the link field (0 or 1)
+ * @param $comments
+ *   value of the comments field (0 or 1)
+ * @param $url_list
+ *   value of the url_list field (0 or 1)
+ */
+function _print_pdf_node_conf_modify($nid, $link, $comments, $url_list) {
+  if (($link == PRINT_TYPE_SHOW_LINK_DEFAULT) && ($comments == PRINT_TYPE_COMMENT_LINK_DEFAULT) &&
+      ($url_list == PRINT_TYPE_URLLIST_DEFAULT)) {
+    db_delete('print_pdf_node_conf')
+      ->condition('nid', $nid)
+      ->execute();
+  }
+  else {
+    db_merge('print_pdf_node_conf')
+      ->key(array('nid' => $nid))
+      ->fields(array(
+        'link' => $link,
+        'comments' => $comments,
+        'url_list' => $url_list,
+      ))
+      ->execute();
   }
 }
 
@@ -228,13 +358,13 @@ function theme_print_pdf_format_link() {
   $print_pdf_link_class  = variable_get('print_pdf_link_class', PRINT_PDF_LINK_CLASS_DEFAULT);
   $print_pdf_content_disposition = variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT);
   $print_pdf_show_link = variable_get('print_pdf_show_link', PRINT_PDF_SHOW_LINK_DEFAULT);
+  $print_pdf_link_text = variable_get('print_pdf_link_text', t('PDF version'));
 
-  $text = t('PDF version');
   $img = drupal_get_path('module', 'print') .'/icons/pdf_icon.gif';
   $title = t('Display a PDF version of this page.');
   $class = strip_tags($print_pdf_link_class);
   $new_window = ($print_pdf_content_disposition == 1);
-  $format = _print_format_link_aux($print_pdf_show_link, $text, $img);
+  $format = _print_format_link_aux($print_pdf_show_link, $print_pdf_link_text, $img);
 
   return array('text' => $format['text'],
                'html' => $format['html'],
@@ -351,12 +481,18 @@ function print_pdf_link_allowed($args) {
     }
     elseif (isset($args['type']) && ($args['type'] == 'comment') && isset($node_type)) {
       // Link is for a comment, return the configured setting
-      return variable_get('print_pdf_display_comment_'. $node_type, PRINT_TYPE_COMMENT_LINK_DEFAULT);
+      $res = db_query("SELECT comments FROM {print_pdf_node_conf} WHERE nid = :nid", array(':nid' => $node->nid))
+               ->fetch();
+      $print_display_comment = $res ? intval($res->comments) : PRINT_TYPE_COMMENT_LINK_DEFAULT;
+      if (($print_display_comment) ||
+          variable_get('print_pdf_display_comment_'. $node_type, PRINT_TYPE_COMMENT_LINK_DEFAULT)) {
+        return PRINT_ALLOW_NORMAL_LINK;
+      }
     }
     else {
       // Node link
-      if (isset($node_type) &&
-          !variable_get('print_pdf_display_'. $node_type, PRINT_TYPE_SHOW_LINK_DEFAULT)) {
+      if ((!$node->print_pdf_display) || (isset($node_type) &&
+          !variable_get('print_pdf_display_'. $node_type, PRINT_TYPE_SHOW_LINK_DEFAULT))) {
         // Link for this node type is disabled
         return FALSE;
       }

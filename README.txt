@@ -88,10 +88,6 @@ The following themeable functions are defined:
       Returns an array of formatted attributes for the Printer-friendly
       link.
 
-  * theme_print_text()
-    Returns an array of costumized text strings used in the printer-friendly
-    page.
-
   * print_pdf_dompdf_footer($html)
     Format the dompdf footer contents
 
