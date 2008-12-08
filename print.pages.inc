@@ -594,13 +594,13 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
     //Remove the comment forms
     $comments = preg_replace('!<form.*?id="comment-.*?">.*?</form>!sim', '', $comments);
     //Remove the 'Post new comment' title
-    $comments = preg_replace('!<h2.*?>Post new comment</h2>!', '', $comments);
+    $comments = preg_replace('!<h2.*?>'. t('Post new comment') .'</h2>!', '', $comments);
     //Remove the comment title hyperlink
-    $comments = preg_replace('!(<h3.*?>)(<a.*?>)(.*?)</a>(</h3>)!', '$1$3$4', $comments);
+    $comments = preg_replace('!(<h3.*?>.*?)<a.*?>(.*?)</a>(.*?</h3>)!i', '$1$2$3', $comments);
     //Remove the comment author link
-    $pattern = '!(<span class="submitted">)(.*?)<a.*?>(.*?)</a>(</span>)!sim';
+    $pattern = '!(<(?:span|div) class="submitted">.*?)<a.*?>(.*?)</a>(.*?</(?:span|div)>)!sim';
     if (preg_match($pattern, $comments)) {
-      $comments = preg_replace($pattern , '$1$2$3$4', $comments);
+      $comments = preg_replace($pattern , '$1$2$3', $comments);
     }
     //Remove the comment links
     $comments = preg_replace('!\s*<ul class="links">.*?</ul>!sim', '', $comments);
