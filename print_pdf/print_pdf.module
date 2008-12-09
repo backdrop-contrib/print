@@ -32,7 +32,7 @@ define('PRINT_PDF_FILENAME_DEFAULT', '[site-name] - [title] - [mod-yyyy]-[mod-mm
  */
 function print_pdf_init() {
   // Disable cache on the generated PDF page, as the cache isn't working for PDFs
-  if (preg_match('!^'.PRINTPDF_PATH.'!i', $_GET['q']) === 1) {
+  if (preg_match('!^'. PRINTPDF_PATH .'!i', $_GET['q']) === 1) {
     $GLOBALS['conf']['cache'] = FALSE;
   }
 }

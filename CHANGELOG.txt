@@ -1,4 +1,87 @@
+December 10, 2008
+        Update changelog
+        Update translations
+        Minor coder fixes
+December 8, 2008
+        Fix #344036 by eMPee584: generated PDF filename configurable via tokens (requires the token module)
+        Fix #343985 by eMPee584: improve removal of comment form and links
+        Fix #177358: Link options by node
+        Fix #247578: Print URLs by content type
+        Fix #298063: Most printed, emailed and PDFd blocks
+        Fix #333049 and #333957: Add ability to change user-visible strings in the settings pages
+        Use different teaser comparison
+        Try to fix #336865: also replace the opening <p>
+        Fix content corner problem and other minor fixes
+        Add ability to configure link text strings
+        Improve variable cleanup at uninstall
+December 1, 2008
+        Disable footer in dompdf
+        Fix #336860 by Limiting Factor: use realpath for the path replacement when using private files
+        Fix #339111: Disable caching for PDF files
+November 25, 2008
+        Fix #336065: change nodeapi content weight to make sure that the content area link is rendered first
+November 14, 2008
+        Handle unclean URLs when using private files
+November 7, 2008
+        Use link format and icon options also in book links.
+        Fix #315204: Add options to show only the current page in book links
+        Fix #314521: Use file:// access when accessing images if private file system is enabled
+November 3, 2008
+        Support latest hook_perm() implementation
+October 28, 2008
+        Use Pass Through in D7's drupal_set_title
+October 22, 2008
+        coder fixes
+        Improved UTF-8 conversion for dompdf
+October 21, 2008
+        Since dompdf can't handle Unicode, decode it to ISO-8859-1
+October 18, 2008
+        Don't validate the PDF settings when the form is empty
+October 17, 2008
+        Improve handling of no PDF tool installed
+October 16, 2008
+        Change PF link class from print to print_html
+        Fix #319529: Use referer URL if no path is provided
+        Fix #321451: Use reset button on email form
+        Update translations
+October 15, 2008
+        Minor coder fixes
+        Use file_unmanaged_copy
+        Use DRUPAL_ROOT when including files
+October 14, 2008
+        Fix #258095: Add block with links to PF versions
+        Fix #318939: Add title tag to icons
+October 3, 2008
+        Fix #315014: redirect back to original page after sending email from book node
+October 2, 2008
+        Set query to NULL when the link doesn't contain a query
+September 25, 2008
+        Verify print_controller return value to avoid PHP warnings
+        Add option to use URL alias in the link
+September 23, 2008
+        Update to current Drupal 7 dev
+        Avoid system CSS conflict with dompdf
+September 22, 2008
+        Fix #311270: Use node_not_found() instead of node_access_denied() when appropriate
+        Make the code closer to Drupal's node_view()
+September 20, 2008
+        Fix #310703 by eMPee584: remove undefined teaser notice
+September 19, 2008
+        Remove file fields from hook_theme calls
+September 18, 2008
+        Fix #300277: don't break tables when modifying TCPDF's input
+September 18, 2008
+        Fix #309084 by gl0tzk0wski: use addslashes in the dompdf footer function
+        Fix #308620 by robertDouglass: cast cid to int
+        Fix #308478 by Obsidiandh: avoid mod_security error in print_mail settings form
+September 13, 2008
+        Vietnamese translation by thehong
+        Remove default front page mail and PDF links
+        Remove PHP4 file from the API index
+        Removed useless redirect of pdf theming functions
+        Make HEAD compatible with Drupal 7
 September 11, 2008
+        Updated german translation
         Update changelog
         Update translations with current .pot
 September 10, 2008
