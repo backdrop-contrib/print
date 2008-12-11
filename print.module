@@ -131,7 +131,7 @@ function print_block($op = 'list', $delta = 0, $edit = array()) {
       case 0:
       $nid = preg_replace('!^node/!', '', $_GET['q']);
       if (is_numeric($nid)) {
-        $node = node_load(array('nid' => $nid));
+        $node = node_load($nid);
       }
       else {
         $node = NULL;
@@ -629,7 +629,7 @@ function print_link_allowed($args) {
   if (!empty($args['path'])) {
     $nid = preg_replace('!^node/!', '', drupal_get_normal_path($args['path']));
     if (is_numeric($nid)) {
-      $args['node'] = node_load(array('nid' => $nid));
+      $args['node'] = node_load($nid);
     }
   }
   if (!empty($args['node'])) {
