@@ -224,31 +224,42 @@ function print_mail_form_submit($form, &$form_state) {
     $from = $form_state['values']['fld_from_addr'];
   }
   $to = $form_state['values']['txt_to_addrs'];
-  $params = array();
-  $params['subject'] = $form_state['values']['fld_subject'];
-  $params['message'] = $form_state['values']['txt_message'];
-  $params['path'] = $form_state['values']['path'];
-  $params['cid'] = isset($form_state['values']['cid']) ? $form_state['values']['cid'] : NULL;
-  $params['teaser'] = $form_state['values']['chk_teaser'];
+  $cid = isset($form_state['values']['cid']) ? $form_state['values']['cid'] : NULL;
 
-  $ret = drupal_mail('print_mail', 'sendpage', $to, language_default(), $params, $from, TRUE);
-  if ($ret['result']) {
-    flood_register_event('print_mail');
-    watchdog('print_mail', '%name [%from] sent %page to [%to]', array('%name' => $form_state['values']['fld_from_name'], '%from' => $form_state['values']['fld_from_addr'], '%page' => $form_state['values']['path'], '%to' => $to));
-    $site_name = variable_get('site_name', t('us'));
-    $print_mail_text_confirmation = variable_get('print_mail_text_confirmation', t('Thank you for spreading the word about !site.'));
-    drupal_set_message(t($print_mail_text_confirmation, array('!site' => $site_name)));
+  $print_mail_text_message = variable_get('print_mail_text_message', t('Message from sender'));
+  $sender_message = $print_mail_text_message .':<br /><br /><em>'. nl2br($form_state['values']['txt_message']) .'</em>';
 
-    $nodepath = drupal_get_normal_path($params['path']);
-    db_update('print_mail_page_counter')
-      ->fields(array(
-          'sentcount' => 1,
-          'sent_timestamp' => REQUEST_TIME,
-      ))
-      ->condition('path', $nodepath, '=')
-      ->expression('sentcount', 'sentcount + :inc', array(':inc' => count(split(',', $to))))
-      ->execute();
+  $print = print_controller($form_state['values']['path'], $cid, PRINT_MAIL_FORMAT, $form_state['values']['chk_teaser'], $sender_message);
+  if ($print !== FALSE) {
+    $params = array();
+    $params['subject'] = $form_state['values']['fld_subject'];
+
+    $node = $print['node'];
+    ob_start();
+    include_once(DRUPAL_ROOT .'/'. _print_get_template(PRINT_MAIL_FORMAT, $print['type']));
+    $params['body'] = ob_get_contents();
+    ob_end_clean();
+
+    $ret = drupal_mail('print_mail', 'sendpage', $to, language_default(), $params, $from, TRUE);
+    if ($ret['result']) {
+      flood_register_event('print_mail');
+      watchdog('print_mail', '%name [%from] sent %page to [%to]', array('%name' => $form_state['values']['fld_from_name'], '%from' => $form_state['values']['fld_from_addr'], '%page' => $form_state['values']['path'], '%to' => $to));
+      $site_name = variable_get('site_name', t('us'));
+      $print_mail_text_confirmation = variable_get('print_mail_text_confirmation', t('Thank you for spreading the word about !site.'));
+      drupal_set_message(t($print_mail_text_confirmation, array('!site' => $site_name)));
+
+      $nodepath = drupal_get_normal_path($form_state['values']['path']);
+      db_update('print_mail_page_counter')
+        ->fields(array(
+            'sentcount' => 1,
+            'sent_timestamp' => REQUEST_TIME,
+        ))
+        ->condition('path', $nodepath, '=')
+        ->expression('sentcount', 'sentcount + :inc', array(':inc' => count(split(',', $to))))
+        ->execute();
+    }
   }
+
   $form_state['redirect'] = preg_replace('!^book/export/html/!', 'node/', $form_state['values']['path']);
 }
 
@@ -258,32 +269,13 @@ function print_mail_form_submit($form, &$form_state) {
 function print_mail_mail($key, &$message, $params) {
   switch ($key) {
     case 'sendpage':
-      $print_mail_text_message = variable_get('print_mail_text_message', t('Message from sender'));
-      $sender_message = $print_mail_text_message .':<br /><br /><em>'. nl2br($params['message']) .'</em>';
-
-      $print = print_controller($params['path'], $params['cid'], PRINT_MAIL_FORMAT, $params['teaser'], $sender_message);
-      if ($print === FALSE) {
-        return;
-      }
-
-      // Img elements must be set to absolute
-//      $pattern = '!<(img\s[^>]*?)>!is';
-//      $print['content'] = preg_replace_callback($pattern, '_print_rewrite_urls', $print['content']);
-//      $print['logo'] = preg_replace_callback($pattern, '_print_rewrite_urls', $print['logo']);
-//      $print['footer_message'] = preg_replace_callback($pattern, '_print_rewrite_urls', $print['footer_message']);
-
-      $node = $print['node'];
-      ob_start();
-      include_once(DRUPAL_ROOT .'/'. _print_get_template(PRINT_MAIL_FORMAT, $print['type']));
-      $html = ob_get_contents();
-      ob_end_clean();
-
       $message['subject'] = $params['subject'];
-      $message['body'] = $html;
+      $message['body'] = $params['body'];
       $message['headers']['Content-Type'] = 'text/html; charset=utf-8';
     break;
   }
 }
+
 /**
  * Process the send by-email form cancel submission.
  *
@@ -292,4 +284,3 @@ function print_mail_mail($key, &$message, $params) {
 function print_mail_form_cancel($form, &$form_state) {
   $form_state['redirect'] = preg_replace('!^book/export/html/!', 'node/', $form_state['values']['path']);
 }
-
