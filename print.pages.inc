@@ -570,6 +570,10 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
     unset($node->content['service_links']);
 
     $content = drupal_render($node->content);
+
+    // Disable the AdSense module ads
+    $content = preg_replace('!<div class=[\'"]adsense[\'"].*?</div>!sim', '', $content);
+
     if ($teaser) {
       $node->teaser = $content;
       unset($node->body);
