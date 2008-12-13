@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "POT-Creation-Date: 2008-12-08 16:14+0100\n"
-"PO-Revision-Date: 2008-12-10 00:36+0100\n"
+"PO-Revision-Date: 2008-12-13 15:50+0100\n"
 "Last-Translator: Joao Ventura <jcnventura@drupal.org>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -379,7 +379,7 @@ msgstr "Anónimo"
 
 #: print.pages.inc:595
 msgid "Post new comment"
-msgstr ""
+msgstr "Submeter um novo comentário"
 
 #: print.module:115;304
 #: print.info:0
@@ -799,7 +799,7 @@ msgid "Adds the capability to export pages as PDF."
 msgstr "Adiciona a capacidade de exportar páginas como PDF."
 
 #~ msgid "Only JPEG, PNG and GIF images are allowed to be used as logos."
-#~ msgstr "Apenas imagens JPEG, PNG ou GIF podem ser usadas como logotipo."
+#~ msgstr "Apenas imagens JPEG, PNG e GIF são permitidas como logótipos."
 #~ msgid "Take control of the book module printer-friendly link"
 #~ msgstr "Assumir controle da ligação à versão para imprimir do módulo Livro"
 #~ msgid ""
