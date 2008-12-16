@@ -362,8 +362,13 @@ function print_form_alter(&$form, $form_state, $form_id) {
  *   node to be modified
  */
 function _print_set_node_fields(&$node) {
-  $res = db_query("SELECT link, comments, url_list FROM {print_node_conf} WHERE nid = :nid", array(':nid' => $node->nid))
-           ->fetch();
+  if (isset($node->nid)) {
+    $res = db_query("SELECT link, comments, url_list FROM {print_node_conf} WHERE nid = :nid", array(':nid' => $node->nid))
+             ->fetch();
+  }
+  else {
+    $res = FALSE;
+  }
   $node->print_display = $res ? intval($res->link) : PRINT_TYPE_SHOW_LINK_DEFAULT;
   $node->print_display_comment = $res ? intval($res->comments) : PRINT_TYPE_COMMENT_LINK_DEFAULT;
   $node->print_display_urllist = $res ? intval($res->url_list) : PRINT_TYPE_URLLIST_DEFAULT;
