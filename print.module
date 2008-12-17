@@ -62,6 +62,10 @@ function print_perm() {
       'title' => t('Administer the module'),
       'description' => t('Perform maintenance tasks for the print module.'),
     ),
+    'use PHP for link visibility' => array(
+      'title' => t('Use PHP for link visibility'),
+      'description' => t('Enables the use of PHP code to configure the link visibility.'),
+    ),
   );
 }
 
@@ -602,6 +606,9 @@ function print_insert_link($path = NULL, $node = NULL) {
  */
 function _print_page_match($visibility, $pages) {
   if ($pages) {
+    if ($visibility == 2) {
+      return drupal_eval($pages);
+    }
     $path = drupal_get_path_alias($_GET['q']);
     $page_match = drupal_match_path($path, $pages);
     if ($path != $_GET['q']) {

@@ -262,6 +262,17 @@ function print_html_settings() {
     '#description' => t("Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>')),
   );
 
+  $access = user_access('use PHP for link visibility');
+
+  if ($form['settings']['adv_link']['print_html_node_link_visibility']['#default_value'] == 2 && !$access) {
+    $form['settings']['adv_link']['print_html_node_link_visibility'] = array('#type' => 'value', '#value' => 2);
+    $form['settings']['adv_link']['print_html_node_link_pages'] = array('#type' => 'value', '#value' => $form['settings']['adv_link']['print_html_node_link_pages']['#default_value']);
+  }
+  elseif ($access) {
+    $form['settings']['adv_link']['print_html_node_link_visibility']['#options'][] = t('Show if the following PHP code returns <code>TRUE</code> (PHP-mode, experts only).');
+    $form['settings']['adv_link']['print_html_node_link_pages']['#description'] .= ' '. t('If the PHP-mode is chosen, enter PHP code between %php. Note that executing incorrect PHP-code can break your Drupal site.', array('%php' => '<?php ?>'));
+  }
+
   $form['settings']['adv_link']['print_html_sys_link_visibility'] = array(
     '#type' => 'radios',
     '#title' => t('Show link in system (non-content) pages'),
@@ -276,6 +287,15 @@ function print_html_settings() {
     '#description' => t('Setting this option will add a printer-friendly version page link on pages created by Drupal or the enabled modules.') .'<br />'.
                       t("Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>')),
   );
+
+  if ($form['settings']['adv_link']['print_html_sys_link_visibility']['#default_value'] == 2 && !$access) {
+    $form['settings']['adv_link']['print_html_sys_link_visibility'] = array('#type' => 'value', '#value' => 2);
+    $form['settings']['adv_link']['print_html_sys_link_pages'] = array('#type' => 'value', '#value' => $form['settings']['adv_link']['print_html_sys_link_pages']['#default_value']);
+  }
+  elseif ($access) {
+    $form['settings']['adv_link']['print_html_sys_link_visibility']['#options'][] = t('Show if the following PHP code returns <code>TRUE</code> (PHP-mode, experts only).');
+    $form['settings']['adv_link']['print_html_sys_link_pages']['#description'] .= ' '. t('If the PHP-mode is chosen, enter PHP code between %php. Note that executing incorrect PHP-code can break your Drupal site.', array('%php' => '<?php ?>'));
+  }
 
   $form['settings']['print_html_book_link'] = array(
     '#type' => 'radios',
