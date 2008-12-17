@@ -22,6 +22,9 @@ require_once(DRUPAL_ROOT .'/'. drupal_get_path('module', 'print') .'/print.pages
 function print_pdf_controller() {
   global $base_url;
 
+  // Disable caching for generated PDFs, as Drupal doesn't ouput the proper headers from the cache
+  $GLOBALS['conf']['cache'] = FALSE;
+
   $args = func_get_args();
   // Remove the printpdf/ prefix
   $path = implode('/', $args);
