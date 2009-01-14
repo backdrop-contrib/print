@@ -163,6 +163,12 @@ function print_mail_settings() {
     '#default_value' => variable_get('print_mail_text_message', t('Message from sender')),
     '#description' => t('e-mail message preamble. The sender will be able to add their own message after this.'),
   );
+  $form['settings']['print_mail_text']['print_mail_text_content'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Message Content'),
+    '#default_value' => variable_get('print_mail_text_content', ''),
+    '#description' => t('Set the default contents of the message.'),
+  );
   $form['settings']['print_mail_text']['print_mail_text_confirmation'] = array(
     '#type' => 'textfield',
     '#title' => t('Thank You Message'),

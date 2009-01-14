@@ -124,6 +124,8 @@ function print_mail_form($form_state) {
   $site_name = variable_get('site_name', t('an interesting site'));
   $print_mail_text_subject = variable_get('print_mail_text_subject', t('!user has sent you a message from !site'));
   $form['fld_subject']['#default_value'] = t($print_mail_text_subject, array('!user' => $user_name, '!site' => $site_name));
+  $print_mail_text_content = variable_get('print_mail_text_content', '');
+  $form['txt_message']['#default_value'] = t($print_mail_text_content);
 
   return $form;
 }
