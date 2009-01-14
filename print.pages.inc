@@ -201,7 +201,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
       $css_files[] = preg_replace($pattern, '', $user_css);
     }
     foreach ($css_files as $filename) {
-      $res = file_get_contents($filename, TRUE);
+      $res = file_exists($filename) ? file_get_contents($filename, TRUE) : FALSE;
       if ($res != FALSE) {
         $style .= $res;
       }
@@ -555,7 +555,11 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
   drupal_set_title($node->title, PASS_THROUGH);
 
   //alert other modules that we are generating a printer-friendly page, so they can choose to show/hide info
+  // TODO: Remove this in favor of PRINT_BUILD_MODE
   $node->printing = TRUE;
+  
+  $node->build_mode = 'print';
+  
   // Turn off Pagination by the Paging module
   unset($node->pages);
   unset($node->page_count);

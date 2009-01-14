@@ -34,7 +34,8 @@ function print_main_settings() {
     '#type' => 'checkbox',
     '#title' => t('Printer-friendly URLs list'),
     '#default_value' => variable_get('print_urls', PRINT_URLS_DEFAULT),
-    '#description' => t('If set, a list of the destination URLs for the page links will be displayed at the bottom of the page.'),
+    '#description' => t('If set, a list of the destination URLs for the page links will be displayed at the bottom of the page.') .'<br />'.
+                      t('Note that you can enable/disable the URL list for each content type individually from the !url.', array('!url' => l(t('Content Types page'),'admin/build/types'))),
   );
 
   $form['settings']['print_comments'] = array(

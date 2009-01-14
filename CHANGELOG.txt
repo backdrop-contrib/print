@@ -1,3 +1,21 @@
+January 14, 2009
+        Update changelog
+        Fix #349991 by moshe weitzman: Use node build_mode instead of custom property for customizing node fields
+        Fix #351043: Add specific permission to edit the node-specific settings
+        Fix #356073: Check for CSS file before expanding it and replace spaces with %20 in mails sent
+        Use integers as SQL int default values instead of strings
+December 17, 2008
+        Add PHP visibility option
+        Move cache disabling code to print_controller() instead of print_pdf_init()
+December 16, 2008
+        Fix #347518: nid is not yet set in node prepare
+December 13, 2008
+        Remove AdSense module's ads from the output
+        Updated Spanish translation by gusgsm1
+        Updated Portuguese translation
+December 12, 2008
+        Use new node_load argument interface
+        Simplify hook_mail
 December 10, 2008
         Update changelog
         Update translations

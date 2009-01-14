@@ -62,6 +62,10 @@ function print_perm() {
       'title' => t('Administer the module'),
       'description' => t('Perform maintenance tasks for the print module.'),
     ),
+    'node-specific print configuration' => array(
+      'title' => t('Node-specific configuration'),
+      'description' => t('Enable access to the per-node settings.'),
+    ),
     'use PHP for link visibility' => array(
       'title' => t('Use PHP for link visibility'),
       'description' => t('Enables the use of PHP code to configure the link visibility.'),
@@ -320,7 +324,8 @@ function print_nodeapi_delete(&$node, $teaser, $page) {
  */
 function print_form_alter(&$form, $form_state, $form_id) {
   // Add the node-type settings option to activate the printer-friendly version link
-  if (($form_id == 'node_type_form') || !empty($form['#node_edit_form'])) {
+  if ((user_access('administer print') || user_access('node-specific print configuration')) && 
+      (($form_id == 'node_type_form') || !empty($form['#node_edit_form']))) {
     $form['print'] = array(
       '#type' => 'fieldset',
       '#title' => t('Printer, e-mail and PDF versions'),
@@ -743,3 +748,52 @@ function print_query_string_encode($query, $exclude = array(), $parent = '') {
 
   return implode('&', $params);
 }
+
+/**
+ * Implementation of hook_content_build_modes()
+ *
+ * @return
+ * An array describing the build modes used by the module.
+ * They are grouped by secondary tabs on CCK's 'Display fields' screens.
+ *
+ * Expected format:
+ * array(
+ *   // The first level keys (tab1_url, tab2_url) will be used to generate
+ *   // the url of the tab: admin/content/node-type/[type_name]/display/[tab1_url]
+ *   // A module can add its render modes to a tab defined by another module.
+ *   // In this case, there's no need to provide a 'title' for this tab.
+ *   'tab1_url' => array(
+ *     'title' => t('The human-readable title of the tab'),
+ *     'build modes' => array(
+ *       // The keys of the 'context' array are the values used in $node->build_mode.
+ *       'mymodule_mode1' => array(
+ *         'title' => t('The human-readable name of the build mode'),
+ *        // The 'views style' property determines if the render mode should be
+ *        // available as an option in Views' 'node' row style (not implemented yet).
+ *        'views style' => TRUE,
+ *       ),
+ *       'mymodule_mode2' => array(
+ *         'title' => t('Mode 2'),
+ *         'views style' => TRUE,
+ *       ),
+ *     ),
+ *   ),
+ *   'tab2_url' => array(
+ *     // ...
+ *   ),
+ * );
+ */
+function print_content_build_modes() {
+ return array(
+   'print' => array(
+     'title' => t('Print'),
+     'build modes' => array(
+     'print' => array(
+         'title' => t('Print'),
+         'views style' => FALSE,
+       ),
+     ),
+   ),
+ );
+}
+

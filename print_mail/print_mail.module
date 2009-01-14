@@ -219,7 +219,8 @@ function print_mail_nodeapi_delete(&$node, $teaser, $page) {
  */
 function print_mail_form_alter(&$form, $form_state, $form_id) {
   // Add the node-type settings option to activate the mail version link
-  if (($form_id == 'node_type_form') || !empty($form['#node_edit_form'])) {
+  if ((user_access('administer print') || user_access('node-specific print configuration')) && 
+      (($form_id == 'node_type_form') || !empty($form['#node_edit_form']))) {
     $form['print']['mail_label'] = array(
       '#type' => 'markup',
       '#markup' => '<p><strong>'. t('Send by e-mail') .'</strong></p>',
