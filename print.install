@@ -14,7 +14,7 @@ function print_install() {
 
   $t = get_t();
   drupal_set_message($t('Printer-friendly Page settings are available under !link',
-    array( '!link' => l('Administer > Site configuration > Printer-friendly Pages ',  'admin/settings/print' ) )
+    array( '!link' => l($t('Administer > Site configuration > Printer-friendly Pages'),  'admin/settings/print' ) )
   ));
 }
 

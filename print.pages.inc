@@ -328,7 +328,9 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   }
 
   if (module_exists('taxonomy')) {
-    $terms = taxonomy_link('taxonomy terms', $node);
+// TODO make this work when taxonomy works again
+//    $terms = taxonomy_link('taxonomy terms', $node);
+    $terms = taxonomy_preview_terms($node);
     $print['taxonomy'] = theme('links', $terms);
   }
 
@@ -557,9 +559,9 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
   //alert other modules that we are generating a printer-friendly page, so they can choose to show/hide info
   // TODO: Remove this in favor of PRINT_BUILD_MODE
   $node->printing = TRUE;
-  
+
   $node->build_mode = 'print';
-  
+
   // Turn off Pagination by the Paging module
   unset($node->pages);
   unset($node->page_count);
