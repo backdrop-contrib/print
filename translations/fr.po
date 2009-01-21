@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: print.module\n"
 "POT-Creation-Date: 2008-12-08 16:14+0100\n"
-"PO-Revision-Date: 2008-12-10 00:35+0100\n"
+"PO-Revision-Date: 2009-01-21 02:35+0100\n"
 "Last-Translator: Joao Ventura <jcnventura@drupal.org>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -250,8 +250,9 @@ msgid "Printer-friendly version"
 msgstr "Version imprimable"
 
 #: print.admin.inc:232
+#, fuzzy
 msgid "Text used in the link to the printer-friendly version."
-msgstr ""
+msgstr "Inclus les commentaires dans la version imprimable"
 
 #: print.admin.inc:237
 #: print_mail/print_mail.admin.inc:55
@@ -407,14 +408,14 @@ msgstr ""
 #: print_pdf/print_pdf.module:281
 #, fuzzy
 msgid "Show link in individual comments"
-msgstr "Affiche le lien dans les commentaires individuels"
+msgstr "Affiche le lien vers la version imprimable dans les commentaires individuels"
 
 #: print.module:324
 #: print_mail/print_mail.module:229
 #: print_pdf/print_pdf.module:285
 #, fuzzy
 msgid "Show Printer-friendly URLs list"
-msgstr "Affiche le liste des URLs des versions imprimables"
+msgstr "Liste des URLs des versions imprimables"
 
 #: print.module:486
 msgid "Display a printer-friendly version of this page."
@@ -479,15 +480,16 @@ msgstr ""
 #: print_mail/print_mail.admin.inc:49
 #: print_mail/print_mail.module:294
 msgid "Send to friend"
-msgstr ""
+msgstr "Envoyer à un ami"
 
 #: print_mail/print_mail.admin.inc:50
 msgid "Text used in the link to the send by-email form."
 msgstr ""
 
 #: print_mail/print_mail.admin.inc:94
+#, fuzzy
 msgid "Setting this option will add a send by e-mail link on pages created by Drupal or the enabled modules."
-msgstr ""
+msgstr "Activer cette option ajoutera un lien vers la version imprimable sur les pages créées par Drupal ou les modules activés."
 
 #: print_mail/print_mail.admin.inc:102
 #: print_pdf/print_pdf.admin.inc:114
@@ -505,7 +507,7 @@ msgstr ""
 #: print_mail/print_mail.admin.inc:115
 #: print_mail/print_mail.inc:89
 msgid "Send only the teaser"
-msgstr ""
+msgstr "N'envoyer que l'aperçu"
 
 #: print_mail/print_mail.admin.inc:117
 msgid "If selected, the default choice will be to send only the node's teaser instead of the full content."
@@ -520,39 +522,43 @@ msgid "If checked, the user will be able to choose between sending the full cont
 msgstr ""
 
 #: print_mail/print_mail.admin.inc:136
+#, fuzzy
 msgid "Message Subject"
-msgstr ""
+msgstr "Objet"
 
 #: print_mail/print_mail.admin.inc:137
 #: print_mail/print_mail.inc:123
 msgid "!user has sent you a message from !site"
-msgstr ""
+msgstr "!user vous a envoyé un message à partir de !site"
 
 #: print_mail/print_mail.admin.inc:138
 msgid "e-mail subject line. The sender's name will appear in place of !user in the subject. The web site name will be inserted in place of !site."
 msgstr ""
 
 #: print_mail/print_mail.admin.inc:142
+#, fuzzy
 msgid "Message Preamble"
-msgstr ""
+msgstr "Message du destinataire :"
 
 #: print_mail/print_mail.admin.inc:143
 #: print_mail/print_mail.inc:252
+#, fuzzy
 msgid "Message from sender"
-msgstr ""
+msgstr "Message du destinataire :"
 
 #: print_mail/print_mail.admin.inc:144
 msgid "e-mail message preamble. The sender will be able to add their own message after this."
 msgstr ""
 
 #: print_mail/print_mail.admin.inc:148
+#, fuzzy
 msgid "Thank You Message"
-msgstr ""
+msgstr "Votre message"
 
 #: print_mail/print_mail.admin.inc:149
 #: print_mail/print_mail.inc:237
 msgid "Thank you for spreading the word about !site."
-msgstr ""
+msgstr "Nous vous remercions passer le mot à propos de !site."
 
 #: print_mail/print_mail.admin.inc:150
 msgid "This message will be displayed after the user successfully submits the form."
@@ -564,89 +570,90 @@ msgstr ""
 
 #: print_mail/print_mail.inc:60
 msgid "Your e-mail"
-msgstr ""
+msgstr "Your adresse e-mail"
 
 #: print_mail/print_mail.inc:65
 msgid "Your name"
-msgstr ""
+msgstr "Votre nom"
 
 #: print_mail/print_mail.inc:70
 msgid "Send to"
-msgstr ""
+msgstr "Envoyer à"
 
 #: print_mail/print_mail.inc:73
 msgid "Enter multiple addresses separated by commas and/or different lines."
-msgstr ""
+msgstr "Entrez plusieurs adresses séparées avec des virgules et/ou écrites sur différentes lignes."
 
 #: print_mail/print_mail.inc:77
 msgid "Subject"
-msgstr ""
+msgstr "Objet"
 
 #: print_mail/print_mail.inc:82
 msgid "Your message"
-msgstr ""
+msgstr "Votre message"
 
 #: print_mail/print_mail.inc:100
 msgid "Send e-mail"
-msgstr ""
+msgstr "Envoyer e-mail"
 
 #: print_mail/print_mail.inc:104
 msgid "Clear form"
-msgstr ""
+msgstr "Effacer le formulaire"
 
 #: print_mail/print_mail.inc:109
 msgid "Cancel"
-msgstr ""
+msgstr "Annuler"
 
 #: print_mail/print_mail.inc:120
 msgid "Someone"
-msgstr ""
+msgstr "Quelqu'un"
 
 #: print_mail/print_mail.inc:122
 msgid "an interesting site"
-msgstr ""
+msgstr "un site intéressant"
 
 #: print_mail/print_mail.inc:197
 msgid "You must enter a subject."
-msgstr ""
+msgstr "Vous devez entrer un sujet."
 
 #: print_mail/print_mail.inc:201
 msgid "You must enter a message."
-msgstr ""
+msgstr "Vous devez entrer un message."
 
 #: print_mail/print_mail.inc:236
 msgid "us"
-msgstr ""
+msgstr "nous"
 
 #: print_mail/print_mail.inc:235
 #: print_mail/print_mail.module:0
 msgid "print_mail"
-msgstr ""
+msgstr "print_mail"
 
 #: print_mail/print_mail.inc:235
 msgid "%name [%from] sent %page to [%to]"
-msgstr ""
+msgstr "%name [$from] à envoyé %page à [%to]"
 
 #: print_mail/print_mail.module:74;84
+#, fuzzy
 msgid "Most emailed"
-msgstr ""
+msgstr "Your adresse e-mail"
 
 #: print_mail/print_mail.module:216
 #: print_mail/print_mail.info:0
 msgid "Send by e-mail"
-msgstr ""
+msgstr "Envoyer par e-mail."
 
 #: print_mail/print_mail.module:297
 msgid "Send this page by e-mail."
-msgstr ""
+msgstr "Envoyer cette page par e-mail."
 
 #: print_mail/print_mail.module:48
 msgid "Send page by e-mail"
-msgstr ""
+msgstr "Envoyer la page par e-mail"
 
 #: print_mail/print_mail.module:56
 msgid "e-mail"
-msgstr ""
+msgstr "e-mail"
 
 #: print_mail/print_mail.info:0
 msgid "Provides the capability to send the web page by e-mail"
