@@ -114,11 +114,7 @@ function print_mail_help($path, $arg) {
 /**
  * Implementation of hook_nodeapi_view().
  */
-function print_mail_nodeapi_view(&$node, $teaser, $page) {
-      if ($teaser === FALSE) {
-        _print_mail_set_node_fields($node);
-      }
-
+function print_mail_nodeapi_view($node, $teaser) {
   $print_mail_link_pos = variable_get('print_mail_link_pos', array(PRINT_MAIL_LINK_POS_DEFAULT => PRINT_MAIL_LINK_POS_DEFAULT));
   $print_mail_link_use_alias = variable_get('print_mail_link_use_alias', PRINT_MAIL_LINK_USE_ALIAS_DEFAULT);
   $allowed_type = print_mail_link_allowed(array('type' => 'node', 'node' => $node, 'teaser' => $teaser));
@@ -178,23 +174,25 @@ function print_mail_nodeapi_view(&$node, $teaser, $page) {
 }
 
 /**
- * Implementation of hook_nodeapi_prepare().
+ * Implementation of hook_nodeapi_load().
  */
-function print_mail_nodeapi_prepare(&$node, $teaser, $page) {
-  _print_mail_set_node_fields($node);
+function print_mail_nodeapi_load($nodes, $types) {
+  foreach ($nodes as $node) {
+    _print_mail_set_node_fields($node);
+  }
 }
 
 /**
  * Implementation of hook_nodeapi_update().
  */
-function print_mail_nodeapi_update(&$node, $teaser, $page) {
+function print_mail_nodeapi_update($node) {
   _print_mail_node_conf_modify($node->nid, $node->print_mail_display, $node->print_mail_display_comment, $node->print_mail_display_urllist);
 }
 
 /**
  * Implementation of hook_nodeapi_delete().
  */
-function print_mail_nodeapi_delete(&$node, $teaser, $page) {
+function print_mail_nodeapi_delete($node) {
   db_delete('print_mail_node_conf')
     ->condition('nid', $node->nid)
     ->execute();

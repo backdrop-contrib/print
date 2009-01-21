@@ -230,11 +230,7 @@ function print_help($path, $arg) {
 /**
  * Implementation of hook_nodeapi_view().
  */
-function print_nodeapi_view(&$node, $teaser, $page) {
-      if ($teaser === FALSE) {
-        _print_set_node_fields($node);
-      }
-
+function print_nodeapi_view($node, $teaser) {
   $print_html_link_pos = variable_get('print_html_link_pos', array(PRINT_HTML_LINK_POS_DEFAULT => PRINT_HTML_LINK_POS_DEFAULT));
   $print_html_link_use_alias = variable_get('print_html_link_use_alias', PRINT_HTML_LINK_USE_ALIAS_DEFAULT);
   $allowed_type = print_link_allowed(array('type' => 'node', 'node' => $node, 'teaser' => $teaser));
@@ -285,23 +281,25 @@ function print_nodeapi_view(&$node, $teaser, $page) {
 }
 
 /**
- * Implementation of hook_nodeapi_prepare().
+ * Implementation of hook_nodeapi_load().
  */
-function print_nodeapi_prepare(&$node, $teaser, $page) {
-  _print_set_node_fields($node);
+function print_nodeapi_load($nodes, $types) {
+  foreach ($nodes as $node) {
+     _print_set_node_fields($node);
+  }
 }
 
 /**
  * Implementation of hook_nodeapi_update().
  */
-function print_nodeapi_update(&$node, $teaser, $page) {
+function print_nodeapi_update($node) {
   _print_node_conf_modify($node->nid, $node->print_display, $node->print_display_comment, $node->print_display_urllist);
 }
 
 /**
  * Implementation of hook_nodeapi_delete().
  */
-function print_nodeapi_delete(&$node, $teaser, $page) {
+function print_nodeapi_delete($node) {
   db_delete('print_node_conf')
     ->condition('nid', $node->nid)
     ->execute();
@@ -738,52 +736,4 @@ function print_query_string_encode($query, $exclude = array(), $parent = '') {
   }
 
   return implode('&', $params);
-}
-
-/**
- * Implementation of hook_content_build_modes().
- *
- * @return
- * An array describing the build modes used by the module.
- * They are grouped by secondary tabs on CCK's 'Display fields' screens.
- *
- * Expected format:
- * array(
- *   // The first level keys (tab1_url, tab2_url) will be used to generate
- *   // the url of the tab: admin/content/node-type/[type_name]/display/[tab1_url]
- *   // A module can add its render modes to a tab defined by another module.
- *   // In this case, there's no need to provide a 'title' for this tab.
- *   'tab1_url' => array(
- *     'title' => t('The human-readable title of the tab'),
- *     'build modes' => array(
- *       // The keys of the 'context' array are the values used in $node->build_mode.
- *       'mymodule_mode1' => array(
- *         'title' => t('The human-readable name of the build mode'),
- *        // The 'views style' property determines if the render mode should be
- *        // available as an option in Views' 'node' row style (not implemented yet).
- *        'views style' => TRUE,
- *       ),
- *       'mymodule_mode2' => array(
- *         'title' => t('Mode 2'),
- *         'views style' => TRUE,
- *       ),
- *     ),
- *   ),
- *   'tab2_url' => array(
- *     // ...
- *   ),
- * );
- */
-function print_content_build_modes() {
-  return array(
-    'print' => array(
-      'title' => t('Print'),
-      'build modes' => array(
-        'print' => array(
-            'title' => t('Print'),
-            'views style' => FALSE,
-        ),
-      ),
-    ),
-  );
 }

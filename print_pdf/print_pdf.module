@@ -155,11 +155,7 @@ function print_pdf_help($path, $arg) {
 /**
  * Implementation of hook_nodeapi_view().
  */
-function print_pdf_nodeapi_view(&$node, $teaser, $page) {
-      if ($teaser === FALSE) {
-        _print_pdf_set_node_fields($node);
-      }
-
+function print_pdf_nodeapi_view($node, $teaser) {
   $print_pdf_link_pos = variable_get('print_pdf_link_pos', array(PRINT_PDF_LINK_POS_DEFAULT => PRINT_PDF_LINK_POS_DEFAULT));
   $print_pdf_link_use_alias = variable_get('print_pdf_link_use_alias', PRINT_PDF_LINK_USE_ALIAS_DEFAULT);
   $allowed_type = print_pdf_link_allowed(array('type' => 'node', 'node' => $node, 'teaser' => $teaser));
@@ -218,23 +214,25 @@ function print_pdf_nodeapi_view(&$node, $teaser, $page) {
 }
 
 /**
- * Implementation of hook_nodeapi_prepare().
+ * Implementation of hook_nodeapi_load().
  */
-function print_pdf_nodeapi_prepare(&$node, $teaser, $page) {
-  _print_pdf_set_node_fields($node);
+function print_pdf_nodeapi_load($nodes, $types) {
+  foreach ($nodes as $node) {
+    _print_pdf_set_node_fields($node);
+  }
 }
 
 /**
  * Implementation of hook_nodeapi_update().
  */
-function print_pdf_nodeapi_update(&$node, $teaser, $page) {
+function print_pdf_nodeapi_update($node) {
   _print_pdf_node_conf_modify($node->nid, $node->print_pdf_display, $node->print_pdf_display_comment, $node->print_pdf_display_urllist);
 }
 
 /**
  * Implementation of hook_nodeapi_delete().
  */
-function print_pdf_nodeapi_delete(&$node, $teaser, $page) {
+function print_pdf_nodeapi_delete($node) {
   db_delete('print_pdf_node_conf')
     ->condition('nid', $node->nid)
     ->execute();
