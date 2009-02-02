@@ -43,13 +43,6 @@ function print_mail_settings() {
     '#description' => t('Select the visual style of the link.'),
   );
 
-  $form['settings']['adv_link']['print_mail_link_text'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Link text'),
-    '#default_value' => variable_get('print_mail_link_text', t('Send to friend')),
-    '#description' => t("Text used in the link to the send by-email form."),
-  );
-
   $form['settings']['adv_link']['print_mail_link_use_alias'] = array(
     '#type' => 'checkbox',
     '#title' => t('Use URL alias instead of node ID'),
@@ -144,32 +137,46 @@ function print_mail_settings() {
     '#description' => t('If checked, the user will be able to choose between sending the full content or only the teaser at send time.'),
   );
 
-  $form['settings']['print_mail_text'] = array(
+  return system_settings_form($form);
+}
+
+/**
+ * Menu callback for the send by e-mail module text strings settings form.
+ *
+ * @ingroup forms
+ */
+function print_mail_strings_settings() {
+  $form['print_mail_text'] = array(
     '#type' => 'fieldset',
     '#title' => t('Text strings'),
-    '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
   );
 
-  $form['settings']['print_mail_text']['print_mail_text_subject'] = array(
+  $form['print_mail_text']['print_mail_link_text'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Link text'),
+    '#default_value' => variable_get('print_mail_link_text', t('Send to friend')),
+    '#description' => t('Text used in the link to the send by-email form.'),
+  );
+
+  $form['print_mail_text']['print_mail_text_subject'] = array(
     '#type' => 'textfield',
     '#title' => t('Message Subject'),
     '#default_value' => variable_get('print_mail_text_subject', t('!user has sent you a message from !site')),
     '#description' => t("e-mail subject line. The sender's name will appear in place of !user in the subject. The web site name will be inserted in place of !site."),
   );
-  $form['settings']['print_mail_text']['print_mail_text_message'] = array(
+  $form['print_mail_text']['print_mail_text_message'] = array(
     '#type' => 'textfield',
     '#title' => t('Message Preamble'),
     '#default_value' => variable_get('print_mail_text_message', t('Message from sender')),
     '#description' => t('e-mail message preamble. The sender will be able to add their own message after this.'),
   );
-  $form['settings']['print_mail_text']['print_mail_text_content'] = array(
+  $form['print_mail_text']['print_mail_text_content'] = array(
     '#type' => 'textfield',
     '#title' => t('Message Content'),
     '#default_value' => variable_get('print_mail_text_content', ''),
     '#description' => t('Set the default contents of the message.'),
   );
-  $form['settings']['print_mail_text']['print_mail_text_confirmation'] = array(
+  $form['print_mail_text']['print_mail_text_confirmation'] = array(
     '#type' => 'textfield',
     '#title' => t('Thank You Message'),
     '#default_value' => variable_get('print_mail_text_confirmation', t('Thank you for spreading the word about !site.')),

@@ -135,38 +135,6 @@ function print_main_settings() {
     '#description' => t("Drupal will attempt to use the page's defined alias in case there is one. To force the use of the fixed URL, activate this option."),
   );
 
-  $form['settings']['print_text'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Text strings'),
-    '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
-  );
-
-  $form['settings']['print_text']['print_text_published'] = array(
-    '#type' => 'textfield',
-    '#default_value' => variable_get('print_text_published', t('Published on %site_name')),
-  );
-  $form['settings']['print_text']['print_text_by'] = array(
-    '#type' => 'textfield',
-    '#default_value' => variable_get('print_text_by', t('By %author')),
-  );
-  $form['settings']['print_text']['print_text_created'] = array(
-    '#type' => 'textfield',
-    '#default_value' => variable_get('print_text_created', t('Created %date')),
-  );
-  $form['settings']['print_text']['print_text_source_url'] = array(
-    '#type' => 'textfield',
-    '#default_value' => variable_get('print_text_source_url', t('Source URL')),
-  );
-  $form['settings']['print_text']['print_text_retrieved'] = array(
-    '#type' => 'textfield',
-    '#default_value' => variable_get('print_text_retrieved', t('retrieved on %date')),
-  );
-  $form['settings']['print_text']['print_text_links'] = array(
-    '#type' => 'textfield',
-    '#default_value' => variable_get('print_text_links', t('Links')),
-  );
-
   $form['#attributes'] = array('enctype' => 'multipart/form-data');
   $form['#validate'][] = '_print_main_settings_validate';
 
@@ -224,13 +192,6 @@ function print_html_settings() {
     '#default_value' => variable_get('print_html_show_link', PRINT_HTML_SHOW_LINK_DEFAULT),
     '#options' => array(1 => t('Text only'), 2 => t('Icon only'), 3 => t('Icon and Text')),
     '#description' => t('Select the visual style of the link.'),
-  );
-
-  $form['settings']['adv_link']['print_html_link_text'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Link text'),
-    '#default_value' => variable_get('print_html_link_text', t('Printer-friendly version')),
-    '#description' => t("Text used in the link to the printer-friendly version."),
   );
 
   $form['settings']['adv_link']['print_html_link_use_alias'] = array(
@@ -345,6 +306,66 @@ function print_html_settings() {
     '#title' => t('Add noarchive'),
     '#default_value' => variable_get('print_robots_noarchive', PRINT_ROBOTS_NOARCHIVE_DEFAULT),
     '#description' => t('Non-standard tag to instruct search engines to not show a "Cached" link for your printer-friendly pages. Recognized by Googlebot.'),
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+ * Menu callback for the Printer-friendly pages module text strings settings form.
+ *
+ * @ingroup forms
+ */
+function print_main_strings_settings() {
+  $form['print_main_text'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Text strings'),
+  );
+
+  $form['print_main_text']['print_text_published'] = array(
+    '#type' => 'textfield',
+    '#default_value' => variable_get('print_text_published', t('Published on %site_name')),
+  );
+  $form['print_main_text']['print_text_by'] = array(
+    '#type' => 'textfield',
+    '#default_value' => variable_get('print_text_by', t('By %author')),
+  );
+  $form['print_main_text']['print_text_created'] = array(
+    '#type' => 'textfield',
+    '#default_value' => variable_get('print_text_created', t('Created %date')),
+  );
+  $form['print_main_text']['print_text_source_url'] = array(
+    '#type' => 'textfield',
+    '#default_value' => variable_get('print_text_source_url', t('Source URL')),
+  );
+  $form['print_main_text']['print_text_retrieved'] = array(
+    '#type' => 'textfield',
+    '#default_value' => variable_get('print_text_retrieved', t('retrieved on %date')),
+  );
+  $form['print_main_text']['print_text_links'] = array(
+    '#type' => 'textfield',
+    '#default_value' => variable_get('print_text_links', t('Links')),
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+ * Menu callback for the Printer-friendly pages module text strings settings form.
+ *
+ * @ingroup forms
+ */
+function print_html_strings_settings() {
+  $form['print_html_text'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Text strings'),
+  );
+
+  $form['print_html_text']['print_html_link_text'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Link text'),
+    '#default_value' => variable_get('print_html_link_text', t('Printer-friendly version')),
+    '#description' => t('Text used in the link to the printer-friendly version.'),
   );
 
   return system_settings_form($form);

@@ -97,7 +97,7 @@ function print_menu() {
     'type' => MENU_CALLBACK,
   );
   $items['admin/settings/print'] = array(
-    'title' => 'Printer-friendly pages',
+    'title' => 'Printer, e-mail and PDF versions',
     'description' => 'Adds a printer-friendly version link to content and administrative pages.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_html_settings'),
@@ -108,12 +108,38 @@ function print_menu() {
     'weight' => 1,
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
+  $items['admin/settings/print/html/options'] = array(
+    'title' => 'Options',
+    'weight' => 1,
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  $items['admin/settings/print/html/strings'] = array(
+    'title' => 'Text strings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('print_html_strings_settings'),
+    'access arguments'  => array('administer print'),
+    'weight' => 2,
+    'type' => MENU_LOCAL_TASK,
+  );
   $items['admin/settings/print/common'] = array(
     'title' => 'Settings',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_main_settings'),
     'access arguments'  => array('administer print'),
     'weight' => 10,
+    'type' => MENU_LOCAL_TASK,
+  );
+  $items['admin/settings/print/common/options'] = array(
+    'title' => 'Options',
+    'weight' => 1,
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  $items['admin/settings/print/common/strings'] = array(
+    'title' => 'Text strings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('print_main_strings_settings'),
+    'access arguments'  => array('administer print'),
+    'weight' => 2,
     'type' => MENU_LOCAL_TASK,
   );
 
@@ -346,9 +372,10 @@ function print_form_alter(&$form, $form_state, $form_id) {
       $form['print']['print_display_urllist']['#default_value'] = variable_get('print_display_urllist_'. $form['#node_type']->type, PRINT_TYPE_URLLIST_DEFAULT);
     }
     else {
-      $form['print']['print_display']['#default_value'] = $form['#node']->print_display;
-      $form['print']['print_display_comment']['#default_value'] = $form['#node']->print_display_comment;
-      $form['print']['print_display_urllist']['#default_value'] = $form['#node']->print_display_urllist;
+      $node = $form['#node'];
+      $form['print']['print_display']['#default_value'] = isset($node->print_display) ? $node->print_display : PRINT_TYPE_SHOW_LINK_DEFAULT;
+      $form['print']['print_display_comment']['#default_value'] = isset($node->print_display_comment) ? $node->print_display_comment : PRINT_TYPE_COMMENT_LINK_DEFAULT;
+      $form['print']['print_display_urllist']['#default_value'] = isset($node->print_display_urllist) ? $node->print_display_urllist : PRINT_TYPE_URLLIST_DEFAULT;
     }
   }
 }
