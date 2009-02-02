@@ -146,7 +146,8 @@ function _print_pdf_dompdf($print, $html, $filename) {
  * @see print_pdf_controller()
  */
 function _print_pdf_tcpdf($print, $html, $filename) {
-  global $base_url;
+  global $base_url, $language;
+
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
   $print_pdf_paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
   $print_pdf_page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
@@ -190,6 +191,10 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   $keys = implode(' ', explode("\n", trim(strip_tags($print['taxonomy']))));
   $pdf->SetKeywords($keys);
   $pdf->setPDFVersion('1.6');
+
+  if (defined('LANGUAGE_RTL') && $language->direction == LANGUAGE_RTL) {
+    $pdf->setRTL(TRUE);
+  }
 
   $pdf = theme('print_pdf_tcpdf_header', $pdf, $html, $font);
   $pdf = theme('print_pdf_tcpdf_footer', $pdf, $html, $font);
