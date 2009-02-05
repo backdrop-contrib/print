@@ -263,6 +263,8 @@ function _print_pdf_tools() {
  * @ingroup forms
  */
 function print_pdf_strings_settings() {
+  drupal_set_message(t("Saving these strings will disable their translation via Drupal's language system. Use the reset button to return them to the original state."), 'warning');
+
   $form['print_pdf_text'] = array(
     '#type' => 'fieldset',
     '#title' => t('Text strings'),

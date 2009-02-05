@@ -128,3 +128,31 @@ function print_schema() {
 
   return $schema;
 }
+
+/**
+ * Update to version 6.x-1.2
+ */
+function print_update_6003() {
+  // Delete custom text strings set to the default
+  $ret = array();
+  $vars = array(
+    'print_html_link_text' => 'Printer-friendly version',
+    'print_text_published' => 'Published on %site_name',
+    'print_text_by' => 'By %author',
+    'print_text_created' => 'Created %date',
+    'print_text_source_url' => 'Source URL',
+    'print_text_retrieved' => 'retrieved on %date',
+    'print_text_links' => 'Links',
+  );
+
+  $t = get_t();
+
+  foreach ($vars as $name => $default) {
+    if (variable_get($name,'') == $t($default)) {
+      variable_del($name);
+    }
+  }
+
+  menu_rebuild();
+  return $ret;
+}

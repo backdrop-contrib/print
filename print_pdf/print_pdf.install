@@ -105,3 +105,25 @@ function print_pdf_schema() {
 
   return $schema;
 }
+
+/**
+ * Update to version 6.x-1.2
+ */
+function print_pdf_update_6003() {
+  // Delete custom text strings set to the default
+  $ret = array();
+  $vars = array(
+    'print_pdf_link_text' => 'PDF version',
+  );
+
+  $t = get_t();
+
+  foreach ($vars as $name => $default) {
+    if (variable_get($name,'') == $t($default)) {
+      variable_del($name);
+    }
+  }
+
+  menu_rebuild();
+  return $ret;
+}

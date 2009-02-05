@@ -317,6 +317,8 @@ function print_html_settings() {
  * @ingroup forms
  */
 function print_main_strings_settings() {
+  drupal_set_message(t("Saving these strings will disable their translation via Drupal's language system. Use the reset button to return them to the original state."), 'warning');
+
   $form['print_main_text'] = array(
     '#type' => 'fieldset',
     '#title' => t('Text strings'),
@@ -356,6 +358,8 @@ function print_main_strings_settings() {
  * @ingroup forms
  */
 function print_html_strings_settings() {
+  drupal_set_message(t("Saving these strings will disable their translation via Drupal's language system. Use the reset button to return them to the original state."), 'warning');
+
   $form['print_html_text'] = array(
     '#type' => 'fieldset',
     '#title' => t('Text strings'),
