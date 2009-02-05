@@ -1,4 +1,24 @@
+February 5, 2009
+        Update changelog
+        Add warning for incompatible mimemail settings
+        Update last patch to Drupal 7 form API fields
+        Fix for #364535: add some warnings about incompatibility of custom strings and the localization mechanism
+        Add explanation of the relation between the type- and node-specific print settings
+        Updated all translations (Dutch 100% thanks to joostvdl)
+February 2, 2009
+        Fix #365041: node-specific settings not initialized when adding new content
+        Fix #364535: move custom text strings to separate form to prevent conflicts with the translation mechanism
+        Fix #366835: support RTL languages in TCPDF generated PDFs
+January 21, 2009
+        Updated french translation by remi
+        Fix #361107: Ensure that per-node configurations are available for block view use
+        Revert #349991 until the cause of #359343 can be determined
+January 16, 2009
+        Coder fixes
+        Update to new hook_block_list and hook_block_view
+        Moved link code to hook_nodeapi_view and removal of hook_link
 January 14, 2009
+        Add configuration for a default sender message
         Update changelog
         Fix #349991 by moshe weitzman: Use node build_mode instead of custom property for customizing node fields
         Fix #351043: Add specific permission to edit the node-specific settings
