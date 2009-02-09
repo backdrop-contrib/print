@@ -319,7 +319,9 @@ function print_nodeapi_load($nodes, $types) {
  * Implementation of hook_nodeapi_update().
  */
 function print_nodeapi_update($node) {
-  _print_node_conf_modify($node->nid, $node->print_display, $node->print_display_comment, $node->print_display_urllist);
+  if (user_access('administer print') || user_access('node-specific print configuration')) {
+    _print_node_conf_modify($node->nid, $node->print_display, $node->print_display_comment, $node->print_display_urllist);
+  }
 }
 
 /**

@@ -239,7 +239,9 @@ function print_pdf_nodeapi_load($nodes, $types) {
  * Implementation of hook_nodeapi_update().
  */
 function print_pdf_nodeapi_update($node) {
-  _print_pdf_node_conf_modify($node->nid, $node->print_pdf_display, $node->print_pdf_display_comment, $node->print_pdf_display_urllist);
+  if (user_access('administer print') || user_access('node-specific print configuration')) {
+    _print_pdf_node_conf_modify($node->nid, $node->print_pdf_display, $node->print_pdf_display_comment, $node->print_pdf_display_urllist);
+  }
 }
 
 /**
