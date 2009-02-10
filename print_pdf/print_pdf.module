@@ -146,26 +146,6 @@ function print_pdf_requirements($phase) {
 }
 
 /**
- * Implementation of hook_help().
- */
-function print_pdf_help($path, $arg) {
-  $print_pdf_link_pos = variable_get('print_pdf_link_pos', array(PRINT_PDF_LINK_POS_DEFAULT => PRINT_PDF_LINK_POS_DEFAULT));
-  if ((preg_match('!^node/!i', $path) == 0) &&
-      !(empty($print_pdf_link_pos['link']) && empty($print_pdf_link_pos['corner']))) {
-    static $output = FALSE;
-
-    if ($output === FALSE) {
-      $output = TRUE;
-
-      $link = print_pdf_insert_link();
-      if ($link) {
-        return "<span class='print-syslink'>$link</span>";
-      }
-    }
-  }
-}
-
-/**
  * Implementation of hook_nodeapi_view().
  */
 function print_pdf_nodeapi_view($node, $teaser) {
@@ -213,17 +193,37 @@ function print_pdf_nodeapi_view($node, $teaser) {
     );
   }
 
-      // Insert content corner links
-      if (($teaser === FALSE) && !empty($print_pdf_link_pos['corner']) &&
-          (preg_match('!^print!i', $_GET['q']) == 0)) {
-        $link = print_pdf_insert_link(NULL, $node);
-        if ($link) {
-          $node->content['print_pdf_link'] = array(
-            '#markup' => "<span class='print-link'>$link</span>",
-            '#weight' => -103,
-          );
-        }
+  // Insert content corner links
+  if (($teaser === FALSE) && !empty($print_pdf_link_pos['corner']) &&
+      (preg_match('!^print!i', $_GET['q']) == 0)) {
+    $link = print_pdf_insert_link(NULL, $node);
+    if ($link) {
+      $node->content['print_pdf_link'] = array(
+        '#markup' => "<span class='print-link'>$link</span>",
+        '#weight' => -103,
+      );
+    }
+  }
+}
+
+/**
+ * Implementation of hook_help().
+ */
+function print_pdf_help($path, $arg) {
+  $print_pdf_link_pos = variable_get('print_pdf_link_pos', array(PRINT_PDF_LINK_POS_DEFAULT => PRINT_PDF_LINK_POS_DEFAULT));
+  if ((preg_match('!^node/!i', $path) == 0) &&
+      !(empty($print_pdf_link_pos['link']) && empty($print_pdf_link_pos['corner']))) {
+    static $output = FALSE;
+
+    if ($output === FALSE) {
+      $output = TRUE;
+
+      $link = print_pdf_insert_link();
+      if ($link) {
+        return "<span class='print-syslink'>$link</span>";
       }
+    }
+  }
 }
 
 /**

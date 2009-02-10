@@ -105,26 +105,6 @@ function print_mail_block_view($delta = 0) {
 }
 
 /**
- * Implementation of hook_help().
- */
-function print_mail_help($path, $arg) {
-  $print_mail_link_pos = variable_get('print_mail_link_pos', array(PRINT_MAIL_LINK_POS_DEFAULT => PRINT_MAIL_LINK_POS_DEFAULT));
-  if ((preg_match('!^node/!i', $path) == 0) &&
-      !(empty($print_mail_link_pos['link']) && empty($print_mail_link_pos['corner']))) {
-    static $output = FALSE;
-
-    if ($output === FALSE) {
-      $output = TRUE;
-
-      $link = print_mail_insert_link();
-      if ($link) {
-        return "<span class='print-syslink'>$link</span>";
-      }
-    }
-  }
-}
-
-/**
  * Implementation of hook_nodeapi_view().
  */
 function print_mail_nodeapi_view($node, $teaser) {
@@ -173,17 +153,37 @@ function print_mail_nodeapi_view($node, $teaser) {
     );
   }
 
-      // Insert content corner links
-      if (($teaser === FALSE) && !empty($print_mail_link_pos['corner']) &&
-          (preg_match('!^print!i', $_GET['q']) == 0)) {
-        $link = print_mail_insert_link(NULL, $node);
-        if ($link) {
-          $node->content['print_mail_link'] = array(
-            '#markup' => "<span class='print-link'>$link</span>",
-            '#weight' => -102,
-          );
-        }
+  // Insert content corner links
+  if (($teaser === FALSE) && !empty($print_mail_link_pos['corner']) &&
+      (preg_match('!^print!i', $_GET['q']) == 0)) {
+    $link = print_mail_insert_link(NULL, $node);
+    if ($link) {
+      $node->content['print_mail_link'] = array(
+        '#markup' => "<span class='print-link'>$link</span>",
+        '#weight' => -102,
+      );
+    }
+  }
+}
+
+/**
+ * Implementation of hook_help().
+ */
+function print_mail_help($path, $arg) {
+  $print_mail_link_pos = variable_get('print_mail_link_pos', array(PRINT_MAIL_LINK_POS_DEFAULT => PRINT_MAIL_LINK_POS_DEFAULT));
+  if ((preg_match('!^node/!i', $path) == 0) &&
+      !(empty($print_mail_link_pos['link']) && empty($print_mail_link_pos['corner']))) {
+    static $output = FALSE;
+
+    if ($output === FALSE) {
+      $output = TRUE;
+
+      $link = print_mail_insert_link();
+      if ($link) {
+        return "<span class='print-syslink'>$link</span>";
       }
+    }
+  }
 }
 
 /**
