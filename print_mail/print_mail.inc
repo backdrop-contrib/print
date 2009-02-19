@@ -162,6 +162,9 @@ function theme_print_mail_form($form) {
  * @ingroup forms
  */
 function print_mail_form_validate($form, &$form_state) {
+  if (array_key_exists('cancel', $form['#post'])) {
+    return;
+  }
   $from_addr = trim($form_state['values']['fld_from_addr']);
   $test = user_validate_mail($from_addr);
   if ($test) {
@@ -219,51 +222,53 @@ function print_mail_form_validate($form, &$form_state) {
  * @ingroup forms
  */
 function print_mail_form_submit($form, &$form_state) {
-  if (!empty($form_state['values']['fld_from_name'])) {
-    $from = '"'. $form_state['values']['fld_from_name'] .'" <'. $form_state['values']['fld_from_addr'] .'>';
-  }
-  else {
-    $from = $form_state['values']['fld_from_addr'];
-  }
-  $to = $form_state['values']['txt_to_addrs'];
-  $cid = isset($form_state['values']['cid']) ? $form_state['values']['cid'] : NULL;
+  if (!array_key_exists('cancel', $form_state['values'])) {
+    if (!empty($form_state['values']['fld_from_name'])) {
+      $from = '"'. $form_state['values']['fld_from_name'] .'" <'. $form_state['values']['fld_from_addr'] .'>';
+    }
+    else {
+      $from = $form_state['values']['fld_from_addr'];
+    }
+    $to = $form_state['values']['txt_to_addrs'];
+    $cid = isset($form_state['values']['cid']) ? $form_state['values']['cid'] : NULL;
 
-  $print_mail_text_message = variable_get('print_mail_text_message', t('Message from sender'));
-  $sender_message = $print_mail_text_message .':<br /><br /><em>'. nl2br($form_state['values']['txt_message']) .'</em>';
+    $print_mail_text_message = variable_get('print_mail_text_message', t('Message from sender'));
+    $sender_message = $print_mail_text_message .':<br /><br /><em>'. nl2br($form_state['values']['txt_message']) .'</em>';
 
-  $print = print_controller($form_state['values']['path'], $cid, PRINT_MAIL_FORMAT, $form_state['values']['chk_teaser'], $sender_message);
+    $print = print_controller($form_state['values']['path'], $cid, PRINT_MAIL_FORMAT, $form_state['values']['chk_teaser'], $sender_message);
 
-  // Spaces in img URLs must be replaced with %20
-  $pattern = '!<(img\s[^>]*?)>!is';
-  $print['content'] = preg_replace_callback($pattern, '_print_mail_encode_urls', $print['content']);
+    // Spaces in img URLs must be replaced with %20
+    $pattern = '!<(img\s[^>]*?)>!is';
+    $print['content'] = preg_replace_callback($pattern, '_print_mail_encode_urls', $print['content']);
 
-  if ($print !== FALSE) {
-    $params = array();
-    $params['subject'] = $form_state['values']['fld_subject'];
+    if ($print !== FALSE) {
+      $params = array();
+      $params['subject'] = $form_state['values']['fld_subject'];
 
-    $node = $print['node'];
-    ob_start();
-    include_once(DRUPAL_ROOT .'/'. _print_get_template(PRINT_MAIL_FORMAT, $print['type']));
-    $params['body'] = ob_get_contents();
-    ob_end_clean();
+      $node = $print['node'];
+      ob_start();
+      include_once(DRUPAL_ROOT .'/'. _print_get_template(PRINT_MAIL_FORMAT, $print['type']));
+      $params['body'] = ob_get_contents();
+      ob_end_clean();
 
-    $ret = drupal_mail('print_mail', 'sendpage', $to, language_default(), $params, $from, TRUE);
-    if ($ret['result']) {
-      flood_register_event('print_mail');
-      watchdog('print_mail', '%name [%from] sent %page to [%to]', array('%name' => $form_state['values']['fld_from_name'], '%from' => $form_state['values']['fld_from_addr'], '%page' => $form_state['values']['path'], '%to' => $to));
-      $site_name = variable_get('site_name', t('us'));
-      $print_mail_text_confirmation = variable_get('print_mail_text_confirmation', t('Thank you for spreading the word about !site.'));
-      drupal_set_message(t($print_mail_text_confirmation, array('!site' => $site_name)));
+      $ret = drupal_mail('print_mail', 'sendpage', $to, language_default(), $params, $from, TRUE);
+      if ($ret['result']) {
+        flood_register_event('print_mail');
+        watchdog('print_mail', '%name [%from] sent %page to [%to]', array('%name' => $form_state['values']['fld_from_name'], '%from' => $form_state['values']['fld_from_addr'], '%page' => $form_state['values']['path'], '%to' => $to));
+        $site_name = variable_get('site_name', t('us'));
+        $print_mail_text_confirmation = variable_get('print_mail_text_confirmation', t('Thank you for spreading the word about !site.'));
+        drupal_set_message(t($print_mail_text_confirmation, array('!site' => $site_name)));
 
-      $nodepath = drupal_get_normal_path($form_state['values']['path']);
-      db_update('print_mail_page_counter')
-        ->fields(array(
-            'sentcount' => 1,
-            'sent_timestamp' => REQUEST_TIME,
-        ))
-        ->condition('path', $nodepath, '=')
-        ->expression('sentcount', 'sentcount + :inc', array(':inc' => count(split(',', $to))))
-        ->execute();
+        $nodepath = drupal_get_normal_path($form_state['values']['path']);
+        db_update('print_mail_page_counter')
+          ->fields(array(
+              'sentcount' => 1,
+              'sent_timestamp' => REQUEST_TIME,
+          ))
+          ->condition('path', $nodepath, '=')
+          ->expression('sentcount', 'sentcount + :inc', array(':inc' => count(split(',', $to))))
+          ->execute();
+      }
     }
   }
 

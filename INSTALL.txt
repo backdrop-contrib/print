@@ -19,7 +19,9 @@ queue at Drupal.org.
 
 dompdf support:
   The dompdf tool produces results that are more faithful to the HTML
-  printer-friendly page.
+  printer-friendly page. Unicode is not supported (only ISO-8859-1).
+  This tool is not supported and there are several known bugs that result
+  from its incomplete implementation.
 
   1. Download dompdf from http://sourceforge.net/projects/dompdf/
   2. Extract the contents of the downloaded package into the print module
@@ -34,7 +36,9 @@ dompdf support:
 
 TCPDF support:
   TCPDF seems to be more actively developed than dompdf, but it's support
-  for CSS is considerably worse. This module requires TCPDF >= 4.0.000.
+  for CSS is considerably worse. Unicode is supported (use of Unicode fonts
+  result in HUGE files). Page header and footer are supported. This module
+  requires TCPDF >= 4.0.000.
 
   1. Download TCPDF from http://sourceforge.net/projects/tcpdf/
   2. Extract the contents of the downloaded package into the print module

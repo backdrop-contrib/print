@@ -129,7 +129,7 @@ function _print_pdf_dompdf($print, $html, $filename) {
   $html = strtr(utf8_decode($html), $no_tags);
 
   //must get rid of tbody (dompdf goes into recursion)
-  $html = preg_replace('!<tbody>|</tbody>!', '', $html);
+  $html = preg_replace('!<tbody[^>]*?>|</tbody>!i', '', $html);
 
   $dompdf->load_html($html);
 

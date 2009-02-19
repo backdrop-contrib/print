@@ -14,6 +14,11 @@ A link is inserted in the each node (configurable in the content type
 settings), that opens a version of the page with no sidebars, search boxes,
 navigation pages, etc.
 
+INSTALLATION
+------------
+
+Follow the instructions in the provided INSTALL.txt file.
+
 CONFIGURATION
 -------------
 
@@ -53,6 +58,9 @@ print.tpl.php or the css/print.css files.
    6. print.node-[type].tpl.php in the module directory 
    7. print.tpl.php in the theme directory
    8. print.tpl.php in the module directory (supplied by the module)
+
+  format is either html, mail or pdf, and type is Drupal's node type (e.g.
+  page, story, etc.)
 
 API
 ---
