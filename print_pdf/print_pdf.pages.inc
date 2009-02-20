@@ -58,6 +58,10 @@ function print_pdf_controller() {
   $html = ob_get_contents();
   ob_end_clean();
 
+  // Convert the a href elements
+  $pattern = '!<(a\s[^>]*?)>!is';
+  $html = preg_replace_callback($pattern, '_print_rewrite_urls', $html);
+
   $pdf_filename = variable_get('print_pdf_filename', PRINT_PDF_FILENAME_DEFAULT);
   if (function_exists('token_replace') && !empty($pdf_filename)) {
     $pdf_filename = token_replace($pdf_filename, 'node', $node) .'.pdf';
