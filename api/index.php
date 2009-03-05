@@ -3,12 +3,15 @@
 
 /**
  * @file
- * Homepage of the API reference
+ * Homepage of the print module API reference
  */
 
-/** @mainpage Printer, e-mail and PDF versions
- * Welcome to the module developer's documentation. The interesting functions for
- * themers are those that start with 'theme_'.
+// * @page module-print modules/print: Printer, e-mail and PDF versions
+
+/** 
+ * @mainpage Printer, e-mail and PDF versions
+ * Welcome to the print module developer's documentation. The interesting
+ * functions for themers are those that start with 'theme_'.
  *
  * - Printer-friendly pages (core)
  *   - @link print.module Module main file @endlink

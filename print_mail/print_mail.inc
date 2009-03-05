@@ -41,6 +41,7 @@ function print_mail_form($form_state) {
     $path = 'node/'. $path;
   }
   $cid = isset($_GET['comment']) ? (int)$_GET['comment'] : NULL;
+  $title = _print_get_title($path);
 
   if (count($form_state['post']) == 0) {
     $nodepath = drupal_get_normal_path($path);
@@ -79,6 +80,11 @@ function print_mail_form($form_state) {
     '#title' => t('Subject'),
     '#size' => 62,
   );
+  $form['fld_title'] = array(
+    '#type' => 'item',
+    '#title' => t('Page to be sent'),
+    '#markup' => l($title, $path, array('attributes' => array('title' => t('View page')))),
+  );
   $form['txt_message'] = array(
     '#type' => 'textarea',
     '#title' => t('Your message'),
@@ -103,7 +109,7 @@ function print_mail_form($form_state) {
   );
   $form['btn_clear'] = array(
     '#type' => 'markup',
-    '#markup' => '<input type="reset" name="clear" value="'. t('Clear form') .'" class="form-submit" />',
+    '#markup' => '<input type="reset" name="clear" value="'. t('Clear form') .'" class="form-submit" /> ',
   );
   $form['btn_cancel'] = array(
     '#name' => 'cancel',
@@ -123,7 +129,7 @@ function print_mail_form($form_state) {
   }
   $site_name = variable_get('site_name', t('an interesting site'));
   $print_mail_text_subject = variable_get('print_mail_text_subject', t('!user has sent you a message from !site'));
-  $form['fld_subject']['#default_value'] = t($print_mail_text_subject, array('!user' => $user_name, '!site' => $site_name));
+  $form['fld_subject']['#default_value'] = t($print_mail_text_subject, array('!user' => $user_name, '!site' => $site_name, '!title' => $title));
   $print_mail_text_content = variable_get('print_mail_text_content', '');
   $form['txt_message']['#default_value'] = t($print_mail_text_content);
 
@@ -148,6 +154,7 @@ function theme_print_mail_form($form) {
       case 'fld_from_name':
       case 'txt_to_addrs':
       case 'fld_subject':
+      case 'fld_title':
         $tmp = str_replace('<label', '<label class ="printmail-label"', $tmp);
         break;
     }
