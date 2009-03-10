@@ -350,6 +350,10 @@ function print_form_alter(&$form, $form_state, $form_id) {
       '#collapsed' => TRUE,
     );
 
+    if (function_exists('cck_extra_field_weight')) {
+      $form['print']['#weight'] = cck_extra_field_weight($form['type']['#value'], 'print');
+    }
+
     $form['print']['label'] = array(
       '#type' => 'markup',
       '#markup' => '<p><strong>'. t('Printer-friendly version') .'</strong></p>',
@@ -381,6 +385,18 @@ function print_form_alter(&$form, $form_state, $form_id) {
       $form['print']['label']['#markup'] = '<p><em>'. t('The settings below only apply in case the corresponding type-specific setting is also enabled (except for the "Show link in individual comments").') .'</em></p>'. $form['print']['label']['#markup'];
     }
   }
+}
+
+/**
+ * Implementation of hook_cck_extra_fields.
+ */
+function print_cck_extra_fields($type_name) {
+  $fields['print'] = array(
+    'label' => t('Printer, e-mail and PDF versions'),
+    'description' => t('Print module form.'),
+    'weight' => 50,
+  );
+  return $fields;
 }
 
 /**
