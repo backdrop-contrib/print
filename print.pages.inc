@@ -617,8 +617,7 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
     }
     $node->body .= $comments;
   }
-
-  node_invoke_nodeapi($node, 'alter', $teaser, TRUE);
+  node_invoke_node($node, 'alter', $teaser, TRUE);
 
   if ($teaser) {
     $node->body = $node->teaser;

@@ -48,6 +48,7 @@ define('PRINT_TYPE_URLLIST_DEFAULT', 1);
 
 define('PRINT_ALLOW_NORMAL_LINK', 1);
 define('PRINT_ALLOW_BOOK_LINK', 2);
+define('PRINT_TYPE_FIELDS_WEIGHT', 50);
 
 /**
  * Implementation of hook_perm().
@@ -254,9 +255,9 @@ function print_help($path, $arg) {
 }
 
 /**
- * Implementation of hook_nodeapi_view().
+ * Implementation of hook_node_view().
  */
-function print_nodeapi_view($node, $teaser) {
+function print_node_view($node, $teaser) {
   $print_html_link_pos = variable_get('print_html_link_pos', array(PRINT_HTML_LINK_POS_DEFAULT => PRINT_HTML_LINK_POS_DEFAULT));
   $print_html_link_use_alias = variable_get('print_html_link_use_alias', PRINT_HTML_LINK_USE_ALIAS_DEFAULT);
   $allowed_type = print_link_allowed(array('type' => 'node', 'node' => $node, 'teaser' => $teaser));
@@ -307,27 +308,27 @@ function print_nodeapi_view($node, $teaser) {
 }
 
 /**
- * Implementation of hook_nodeapi_load().
+ * Implementation of hook_node_load().
  */
-function print_nodeapi_load($nodes, $types) {
+function print_node_load($nodes, $types) {
   foreach ($nodes as $node) {
      _print_set_node_fields($node);
   }
 }
 
 /**
- * Implementation of hook_nodeapi_update().
+ * Implementation of hook_node_update().
  */
-function print_nodeapi_update($node) {
+function print_node_update($node) {
   if (user_access('administer print') || user_access('node-specific print configuration')) {
     _print_node_conf_modify($node->nid, $node->print_display, $node->print_display_comment, $node->print_display_urllist);
   }
 }
 
 /**
- * Implementation of hook_nodeapi_delete().
+ * Implementation of hook_node_delete().
  */
-function print_nodeapi_delete($node) {
+function print_node_delete($node) {
   db_delete('print_node_conf')
     ->condition('nid', $node->nid)
     ->execute();
@@ -348,11 +349,8 @@ function print_form_alter(&$form, $form_state, $form_id) {
       '#title' => t('Printer, e-mail and PDF versions'),
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
+      '#weight' => function_exists('cck_extra_field_weight') ? cck_extra_field_weight($form['type']['#value'], 'print') : PRINT_TYPE_FIELDS_WEIGHT,
     );
-
-    if (function_exists('cck_extra_field_weight')) {
-      $form['print']['#weight'] = cck_extra_field_weight($form['type']['#value'], 'print');
-    }
 
     $form['print']['label'] = array(
       '#type' => 'markup',
@@ -394,7 +392,7 @@ function print_cck_extra_fields($type_name) {
   $fields['print'] = array(
     'label' => t('Printer, e-mail and PDF versions'),
     'description' => t('Print module form.'),
-    'weight' => 50,
+    'weight' => PRINT_TYPE_FIELDS_WEIGHT,
   );
   return $fields;
 }

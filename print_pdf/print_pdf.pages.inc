@@ -20,7 +20,7 @@ require_once(DRUPAL_ROOT .'/'. drupal_get_path('module', 'print') .'/print.pages
  * @see _print_pdf_tcpdf()
  */
 function print_pdf_controller() {
-  global $base_url;
+  global $base_url, $language;
 
   // Disable caching for generated PDFs, as Drupal doesn't ouput the proper headers from the cache
   $GLOBALS['conf']['cache'] = FALSE;
@@ -45,7 +45,16 @@ function print_pdf_controller() {
   // And converted from private to public paths
   $file_downloads = variable_get('file_downloads', FILE_DOWNLOADS_PUBLIC);
   if ($file_downloads == FILE_DOWNLOADS_PRIVATE) {
-    $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?system/files(/[^>]*?>)!is";
+    switch (variable_get('language_negotiation', LANGUAGE_NEGOTIATION_NONE)) {
+      case LANGUAGE_NEGOTIATION_PATH_DEFAULT:
+      case LANGUAGE_NEGOTIATION_PATH:
+        $lang = $language->language;
+        break;
+      default:
+        $lang = '';
+        break;
+    }
+    $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?(?:${lang}/)?system/files(/[^>]*?>)!is";
     $replacement = '$1file://'. realpath(file_directory_path()) .'$2';
     $print['content'] = preg_replace($pattern, $replacement, $print['content']);
     $print['logo'] = preg_replace($pattern, $replacement, $print['logo']);
