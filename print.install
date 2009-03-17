@@ -148,7 +148,7 @@ function print_update_6003() {
   $t = get_t();
 
   foreach ($vars as $name => $default) {
-    if (variable_get($name,'') == $t($default)) {
+    if (variable_get($name, '') == $t($default)) {
       variable_del($name);
     }
   }

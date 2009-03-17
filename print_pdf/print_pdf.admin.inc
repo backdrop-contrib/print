@@ -93,7 +93,7 @@ function print_pdf_settings() {
     }
     elseif ($access) {
       $form['settings']['adv_link']['print_pdf_node_link_visibility']['#options'][] = t('Show if the following PHP code returns <code>TRUE</code> (PHP-mode, experts only).');
-      $form['settings']['adv_link']['print_pdf_node_link_pages']['#description'] .= ' '. t('If the PHP-mode is chosen, enter PHP code between %php. Note that executing incorrect PHP-code can break your Drupal site.', array('%php' => '<?php ?>'));
+      $form['settings']['adv_link']['print_pdf_node_link_pages']['#description'] .= ' ' . t('If the PHP-mode is chosen, enter PHP code between %php. Note that executing incorrect PHP-code can break your Drupal site.', array('%php' => '<?php ?>'));
     }
 
     $form['settings']['adv_link']['print_pdf_sys_link_visibility'] = array(
@@ -107,7 +107,7 @@ function print_pdf_settings() {
       '#type' => 'textarea',
       '#default_value' => variable_get('print_pdf_sys_link_pages', PRINT_PDF_SYS_LINK_PAGES_DEFAULT),
       '#rows' => 3,
-      '#description' => t('Setting this option will add a PDF version page link on pages created by Drupal or the enabled modules.') .'<br />'.
+      '#description' => t('Setting this option will add a PDF version page link on pages created by Drupal or the enabled modules.') . '<br />' .
                         t("Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>')),
     );
 
@@ -117,7 +117,7 @@ function print_pdf_settings() {
     }
     elseif ($access) {
       $form['settings']['adv_link']['print_pdf_sys_link_visibility']['#options'][] = t('Show if the following PHP code returns <code>TRUE</code> (PHP-mode, experts only).');
-      $form['settings']['adv_link']['print_pdf_sys_link_pages']['#description'] .= ' '. t('If the PHP-mode is chosen, enter PHP code between %php. Note that executing incorrect PHP-code can break your Drupal site.', array('%php' => '<?php ?>'));
+      $form['settings']['adv_link']['print_pdf_sys_link_pages']['#description'] .= ' ' . t('If the PHP-mode is chosen, enter PHP code between %php. Note that executing incorrect PHP-code can break your Drupal site.', array('%php' => '<?php ?>'));
     }
 
     $form['settings']['print_pdf_book_link'] = array(
@@ -170,7 +170,7 @@ function print_pdf_settings() {
       '#default_value' => variable_get('print_pdf_font_family', PRINT_PDF_FONT_FAMILY_DEFAULT),
       '#size' => 60,
       '#maxlength' => 250,
-      '#description' => t('(TCPDF only) Set the font family to be used. Examples: %examples.', array('%examples' => 'helvetica, times, courier, dejavusans, dejavuserif, freesans, freeserif, freemono')) .'<br />'.
+      '#description' => t('(TCPDF only) Set the font family to be used. Examples: %examples.', array('%examples' => 'helvetica, times, courier, dejavusans, dejavuserif, freesans, freeserif, freemono')) . '<br />' .
                         t("CAUTION: TCPDF embeds the complete font in the generated PDF. If you're not using Unicode, then helvetica or times are safe choices that will keep the PDF small. Unicode fonts can increase the size of the PDF to the 1MB region."),
     );
     $form['settings']['print_pdf_font_size'] = array(
@@ -198,12 +198,12 @@ function print_pdf_settings() {
       $tokens = token_get_list('node');
       foreach ($tokens as $token) {
         foreach ($token as $key => $val) {
-          $descriptions .= '<dt>['. $key .']</dt><dd>'. $val ."</dd>\n";
+          $descriptions .= '<dt>[' . $key . ']</dt><dd>' . $val . "</dd>\n";
         }
       }
       $form['settings']['print_pdf_filename_patterns']['descriptions'] = array(
         '#type' => 'markup',
-        '#markup' => "<dl>\n". $descriptions ."</dl>\n",
+        '#markup' => "<dl>\n" . $descriptions . "</dl>\n",
       );
     }
     $form['#validate'][] = '_print_pdf_settings_validate';
@@ -211,7 +211,7 @@ function print_pdf_settings() {
   else {
     $form['settings'] = array(
       '#type' => 'markup',
-      '#markup' => '<p>'. t("No PDF generation tool found! Please dowload a supported PHP PDF generation tool. Check this module's INSTALL.txt for more details.") .'</p>',
+      '#markup' => '<p>' . t("No PDF generation tool found! Please dowload a supported PHP PDF generation tool. Check this module's INSTALL.txt for more details.") . '</p>',
     );
   }
 

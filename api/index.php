@@ -8,7 +8,7 @@
 
 // * @page module-print modules/print: Printer, e-mail and PDF versions
 
-/** 
+/**
  * @mainpage Printer, e-mail and PDF versions
  * Welcome to the print module developer's documentation. The interesting
  * functions for themers are those that start with 'theme_'.

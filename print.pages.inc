@@ -27,9 +27,14 @@ function print_controller_html() {
   $print = print_controller($path, $cid, PRINT_HTML_FORMAT);
   if ($print !== FALSE) {
     $node = $print['node'];
-    include_once(DRUPAL_ROOT .'/'. _print_get_template(PRINT_HTML_FORMAT, $print['type']));
+    include_once(DRUPAL_ROOT . '/' . _print_get_template(PRINT_HTML_FORMAT, $print['type']));
 
-    $nodepath = drupal_get_normal_path($node->path);
+    if (is_numeric($path)) {
+      $nodepath = 'node/' . $path;
+    }
+    else {
+      $nodepath = drupal_get_normal_path($path);
+    }
     db_merge('print_page_counter')
       ->key(array('path' => $nodepath))
       ->fields(array(
@@ -170,15 +175,15 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   $print['scripts'] = drupal_get_js();
   $print['robots_meta'] = _print_robots_meta_generator();
   $print['url'] = url($path, array('absolute' => TRUE));
-  $print['base_href'] = "<base href='". $print['url'] ."' />\n";
-  $print['favicon'] = theme_get_setting('toggle_favicon') ? "<link rel='shortcut icon' href='". theme_get_setting('favicon') ."' type='image/x-icon' />\n" : '';
+  $print['base_href'] = "<base href='" . $print['url'] . "' />\n";
+  $print['favicon'] = theme_get_setting('toggle_favicon') ? "<link rel='shortcut icon' href='" . theme_get_setting('favicon') . "' type='image/x-icon' />\n" : '';
 
   if (!empty($print_css)) {
     $replace_pairs = array('%b' => base_path(), '%t' => path_to_theme());
     $user_css = strip_tags(strtr($print_css, $replace_pairs));
   }
   else {
-    drupal_add_css(drupal_get_path('module', 'print') .'/css/print.css');
+    drupal_add_css(drupal_get_path('module', 'print') . '/css/print.css');
   }
   $drupal_css = drupal_add_css();
   foreach ($drupal_css as $key => $types) {
@@ -197,7 +202,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
     }
     if (!empty($print_css)) {
       // Convert to a local path, by removing the base_path
-      $pattern = '!^'. base_path() .'!';
+      $pattern = '!^' . base_path() . '!';
       $css_files[] = preg_replace($pattern, '', $user_css);
     }
     foreach ($css_files as $filename) {
@@ -235,7 +240,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
       $footer = '';
       break;
     case 1: // theme's
-      $footer = filter_xss_admin(variable_get('site_footer', FALSE)) ."\n". theme('blocks', 'footer');
+      $footer = filter_xss_admin(variable_get('site_footer', FALSE)) . "\n" . theme('blocks', 'footer');
       $logo_url = theme_get_setting('logo');
       break;
     case 2: // user-specifed
@@ -248,7 +253,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   if ($published_site) {
     $print_text_published = variable_get('print_text_published', t('Published on %site_name'));
     $published = t($print_text_published, array('%site_name' => $published_site));
-    $print['site_name'] = $published .' ('. l($base_url, $base_url) .')';
+    $print['site_name'] = $published . ' (' . l($base_url, $base_url) . ')';
   }
   else {
     $print['site_name'] = '';
@@ -260,7 +265,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
       $url = $print['url'];
     }
     else {
-      $url = $base_url .'/'. (((bool)variable_get('clean_url', '0')) ? '' : '?q=') . $path;
+      $url = $base_url . '/' . (((bool)variable_get('clean_url', '0')) ? '' : '?q=') . $path;
     }
     if (is_int($cid)) {
       $url .= '#comment-$cid';
@@ -271,7 +276,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
     $print['printdate'] = $print_sourceurl_date ? " ($retrieved)" : '';
 
     $source_url = variable_get('print_text_source_url', t('Source URL'));
-    $print['source_url'] = '<strong>'. $source_url . $print['printdate'] .':</strong> '. l($url, $url);
+    $print['source_url'] = '<strong>' . $source_url . $print['printdate'] . ':</strong> ' . l($url, $url);
   }
   else {
     $print['source_url'] = '';
@@ -320,7 +325,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
     $pfp_links = '';
     if ($max) {
       for ($i = 0; $i < $max; $i++) {
-        $pfp_links .= '['. ($i + 1) .'] '. $urls[$i] ."<br />\n";
+        $pfp_links .= '[' . ($i + 1) . '] ' . $urls[$i] . "<br />\n";
       }
       $links = variable_get('print_text_links', t('Links'));
       $print['pfp_links'] = "<p><strong>$links:</strong><br />$pfp_links</p>";
@@ -394,11 +399,11 @@ function _print_rewrite_urls($matches) {
           // URL is relative, convert it into absolute URL
           if ($url[0] == '/') {
             // If it starts with '/' just append it to the server name
-            $newurl = $base_root .'/'. trim(urldecode($url), '/');
+            $newurl = $base_root . '/' . trim(urldecode($url), '/');
           }
           elseif (preg_match('!^(?:index.php)?\?q=!i', $url)) {
             // If it starts with ?q=, just prepend with the base URL
-            $newurl = $base_url .'/'. trim(urldecode($url), '/');
+            $newurl = $base_url . '/' . trim(urldecode($url), '/');
           }
           else {
             $newurl = url(trim(urldecode($url), '/'), array('absolute' => TRUE));
@@ -409,11 +414,11 @@ function _print_rewrite_urls($matches) {
     }
   }
 
-  $ret = '<'. $matches[1] .'>';
+  $ret = '<' . $matches[1] . '>';
   if (count($matches) == 4) {
     $ret .= $matches[2] . $matches[3];
     if ((!empty($_print_urls)) && (isset($newurl))) {
-      $ret .= ' <span class="print-footnote">['. _print_friendly_urls(trim(stripslashes($newurl))) .']</span>';
+      $ret .= ' <span class="print-footnote">[' . _print_friendly_urls(trim(stripslashes($newurl))) . ']</span>';
     }
   }
 
@@ -479,12 +484,12 @@ function _print_get_template($format = NULL, $type = NULL) {
 
   foreach ($filenames as $value) {
     // First in the theme directory
-    $file = drupal_get_path('theme', $GLOBALS['theme_key']) .'/'. $value;
+    $file = drupal_get_path('theme', $GLOBALS['theme_key']) . '/' . $value;
     if (file_exists($file)) {
       return $file;
     }
     // Then in the module directory
-    $file = drupal_get_path('module', 'print') .'/'. $value;
+    $file = drupal_get_path('module', 'print') . '/' . $value;
     if (file_exists($file)) {
       return $file;
     }
@@ -509,18 +514,18 @@ function _print_url_list_enabled($node, $format = PRINT_HTML_FORMAT) {
       break;
     case PRINT_MAIL_FORMAT:
       $node_urllist = isset($node->print_mail_display_urllist) ? $node->print_mail_display_urllist : TRUE;
-      $fmt = $format .'_';
+      $fmt = $format . '_';
       break;
     case PRINT_PDF_FORMAT:
       $node_urllist = isset($node->print_pdf_display_urllist) ? $node->print_pdf_display_urllist : TRUE;
-      $fmt = $format .'_';
+      $fmt = $format . '_';
       break;
   }
   if (!isset($node_urllist)) $node_urllist = TRUE;
 
   // Get value of Printer-friendly URLs setting
   return (variable_get('print_urls', PRINT_URLS_DEFAULT) && ($node_urllist) &&
-          variable_get('print_'. $fmt .'display_urllist_'. $node->type, PRINT_TYPE_URLLIST_DEFAULT));
+          variable_get('print_' . $fmt . 'display_urllist_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT));
 }
 
 /**
@@ -601,7 +606,7 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
     //Remove the comment forms
     $comments = preg_replace('!<form.*?id="comment-.*?">.*?</form>!sim', '', $comments);
     //Remove the 'Post new comment' title
-    $comments = preg_replace('!<h2.*?>'. t('Post new comment') .'</h2>!', '', $comments);
+    $comments = preg_replace('!<h2.*?>' . t('Post new comment') . '</h2>!', '', $comments);
     //Remove the comment title hyperlink
     $comments = preg_replace('!(<h3.*?>.*?)<a.*?>(.*?)</a>(.*?</h3>)!i', '$1$2$3', $comments);
     //Remove the comment author link

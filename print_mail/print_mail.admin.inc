@@ -81,7 +81,7 @@ function print_mail_settings() {
   }
   elseif ($access) {
     $form['settings']['adv_link']['print_mail_node_link_visibility']['#options'][] = t('Show if the following PHP code returns <code>TRUE</code> (PHP-mode, experts only).');
-    $form['settings']['adv_link']['print_mail_node_link_pages']['#description'] .= ' '. t('If the PHP-mode is chosen, enter PHP code between %php. Note that executing incorrect PHP-code can break your Drupal site.', array('%php' => '<?php ?>'));
+    $form['settings']['adv_link']['print_mail_node_link_pages']['#description'] .= ' ' . t('If the PHP-mode is chosen, enter PHP code between %php. Note that executing incorrect PHP-code can break your Drupal site.', array('%php' => '<?php ?>'));
   }
 
   $form['settings']['adv_link']['print_mail_sys_link_visibility'] = array(
@@ -95,7 +95,7 @@ function print_mail_settings() {
     '#type' => 'textarea',
     '#default_value' => variable_get('print_mail_sys_link_pages', PRINT_MAIL_SYS_LINK_PAGES_DEFAULT),
     '#rows' => 3,
-    '#description' => t('Setting this option will add a send by e-mail link on pages created by Drupal or the enabled modules.') .'<br />'.
+    '#description' => t('Setting this option will add a send by e-mail link on pages created by Drupal or the enabled modules.') . '<br />' .
                       t("Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>')),
   );
 
@@ -105,7 +105,7 @@ function print_mail_settings() {
   }
   elseif ($access) {
     $form['settings']['adv_link']['print_mail_sys_link_visibility']['#options'][] = t('Show if the following PHP code returns <code>TRUE</code> (PHP-mode, experts only).');
-    $form['settings']['adv_link']['print_mail_sys_link_pages']['#description'] .= ' '. t('If the PHP-mode is chosen, enter PHP code between %php. Note that executing incorrect PHP-code can break your Drupal site.', array('%php' => '<?php ?>'));
+    $form['settings']['adv_link']['print_mail_sys_link_pages']['#description'] .= ' ' . t('If the PHP-mode is chosen, enter PHP code between %php. Note that executing incorrect PHP-code can break your Drupal site.', array('%php' => '<?php ?>'));
   }
 
   $form['settings']['print_mail_book_link'] = array(

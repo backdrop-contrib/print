@@ -175,7 +175,7 @@ function print_block_view($delta = 0) {
         if (preg_match('!^print.*?_insert_link$!', $func)) {
           $link = $func(NULL, $node);
           if (!empty($link)) {
-            $block['content'] .= $link .'<br />';
+            $block['content'] .= $link . '<br />';
           }
         }
       }
@@ -187,7 +187,7 @@ function print_block_view($delta = 0) {
         if (count($result)) {
           $block['content'] = '<div class="item-list"><ul>';
           foreach ($result as $obj) {
-            $block['content'] .= '<li>'. l(_print_get_title($obj->path), $obj->path) .'</li>';
+            $block['content'] .= '<li>' . l(_print_get_title($obj->path), $obj->path) . '</li>';
           }
           $block['content'] .= '</ul></div>';
         }
@@ -218,7 +218,7 @@ function print_link_alter(&$links, $node) {
         }
 
         $links[$module] = array(
-          'href' => PRINT_PATH .'/'. $path,
+          'href' => PRINT_PATH . '/' . $path,
           'title' => $format['text'],
           'attributes' => $format['attributes'],
           'html' => $format['html'],
@@ -235,7 +235,7 @@ function print_help($path, $arg) {
   switch ($path) {
     case 'admin/help#print':
       // Return a line-break version of the module README
-      return filter_filter('process', 1, NULL, file_get_contents(drupal_get_path('module', 'print') .'/README.txt') );
+      return filter_filter('process', 1, NULL, file_get_contents(drupal_get_path('module', 'print') . '/README.txt') );
   }
 
   $print_html_link_pos = variable_get('print_html_link_pos', array(PRINT_HTML_LINK_POS_DEFAULT => PRINT_HTML_LINK_POS_DEFAULT));
@@ -262,7 +262,7 @@ function print_node_view($node, $teaser) {
   $print_html_link_use_alias = variable_get('print_html_link_use_alias', PRINT_HTML_LINK_USE_ALIAS_DEFAULT);
   $allowed_type = print_link_allowed(array('type' => 'node', 'node' => $node, 'teaser' => $teaser));
   if (($allowed_type === PRINT_ALLOW_NORMAL_LINK) && !isset($node->book) && !empty($print_html_link_pos['link'])) {
-    drupal_add_css(drupal_get_path('module', 'print') .'/css/printlinks.css');
+    drupal_add_css(drupal_get_path('module', 'print') . '/css/printlinks.css');
     $links = array();
     $format = theme('print_format_link');
 
@@ -274,14 +274,14 @@ function print_node_view($node, $teaser) {
     if (empty($query)) $query = NULL;
 
     if ($print_html_link_use_alias) {
-      $path = drupal_get_path_alias('node/'. $node->nid);
+      $path = drupal_get_path_alias('node/' . $node->nid);
     }
     else {
       $path = $node->nid;
     }
 
     $links['print_html'] = array(
-      'href' => PRINT_PATH .'/'. $path,
+      'href' => PRINT_PATH . '/' . $path,
       'title' => $format['text'],
       'attributes' => $format['attributes'],
       'html' => $format['html'],
@@ -312,7 +312,7 @@ function print_node_view($node, $teaser) {
  */
 function print_node_load($nodes, $types) {
   foreach ($nodes as $node) {
-     _print_set_node_fields($node);
+    _print_set_node_fields($node);
   }
 }
 
@@ -342,7 +342,7 @@ function print_node_delete($node) {
  */
 function print_form_alter(&$form, $form_state, $form_id) {
   // Add the node-type settings option to activate the printer-friendly version link
-  if ((user_access('administer print') || user_access('node-specific print configuration')) && 
+  if ((user_access('administer print') || user_access('node-specific print configuration')) &&
       (($form_id == 'node_type_form') || !empty($form['#node_edit_form']))) {
     $form['print'] = array(
       '#type' => 'fieldset',
@@ -354,7 +354,7 @@ function print_form_alter(&$form, $form_state, $form_id) {
 
     $form['print']['label'] = array(
       '#type' => 'markup',
-      '#markup' => '<p><strong>'. t('Printer-friendly version') .'</strong></p>',
+      '#markup' => '<p><strong>' . t('Printer-friendly version') . '</strong></p>',
     );
 
     $form['print']['print_display'] = array(
@@ -371,22 +371,22 @@ function print_form_alter(&$form, $form_state, $form_id) {
     );
 
     if ($form_id == 'node_type_form') {
-      $form['print']['print_display']['#default_value'] = variable_get('print_display_'. $form['#node_type']->type, PRINT_TYPE_SHOW_LINK_DEFAULT);
-      $form['print']['print_display_comment']['#default_value'] = variable_get('print_display_comment_'. $form['#node_type']->type, PRINT_TYPE_COMMENT_LINK_DEFAULT);
-      $form['print']['print_display_urllist']['#default_value'] = variable_get('print_display_urllist_'. $form['#node_type']->type, PRINT_TYPE_URLLIST_DEFAULT);
+      $form['print']['print_display']['#default_value'] = variable_get('print_display_' . $form['#node_type']->type, PRINT_TYPE_SHOW_LINK_DEFAULT);
+      $form['print']['print_display_comment']['#default_value'] = variable_get('print_display_comment_' . $form['#node_type']->type, PRINT_TYPE_COMMENT_LINK_DEFAULT);
+      $form['print']['print_display_urllist']['#default_value'] = variable_get('print_display_urllist_' . $form['#node_type']->type, PRINT_TYPE_URLLIST_DEFAULT);
     }
     else {
       $node = $form['#node'];
       $form['print']['print_display']['#default_value'] = isset($node->print_display) ? $node->print_display : PRINT_TYPE_SHOW_LINK_DEFAULT;
       $form['print']['print_display_comment']['#default_value'] = isset($node->print_display_comment) ? $node->print_display_comment : PRINT_TYPE_COMMENT_LINK_DEFAULT;
       $form['print']['print_display_urllist']['#default_value'] = isset($node->print_display_urllist) ? $node->print_display_urllist : PRINT_TYPE_URLLIST_DEFAULT;
-      $form['print']['label']['#markup'] = '<p><em>'. t('The settings below only apply in case the corresponding type-specific setting is also enabled (except for the "Show link in individual comments").') .'</em></p>'. $form['print']['label']['#markup'];
+      $form['print']['label']['#markup'] = '<p><em>' . t('The settings below only apply in case the corresponding type-specific setting is also enabled (except for the "Show link in individual comments").') . '</em></p>' . $form['print']['label']['#markup'];
     }
   }
 }
 
 /**
- * Implementation of hook_cck_extra_fields.
+ * Implementation of hook_cck_extra_fields().
  */
 function print_cck_extra_fields($type_name) {
   $fields['print'] = array(
@@ -406,7 +406,7 @@ function print_cck_extra_fields($type_name) {
 function _print_set_node_fields(&$node) {
   if (isset($node->nid)) {
     $res = db_query("SELECT link, comments, url_list FROM {print_node_conf} WHERE nid = :nid", array(':nid' => $node->nid))
-             ->fetch();
+              ->fetch();
   }
   else {
     $res = FALSE;
@@ -429,11 +429,11 @@ function _print_get_title($path) {
   $nid = preg_replace('!^node/!', '', $path);
   if (is_numeric($nid)) {
     $res = db_query("SELECT title FROM {node} WHERE nid = :nid", array(':nid' => $nid))
-             ->fetchField();
+              ->fetchField();
   }
   else {
     $res = db_query("SELECT link_title FROM {menu_links} WHERE link_path = :link_path", array(':link_path' => $path))
-             ->fetchField();
+              ->fetchField();
   }
   return $res;
 }
@@ -555,7 +555,7 @@ function theme_print_format_link() {
   $print_html_show_link = variable_get('print_html_show_link', PRINT_HTML_SHOW_LINK_DEFAULT);
   $print_html_link_text = variable_get('print_html_link_text', t('Printer-friendly version'));
 
-  $img = drupal_get_path('module', 'print') .'/icons/print_icon.gif';
+  $img = drupal_get_path('module', 'print') . '/icons/print_icon.gif';
   $title = t('Display a printer-friendly version of this page.');
   $class = strip_tags($print_html_link_class);
   $new_window = $print_html_new_window;
@@ -585,7 +585,7 @@ function theme_print_format_link() {
 function print_insert_link($path = NULL, $node = NULL) {
   if ($node !== NULL) {
     $nid = $node->nid;
-    $path = 'node/'. $nid;
+    $path = 'node/' . $nid;
     $allowed_type = print_link_allowed(array('node' => $node));
   }
   else {
@@ -602,7 +602,7 @@ function print_insert_link($path = NULL, $node = NULL) {
   if ($allowed_type) {
     if ($nid !== NULL) {
       if ($allowed_type === PRINT_ALLOW_BOOK_LINK) {
-        $path = 'book/export/html/'. $nid;
+        $path = 'book/export/html/' . $nid;
       }
       else {
         if (variable_get('print_html_link_use_alias', PRINT_HTML_LINK_USE_ALIAS_DEFAULT)) {
@@ -612,7 +612,7 @@ function print_insert_link($path = NULL, $node = NULL) {
           $path = $nid;
         }
       }
-      $path = PRINT_PATH .'/'. $path;
+      $path = PRINT_PATH . '/' . $path;
       $query = print_query_string_encode($_GET, array('q'));
       if (empty($query)) {
         $query = NULL;
@@ -621,9 +621,9 @@ function print_insert_link($path = NULL, $node = NULL) {
     else {
       $query = NULL;
     }
-    drupal_add_css(drupal_get_path('module', 'print') .'/css/printlinks.css');
+    drupal_add_css(drupal_get_path('module', 'print') . '/css/printlinks.css');
     $format = theme('print_format_link');
-    return '<span class="print_html">'. l($format['text'], $path, array('attributes' => $format['attributes'], 'query' => $query, 'absolute' => TRUE, 'html' => $format['html'])) .'</span>';
+    return '<span class="print_html">' . l($format['text'], $path, array('attributes' => $format['attributes'], 'query' => $query, 'absolute' => TRUE, 'html' => $format['html'])) . '</span>';
   }
   else {
     return FALSE;
@@ -706,17 +706,17 @@ function print_link_allowed($args) {
     elseif (isset($args['type']) && ($args['type'] == 'comment') && isset($node_type)) {
       // Link is for a comment, return the configured setting
       $res = db_query("SELECT comments FROM {print_node_conf} WHERE nid = :nid", array(':nid' => $node->nid))
-               ->fetch();
+                ->fetch();
       $print_display_comment = $res ? intval($res->comments) : PRINT_TYPE_COMMENT_LINK_DEFAULT;
       if (($print_display_comment) ||
-          variable_get('print_display_comment_'. $node_type, PRINT_TYPE_COMMENT_LINK_DEFAULT)) {
+          variable_get('print_display_comment_' . $node_type, PRINT_TYPE_COMMENT_LINK_DEFAULT)) {
         return PRINT_ALLOW_NORMAL_LINK;
       }
     }
     else {
       // Node link
       if ((!$node->print_display) || (isset($node_type) &&
-          !variable_get('print_display_'. $node_type, PRINT_TYPE_SHOW_LINK_DEFAULT))) {
+          !variable_get('print_display_' . $node_type, PRINT_TYPE_SHOW_LINK_DEFAULT))) {
         // Link for this node type is disabled
         return FALSE;
       }
@@ -764,7 +764,7 @@ function print_query_string_encode($query, $exclude = array(), $parent = '') {
   $params = array();
   foreach ($query as $key => $value) {
     if ($parent) {
-      $key = $parent .'['. $key .']';
+      $key = $parent . '[' . $key . ']';
     }
 
     if (in_array($key, $exclude)) {
@@ -775,7 +775,7 @@ function print_query_string_encode($query, $exclude = array(), $parent = '') {
       $params[] = print_query_string_encode($value, $exclude, $key);
     }
     else {
-      $params[] = $key .'='. rawurlencode($value);
+      $params[] = $key . '=' . rawurlencode($value);
     }
   }
 

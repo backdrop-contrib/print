@@ -26,7 +26,7 @@ function print_main_settings() {
     '#default_value' => variable_get('print_css', PRINT_CSS_DEFAULT),
     '#size' => 60,
     '#maxlength' => 64,
-    '#description' => t('The URL to your custom print cascading stylesheet, if any. When none is specified, the default module CSS file is used.') .'<br />'.
+    '#description' => t('The URL to your custom print cascading stylesheet, if any. When none is specified, the default module CSS file is used.') . '<br />' .
                       t('Macros: %b (base path: "%base"), %t (path to theme: "%theme")', array('%base' => base_path(), '%theme' => path_to_theme())),
   );
 
@@ -34,7 +34,7 @@ function print_main_settings() {
     '#type' => 'checkbox',
     '#title' => t('Printer-friendly URLs list'),
     '#default_value' => variable_get('print_urls', PRINT_URLS_DEFAULT),
-    '#description' => t('If set, a list of the destination URLs for the page links will be displayed at the bottom of the page.') .'<br />'.
+    '#description' => t('If set, a list of the destination URLs for the page links will be displayed at the bottom of the page.') . '<br />' .
                       t('Note that you can enable/disable the URL list for each content type individually from the !url.', array('!url' => l(t('Content Types page'), 'admin/build/types'))),
   );
 
@@ -148,7 +148,7 @@ function _print_main_settings_validate($form, &$form_state) {
   // Check for a new uploaded logo, and use that instead.
   if ($file = file_save_upload('print_logo_upload', array('file_validate_is_image' => array()))) {
     $parts = pathinfo($file->filename);
-    $filename = 'print_logo.'. drupal_strtolower($parts['extension']);
+    $filename = 'print_logo.' . drupal_strtolower($parts['extension']);
 
     // The image was saved using file_save_upload() and was added to the
     // files table as a temporary file. We'll make a copy and let the garbage
@@ -232,7 +232,7 @@ function print_html_settings() {
   }
   elseif ($access) {
     $form['settings']['adv_link']['print_html_node_link_visibility']['#options'][] = t('Show if the following PHP code returns <code>TRUE</code> (PHP-mode, experts only).');
-    $form['settings']['adv_link']['print_html_node_link_pages']['#description'] .= ' '. t('If the PHP-mode is chosen, enter PHP code between %php. Note that executing incorrect PHP-code can break your Drupal site.', array('%php' => '<?php ?>'));
+    $form['settings']['adv_link']['print_html_node_link_pages']['#description'] .= ' ' . t('If the PHP-mode is chosen, enter PHP code between %php. Note that executing incorrect PHP-code can break your Drupal site.', array('%php' => '<?php ?>'));
   }
 
   $form['settings']['adv_link']['print_html_sys_link_visibility'] = array(
@@ -246,7 +246,7 @@ function print_html_settings() {
     '#type' => 'textarea',
     '#default_value' => variable_get('print_html_sys_link_pages', PRINT_HTML_SYS_LINK_PAGES_DEFAULT),
     '#rows' => 3,
-    '#description' => t('Setting this option will add a printer-friendly version page link on pages created by Drupal or the enabled modules.') .'<br />'.
+    '#description' => t('Setting this option will add a printer-friendly version page link on pages created by Drupal or the enabled modules.') . '<br />' .
                       t("Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>')),
   );
 
@@ -256,7 +256,7 @@ function print_html_settings() {
   }
   elseif ($access) {
     $form['settings']['adv_link']['print_html_sys_link_visibility']['#options'][] = t('Show if the following PHP code returns <code>TRUE</code> (PHP-mode, experts only).');
-    $form['settings']['adv_link']['print_html_sys_link_pages']['#description'] .= ' '. t('If the PHP-mode is chosen, enter PHP code between %php. Note that executing incorrect PHP-code can break your Drupal site.', array('%php' => '<?php ?>'));
+    $form['settings']['adv_link']['print_html_sys_link_pages']['#description'] .= ' ' . t('If the PHP-mode is chosen, enter PHP code between %php. Note that executing incorrect PHP-code can break your Drupal site.', array('%php' => '<?php ?>'));
   }
 
   $form['settings']['print_html_book_link'] = array(

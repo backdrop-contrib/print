@@ -9,7 +9,7 @@
  * functions that interface with the PDF generation packages.
  */
 
-require_once(DRUPAL_ROOT .'/'. drupal_get_path('module', 'print') .'/print.pages.inc');
+require_once(DRUPAL_ROOT . '/' . drupal_get_path('module', 'print') . '/print.pages.inc');
 
 /**
  * Generate a PDF version of the printer-friendly page
@@ -55,7 +55,7 @@ function print_pdf_controller() {
         break;
     }
     $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?(?:${lang}/)?system/files(/[^>]*?>)!is";
-    $replacement = '$1file://'. realpath(file_directory_path()) .'$2';
+    $replacement = '$1file://' . realpath(file_directory_path()) . '$2';
     $print['content'] = preg_replace($pattern, $replacement, $print['content']);
     $print['logo'] = preg_replace($pattern, $replacement, $print['logo']);
     $print['footer_message'] = preg_replace($pattern, $replacement, $print['footer_message']);
@@ -63,7 +63,7 @@ function print_pdf_controller() {
 
   $node = $print['node'];
   ob_start();
-  include_once(DRUPAL_ROOT .'/'. _print_get_template(PRINT_PDF_FORMAT, $print['type']));
+  include_once(DRUPAL_ROOT . '/' . _print_get_template(PRINT_PDF_FORMAT, $print['type']));
   $html = ob_get_contents();
   ob_end_clean();
 
@@ -73,10 +73,10 @@ function print_pdf_controller() {
 
   $pdf_filename = variable_get('print_pdf_filename', PRINT_PDF_FILENAME_DEFAULT);
   if (function_exists('token_replace') && !empty($pdf_filename)) {
-    $pdf_filename = token_replace($pdf_filename, 'node', $node) .'.pdf';
+    $pdf_filename = token_replace($pdf_filename, 'node', $node) . '.pdf';
   }
   else {
-    $pdf_filename = str_replace('/', '_', $path) .'.pdf';
+    $pdf_filename = str_replace('/', '_', $path) . '.pdf';
   }
   if (basename($print_pdf_pdf_tool) == 'dompdf_config.inc.php') {
     _print_pdf_dompdf($print, $html, $pdf_filename);
@@ -115,16 +115,16 @@ function _print_pdf_dompdf($print, $html, $filename) {
   $print_pdf_paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
   $print_pdf_page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
   $print_pdf_content_disposition = variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT);
-  require_once(DRUPAL_ROOT .'/'. $print_pdf_pdf_tool);
+  require_once(DRUPAL_ROOT . '/' . $print_pdf_pdf_tool);
 
   // dompdf seems to have problems with something in system.css so let's not use it
   $html = preg_replace('!<link.*?modules/system/system.css.*?/>!', '', $html);
 
   $url_array  = parse_url($print['url']);
 
-  $protocol = $url_array['scheme'] .'://';
+  $protocol = $url_array['scheme'] . '://';
   $host = $url_array['host'];
-  $path = dirname($url_array['path']) .'/';
+  $path = dirname($url_array['path']) . '/';
 
   $dompdf = new DOMPDF();
   $dompdf->set_base_path($path);
@@ -174,16 +174,16 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   define('K_TCPDF_EXTERNAL_CONFIG', TRUE);
   define('K_PATH_MAIN', dirname($_SERVER['SCRIPT_FILENAME']));
   define('K_PATH_URL', $base_url);
-  define('K_PATH_FONTS', $pdf_tool_path .'/fonts/');
-  define('K_PATH_CACHE', $pdf_tool_path .'/cache/');
+  define('K_PATH_FONTS', $pdf_tool_path . '/fonts/');
+  define('K_PATH_CACHE', $pdf_tool_path . '/cache/');
   define('K_PATH_IMAGES', '');
-  define('K_BLANK_IMAGE', $pdf_tool_path .'/images/_blank.png');
+  define('K_BLANK_IMAGE', $pdf_tool_path . '/images/_blank.png');
   define('K_CELL_HEIGHT_RATIO', 1.25);
   define('K_SMALL_RATIO', 2/3);
 
-  require_once(DRUPAL_ROOT .'/'. $print_pdf_pdf_tool);
+  require_once(DRUPAL_ROOT . '/' . $print_pdf_pdf_tool);
   if (strpos(PDF_PRODUCER, 'PHP4') === FALSE) {
-    require_once(DRUPAL_ROOT .'/'. drupal_get_path('module', 'print_pdf') .'/print_pdf.class.inc');
+    require_once(DRUPAL_ROOT . '/' . drupal_get_path('module', 'print_pdf') . '/print_pdf.class.inc');
   }
   else {
     drupal_set_message(t("The PHP4 version of TCPDF is not supported. Please upgrade it."), 'error', FALSE);
@@ -260,7 +260,7 @@ function theme_print_pdf_dompdf_footer(&$html) {
       $pdf->line(15, $y, $w - 15, $y, $color, 1);
 
       $y += $text_height / 2;
-      $pdf->page_text(15, $y, \''. addslashes(strip_tags($tpl_footer[1])) .'\', $font, $size, $color);
+      $pdf->page_text(15, $y, \'' . addslashes(strip_tags($tpl_footer[1])) . '\', $font, $size, $color);
 
       $pdf->close_object();
       $pdf->add_object($footer, "all");
