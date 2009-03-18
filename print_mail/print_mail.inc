@@ -9,7 +9,7 @@
  * mail form display, validation and submit hooks.
  */
 
-require_once(DRUPAL_ROOT .'/'. drupal_get_path('module', 'print') .'/print.pages.inc');
+require_once(DRUPAL_ROOT . '/' . drupal_get_path('module', 'print') . '/print.pages.inc');
 
 /**
  * Menu callback for the send by e-mail form.
@@ -21,10 +21,10 @@ function print_mail_form($form_state) {
 
   $print_mail_hourly_threshold = variable_get('print_mail_hourly_threshold', PRINT_MAIL_HOURLY_THRESHOLD);
 
-  if (($user->uid != 1) && (!flood_is_allowed('print_mail', $print_mail_hourly_threshold))) {
+  if ((!user_access('administer print')) && (!flood_is_allowed('print_mail', $print_mail_hourly_threshold))) {
     $form['flood'] = array(
       '#type' => 'markup',
-      '#markup' => '<p>'. t('You cannot send more than %number messages per hour. Please try again later.', array('%number' => $print_mail_hourly_threshold)) .'</p>',
+      '#markup' => '<p>' . t('You cannot send more than %number messages per hour. Please try again later.', array('%number' => $print_mail_hourly_threshold)) . '</p>',
     );
     return $form;
   }
@@ -38,7 +38,7 @@ function print_mail_form($form_state) {
   unset($path[0]);
   $path = implode('/', $path);
   if (is_numeric($path)) {
-    $path = 'node/'. $path;
+    $path = 'node/' . $path;
   }
   $cid = isset($_GET['comment']) ? (int)$_GET['comment'] : NULL;
   $title = _print_get_title($path);
@@ -109,7 +109,7 @@ function print_mail_form($form_state) {
   );
   $form['btn_clear'] = array(
     '#type' => 'markup',
-    '#markup' => '<input type="reset" name="clear" value="'. t('Clear form') .'" class="form-submit" /> ',
+    '#markup' => '<input type="reset" name="clear" value="' . t('Clear form') . '" class="form-submit" /> ',
   );
   $form['btn_cancel'] = array(
     '#name' => 'cancel',
@@ -145,7 +145,7 @@ function print_mail_form($form_state) {
  * @ingroup forms
  */
 function theme_print_mail_form($form) {
-  drupal_add_css(drupal_get_path('module', 'print') .'/css/printlinks.css');
+  drupal_add_css(drupal_get_path('module', 'print') . '/css/printlinks.css');
   $content = '';
   foreach (element_children($form) as $key) {
     $tmp = drupal_render($form[$key]);
@@ -188,7 +188,7 @@ function print_mail_form_validate($form, &$form_state) {
     if (preg_match('/(.*?) <(.*)>/s', $address, $matches)) {
       // Address is of the type User Name <user@domain.tld>
       $test = user_validate_mail($matches[2]);
-      $to_array[$key] = trim($matches[1]) .' <'. $matches[2] .'>';
+      $to_array[$key] = trim($matches[1]) . ' <' . $matches[2] . '>';
     }
     else {
       // Address must be user@domain.tld
@@ -197,6 +197,12 @@ function print_mail_form_validate($form, &$form_state) {
     if ($test) {
       form_set_error('txt_to_addrs', $test);
     }
+  }
+
+  $print_mail_hourly_threshold = variable_get('print_mail_hourly_threshold', PRINT_MAIL_HOURLY_THRESHOLD);
+
+  if ((!user_access('administer print')) && (!flood_is_allowed('print_mail', $print_mail_hourly_threshold - count($to_array) + 1))) {
+    form_set_error('txt_to_addrs',  t('You cannot send more than %number messages per hour. Please reduce the number of recipients.', array('%number' => $print_mail_hourly_threshold)));
   }
 
   // In all fields, prevent insertion of custom headers
@@ -231,16 +237,15 @@ function print_mail_form_validate($form, &$form_state) {
 function print_mail_form_submit($form, &$form_state) {
   if (!array_key_exists('cancel', $form_state['values'])) {
     if (!empty($form_state['values']['fld_from_name'])) {
-      $from = '"'. $form_state['values']['fld_from_name'] .'" <'. $form_state['values']['fld_from_addr'] .'>';
+      $from = '"' . $form_state['values']['fld_from_name'] . '" <' . $form_state['values']['fld_from_addr'] . '>';
     }
     else {
       $from = $form_state['values']['fld_from_addr'];
     }
-    $to = $form_state['values']['txt_to_addrs'];
     $cid = isset($form_state['values']['cid']) ? $form_state['values']['cid'] : NULL;
 
     $print_mail_text_message = variable_get('print_mail_text_message', t('Message from sender'));
-    $sender_message = $print_mail_text_message .':<br /><br /><em>'. nl2br($form_state['values']['txt_message']) .'</em>';
+    $sender_message = $print_mail_text_message . ':<br /><br /><em>' . nl2br(check_plain($form_state['values']['txt_message'])) . '</em>';
 
     $print = print_controller($form_state['values']['path'], $cid, PRINT_MAIL_FORMAT, $form_state['values']['chk_teaser'], $sender_message);
 
@@ -254,14 +259,21 @@ function print_mail_form_submit($form, &$form_state) {
 
       $node = $print['node'];
       ob_start();
-      include_once(DRUPAL_ROOT .'/'. _print_get_template(PRINT_MAIL_FORMAT, $print['type']));
+      include_once(DRUPAL_ROOT . '/' . _print_get_template(PRINT_MAIL_FORMAT, $print['type']));
       $params['body'] = ob_get_contents();
       ob_end_clean();
 
-      $ret = drupal_mail('print_mail', 'sendpage', $to, language_default(), $params, $from, TRUE);
-      if ($ret['result']) {
-        flood_register_event('print_mail');
-        watchdog('print_mail', '%name [%from] sent %page to [%to]', array('%name' => $form_state['values']['fld_from_name'], '%from' => $form_state['values']['fld_from_addr'], '%page' => $form_state['values']['path'], '%to' => $to));
+      $ok = FALSE;
+      $addresses = explode(', ', $form_state['values']['txt_to_addrs']);
+      foreach ($addresses as $to) {
+        $ret = drupal_mail('print_mail', 'sendpage', $to, language_default(), $params, $from, TRUE);
+        if ($ret['result']) {
+          flood_register_event('print_mail');
+          $ok = TRUE;
+        }
+      }
+      if ($ok) {
+        watchdog('print_mail', '%name [%from] sent %page to [%to]', array('%name' => $form_state['values']['fld_from_name'], '%from' => $form_state['values']['fld_from_addr'], '%page' => $form_state['values']['path'], '%to' => $form_state['values']['txt_to_addrs']));
         $site_name = variable_get('site_name', t('us'));
         $print_mail_text_confirmation = variable_get('print_mail_text_confirmation', t('Thank you for spreading the word about !site.'));
         drupal_set_message(t($print_mail_text_confirmation, array('!site' => $site_name)));
@@ -273,7 +285,7 @@ function print_mail_form_submit($form, &$form_state) {
               'sent_timestamp' => REQUEST_TIME,
           ))
           ->condition('path', $nodepath, '=')
-          ->expression('sentcount', 'sentcount + :inc', array(':inc' => count(split(',', $to))))
+          ->expression('sentcount', 'sentcount + :inc', array(':inc' => count($addresses)))
           ->execute();
       }
     }
@@ -332,7 +344,7 @@ function _print_mail_encode_urls($matches) {
     }
   }
 
-  $ret = '<'. $matches[1] .'>';
+  $ret = '<' . $matches[1] . '>';
   if (count($matches) == 4) {
     $ret .= $matches[2] . $matches[3];
   }
