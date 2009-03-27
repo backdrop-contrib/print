@@ -32,7 +32,7 @@ function print_mail_settings() {
     '#type' => 'fieldset',
     '#title' => t('Advanced link options'),
     '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
+    '#collapsed' => FALSE,
   );
 
   $form['settings']['adv_link']['print_mail_show_link'] = array(
@@ -108,7 +108,7 @@ function print_mail_settings() {
     $form['settings']['adv_link']['print_mail_sys_link_pages']['#description'] .= ' ' . t('If the PHP-mode is chosen, enter PHP code between %php. Note that executing incorrect PHP-code can break your Drupal site.', array('%php' => '<?php ?>'));
   }
 
-  $form['settings']['print_mail_book_link'] = array(
+  $form['settings']['adv_link']['print_mail_book_link'] = array(
     '#type' => 'radios',
     '#title' => t('Link in book hierarchy nodes'),
     '#default_value' => variable_get('print_mail_book_link', PRINT_MAIL_BOOK_LINK_DEFAULT),

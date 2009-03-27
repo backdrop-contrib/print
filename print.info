@@ -6,3 +6,4 @@ package = "Printer, e-mail and PDF versions"
 files[] = print.module
 files[] = print.admin.inc
 files[] = print.pages.inc
+files[] = print.install

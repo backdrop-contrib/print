@@ -48,7 +48,7 @@ define('PRINT_TYPE_URLLIST_DEFAULT', 1);
 
 define('PRINT_ALLOW_NORMAL_LINK', 1);
 define('PRINT_ALLOW_BOOK_LINK', 2);
-define('PRINT_TYPE_FIELDS_WEIGHT', 50);
+define('PRINT_TYPE_FIELDS_WEIGHT', 30);
 
 /**
  * Implementation of hook_perm().
@@ -239,8 +239,7 @@ function print_help($path, $arg) {
   }
 
   $print_html_link_pos = variable_get('print_html_link_pos', array(PRINT_HTML_LINK_POS_DEFAULT => PRINT_HTML_LINK_POS_DEFAULT));
-  if ((preg_match('!^node/!i', $path) == 0) &&
-      !(empty($print_html_link_pos['link']) && empty($print_html_link_pos['corner']))) {
+  if (($path !== 'node/%') && !(empty($print_html_link_pos['link']) && empty($print_html_link_pos['corner']))) {
     static $output = FALSE;
 
     if ($output === FALSE) {
@@ -295,14 +294,15 @@ function print_node_view($node, $teaser) {
   }
 
       // Insert content corner links
+      $node->content['print_links'] = array(
+        '#markup' => "<span class='print-link'></span>",
+        '#weight' => -101,
+      );
       if (($teaser === FALSE) && !empty($print_html_link_pos['corner']) &&
           (preg_match('!^print!i', $_GET['q']) == 0)) {
         $link = print_insert_link(NULL, $node);
         if ($link) {
-          $node->content['print_link'] = array(
-            '#markup' => "<span class='print-link'>$link</span>",
-            '#weight' => -101,
-          );
+          $node->content['print_links']['#markup'] = preg_replace('!</span>$!', $link . '</span>', $node->content['print_links']['#markup']);
         }
       }
 }
@@ -349,7 +349,7 @@ function print_form_alter(&$form, $form_state, $form_id) {
       '#title' => t('Printer, e-mail and PDF versions'),
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
-      '#weight' => function_exists('cck_extra_field_weight') ? cck_extra_field_weight($form['type']['#value'], 'print') : PRINT_TYPE_FIELDS_WEIGHT,
+      '#weight' => (function_exists('cck_extra_field_weight') && isset($form['type'])) ? cck_extra_field_weight($form['type']['#value'], 'print') : PRINT_TYPE_FIELDS_WEIGHT,
     );
 
     $form['print']['label'] = array(
