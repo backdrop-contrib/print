@@ -195,7 +195,7 @@ function print_pdf_node_view($node, $teaser) {
 
   // Insert content corner links
   if (($teaser === FALSE) && !empty($print_pdf_link_pos['corner']) &&
-      (preg_match('!^print!i', $_GET['q']) == 0)) {
+      isset($node->build_mode) && ($node->build_mode == NODE_BUILD_NORMAL)) {
     $link = print_pdf_insert_link(NULL, $node);
     if ($link) {
       $node->content['print_links']['#markup'] = preg_replace('!</span>$!', $link . '</span>', $node->content['print_links']['#markup']);
@@ -469,7 +469,7 @@ function print_pdf_link_allowed($args) {
     $print_pdf_node_link_visibility = variable_get('print_pdf_node_link_visibility', PRINT_PDF_NODE_LINK_VISIBILITY_DEFAULT);
     $print_pdf_node_link_pages = variable_get('print_pdf_node_link_pages', PRINT_PDF_NODE_LINK_PAGES_DEFAULT);
 
-    if (!empty($node->printing) ||
+    if ((isset($node->build_mode) && ($node->build_mode == NODE_BUILD_PRINT)) ||
         !_print_page_match($print_pdf_node_link_visibility, $print_pdf_node_link_pages)) {
       // Page not in visibility list or we are working!
       return FALSE;

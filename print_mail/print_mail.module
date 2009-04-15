@@ -155,7 +155,7 @@ function print_mail_node_view($node, $teaser) {
 
   // Insert content corner links
   if (($teaser === FALSE) && !empty($print_mail_link_pos['corner']) &&
-      (preg_match('!^print!i', $_GET['q']) == 0)) {
+      isset($node->build_mode) && ($node->build_mode == NODE_BUILD_NORMAL)) {
     $link = print_mail_insert_link(NULL, $node);
     if ($link) {
       $node->content['print_links']['#markup'] = preg_replace('!</span>$!', $link . '</span>', $node->content['print_links']['#markup']);
@@ -427,7 +427,7 @@ function print_mail_link_allowed($args) {
     $print_mail_node_link_visibility = variable_get('print_mail_node_link_visibility', PRINT_MAIL_NODE_LINK_VISIBILITY_DEFAULT);
     $print_mail_node_link_pages = variable_get('print_mail_node_link_pages', PRINT_MAIL_NODE_LINK_PAGES_DEFAULT);
 
-    if (!empty($node->printing) ||
+    if ((isset($node->build_mode) && ($node->build_mode == NODE_BUILD_PRINT)) ||
         !_print_page_match($print_mail_node_link_visibility, $print_mail_node_link_pages)) {
       // Page not in visibility list or we are working!
       return FALSE;

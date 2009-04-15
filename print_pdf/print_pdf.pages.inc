@@ -372,7 +372,7 @@ function theme_print_pdf_tcpdf_content(&$pdf, &$html, $font) {
     $matches[1] = preg_replace('!(</span>)<br />(\s*?</span><br />)!s', '$1$2', $matches[1]);
   } while ($prev != $matches[1]);
 
-  $pdf->writeHTML($matches[1]);
+  @$pdf->writeHTML($matches[1]);
 
   return $pdf;
 }
