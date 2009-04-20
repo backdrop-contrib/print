@@ -4,6 +4,7 @@
   /* Use these for links above the content */
   display: block;
   text-align: right;
+  padding-bottom: 0.5em;
   /* Use these for links in a corner of the content */
   /*
   position:relative;
