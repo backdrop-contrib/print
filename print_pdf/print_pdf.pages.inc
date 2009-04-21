@@ -84,6 +84,9 @@ function print_pdf_controller() {
   elseif (basename($print_pdf_pdf_tool) == 'tcpdf.php') {
     _print_pdf_tcpdf($print, $html, $pdf_filename);
   }
+  elseif (basename($print_pdf_pdf_tool) == 'wkhtmltopdf') {
+    _print_pdf_wkhtmltopdf($print, $html, $pdf_filename);
+  }
   else {
     return drupal_not_found();
   }
@@ -240,6 +243,82 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   //Close and output PDF document
   $output_dest = ($print_pdf_content_disposition == 2) ? 'D' : 'I';
   $pdf->Output($filename, $output_dest);
+}
+
+/**
+ * Generate the PDF file using wkhtmltopdf
+ *
+ * @param $print
+ *   array containing the configured data
+ * @param $html
+ *   contents of the post-processed template already with the node data
+ * @param $filename
+ *   name of the PDF file to be generated
+ * @see print_pdf_controller()
+ */
+function _print_pdf_wkhtmltopdf($print, $html, $filename) {
+  $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
+  $print_pdf_paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
+  $print_pdf_page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
+  $print_pdf_content_disposition = variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT);
+
+  $xvfb_binary = key(file_scan_directory(drupal_get_path('module', 'print'), '!^Xvfb$!'));
+
+  define('WKHTMLTOPDF_DPI', '96');
+  define('WKHTMLTOPDF_OPTIONS', " --footer-font-size 7 --footer-right '[page]'");
+//  define('WKHTMLTOPDF_XVFB_FONT_PATH', '/usr/share/fonts/X11/misc/,/usr/share/fonts/X11/Type1/,/usr/share/fonts/X11/75dpi/,/usr/share/fonts/X11/100dpi/');
+  define('WKHTMLTOPDF_TEMP_DIR', '/tmp');
+
+  // If configured to do so, launch a temporary X server with a random display number.
+  if (isset($xvfb_binary)) {
+    $xdisplay = rand(10, 500);
+    $xcmd = realpath($xvfb_binary) ." :$xdisplay -screen 0 320x200x24 -dpi ". WKHTMLTOPDF_DPI .
+            ' -terminate -nolisten tcp'.
+            (defined('WKHTMLTOPDF_XVFB_FONT_PATH') ? ' -fp ' . WKHTMLTOPDF_XVFB_FONT_PATH : '') .
+            ' -tst  2> ' . WKHTMLTOPDF_TEMP_DIR . '/Xvfb-err';
+    $xvfb = popen($xcmd, 'r');
+  }
+
+  $descriptor = array(0 => array('pipe', 'r'),
+                      1 => array('pipe', 'w'),
+                      2 => array('file', WKHTMLTOPDF_TEMP_DIR . '/wkhtmltopdf-err', 'a'));
+  $cmd = realpath($print_pdf_pdf_tool) .
+         ' --page-size ' . drupal_strtolower($print_pdf_paper_size) .
+         ' --orientation ' . $print_pdf_page_orientation .
+         ' --dpi ' . WKHTMLTOPDF_DPI .
+         (defined('WKHTMLTOPDF_OPTIONS') ? WKHTMLTOPDF_OPTIONS : '') .
+         ' - -';
+
+  $process = proc_open($cmd, $descriptor, $pipes, NULL,
+             isset($xvfb_binary) ? array('DISPLAY' => ':' . $xdisplay) : NULL);
+
+  if (is_resource($process)) {
+    fwrite($pipes[0], $html);
+    fclose($pipes[0]);
+
+    $pdf = stream_get_contents($pipes[1]);
+    fclose($pipes[1]);
+
+    $retval = proc_close($process);
+  }
+  if (isset($xvfb_binary)) {
+    pclose($xvfb);
+  }
+
+  if (isset($pdf)) {
+    if (headers_sent()) {
+      die("Unable to stream pdf: headers already sent");
+    }
+    header("Cache-Control: private");
+    header("Content-Type: application/pdf");
+
+    $attachment =  ($print_pdf_content_disposition == 2) ?  "attachment" :  "inline";
+
+    header("Content-Disposition: $attachment; filename=\"$filename\"");
+
+    echo $pdf;
+    flush();
+  }
 }
 
 /**

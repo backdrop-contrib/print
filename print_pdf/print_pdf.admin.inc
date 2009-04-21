@@ -237,7 +237,7 @@ function _print_pdf_settings_validate($form, &$form_state) {
  *   array of filenames with the include-able PHP file of the located tools
  */
 function _print_pdf_tools() {
-  $pattern = '/^(?:dompdf_config.inc.php|tcpdf.php)$/';
+  $pattern = '!^(?:dompdf_config.inc.php|tcpdf.php|wkhtmltopdf)$!';
   $tools = array_keys(file_scan_directory(drupal_get_path('module', 'print'), $pattern));
 
   $num_tools = count($tools);
