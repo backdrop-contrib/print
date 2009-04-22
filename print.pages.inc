@@ -525,7 +525,7 @@ function _print_url_list_enabled($node, $format = PRINT_HTML_FORMAT) {
 
   // Get value of Printer-friendly URLs setting
   return (variable_get('print_urls', PRINT_URLS_DEFAULT) && ($node_urllist) &&
-          variable_get('print_' . $fmt . 'display_urllist_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT));
+          (isset($node->type) ? variable_get('print_' . $fmt . 'display_urllist_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT) : PRINT_TYPE_URLLIST_DEFAULT));
 }
 
 /**

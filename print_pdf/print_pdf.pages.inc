@@ -194,6 +194,9 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   define('K_CELL_HEIGHT_RATIO', 1.25);
   define('K_SMALL_RATIO', 2/3);
 
+   $pattern = "!<img[^>]*?>!is";
+   $html = preg_replace_callback($pattern, create_function('$matches', 'return html_entity_decode($matches[0], ENT_QUOTES);'), $html);
+
   require_once(DRUPAL_ROOT . '/' . $print_pdf_pdf_tool);
   if (strpos(PDF_PRODUCER, 'PHP4') === FALSE) {
     require_once(DRUPAL_ROOT . '/' . drupal_get_path('module', 'print_pdf') . '/print_pdf.class.inc');
