@@ -593,11 +593,6 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
       $node->body = $content;
       unset($node->teaser);
     }
-
-    //TODO the following was part of the fix for http://drupal.org/node/254863
-    //check if it is reproducible and find the exact condition which
-    //triggered it
-    //$node->body = html_entity_decode($node->body);
   }
 
   $print_comments = variable_get('print_comments', PRINT_COMMENTS_DEFAULT);
