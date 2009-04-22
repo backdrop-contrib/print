@@ -266,10 +266,19 @@ function print_mail_form_submit($form, &$form_state) {
       $ok = FALSE;
       $addresses = explode(', ', $form_state['values']['txt_to_addrs']);
       foreach ($addresses as $to) {
-        $ret = drupal_mail('print_mail', 'sendpage', $to, language_default(), $params, $from, TRUE);
-        if ($ret['result']) {
-          flood_register_event('print_mail');
-          $ok = TRUE;
+        // Call to hook_print_mail_before_send in order to know if the mail can be sent
+        // Handlers must return TRUE or FALSE
+        $can_send = module_invoke_all('print_mail_before_send', $node, $to, $from, $params);
+
+        if (!in_array(FALSE, $can_send)) {
+          $ret = drupal_mail('print_mail', 'sendpage', $to, language_default(), $params, $from, TRUE);
+          if ($ret['result']) {
+            // Call to hook_print_mail_after_send in order to provide information to other modules.
+            module_invoke_all('print_mail_after_send', $node, $to, $from, $params);
+
+            flood_register_event('print_mail');
+            $ok = TRUE;
+          }
         }
       }
       if ($ok) {
