@@ -565,7 +565,7 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
   $node->printing = TRUE;
 
   //use the proper build_mode
-  $node->build_mode = NODE_BUILD_PRINT;
+//  $node->build_mode = NODE_BUILD_PRINT;
 
   // Turn off Pagination by the Paging module
   unset($node->pages);
