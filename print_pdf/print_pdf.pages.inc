@@ -243,6 +243,9 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   // reset pointer to the last page
   $pdf->lastPage();
 
+  // try to recover from any warning/error
+  ob_clean();
+
   //Close and output PDF document
   $output_dest = ($print_pdf_content_disposition == 2) ? 'D' : 'I';
   $pdf->Output($filename, $output_dest);
