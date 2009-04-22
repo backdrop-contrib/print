@@ -261,7 +261,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
  */
 function _print_pdf_wkhtmltopdf($print, $html, $filename) {
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
-  $print_pdf_paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
+  $print_pdf_paper_size = drupal_strtolower(variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT));
   $print_pdf_page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
   $print_pdf_content_disposition = variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT);
 
@@ -276,20 +276,16 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
   if (isset($xvfb_binary)) {
     $xdisplay = rand(10, 500);
     $xcmd = realpath($xvfb_binary) ." :$xdisplay -screen 0 320x200x24 -dpi ". WKHTMLTOPDF_DPI .
-            ' -terminate -nolisten tcp'.
-            (defined('WKHTMLTOPDF_XVFB_FONT_PATH') ? ' -fp ' . WKHTMLTOPDF_XVFB_FONT_PATH : '') .
-            ' -tst  2> ' . WKHTMLTOPDF_TEMP_DIR . '/Xvfb-err';
-    $xvfb = popen($xcmd, 'r');
+            ' -terminate -nolisten tcp -tst'.
+            (defined('WKHTMLTOPDF_XVFB_FONT_PATH') ? ' -fp ' . WKHTMLTOPDF_XVFB_FONT_PATH : '');
+
+    $xdescriptor = array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'w'));
+    $xprocess = proc_open($xcmd, $xdescriptor, $xpipes, NULL, NULL);
   }
 
-  $descriptor = array(0 => array('pipe', 'r'),
-                      1 => array('pipe', 'w'),
-                      2 => array('file', WKHTMLTOPDF_TEMP_DIR . '/wkhtmltopdf-err', 'a'));
-  $cmd = realpath($print_pdf_pdf_tool) .
-         ' --page-size ' . drupal_strtolower($print_pdf_paper_size) .
-         ' --orientation ' . $print_pdf_page_orientation .
-         ' --dpi ' . WKHTMLTOPDF_DPI .
-         (defined('WKHTMLTOPDF_OPTIONS') ? WKHTMLTOPDF_OPTIONS : '') .
+  $descriptor = array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'w'));
+  $cmd = realpath($print_pdf_pdf_tool) . " --page-size $print_pdf_paper_size --orientation $print_pdf_page_orientation" .
+         ' --dpi ' . WKHTMLTOPDF_DPI . (defined('WKHTMLTOPDF_OPTIONS') ? WKHTMLTOPDF_OPTIONS : '') .
          ' - -';
 
   $process = proc_open($cmd, $descriptor, $pipes, NULL,
@@ -302,10 +298,19 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
     $pdf = stream_get_contents($pipes[1]);
     fclose($pipes[1]);
 
+    $status = proc_get_status($process);
+    if (!$status['running']) {
+      watchdog('print_pdf', 'wkhtmltopdf: '. stream_get_contents($pipes[2]));
+    }
+
     $retval = proc_close($process);
   }
   if (isset($xvfb_binary)) {
-    pclose($xvfb);
+    $xstatus = proc_get_status($xprocess);
+    if ($xstatus['exitcode']) {
+      watchdog('print_pdf', 'wkhtmltopdf Xvfb: '. stream_get_contents($xpipes[2]));
+    }
+    proc_close($xprocess);
   }
 
   if (isset($pdf)) {
@@ -321,6 +326,10 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
 
     echo $pdf;
     flush();
+  }
+  else {
+    drupal_goto($print['url']);
+    exit;
   }
 }
 
