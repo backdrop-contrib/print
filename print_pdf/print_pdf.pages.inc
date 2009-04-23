@@ -277,7 +277,10 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
 
   // If configured to do so, launch a temporary X server with a random display number.
   if (isset($xvfb_binary)) {
-    $xdisplay = rand(10, 500);
+    $xdisplay = variable_get('print_pdf_wkhtmltopdf_xdisplay', 10);
+    variable_set('print_pdf_wkhtmltopdf_xdisplay', ($xdisplay == 4990) ? 10 : $xdisplay + 10);
+    $xdisplay += mt_rand(0, 9);
+
     $xcmd = realpath($xvfb_binary) . " :$xdisplay -screen 0 320x200x24 -dpi " . WKHTMLTOPDF_DPI .
             ' -terminate -nolisten tcp -tst' .
             (defined('WKHTMLTOPDF_XVFB_FONT_PATH') ? ' -fp ' . WKHTMLTOPDF_XVFB_FONT_PATH : '');
@@ -314,7 +317,7 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
     proc_close($xprocess);
   }
 
-  if (isset($pdf)) {
+  if (!empty($pdf)) {
     if (headers_sent()) {
       die("Unable to stream pdf: headers already sent");
     }
