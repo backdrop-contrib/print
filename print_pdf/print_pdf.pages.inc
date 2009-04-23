@@ -272,18 +272,16 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
 
   define('WKHTMLTOPDF_DPI', '96');
   define('WKHTMLTOPDF_OPTIONS', " --footer-font-size 7 --footer-right '[page]'");
-//  define('WKHTMLTOPDF_XVFB_FONT_PATH', '/usr/share/fonts/X11/misc/,/usr/share/fonts/X11/Type1/,/usr/share/fonts/X11/75dpi/,/usr/share/fonts/X11/100dpi/');
-  define('WKHTMLTOPDF_TEMP_DIR', '/tmp');
+//  define('WKHTMLTOPDF_XVFB_OPTIONS', ' -fp /usr/share/fonts/X11/misc/,/usr/share/fonts/X11/Type1/,/usr/share/fonts/X11/75dpi/,/usr/share/fonts/X11/100dpi/');
 
-  // If configured to do so, launch a temporary X server with a random display number.
+  // If available, launch a temporary X server
   if (isset($xvfb_binary)) {
     $xdisplay = variable_get('print_pdf_wkhtmltopdf_xdisplay', 10);
     variable_set('print_pdf_wkhtmltopdf_xdisplay', ($xdisplay == 4990) ? 10 : $xdisplay + 10);
     $xdisplay += mt_rand(0, 9);
 
     $xcmd = realpath($xvfb_binary) . " :$xdisplay -screen 0 320x200x24 -dpi " . WKHTMLTOPDF_DPI .
-            ' -terminate -nolisten tcp -tst' .
-            (defined('WKHTMLTOPDF_XVFB_FONT_PATH') ? ' -fp ' . WKHTMLTOPDF_XVFB_FONT_PATH : '');
+            ' -terminate -nolisten tcp -tst' . (defined('WKHTMLTOPDF_XVFB_OPTIONS') ? WKHTMLTOPDF_XVFB_OPTIONS : '');
 
     $xdescriptor = array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'w'));
     $xprocess = proc_open($xcmd, $xdescriptor, $xpipes, NULL, NULL);
@@ -302,19 +300,26 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
     $pdf = stream_get_contents($pipes[1]);
     fclose($pipes[1]);
 
-    $status = proc_get_status($process);
-    if (!$status['running']) {
-      watchdog('print_pdf', 'wkhtmltopdf: ' . stream_get_contents($pipes[2]));
+    stream_set_blocking($xpipes[2], 0);
+    $error = stream_get_contents($pipes[2]);
+    if (!empty($error)) {
+      watchdog('print_pdf', 'wkhtmltopdf: ' . $error);
     }
+    fclose($pipes[2]);
 
-    $retval = proc_close($process);
+    $retval = proc_terminate($process);
   }
   if (isset($xvfb_binary)) {
-    $xstatus = proc_get_status($xprocess);
-    if ($xstatus['exitcode']) {
-      watchdog('print_pdf', 'wkhtmltopdf Xvfb: ' . stream_get_contents($xpipes[2]));
+    fclose($xpipes[0]);
+    fclose($xpipes[1]);
+    stream_set_blocking($xpipes[2], 0);
+    $xerror = stream_get_contents($xpipes[2]);
+    if (!empty($xerror)) {
+      watchdog('print_pdf', 'wkhtmltopdf Xvfb: ' . $xerror);
     }
-    proc_close($xprocess);
+    fclose($xpipes[2]);
+
+    proc_terminate($xprocess);
   }
 
   if (!empty($pdf)) {
