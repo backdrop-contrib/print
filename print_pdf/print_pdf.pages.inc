@@ -146,10 +146,10 @@ function _print_pdf_dompdf($print, $html, $filename) {
 //  else if (function_exists('iconv')) {
 //    $html = iconv('UTF-8', 'ISO-8859-1', $html);
 //  }
-  else if (function_exists('mb_convert_encoding')) {
+  elseif (function_exists('mb_convert_encoding')) {
     $html = mb_convert_encoding($html, 'ISO-8859-1', 'UTF-8');
   }
-  else if (function_exists('recode_string')) {
+  elseif (function_exists('recode_string')) {
     $html = recode_string('UTF-8..ISO_8859-1', $html);
   }
   $html = htmlspecialchars_decode(htmlentities($html, ENT_NOQUOTES, 'ISO-8859-1'), ENT_NOQUOTES);
@@ -194,8 +194,8 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   define('K_CELL_HEIGHT_RATIO', 1.25);
   define('K_SMALL_RATIO', 2/3);
 
-   $pattern = "!<img[^>]*?>!is";
-   $html = preg_replace_callback($pattern, create_function('$matches', 'return html_entity_decode($matches[0], ENT_QUOTES);'), $html);
+  $pattern = "!<img[^>]*?>!is";
+  $html = preg_replace_callback($pattern, create_function('$matches', 'return html_entity_decode($matches[0], ENT_QUOTES);'), $html);
 
   require_once(DRUPAL_ROOT . '/' . $print_pdf_pdf_tool);
   if (strpos(PDF_PRODUCER, 'PHP4') === FALSE) {
@@ -278,8 +278,8 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
   // If configured to do so, launch a temporary X server with a random display number.
   if (isset($xvfb_binary)) {
     $xdisplay = rand(10, 500);
-    $xcmd = realpath($xvfb_binary) ." :$xdisplay -screen 0 320x200x24 -dpi ". WKHTMLTOPDF_DPI .
-            ' -terminate -nolisten tcp -tst'.
+    $xcmd = realpath($xvfb_binary) . " :$xdisplay -screen 0 320x200x24 -dpi " . WKHTMLTOPDF_DPI .
+            ' -terminate -nolisten tcp -tst' .
             (defined('WKHTMLTOPDF_XVFB_FONT_PATH') ? ' -fp ' . WKHTMLTOPDF_XVFB_FONT_PATH : '');
 
     $xdescriptor = array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'w'));
@@ -288,11 +288,9 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
 
   $descriptor = array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'w'));
   $cmd = realpath($print_pdf_pdf_tool) . " --page-size $print_pdf_paper_size --orientation $print_pdf_page_orientation" .
-         ' --dpi ' . WKHTMLTOPDF_DPI . (defined('WKHTMLTOPDF_OPTIONS') ? WKHTMLTOPDF_OPTIONS : '') .
-         ' - -';
+         ' --dpi ' . WKHTMLTOPDF_DPI . (defined('WKHTMLTOPDF_OPTIONS') ? WKHTMLTOPDF_OPTIONS : '') . ' - -';
 
-  $process = proc_open($cmd, $descriptor, $pipes, NULL,
-             isset($xvfb_binary) ? array('DISPLAY' => ':' . $xdisplay) : NULL);
+  $process = proc_open($cmd, $descriptor, $pipes, NULL, isset($xvfb_binary) ? array('DISPLAY' => ':' . $xdisplay) : NULL);
 
   if (is_resource($process)) {
     fwrite($pipes[0], $html);
@@ -303,7 +301,7 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
 
     $status = proc_get_status($process);
     if (!$status['running']) {
-      watchdog('print_pdf', 'wkhtmltopdf: '. stream_get_contents($pipes[2]));
+      watchdog('print_pdf', 'wkhtmltopdf: ' . stream_get_contents($pipes[2]));
     }
 
     $retval = proc_close($process);
@@ -311,7 +309,7 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
   if (isset($xvfb_binary)) {
     $xstatus = proc_get_status($xprocess);
     if ($xstatus['exitcode']) {
-      watchdog('print_pdf', 'wkhtmltopdf Xvfb: '. stream_get_contents($xpipes[2]));
+      watchdog('print_pdf', 'wkhtmltopdf Xvfb: ' . stream_get_contents($xpipes[2]));
     }
     proc_close($xprocess);
   }
