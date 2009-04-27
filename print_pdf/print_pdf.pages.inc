@@ -267,12 +267,11 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
   $print_pdf_paper_size = drupal_strtolower(variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT));
   $print_pdf_page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
   $print_pdf_content_disposition = variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT);
+  $print_pdf_wkhtmltopdf_options = variable_get('print_pdf_wkhtmltopdf_options', PRINT_PDF_WKHTMLTOPDF_OPTIONS);
+  $print_pdf_xvfb_options = variable_get('print_pdf_xvfb_options', PRINT_PDF_XVFB_OPTIONS);
 
   $xvfb_binary = key(file_scan_directory(drupal_get_path('module', 'print'), '!^Xvfb$!'));
-
-  define('WKHTMLTOPDF_DPI', '96');
-  define('WKHTMLTOPDF_OPTIONS', " --footer-font-size 7 --footer-right '[page]'");
-//  define('WKHTMLTOPDF_XVFB_OPTIONS', ' -fp /usr/share/fonts/X11/misc/,/usr/share/fonts/X11/Type1/,/usr/share/fonts/X11/75dpi/,/usr/share/fonts/X11/100dpi/');
+  $dpi = 96;
 
   // If available, launch a temporary X server
   if (isset($xvfb_binary)) {
@@ -280,16 +279,14 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
     variable_set('print_pdf_wkhtmltopdf_xdisplay', ($xdisplay == 4990) ? 10 : $xdisplay + 10);
     $xdisplay += mt_rand(0, 9);
 
-    $xcmd = realpath($xvfb_binary) . " :$xdisplay -screen 0 320x200x24 -dpi " . WKHTMLTOPDF_DPI .
-            ' -terminate -nolisten tcp -tst' . (defined('WKHTMLTOPDF_XVFB_OPTIONS') ? WKHTMLTOPDF_XVFB_OPTIONS : '');
+    $xcmd = realpath($xvfb_binary) . " :$xdisplay -screen 0 320x200x24 -dpi $dpi -terminate -nolisten tcp -tst $print_pdf_xvfb_options";
 
     $xdescriptor = array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'w'));
     $xprocess = proc_open($xcmd, $xdescriptor, $xpipes, NULL, NULL);
   }
 
   $descriptor = array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'w'));
-  $cmd = realpath($print_pdf_pdf_tool) . " --page-size $print_pdf_paper_size --orientation $print_pdf_page_orientation" .
-         ' --dpi ' . WKHTMLTOPDF_DPI . (defined('WKHTMLTOPDF_OPTIONS') ? WKHTMLTOPDF_OPTIONS : '') . ' - -';
+  $cmd = realpath($print_pdf_pdf_tool) . " --page-size $print_pdf_paper_size --orientation $print_pdf_page_orientation --dpi $dpi $print_pdf_wkhtmltopdf_options - -";
 
   $process = proc_open($cmd, $descriptor, $pipes, NULL, isset($xvfb_binary) ? array('DISPLAY' => ':' . $xdisplay) : NULL);
 

@@ -181,6 +181,19 @@ function print_pdf_settings() {
       '#maxlength' => 3,
       '#description' => t('(TCPDF only) Set the font size to be used for normal text. This is the base value for the scaling applied to other text styles.'),
     );
+    $form['settings']['print_pdf_wkhtmltopdf_options'] = array(
+      '#type' => 'textfield',
+      '#title' => t('wkhtmltopdf options'),
+      '#default_value' => variable_get('print_pdf_wkhtmltopdf_options', PRINT_PDF_WKHTMLTOPDF_OPTIONS),
+      '#description' => t('(wkhtmltopdf only) Set any additional options to be passed to the wkhtmltopdf executable.'),
+    );
+    $form['settings']['print_pdf_xvfb_options'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Xvfb options'),
+      '#default_value' => variable_get('print_pdf_xvfb_options', PRINT_PDF_XVFB_OPTIONS),
+      '#description' => t('(wkhtmltopdf only) Set any additional options to be passed to the Xvfb executable.'),
+    );
+
     if (module_exists('token')) {
       $form['settings']['print_pdf_filename'] = array(
         '#type' => 'textfield',
