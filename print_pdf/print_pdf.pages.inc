@@ -219,7 +219,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   // set document information
   $pdf->SetAuthor(strip_tags($print['submitted']));
   $pdf->SetCreator(variable_get('site_name', 'Drupal'));
-  $pdf->SetTitle($print['title']);
+  $pdf->SetTitle(html_entity_decode($print['title'], ENT_QUOTES, UTF-8));
   $keys = implode(' ', explode("\n", trim(strip_tags($print['taxonomy']))));
   $pdf->SetKeywords($keys);
   $pdf->setPDFVersion('1.6');
@@ -412,7 +412,7 @@ function theme_print_pdf_tcpdf_header(&$pdf, &$html, $font) {
   // set header margin
   $pdf->SetHeaderMargin(5);
   // set header data
-  $pdf->SetHeaderData($logo, 10 * $ratio, $tpl_title[1], strip_tags($tpl_site_name[1]));
+  $pdf->SetHeaderData($logo, 10 * $ratio, html_entity_decode($tpl_title[1], ENT_QUOTES, UTF-8), strip_tags($tpl_site_name[1]));
 
   return $pdf;
 }
