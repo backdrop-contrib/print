@@ -137,6 +137,15 @@ function print_mail_settings() {
     '#description' => t('If checked, the user will be able to choose between sending the full content or only the teaser at send time.'),
   );
 
+  if (module_exists('job_queue')) {
+    $form['settings']['print_mail_job_queue'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Send e-mails using Job Queue'),
+      '#default_value' => variable_get('print_mail_job_queue', PRINT_MAIL_JOB_QUEUE_DEFAULT),
+      '#description' => t("Selecting this option, e-mail delivery will be performed by the Job Queue module during each cron run. Leaving this unselected, the e-mail will be sent immediately, but the site will take slightly longer to reply to the user."),
+    );
+  }
+
   return system_settings_form($form);
 }
 

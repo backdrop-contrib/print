@@ -22,6 +22,7 @@ define('PRINT_MAIL_BOOK_LINK_DEFAULT', 1);
 define('PRINT_MAIL_HOURLY_THRESHOLD', 3);
 define('PRINT_MAIL_TEASER_DEFAULT_DEFAULT', 1);
 define('PRINT_MAIL_TEASER_CHOICE_DEFAULT', 1);
+define('PRINT_MAIL_JOB_QUEUE_DEFAULT', 0);
 
 /**
  * Implementation of hook_theme().
@@ -249,6 +250,16 @@ function print_mail_form_alter(&$form, $form_state, $form_id) {
       $form['print']['print_mail_display_urllist']['#default_value'] = isset($node->print_mail_display_urllist) ? $node->print_mail_display_urllist : PRINT_TYPE_URLLIST_DEFAULT;
     }
   }
+}
+
+/**
+ * Implementation of hook_job_queue_functions.
+ */
+function print_mail_job_queue_functions() {
+  $functions['print_mail'] = array(
+   'title' => t('Send to friend'),
+  );
+  return $functions;
 }
 
 /**
