@@ -26,7 +26,6 @@ function print_pdf_controller() {
   $GLOBALS['conf']['cache'] = FALSE;
 
   $args = func_get_args();
-  // Remove the printpdf/ prefix
   $path = implode('/', $args);
   $cid = isset($_GET['comment']) ? (int)$_GET['comment'] : NULL;
 
@@ -91,7 +90,7 @@ function print_pdf_controller() {
     return drupal_not_found();
   }
 
-  $nodepath = drupal_get_normal_path($node->path);
+  $nodepath = (isset($node->path)) ? drupal_get_normal_path($node->path) : 'node/' . $path;
   db_merge('print_pdf_page_counter')
     ->key(array('path' => $nodepath))
     ->fields(array(

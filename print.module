@@ -213,7 +213,7 @@ function print_link_alter(&$links, $node) {
             break;
           case 2:
             $print_html_link_use_alias = variable_get('print_html_link_use_alias', PRINT_HTML_LINK_USE_ALIAS_DEFAULT);
-            $path = $print_html_link_use_alias ? $node->path : $node->nid;
+            $path = ($print_html_link_use_alias && isset($node->path)) ? $node->path : $node->nid;
             break;
         }
 
@@ -333,7 +333,7 @@ function print_node_delete($node) {
     ->condition('nid', $node->nid)
     ->execute();
   db_delete('print_page_counter')
-    ->condition('path', $node->path)
+    ->condition('path', 'node/' . $node->nid)
     ->execute();
 }
 
@@ -698,9 +698,8 @@ function print_link_allowed($args) {
     $print_html_node_link_visibility = variable_get('print_html_node_link_visibility', PRINT_HTML_NODE_LINK_VISIBILITY_DEFAULT);
     $print_html_node_link_pages = variable_get('print_html_node_link_pages', PRINT_HTML_NODE_LINK_PAGES_DEFAULT);
 
-    if ((isset($node->build_mode) && ($node->build_mode == NODE_BUILD_PRINT)) ||
-        !_print_page_match($print_html_node_link_visibility, $print_html_node_link_pages)) {
-      // Page not in visibility list or we are working!
+    if (!_print_page_match($print_html_node_link_visibility, $print_html_node_link_pages)) {
+      // Page not in visibility list
       return FALSE;
     }
     elseif (isset($args['type']) && ($args['type'] == 'comment') && isset($node_type)) {
