@@ -222,7 +222,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   // set document information
   $pdf->SetAuthor(strip_tags($print['submitted']));
   $pdf->SetCreator(variable_get('site_name', 'Drupal'));
-  $pdf->SetTitle(html_entity_decode($print['title'], ENT_QUOTES, UTF-8));
+  $pdf->SetTitle(html_entity_decode($print['title'], ENT_QUOTES, 'UTF-8'));
   $keys = implode(' ', explode("\n", trim(strip_tags($print['taxonomy']))));
   $pdf->SetKeywords($keys);
   $pdf->setPDFVersion('1.6');
