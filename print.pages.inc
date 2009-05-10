@@ -574,6 +574,8 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
     // Adapted (simplified) version of node_view
     //Render the node content
     $node = node_build_content($node, $teaser, TRUE);
+    // Disable the links area
+    unset($node->content['links']);
     // Disable fivestar widget output
     unset($node->content['fivestar_widget']);
     // Disable service links module output
@@ -619,7 +621,7 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
     }
     $node->body .= $comments;
   }
-  node_invoke_node($node, 'alter', $teaser, TRUE);
+  module_invoke_all('node_alter', $node, $teaser, TRUE);
 
   if ($teaser) {
     $node->body = $node->teaser;

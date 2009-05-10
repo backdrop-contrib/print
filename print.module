@@ -293,18 +293,19 @@ function print_node_view($node, $teaser) {
     );
   }
 
+  if (($teaser === FALSE) && isset($node->build_mode) && ($node->build_mode == NODE_BUILD_NORMAL)) {
       // Insert content corner links
       $node->content['print_links'] = array(
         '#markup' => "<span class='print-link'></span>",
         '#weight' => -101,
       );
-      if (($teaser === FALSE) && !empty($print_html_link_pos['corner']) &&
-          isset($node->build_mode) && ($node->build_mode == NODE_BUILD_NORMAL)) {
+      if (!empty($print_html_link_pos['corner'])) {
         $link = print_insert_link(NULL, $node);
         if ($link) {
           $node->content['print_links']['#markup'] = preg_replace('!</span>$!', $link . '</span>', $node->content['print_links']['#markup']);
         }
       }
+  }
 }
 
 /**
@@ -395,6 +396,23 @@ function print_cck_extra_fields($type_name) {
     'weight' => PRINT_TYPE_FIELDS_WEIGHT,
   );
   return $fields;
+}
+
+/**
+ * Implementation of hook_cck_build_modes().
+ */
+function print_cck_build_modes() {
+  return array(
+    'print' => array(
+      'title' => t('Print'),
+      'build modes' => array(
+        NODE_BUILD_PRINT => array(
+          'title' => t('Print'),
+          'views style' => TRUE,
+        ),
+      ),
+    ),
+  );
 }
 
 /**
