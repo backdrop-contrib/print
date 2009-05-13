@@ -196,8 +196,8 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   // Decode HTML entities in image filenames
   $pattern = "!<img[^>]*?>!is";
   $html = preg_replace_callback($pattern, create_function('$matches', 'return html_entity_decode($matches[0], ENT_QUOTES);'), $html);
-  // Remove imagefield/filefield numerical parameter
-  $pattern = "!(<img\s[^>]*?src\s*?=.*?)%3F\d+([^>]*?>)!is";
+  // Remove queries from the image URL
+  $pattern = "!(<img\s[^>]*?src\s*?=.*?)(?:%3F|\?)[\w=&]+([^>]*?>)!is";
   $html = preg_replace($pattern, '$1$2', $html);
 
   require_once(DRUPAL_ROOT . '/' . $print_pdf_pdf_tool);

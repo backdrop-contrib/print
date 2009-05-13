@@ -253,7 +253,7 @@ function print_mail_form_alter(&$form, $form_state, $form_id) {
 }
 
 /**
- * Implementation of hook_job_queue_functions.
+ * Implementation of hook_job_queue_functions().
  */
 function print_mail_job_queue_functions() {
   $functions['print_mail'] = array(
