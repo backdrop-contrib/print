@@ -663,7 +663,12 @@ function print_insert_link($path = NULL, $node = NULL) {
 function _print_page_match($visibility, $pages) {
   if ($pages) {
     if ($visibility == 2) {
-      return drupal_eval($pages);
+      if (module_exists('php')) {
+        return php_eval($pages);
+      }
+      else {
+        return FALSE;
+      }
     }
     $path = drupal_get_path_alias($_GET['q']);
     $page_match = drupal_match_path($path, $pages);
