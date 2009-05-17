@@ -433,7 +433,9 @@ function theme_print_pdf_tcpdf_page(&$pdf) {
   // set auto page breaks
   $pdf->SetAutoPageBreak(TRUE, 15);
   // set image scale factor
-  $pdf->setImageScale(4);
+  sscanf(PDF_PRODUCER, "TCPDF %d.%d.%d", $major, $minor, $build);
+  $imagescale = (($major >= 4) && ($minor >= 6) && ($build >= 2)) ? 1 : 4;
+  $pdf->setImageScale($imagescale);
   // set image compression quality
   $pdf->setJPEGQuality(100);
 
