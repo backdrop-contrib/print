@@ -164,6 +164,12 @@ function print_pdf_settings() {
       '#default_value' => variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT),
       '#description' => t('Choose the page orientation of the generated PDF.'),
     );
+    $form['settings']['print_pdf_autoconfig'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Auto-configure the TCPDF settings'),
+      '#default_value' => variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT),
+      '#description' => t('(TCPDF only) If you disable this option, the TCDPF settings in tcpdf/config/tcpdf_config.php file must be configured manually.'),
+    );
     $form['settings']['print_pdf_font_family'] = array(
       '#type' => 'textfield',
       '#title' => t('Font Family'),

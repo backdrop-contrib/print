@@ -183,21 +183,23 @@ function _print_pdf_tcpdf($print, $html, $filename) {
 
   $pdf_tool_path = realpath(dirname($print_pdf_pdf_tool));
 
-  define('K_TCPDF_EXTERNAL_CONFIG', TRUE);
-  define('K_PATH_MAIN', dirname($_SERVER['SCRIPT_FILENAME']));
-  define('K_PATH_URL', $base_url);
-  define('K_PATH_FONTS', $pdf_tool_path . '/fonts/');
-  define('K_PATH_CACHE', $pdf_tool_path . '/cache/');
-  define('K_PATH_IMAGES', '');
-  define('K_BLANK_IMAGE', $pdf_tool_path . '/images/_blank.png');
-  define('K_CELL_HEIGHT_RATIO', 1.25);
-  define('K_SMALL_RATIO', 2/3);
+  if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
+    define('K_TCPDF_EXTERNAL_CONFIG', TRUE);
+    define('K_PATH_MAIN', dirname($_SERVER['SCRIPT_FILENAME']));
+    define('K_PATH_URL', $base_url);
+    define('K_PATH_FONTS', $pdf_tool_path . '/fonts/');
+    define('K_PATH_CACHE', $pdf_tool_path . '/cache/');
+    define('K_PATH_IMAGES', '');
+    define('K_BLANK_IMAGE', $pdf_tool_path . '/images/_blank.png');
+    define('K_CELL_HEIGHT_RATIO', 1.25);
+    define('K_SMALL_RATIO', 2/3);
+  }
 
   // Decode HTML entities in image filenames
-  $pattern = "!<img[^>]*?>!is";
+  $pattern = "!<img\s[^>]*?src\s*?=\s*?['\"]?${base_url}[^>]*?>!is";
   $html = preg_replace_callback($pattern, create_function('$matches', 'return html_entity_decode($matches[0], ENT_QUOTES);'), $html);
   // Remove queries from the image URL
-  $pattern = "!(<img\s[^>]*?src\s*?=.*?)(?:%3F|\?)[\w=&]+([^>]*?>)!is";
+  $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?${base_url}.*?)(?:%3F|\?)[\w=&]+([^>]*?>)!is";
   $html = preg_replace($pattern, '$1$2', $html);
 
   require_once(DRUPAL_ROOT . '/' . $print_pdf_pdf_tool);
