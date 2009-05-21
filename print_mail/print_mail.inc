@@ -43,7 +43,7 @@ function print_mail_form($form_state) {
   $cid = isset($_GET['comment']) ? (int)$_GET['comment'] : NULL;
   $title = _print_get_title($path);
 
-  if (count($form_state['post']) == 0) {
+  if (count($form_state['input']) == 0) {
     $nodepath = drupal_get_normal_path($path);
     db_merge('print_mail_page_counter')
       ->key(array('path' => $nodepath))
@@ -169,7 +169,7 @@ function theme_print_mail_form($form) {
  * @ingroup forms
  */
 function print_mail_form_validate($form, &$form_state) {
-  if (array_key_exists('cancel', $form['#post'])) {
+  if (array_key_exists('cancel', $form_state['input'])) {
     return;
   }
   $from_addr = trim($form_state['values']['fld_from_addr']);
