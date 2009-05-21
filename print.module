@@ -67,10 +67,6 @@ function print_perm() {
       'title' => t('Node-specific configuration'),
       'description' => t('Enable access to the per-node settings.'),
     ),
-    'use PHP for link visibility' => array(
-      'title' => t('Use PHP for link visibility'),
-      'description' => t('Enables the use of PHP code to configure the link visibility.'),
-    ),
   );
 }
 

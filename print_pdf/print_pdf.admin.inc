@@ -85,7 +85,7 @@ function print_pdf_settings() {
       '#description' => t("Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>')),
     );
 
-    $access = user_access('use PHP for link visibility');
+    $access = user_access('use PHP for settings');
 
     if ($form['settings']['adv_link']['print_pdf_node_link_visibility']['#default_value'] == 2 && !$access) {
       $form['settings']['adv_link']['print_pdf_node_link_visibility'] = array('#type' => 'value', '#value' => 2);
