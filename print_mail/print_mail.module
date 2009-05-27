@@ -25,6 +25,18 @@ define('PRINT_MAIL_TEASER_CHOICE_DEFAULT', 1);
 define('PRINT_MAIL_JOB_QUEUE_DEFAULT', 0);
 
 /**
+ * Implementation of hook_perm().
+ */
+function print_mail_perm() {
+  return array(
+    'access send to friend' => array(
+      'title' => t('Access the Send To Friend functionality'),
+      'description' => t('Provides the ability to send pages to a friend and the links to them in the original pages.'),
+    ),
+  );
+}
+
+/**
  * Implementation of hook_theme().
  */
 function print_mail_theme() {
@@ -48,7 +60,7 @@ function print_mail_menu() {
     'title' => 'Send page by e-mail',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_mail_form'),
-    'access arguments' => array('access print'),
+    'access arguments' => array('access send to friend'),
     'type' => MENU_CALLBACK,
   );
   $items['admin/settings/print/email'] = array(
@@ -412,7 +424,7 @@ function print_mail_insert_link($path = NULL, $node = NULL) {
  *   PRINT_ALLOW_BOOK_LINK if a link is allowed in a book node
  */
 function print_mail_link_allowed($args) {
-  if (!empty($args['teaser']) || !user_access('access print')) {
+  if (!empty($args['teaser']) || !user_access('access send to friend')) {
     // If showing only the teaser or the user is not allowed or link is disabled
     return FALSE;
   }
