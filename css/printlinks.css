@@ -13,6 +13,10 @@
   */
 }
 
+div#block-print-0 span {
+  display: block;
+}
+
 .print_html, .print_mail, .print_pdf {
   margin-left: 1em;
 }
