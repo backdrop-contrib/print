@@ -63,6 +63,9 @@ function print_mail_menu() {
     'access arguments' => array('access send to friend'),
     'type' => MENU_CALLBACK,
   );
+  $items[PRINTMAIL_PATH . '/' . PRINTMAIL_PATH] = array(
+    'page callback' => 'drupal_access_denied',
+  );
   $items['admin/settings/print/email'] = array(
     'title' => 'e-mail',
     'page callback' => 'drupal_get_form',

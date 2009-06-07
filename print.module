@@ -93,6 +93,9 @@ function print_menu() {
     'access arguments' => array('access print'),
     'type' => MENU_CALLBACK,
   );
+  $items[PRINT_PATH . '/' . PRINT_PATH] = array(
+    'page callback' => 'drupal_access_denied',
+  );
   $items['admin/settings/print'] = array(
     'title' => 'Printer, e-mail and PDF versions',
     'description' => 'Adds a printer-friendly version link to content and administrative pages.',

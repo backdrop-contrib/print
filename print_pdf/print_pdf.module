@@ -84,6 +84,9 @@ function print_pdf_menu() {
     'access arguments' => array('access PDF version'),
     'type' => MENU_CALLBACK,
   );
+  $items[PRINTPDF_PATH . '/' . PRINTPDF_PATH] = array(
+    'page callback' => 'drupal_access_denied',
+  );
   $items['admin/settings/print/pdf'] = array(
     'title' => 'PDF',
     'page callback' => 'drupal_get_form',
