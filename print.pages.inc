@@ -621,6 +621,7 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
     }
     $node->body .= $comments;
   }
+
   module_invoke_all('node_alter', $node, $teaser, TRUE);
 
   if ($teaser) {
