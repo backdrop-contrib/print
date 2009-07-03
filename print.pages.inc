@@ -83,7 +83,7 @@ function print_controller($path, $cid = NULL, $format = PRINT_HTML_FORMAT, $teas
     }
   }
   $parts = explode('/', $path);
-  if (is_numeric($parts[0])) {
+  if (is_numeric($parts[0]) && (count($parts) == 1)) {
     $print = _print_generate_node($path, $cid, $format, $teaser, $message);
   }
   else {
@@ -659,6 +659,12 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
  */
 function _print_generate_path($path, $format = PRINT_HTML_FORMAT, $teaser = FALSE, $message = NULL) {
   global $_print_urls;
+
+  // Handle node tabs
+  $parts = explode('/', $path);
+  if (is_numeric($parts[0]) && (count($parts) > 1)) {
+    $path = 'node/' . $path;
+  }
 
   $path = drupal_get_normal_path($path);
 
