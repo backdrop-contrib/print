@@ -66,9 +66,11 @@ function print_pdf_controller() {
   $html = ob_get_contents();
   ob_end_clean();
 
-  // Convert the a href elements
+  // Convert the a href elements, to make sure no relative links remain
   $pattern = '!<(a\s[^>]*?)>!is';
   $html = preg_replace_callback($pattern, '_print_rewrite_urls', $html);
+  // And make anchor links relative again, to permit in-PDF navigation
+  $html = preg_replace("!${base_url}/" . PRINTPDF_PATH . "/.*?%2523!", '#', $html);
 
   $pdf_filename = variable_get('print_pdf_filename', PRINT_PDF_FILENAME_DEFAULT);
   if (function_exists('token_replace') && !empty($pdf_filename)) {
