@@ -13,7 +13,7 @@
  * Welcome to the print module developer's documentation. The interesting
  * functions for themers are those that start with 'theme_'.
  *
- * - Printer-friendly pages (core)
+ * - Printer-friendly pages
  *   - @link print.module Module main file @endlink
  *   - @link print.admin.inc Settings form @endlink
  *   - @link print.pages.inc HTML generation @endlink

@@ -1,5 +1,5 @@
 ; $Id$
-name = "Printer-friendly pages (core)"
+name = "Printer-friendly pages"
 description = "Adds a printer-friendly version link to content and administrative pages."
 core=7.x
 package = "Printer, e-mail and PDF versions"
