@@ -713,16 +713,11 @@ function print_link_allowed($args) {
     }
   }
   if (!empty($args['node'])) {
-    static $node_type = FALSE;
+    static $node_type = '';
 
     $node = $args['node'];
-    if ($node_type === FALSE) {
-      if (isset($node->type)) {
-        $node_type = $node->type;
-      }
-      else {
-        $node_type = '';
-      }
+    if (isset($node->type)) {
+      $node_type = $node->type;
     }
     // Node
     $print_html_node_link_visibility = variable_get('print_html_node_link_visibility', PRINT_HTML_NODE_LINK_VISIBILITY_DEFAULT);
