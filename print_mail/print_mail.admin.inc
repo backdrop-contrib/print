@@ -7,6 +7,8 @@
  *
  * This file is included by the send by e-mail module, and includes the
  * settings form.
+ *
+ * @ingroup print
  */
 
 /**

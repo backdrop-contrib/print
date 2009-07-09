@@ -4,6 +4,8 @@
 /**
  * @file
  * Displays Printer-friendly versions of Drupal pages.
+ *
+ * @ingroup print
  */
 
 define('PRINTPDF_PATH', 'printpdf');

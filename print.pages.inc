@@ -8,6 +8,8 @@
  * This file is included by the core PF module, and includes all the
  * functions necessary to generate a PF version of the original page
  * in HTML format.
+ *
+ * @ingroup print
  */
 
 $_print_urls = PRINT_URLS_DEFAULT;

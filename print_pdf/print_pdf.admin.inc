@@ -7,6 +7,8 @@
  *
  * This file is included by the PDF version module, and includes the
  * settings form.
+ *
+ * @ingroup print
  */
 
 /**

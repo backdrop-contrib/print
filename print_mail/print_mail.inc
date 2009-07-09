@@ -7,6 +7,8 @@
  *
  * This file is included by the print_mail module and includes the
  * mail form display, validation and submit hooks.
+ *
+ * @ingroup print
  */
 
 require_once(DRUPAL_ROOT . '/' . drupal_get_path('module', 'print') . '/print.pages.inc');

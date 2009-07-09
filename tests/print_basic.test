@@ -6,6 +6,8 @@
  * print module simpletest tests
  *
  * This file includes the defined tests for the print module.
+ *
+ * @ingroup print
  */
 
 class PrintBasicTest extends DrupalWebTestCase {

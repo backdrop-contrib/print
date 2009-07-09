@@ -4,6 +4,8 @@
 /**
  * @file
  * Install file of the print_pdf module
+ *
+ * @ingroup print
  */
 
 /**

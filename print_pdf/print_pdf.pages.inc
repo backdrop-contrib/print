@@ -7,6 +7,8 @@
  *
  * This file is included by the print_pdf module and includes the
  * functions that interface with the PDF generation packages.
+ *
+ * @ingroup print
  */
 
 require_once(DRUPAL_ROOT . '/' . drupal_get_path('module', 'print') . '/print.pages.inc');

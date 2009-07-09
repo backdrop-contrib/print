@@ -7,6 +7,8 @@
  *
  * This file is included by the core PF module, and includes the
  * settings form.
+ *
+ * @ingroup print
  */
 
 /**
