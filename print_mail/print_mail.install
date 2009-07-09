@@ -120,29 +120,3 @@ function print_mail_schema() {
 
   return $schema;
 }
-
-/**
- * Update to version 6.x-1.2
- */
-function print_mail_update_6003() {
-  // Delete custom text strings set to the default
-  $ret = array();
-  $vars = array(
-    'print_mail_link_text' => 'Send to friend',
-    'print_mail_text_subject' => '!user has sent you a message from !site',
-    'print_mail_text_message' => 'Message from sender',
-    'print_mail_text_content' => '',
-    'print_mail_text_confirmation' => 'Thank you for spreading the word about !site.',
-  );
-
-  $t = get_t();
-
-  foreach ($vars as $name => $default) {
-    if (variable_get($name, '') == $t($default)) {
-      variable_del($name);
-    }
-  }
-
-  menu_rebuild();
-  return $ret;
-}
