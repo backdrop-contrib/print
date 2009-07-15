@@ -309,7 +309,7 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
     $pdf = stream_get_contents($pipes[1]);
     fclose($pipes[1]);
 
-    stream_set_blocking($xpipes[2], 0);
+    stream_set_blocking($pipes[2], 0);
     $error = stream_get_contents($pipes[2]);
     if (!empty($error)) {
       watchdog('print_pdf', 'wkhtmltopdf: ' . $error);
