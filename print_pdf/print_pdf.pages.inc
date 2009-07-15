@@ -141,6 +141,9 @@ function _print_pdf_dompdf($print, $html, $filename) {
 // dompdf can't handle footers cleanly, so disable the following
 //  $html = theme('print_pdf_dompdf_footer', $html);
 
+  // Convert the euro sign to an HTML entity
+  $html = str_replace('€', '&#0128;', $html);
+
   // Convert from UTF-8 to ISO 8859-1 and then to HTML entities
   if (function_exists('utf8_decode')) {
     $html = utf8_decode($html);
