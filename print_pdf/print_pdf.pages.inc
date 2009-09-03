@@ -219,9 +219,9 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   }
 
   $font = Array(
-    variable_get('print_pdf_font_family', PRINT_PDF_FONT_FAMILY_DEFAULT),
+    check_plain(variable_get('print_pdf_font_family', PRINT_PDF_FONT_FAMILY_DEFAULT)),
     '',
-    variable_get('print_pdf_font_size', PRINT_PDF_FONT_SIZE_DEFAULT),
+    check_plain(variable_get('print_pdf_font_size', PRINT_PDF_FONT_SIZE_DEFAULT)),
   );
   $orientation = drupal_strtoupper($print_pdf_page_orientation[0]);
 

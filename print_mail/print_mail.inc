@@ -130,9 +130,9 @@ function print_mail_form($form_state) {
     $user_name = t('Someone');
   }
   $site_name = variable_get('site_name', t('an interesting site'));
-  $print_mail_text_subject = variable_get('print_mail_text_subject', t('!user has sent you a message from !site'));
+  $print_mail_text_subject = filter_xss(variable_get('print_mail_text_subject', t('!user has sent you a message from !site')));
   $form['fld_subject']['#default_value'] = t($print_mail_text_subject, array('!user' => $user_name, '!site' => $site_name, '!title' => $title));
-  $print_mail_text_content = variable_get('print_mail_text_content', '');
+  $print_mail_text_content = filter_xss(variable_get('print_mail_text_content', ''));
   $form['txt_message']['#default_value'] = t($print_mail_text_content);
 
   return $form;
@@ -246,7 +246,7 @@ function print_mail_form_submit($form, &$form_state) {
     }
     $cid = isset($form_state['values']['cid']) ? $form_state['values']['cid'] : NULL;
 
-    $print_mail_text_message = variable_get('print_mail_text_message', t('Message from sender'));
+    $print_mail_text_message = filter_xss_admin(variable_get('print_mail_text_message', t('Message from sender')));
     $sender_message = $print_mail_text_message . ':<br /><br /><em>' . nl2br(check_plain($form_state['values']['txt_message'])) . '</em>';
 
     $print = print_controller($form_state['values']['path'], $cid, PRINT_MAIL_FORMAT, $form_state['values']['chk_teaser'], $sender_message);
@@ -268,7 +268,7 @@ function print_mail_form_submit($form, &$form_state) {
       $ok = FALSE;
       if (function_exists('job_queue_add') && variable_get('print_mail_job_queue', PRINT_MAIL_JOB_QUEUE_DEFAULT)) {
         $use_job_queue = TRUE;
-        $this_file = drupal_get_path('module', 'print_mail') .'/print_mail.inc';
+        $this_file = drupal_get_path('module', 'print_mail') . '/print_mail.inc';
       }
       else {
         $use_job_queue = FALSE;
@@ -302,7 +302,7 @@ function print_mail_form_submit($form, &$form_state) {
         watchdog('print_mail', '%name [%from] sent %page to [%to]', array('%name' => $form_state['values']['fld_from_name'], '%from' => $form_state['values']['fld_from_addr'], '%page' => $form_state['values']['path'], '%to' => $form_state['values']['txt_to_addrs']));
         $site_name = variable_get('site_name', t('us'));
         $print_mail_text_confirmation = variable_get('print_mail_text_confirmation', t('Thank you for spreading the word about !site.'));
-        drupal_set_message(t($print_mail_text_confirmation, array('!site' => $site_name)));
+        drupal_set_message(check_plain(t($print_mail_text_confirmation, array('!site' => $site_name))));
 
         $nodepath = drupal_get_normal_path($form_state['values']['path']);
         db_update('print_mail_page_counter')
@@ -321,7 +321,7 @@ function print_mail_form_submit($form, &$form_state) {
 }
 
 /**
- * Implementation of hook_mail().
+ * Implements hook_mail().
  */
 function print_mail_mail($key, &$message, $params) {
   switch ($key) {

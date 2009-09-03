@@ -27,9 +27,9 @@ define('PRINT_MAIL_TEASER_CHOICE_DEFAULT', 1);
 define('PRINT_MAIL_JOB_QUEUE_DEFAULT', 0);
 
 /**
- * Implementation of hook_perm().
+ * Implements hook_permission().
  */
-function print_mail_perm() {
+function print_mail_permission() {
   return array(
     'access send to friend' => array(
       'title' => t('Access the Send To Friend functionality'),
@@ -39,7 +39,7 @@ function print_mail_perm() {
 }
 
 /**
- * Implementation of hook_theme().
+ * Implements hook_theme().
  */
 function print_mail_theme() {
   return array(
@@ -48,12 +48,13 @@ function print_mail_theme() {
     ),
     'print_mail_form' => array(
       'arguments' => array('form'),
+      'file' => 'print_mail.inc',
     ),
   );
 }
 
 /**
- * Implementation of hook_menu().
+ * Implements hook_menu().
  */
 function print_mail_menu() {
   $items = array();
@@ -64,6 +65,7 @@ function print_mail_menu() {
     'page arguments' => array('print_mail_form'),
     'access arguments' => array('access send to friend'),
     'type' => MENU_CALLBACK,
+    'file' => 'print_mail.inc',
   );
   $items[PRINTMAIL_PATH . '/' . PRINTMAIL_PATH] = array(
     'page callback' => 'drupal_access_denied',
@@ -75,6 +77,7 @@ function print_mail_menu() {
     'access arguments'  => array('administer print'),
     'weight' => 2,
     'type' => MENU_LOCAL_TASK,
+    'file' => 'print_mail.admin.inc',
   );
   $items['admin/settings/print/email/options'] = array(
     'title' => 'Options',
@@ -88,13 +91,14 @@ function print_mail_menu() {
     'access arguments'  => array('administer print'),
     'weight' => 2,
     'type' => MENU_LOCAL_TASK,
+    'file' => 'print_mail.admin.inc',
   );
 
   return $items;
 }
 
 /**
- * Implementation of hook_block_list().
+ * Implements hook_block_list().
  */
 function print_mail_block_list() {
       $block[0]['info'] = t('Most emailed');
@@ -102,7 +106,7 @@ function print_mail_block_list() {
 }
 
 /**
- * Implementation of hook_block_view().
+ * Implements hook_block_view().
  */
 function print_mail_block_view($delta = 0) {
       switch ($delta) {
@@ -123,12 +127,12 @@ function print_mail_block_view($delta = 0) {
 }
 
 /**
- * Implementation of hook_node_view().
+ * Implements hook_node_view().
  */
-function print_mail_node_view($node, $teaser) {
+function print_mail_node_view($node, $build_mode) {
   $print_mail_link_pos = variable_get('print_mail_link_pos', array(PRINT_MAIL_LINK_POS_DEFAULT => PRINT_MAIL_LINK_POS_DEFAULT));
   $print_mail_link_use_alias = variable_get('print_mail_link_use_alias', PRINT_MAIL_LINK_USE_ALIAS_DEFAULT);
-  $allowed_type = print_mail_link_allowed(array('type' => 'node', 'node' => $node, 'teaser' => $teaser));
+  $allowed_type = print_mail_link_allowed(array('type' => 'node', 'node' => $node, 'teaser' => ($build_mode == 'teaser')));
   if (($allowed_type) && !empty($print_mail_link_pos['link'])) {
     drupal_add_css(drupal_get_path('module', 'print') . '/css/printlinks.css');
     $links = array();
@@ -166,14 +170,14 @@ function print_mail_node_view($node, $teaser) {
     }
 
     $node->content['links']['print_mail'] = array(
-      '#type' => 'node_links',
-      '#value' => $links,
+      '#theme' => 'links',
+      '#links' => $links,
+      '#attributes' => array('class' => 'links inline'),
     );
   }
 
   // Insert content corner links
-  if (($teaser === FALSE) && !empty($print_mail_link_pos['corner']) &&
-      isset($node->build_mode) && ($node->build_mode == NODE_BUILD_NORMAL)) {
+  if (!empty($print_mail_link_pos['corner']) && ($build_mode == 'full')) {
     $link = print_mail_insert_link(NULL, $node);
     if ($link) {
       $node->content['print_links']['#markup'] = preg_replace('!</span>$!', $link . '</span>', $node->content['print_links']['#markup']);
@@ -182,7 +186,7 @@ function print_mail_node_view($node, $teaser) {
 }
 
 /**
- * Implementation of hook_help().
+ * Implements hook_help().
  */
 function print_mail_help($path, $arg) {
   $print_mail_link_pos = variable_get('print_mail_link_pos', array(PRINT_MAIL_LINK_POS_DEFAULT => PRINT_MAIL_LINK_POS_DEFAULT));
@@ -201,7 +205,7 @@ function print_mail_help($path, $arg) {
 }
 
 /**
- * Implementation of hook_node_load().
+ * Implements hook_node_load().
  */
 function print_mail_node_load($nodes, $types) {
   foreach ($nodes as $node) {
@@ -210,7 +214,7 @@ function print_mail_node_load($nodes, $types) {
 }
 
 /**
- * Implementation of hook_node_update().
+ * Implements hook_node_update().
  */
 function print_mail_node_update($node) {
   if (user_access('administer print') || user_access('node-specific print configuration')) {
@@ -219,7 +223,7 @@ function print_mail_node_update($node) {
 }
 
 /**
- * Implementation of hook_node_delete().
+ * Implements hook_node_delete().
  */
 function print_mail_node_delete($node) {
   db_delete('print_mail_node_conf')
@@ -231,9 +235,9 @@ function print_mail_node_delete($node) {
 }
 
 /**
- * Implementation of hook_form_alter().
+ * Implements hook_form_alter().
  */
-function print_mail_form_alter(&$form, $form_state, $form_id) {
+function print_mail_form_alter(&$form, &$form_state, $form_id) {
   // Add the node-type settings option to activate the mail version link
   if ((user_access('administer print') || user_access('node-specific print configuration')) &&
       (($form_id == 'node_type_form') || !empty($form['#node_edit_form']))) {
@@ -270,7 +274,7 @@ function print_mail_form_alter(&$form, $form_state, $form_id) {
 }
 
 /**
- * Implementation of hook_job_queue_functions().
+ * Implements hook_job_queue_functions().
  */
 function print_mail_job_queue_functions() {
   $functions['print_mail'] = array(
@@ -340,7 +344,7 @@ function _print_mail_node_conf_modify($nid, $link, $comments, $url_list) {
 function theme_print_mail_format_link() {
   $print_mail_link_class  = variable_get('print_mail_link_class', PRINT_MAIL_LINK_CLASS_DEFAULT);
   $print_mail_show_link = variable_get('print_mail_show_link', PRINT_MAIL_SHOW_LINK_DEFAULT);
-  $print_mail_link_text = variable_get('print_mail_link_text', t('Send to friend'));
+  $print_mail_link_text = filter_xss(variable_get('print_mail_link_text', t('Send to friend')));
 
   $img = drupal_get_path('module', 'print') . '/icons/mail_icon.gif';
   $title = t('Send this page by e-mail.');

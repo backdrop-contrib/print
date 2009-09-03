@@ -9,7 +9,7 @@
  */
 
 /**
- * Implementation of hook_install().
+ * Implements hook_install().
  */
 function print_install() {
   drupal_install_schema('print');
@@ -21,7 +21,7 @@ function print_install() {
 }
 
 /**
- * Implementation of hook_uninstall().
+ * Implements hook_uninstall().
  */
 function print_uninstall() {
   drupal_uninstall_schema('print');
@@ -69,7 +69,7 @@ function print_uninstall() {
 }
 
 /**
- * Implementation of hook_schema().
+ * Implements hook_schema().
  */
 function print_schema() {
   $schema['print_node_conf'] = array(

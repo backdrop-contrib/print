@@ -176,7 +176,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
 
   if (!empty($print_css)) {
     $replace_pairs = array('%b' => base_path(), '%t' => path_to_theme());
-    $user_css = strip_tags(strtr($print_css, $replace_pairs));
+    $user_css = check_url(strtr($print_css, $replace_pairs));
   }
   else {
     drupal_add_css(drupal_get_path('module', 'print') . '/css/print.css');
@@ -229,25 +229,24 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
       $logo_url = strip_tags($print_logo_url);
       break;
   }
-  $print['logo'] = $logo_url ? "<img class='print-logo' src='$logo_url' alt='' />\n" : '';
+  $print['logo'] = $logo_url ? "<img class='print-logo' src='" . check_url($logo_url) . "' alt='' />\n" : '';
 
   switch ($print_footer_options) {
     case 0: // none
       $footer = '';
       break;
     case 1: // theme's
-      $footer = filter_xss_admin(variable_get('site_footer', FALSE)) . "\n" . theme('blocks', 'footer');
-      $logo_url = theme_get_setting('logo');
+      $footer = variable_get('site_footer', FALSE) . "\n" . theme('blocks', 'footer');
       break;
     case 2: // user-specifed
       $footer = $print_footer_user;
       break;
   }
-  $print['footer_message'] = $footer;
+  $print['footer_message'] = filter_xss_admin($footer);
 
   $published_site = variable_get('site_name', 0);
   if ($published_site) {
-    $print_text_published = variable_get('print_text_published', t('Published on %site_name'));
+    $print_text_published = filter_xss(variable_get('print_text_published', t('Published on %site_name')));
     $published = t($print_text_published, array('%site_name' => $published_site));
     $print['site_name'] = $published . ' (' . l($base_url, $base_url) . ')';
   }
@@ -267,11 +266,11 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
       $url .= '#comment-$cid';
     }
     $retrieved_date = format_date(REQUEST_TIME, 'small');
-    $print_text_retrieved = variable_get('print_text_retrieved', t('retrieved on %date'));
+    $print_text_retrieved = filter_xss(variable_get('print_text_retrieved', t('retrieved on %date')));
     $retrieved = t($print_text_retrieved, array('%date' => $retrieved_date));
     $print['printdate'] = $print_sourceurl_date ? " ($retrieved)" : '';
 
-    $source_url = variable_get('print_text_source_url', t('Source URL'));
+    $source_url = filter_xss(variable_get('print_text_source_url', t('Source URL')));
     $print['source_url'] = '<strong>' . $source_url . $print['printdate'] . ':</strong> ' . l($url, $url);
   }
   else {
@@ -282,11 +281,11 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
     $node_type = $node->type;
 
     if (theme_get_setting("toggle_node_info_$node_type")) {
-      $print_text_by = variable_get('print_text_by', t('By %author'));
+      $print_text_by = filter_xss(variable_get('print_text_by', t('By %author')));
       $by_author = ($node->name ? $node->name : variable_get('anonymous', t('Anonymous')));
       $print['submitted'] = t($print_text_by, array('%author' => $by_author));
 
-      $print_text_created = variable_get('print_text_created', t('Created %date'));
+      $print_text_created = filter_xss(variable_get('print_text_created', t('Created %date')));
       $created_datetime = format_date($node->created, 'small');
       $print['created'] = t($print_text_created, array('%date' => $created_datetime));
     }
@@ -307,7 +306,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   $breadcrumb = drupal_get_breadcrumb();
   if (!empty($breadcrumb)) {
     $breadcrumb[] = menu_get_active_title();
-    $print['breadcrumb'] = implode(' > ', $breadcrumb);
+    $print['breadcrumb'] = filter_xss(implode(' > ', $breadcrumb));
   }
   else {
     $print['breadcrumb'] = '';
@@ -323,7 +322,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
       for ($i = 0; $i < $max; $i++) {
         $pfp_links .= '[' . ($i + 1) . '] ' . $urls[$i] . "<br />\n";
       }
-      $links = variable_get('print_text_links', t('Links'));
+      $links = filter_xss(variable_get('print_text_links', t('Links')));
       $print['pfp_links'] = "<p><strong>$links:</strong><br />$pfp_links</p>";
     }
   }
@@ -561,7 +560,7 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
   $node->printing = TRUE;
 
   //use the proper build_mode
-  $node->build_mode = NODE_BUILD_PRINT;
+  $node->build_mode = 'print';
 
   // Turn off Pagination by the Paging module
   unset($node->pages);

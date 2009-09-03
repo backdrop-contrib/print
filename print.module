@@ -79,9 +79,9 @@ define('PRINT_ALLOW_BOOK_LINK', 2);
 define('PRINT_TYPE_FIELDS_WEIGHT', 30);
 
 /**
- * Implementation of hook_perm().
+ * Implements hook_permission().
  */
-function print_perm() {
+function print_permission() {
   return array(
     'access print' => array(
       'title' => t('Access the printer-friendly page'),
@@ -99,7 +99,7 @@ function print_perm() {
 }
 
 /**
- * Implementation of hook_theme().
+ * Implements hook_theme().
  */
 function print_theme() {
   return array(
@@ -110,7 +110,7 @@ function print_theme() {
 }
 
 /**
- * Implementation of hook_menu().
+ * Implements hook_menu().
  */
 function print_menu() {
   $items = array();
@@ -120,6 +120,7 @@ function print_menu() {
     'page callback' => 'print_controller_html',
     'access arguments' => array('access print'),
     'type' => MENU_CALLBACK,
+    'file' => 'print.pages.inc',
   );
   $items[PRINT_PATH . '/' . PRINT_PATH] = array(
     'page callback' => 'drupal_access_denied',
@@ -130,6 +131,7 @@ function print_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_html_settings'),
     'access arguments'  => array('administer print'),
+    'file' => 'print.admin.inc',
   );
   $items['admin/settings/print/html'] = array(
     'title' => 'Web page',
@@ -148,6 +150,7 @@ function print_menu() {
     'access arguments'  => array('administer print'),
     'weight' => 2,
     'type' => MENU_LOCAL_TASK,
+    'file' => 'print.admin.inc',
   );
   $items['admin/settings/print/common'] = array(
     'title' => 'Settings',
@@ -156,6 +159,7 @@ function print_menu() {
     'access arguments'  => array('administer print'),
     'weight' => 10,
     'type' => MENU_LOCAL_TASK,
+    'file' => 'print.admin.inc',
   );
   $items['admin/settings/print/common/options'] = array(
     'title' => 'Options',
@@ -169,13 +173,14 @@ function print_menu() {
     'access arguments'  => array('administer print'),
     'weight' => 2,
     'type' => MENU_LOCAL_TASK,
+    'file' => 'print.admin.inc',
   );
 
   return $items;
 }
 
 /**
- * Implementation of hook_block_list().
+ * Implements hook_block_list().
  */
 function print_block_list() {
       $block[0]['info'] = t('Printer, e-mail and PDF versions');
@@ -184,7 +189,7 @@ function print_block_list() {
 }
 
 /**
- * Implementation of hook_block_view().
+ * Implements hook_block_view().
  */
 function print_block_view($delta = 0) {
       switch ($delta) {
@@ -224,7 +229,7 @@ function print_block_view($delta = 0) {
 }
 
 /**
- * Implementation of hook_link_alter().
+ * Implements hook_link_alter().
  */
 function print_link_alter(array &$links, $node) {
   foreach ($links as $module => $link) {
@@ -263,13 +268,13 @@ function print_link_alter(array &$links, $node) {
 }
 
 /**
- * Implementation of hook_help().
+ * Implements hook_help().
  */
 function print_help($path, $arg) {
   switch ($path) {
     case 'admin/help#print':
       // Return a line-break version of the module README
-      return filter_filter('process', 1, NULL, file_get_contents(drupal_get_path('module', 'print') . '/README.txt') );
+      return _filter_autop(file_get_contents(drupal_get_path('module', 'print') . '/README.txt'));
   }
 
   $print_html_link_pos = variable_get('print_html_link_pos', array(PRINT_HTML_LINK_POS_DEFAULT => PRINT_HTML_LINK_POS_DEFAULT));
@@ -288,12 +293,12 @@ function print_help($path, $arg) {
 }
 
 /**
- * Implementation of hook_node_view().
+ * Implements hook_node_view().
  */
-function print_node_view($node, $teaser) {
+function print_node_view($node, $build_mode) {
   $print_html_link_pos = variable_get('print_html_link_pos', array(PRINT_HTML_LINK_POS_DEFAULT => PRINT_HTML_LINK_POS_DEFAULT));
   $print_html_link_use_alias = variable_get('print_html_link_use_alias', PRINT_HTML_LINK_USE_ALIAS_DEFAULT);
-  $allowed_type = print_link_allowed(array('type' => 'node', 'node' => $node, 'teaser' => $teaser));
+  $allowed_type = print_link_allowed(array('type' => 'node', 'node' => $node, 'teaser' => ($build_mode == 'teaser')));
   if (($allowed_type === PRINT_ALLOW_NORMAL_LINK) && !isset($node->book) && !empty($print_html_link_pos['link'])) {
     drupal_add_css(drupal_get_path('module', 'print') . '/css/printlinks.css');
     $links = array();
@@ -322,12 +327,13 @@ function print_node_view($node, $teaser) {
     );
 
     $node->content['links']['print_html'] = array(
-      '#type' => 'node_links',
-      '#value' => $links,
+      '#theme' => 'links',
+      '#links' => $links,
+      '#attributes' => array('class' => 'links inline'),
     );
   }
 
-  if (($teaser === FALSE) && isset($node->build_mode) && ($node->build_mode == NODE_BUILD_NORMAL)) {
+  if ($build_mode == 'full') {
       // Insert content corner links
       $node->content['print_links'] = array(
         '#markup' => "<span class='print-link'></span>",
@@ -343,7 +349,7 @@ function print_node_view($node, $teaser) {
 }
 
 /**
- * Implementation of hook_node_load().
+ * Implements hook_node_load().
  */
 function print_node_load($nodes, $types) {
   foreach ($nodes as $node) {
@@ -352,7 +358,7 @@ function print_node_load($nodes, $types) {
 }
 
 /**
- * Implementation of hook_node_update().
+ * Implements hook_node_update().
  */
 function print_node_update($node) {
   if (user_access('administer print') || user_access('node-specific print configuration')) {
@@ -361,7 +367,7 @@ function print_node_update($node) {
 }
 
 /**
- * Implementation of hook_node_delete().
+ * Implements hook_node_delete().
  */
 function print_node_delete($node) {
   db_delete('print_node_conf')
@@ -373,9 +379,9 @@ function print_node_delete($node) {
 }
 
 /**
- * Implementation of hook_form_alter().
+ * Implements hook_form_alter().
  */
-function print_form_alter(&$form, $form_state, $form_id) {
+function print_form_alter(&$form, &$form_state, $form_id) {
   // Add the node-type settings option to activate the printer-friendly version link
   if ((user_access('administer print') || user_access('node-specific print configuration')) &&
       (($form_id == 'node_type_form') || !empty($form['#node_edit_form']))) {
@@ -422,7 +428,7 @@ function print_form_alter(&$form, $form_state, $form_id) {
 }
 
 /**
- * Implementation of hook_cck_extra_fields().
+ * Implements hook_cck_extra_fields().
  */
 function print_cck_extra_fields($type_name) {
   $fields['print'] = array(
@@ -434,14 +440,14 @@ function print_cck_extra_fields($type_name) {
 }
 
 /**
- * Implementation of hook_cck_build_modes().
+ * Implements hook_field_build_modes().
  */
-function print_cck_build_modes() {
+function print_field_build_modes() {
   return array(
     'print' => array(
       'title' => t('Print'),
       'build modes' => array(
-        NODE_BUILD_PRINT => array(
+        'print' => array(
           'title' => t('Print'),
           'views style' => TRUE,
         ),
@@ -606,7 +612,7 @@ function theme_print_format_link() {
   $print_html_link_class = variable_get('print_html_link_class', PRINT_HTML_LINK_CLASS_DEFAULT);
   $print_html_new_window = variable_get('print_html_new_window', PRINT_HTML_NEW_WINDOW_DEFAULT);
   $print_html_show_link = variable_get('print_html_show_link', PRINT_HTML_SHOW_LINK_DEFAULT);
-  $print_html_link_text = variable_get('print_html_link_text', t('Printer-friendly version'));
+  $print_html_link_text = filter_xss(variable_get('print_html_link_text', t('Printer-friendly version')));
 
   $img = drupal_get_path('module', 'print') . '/icons/print_icon.gif';
   $title = t('Display a printer-friendly version of this page.');
