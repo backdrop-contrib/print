@@ -181,7 +181,7 @@ function print_mail_form_validate($form, &$form_state) {
   }
 
   // All new-lines are replaced by commas
-  $to_addrs = preg_replace('![\r|\n|,]+!', ',', $form_state['values']['txt_to_addrs']);
+  $to_addrs = preg_replace('![\r|\n|,]+!', ',', trim($form_state['values']['txt_to_addrs']));
   // Create an array from the string
   $to_array = explode(',', $to_addrs);
   // Verify each element of the array
