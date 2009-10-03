@@ -120,11 +120,11 @@ function print_mail_form($form_state) {
   );
 
   if ($user->uid != 0) {
-    $user_name = $user->name;
+    $user_name = check_plain(strip_tags(theme('username', $user)));
     $form['fld_from_addr']['#default_value'] = $user->mail;
     $form['fld_from_addr']['#disabled'] = TRUE;
     $form['fld_from_addr']['#value'] = $user->mail;
-    $form['fld_from_name']['#default_value'] = $user->name;
+    $form['fld_from_name']['#default_value'] = $user_name;
   }
   else {
     $user_name = t('Someone');
