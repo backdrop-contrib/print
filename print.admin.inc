@@ -293,6 +293,13 @@ function print_html_settings() {
     '#description' => t("Automatically calls the browser's print function when the printer-friendly version is displayed."),
   );
 
+  $form['settings']['print_html_windowclose'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Close window after sending to printer'),
+    '#default_value' => variable_get('print_html_windowclose', PRINT_HTML_WINDOWCLOSE_DEFAULT),
+    '#description' => t("When the above options are enabled, this option will close the window after its contents are printed."),
+  );
+
   $form['settings']['print_robots_settings'] = array(
       '#type' => 'fieldset',
       '#title' => t('Robots META tags'),

@@ -49,6 +49,7 @@ function print_uninstall() {
   variable_del('print_html_book_link');
   variable_del('print_html_new_window');
   variable_del('print_html_sendtoprinter');
+  variable_del('print_html_windowclose');
   variable_del('print_robots_noindex');
   variable_del('print_robots_nofollow');
   variable_del('print_robots_noarchive');
