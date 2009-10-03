@@ -12,6 +12,8 @@ define('PRINTPDF_PATH', 'printpdf');
 
 define('PRINT_PDF_FORMAT', 'pdf');
 
+define('PRINT_PDF_LIB_PATH', 'sites/all/libraries');
+
 define('PRINT_PDF_LINK_POS_DEFAULT', 'link');
 define('PRINT_PDF_SHOW_LINK_DEFAULT', 1);
 define('PRINT_PDF_NODE_LINK_VISIBILITY_DEFAULT', 0);
