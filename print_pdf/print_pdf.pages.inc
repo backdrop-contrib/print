@@ -297,6 +297,10 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
     $xprocess = proc_open($xcmd, $xdescriptor, $xpipes, NULL, NULL);
   }
 
+  if (function_exists('token_replace') && !empty($print_pdf_wkhtmltopdf_options)) {
+    $print_pdf_wkhtmltopdf_options = token_replace($print_pdf_wkhtmltopdf_options, 'node', $print['node']);
+  }
+
   $descriptor = array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'w'));
   $cmd = realpath($print_pdf_pdf_tool) . " --page-size $print_pdf_paper_size --orientation $print_pdf_page_orientation --dpi $dpi $print_pdf_wkhtmltopdf_options - -";
 

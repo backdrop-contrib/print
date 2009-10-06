@@ -193,7 +193,7 @@ function print_pdf_settings() {
       '#type' => 'textfield',
       '#title' => t('wkhtmltopdf options'),
       '#default_value' => variable_get('print_pdf_wkhtmltopdf_options', PRINT_PDF_WKHTMLTOPDF_OPTIONS),
-      '#description' => t('(wkhtmltopdf only) Set any additional options to be passed to the wkhtmltopdf executable.'),
+      '#description' => t('(wkhtmltopdf only) Set any additional options to be passed to the wkhtmltopdf executable. Tokens may be used in these options (see list below).'),
     );
     $form['settings']['print_pdf_xvfb_options'] = array(
       '#type' => 'textfield',
