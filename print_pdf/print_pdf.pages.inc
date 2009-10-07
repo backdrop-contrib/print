@@ -122,6 +122,7 @@ function _print_pdf_dompdf($print, $html, $filename) {
   $print_pdf_page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
   $print_pdf_content_disposition = variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT);
   require_once(DRUPAL_ROOT . '/' . $print_pdf_pdf_tool);
+  spl_autoload_register('DOMPDF_autoload');
 
   // dompdf seems to have problems with something in system.css so let's not use it
   $html = preg_replace('!<link.*?modules/system/system.css.*?/>!', '', $html);
