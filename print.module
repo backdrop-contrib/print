@@ -124,7 +124,7 @@ function print_menu() {
     'file' => 'print.pages.inc',
   );
   $items[PRINT_PATH . '/' . PRINT_PATH] = array(
-    'page callback' => 'drupal_access_denied',
+    'access callback' => FALSE,
   );
   $items['admin/settings/print'] = array(
     'title' => 'Printer, e-mail and PDF versions',
@@ -691,7 +691,7 @@ function print_insert_link($path = NULL, $node = NULL) {
 }
 
 /**
- * Determine if the current page is enabled according to the visibility settings
+ * Determine if the provided page is enabled according to the visibility settings
  *
  * @param $visibility
  *   current visibility settings:
@@ -702,7 +702,7 @@ function print_insert_link($path = NULL, $node = NULL) {
  * @return
  *   TRUE if it is enabled, FALSE otherwise
  */
-function _print_page_match($visibility, $pages) {
+function _print_page_match($visibility, $path, $pages) {
   if ($pages) {
     if ($visibility == 2) {
       if (module_exists('php')) {
@@ -712,10 +712,10 @@ function _print_page_match($visibility, $pages) {
         return FALSE;
       }
     }
-    $path = drupal_get_path_alias($_GET['q']);
+    $alias = drupal_get_path_alias($path);
     $page_match = drupal_match_path($path, $pages);
-    if ($path != $_GET['q']) {
-      $page_match = $page_match || drupal_match_path($_GET['q'], $pages);
+    if ($alias != $path) {
+      $page_match = $page_match || drupal_match_path($alias, $pages);
     }
 
     return !($visibility xor $page_match);
@@ -758,7 +758,7 @@ function print_link_allowed($args) {
     $print_html_node_link_visibility = variable_get('print_html_node_link_visibility', PRINT_HTML_NODE_LINK_VISIBILITY_DEFAULT);
     $print_html_node_link_pages = variable_get('print_html_node_link_pages', PRINT_HTML_NODE_LINK_PAGES_DEFAULT);
 
-    if (!_print_page_match($print_html_node_link_visibility, $print_html_node_link_pages)) {
+    if (!_print_page_match($print_html_node_link_visibility, "node/". $node->nid, $print_html_node_link_pages)) {
       // Page not in visibility list
       return FALSE;
     }
@@ -802,7 +802,7 @@ function print_link_allowed($args) {
     $print_html_sys_link_visibility = variable_get('print_html_sys_link_visibility', PRINT_HTML_SYS_LINK_VISIBILITY_DEFAULT);
     $print_html_sys_link_pages = variable_get('print_html_sys_link_pages', PRINT_HTML_SYS_LINK_PAGES_DEFAULT);
 
-    return _print_page_match($print_html_sys_link_visibility, $print_html_sys_link_pages);
+    return _print_page_match($print_html_sys_link_visibility, $_GET['q'], $print_html_sys_link_pages);
   }
   return FALSE;
 }

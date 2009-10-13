@@ -96,7 +96,7 @@ function print_pdf_menu() {
     'file' => 'print_pdf.pages.inc',
   );
   $items[PRINTPDF_PATH . '/' . PRINTPDF_PATH] = array(
-    'page callback' => 'drupal_access_denied',
+    'access callback' => FALSE,
   );
   $items['admin/settings/print/pdf'] = array(
     'title' => 'PDF',
@@ -501,7 +501,7 @@ function print_pdf_link_allowed($args) {
     $print_pdf_node_link_visibility = variable_get('print_pdf_node_link_visibility', PRINT_PDF_NODE_LINK_VISIBILITY_DEFAULT);
     $print_pdf_node_link_pages = variable_get('print_pdf_node_link_pages', PRINT_PDF_NODE_LINK_PAGES_DEFAULT);
 
-    if (!_print_page_match($print_pdf_node_link_visibility, $print_pdf_node_link_pages)) {
+    if (!_print_page_match($print_pdf_node_link_visibility, "node/". $node->nid, $print_pdf_node_link_pages)) {
       // Page not in visibility list
       return FALSE;
     }
@@ -545,7 +545,7 @@ function print_pdf_link_allowed($args) {
     $print_pdf_sys_link_visibility = variable_get('print_pdf_sys_link_visibility', PRINT_PDF_SYS_LINK_VISIBILITY_DEFAULT);
     $print_pdf_sys_link_pages = variable_get('print_pdf_sys_link_pages', PRINT_PDF_SYS_LINK_PAGES_DEFAULT);
 
-    return _print_page_match($print_pdf_sys_link_visibility, $print_pdf_sys_link_pages);
+    return _print_page_match($print_pdf_sys_link_visibility, $_GET['q'], $print_pdf_sys_link_pages);
   }
   return FALSE;
 }
