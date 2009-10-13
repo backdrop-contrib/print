@@ -87,7 +87,7 @@ function print_pdf_controller() {
   elseif (basename($print_pdf_pdf_tool) == 'tcpdf.php') {
     _print_pdf_tcpdf($print, $html, $pdf_filename);
   }
-  elseif (basename($print_pdf_pdf_tool) == 'wkhtmltopdf') {
+  elseif (basename($print_pdf_pdf_tool, '.exe') == 'wkhtmltopdf') {
     _print_pdf_wkhtmltopdf($print, $html, $pdf_filename);
   }
   else {
@@ -303,7 +303,8 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
   }
 
   $descriptor = array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'w'));
-  $cmd = realpath($print_pdf_pdf_tool) . " --page-size $print_pdf_paper_size --orientation $print_pdf_page_orientation --dpi $dpi $print_pdf_wkhtmltopdf_options - -";
+  $pdf_output = (stristr(PHP_OS, 'Win')) ? tempnam(variable_get('file_temporary_path', conf_path() . '/private/temp'), 'pdf') : '-';
+  $cmd = realpath($print_pdf_pdf_tool) . " --page-size $print_pdf_paper_size --orientation $print_pdf_page_orientation --dpi $dpi $print_pdf_wkhtmltopdf_options - $pdf_output";
 
   $process = proc_open($cmd, $descriptor, $pipes, NULL, isset($xvfb_binary) ? array('DISPLAY' => ':' . $xdisplay) : NULL);
 
@@ -311,7 +312,14 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
     fwrite($pipes[0], $html);
     fclose($pipes[0]);
 
-    $pdf = stream_get_contents($pipes[1]);
+    if (stristr(PHP_OS, 'Win')) {
+      // It seems Windows can't use the pipe properly so get the contents from a file and then delete it.
+      $pdf = file_get_contents($pdf_outputg);
+      unlink($pdf_output);
+    }
+    else {
+      $pdf = stream_get_contents($pipes[1]);
+    }
     fclose($pipes[1]);
 
     stream_set_blocking($pipes[2], 0);
