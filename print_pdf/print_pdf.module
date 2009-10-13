@@ -98,7 +98,7 @@ function print_pdf_menu() {
   $items[PRINTPDF_PATH . '/' . PRINTPDF_PATH] = array(
     'access callback' => FALSE,
   );
-  $items['admin/settings/print/pdf'] = array(
+  $items['admin/config/print/pdf'] = array(
     'title' => 'PDF',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_pdf_settings'),
@@ -107,12 +107,12 @@ function print_pdf_menu() {
     'type' => MENU_LOCAL_TASK,
     'file' => 'print_pdf.admin.inc',
   );
-  $items['admin/settings/print/pdf/options'] = array(
+  $items['admin/config/print/pdf/options'] = array(
     'title' => 'Options',
     'weight' => 1,
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
-  $items['admin/settings/print/pdf/strings'] = array(
+  $items['admin/config/print/pdf/strings'] = array(
     'title' => 'Text strings',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_pdf_strings_settings'),
@@ -168,7 +168,7 @@ function print_pdf_requirements($phase) {
         $requirements['print_pdf_tool'] = array(
           'title' => $t('PDF version'),
           'value' => $t('No PDF tool selected'),
-          'description' => $t('Please configure it in the <a href="@url">PDF settings page</a>. ', array('@url' => url('admin/settings/print/pdf'))),
+          'description' => $t('Please configure it in the <a href="@url">PDF settings page</a>. ', array('@url' => url('admin/config/print/pdf'))),
           'severity' => REQUIREMENT_ERROR,
         );
       }

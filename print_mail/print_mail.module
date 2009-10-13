@@ -70,7 +70,7 @@ function print_mail_menu() {
   $items[PRINTMAIL_PATH . '/' . PRINTMAIL_PATH] = array(
     'access callback' => FALSE,
   );
-  $items['admin/settings/print/email'] = array(
+  $items['admin/config/print/email'] = array(
     'title' => 'e-mail',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_mail_settings'),
@@ -79,12 +79,12 @@ function print_mail_menu() {
     'type' => MENU_LOCAL_TASK,
     'file' => 'print_mail.admin.inc',
   );
-  $items['admin/settings/print/email/options'] = array(
+  $items['admin/config/print/email/options'] = array(
     'title' => 'Options',
     'weight' => 1,
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
-  $items['admin/settings/print/email/strings'] = array(
+  $items['admin/config/print/email/strings'] = array(
     'title' => 'Text strings',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_mail_strings_settings'),

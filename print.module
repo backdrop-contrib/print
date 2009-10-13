@@ -126,7 +126,7 @@ function print_menu() {
   $items[PRINT_PATH . '/' . PRINT_PATH] = array(
     'access callback' => FALSE,
   );
-  $items['admin/settings/print'] = array(
+  $items['admin/config/print'] = array(
     'title' => 'Printer, e-mail and PDF versions',
     'description' => 'Adds a printer-friendly version link to content and administrative pages.',
     'page callback' => 'drupal_get_form',
@@ -134,17 +134,17 @@ function print_menu() {
     'access arguments'  => array('administer print'),
     'file' => 'print.admin.inc',
   );
-  $items['admin/settings/print/html'] = array(
+  $items['admin/config/print/html'] = array(
     'title' => 'Web page',
     'weight' => 1,
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
-  $items['admin/settings/print/html/options'] = array(
+  $items['admin/config/print/html/options'] = array(
     'title' => 'Options',
     'weight' => 1,
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
-  $items['admin/settings/print/html/strings'] = array(
+  $items['admin/config/print/html/strings'] = array(
     'title' => 'Text strings',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_html_strings_settings'),
@@ -153,7 +153,7 @@ function print_menu() {
     'type' => MENU_LOCAL_TASK,
     'file' => 'print.admin.inc',
   );
-  $items['admin/settings/print/common'] = array(
+  $items['admin/config/print/common'] = array(
     'title' => 'Settings',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_main_settings'),
@@ -162,12 +162,12 @@ function print_menu() {
     'type' => MENU_LOCAL_TASK,
     'file' => 'print.admin.inc',
   );
-  $items['admin/settings/print/common/options'] = array(
+  $items['admin/config/print/common/options'] = array(
     'title' => 'Options',
     'weight' => 1,
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
-  $items['admin/settings/print/common/strings'] = array(
+  $items['admin/config/print/common/strings'] = array(
     'title' => 'Text strings',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_main_strings_settings'),
