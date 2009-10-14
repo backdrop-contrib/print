@@ -63,6 +63,7 @@ function print_mail_menu() {
     'title' => 'Send page by e-mail',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_mail_form'),
+    'access callback' => '_print_mail_access',
     'access arguments' => array('access send to friend'),
     'type' => MENU_CALLBACK,
     'file' => 'print_mail.inc',
@@ -281,6 +282,32 @@ function print_mail_job_queue_functions() {
    'title' => t('Send to friend'),
   );
   return $functions;
+}
+
+/**
+ * Access callback to check a combination of user_acess() and page access
+ *
+ * @param $permission
+ *   permission required to view the page
+ * @return
+ *   TRUE if the user has permission to view the page, FALSE otherwise
+ */
+function _print_mail_access($permission) {
+  $page_access = TRUE;
+  $parts = explode('/', $_GET['q']);
+  if (count($parts) > 1) {
+    unset($parts[0]);
+    $path = implode('/', $parts);
+    if (is_numeric($parts[1])) {
+      $path = 'node/'. $path;
+    }
+    // If the destination page is not accessible, don't show the form
+    if (!($router_item = menu_get_item($path)) || (!$router_item['access'])) {
+      $page_access = FALSE;
+    }
+  }
+
+  return (user_access($permission) && $page_access);
 }
 
 /**

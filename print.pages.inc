@@ -323,7 +323,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
     $pfp_links = '';
     if ($max) {
       for ($i = 0; $i < $max; $i++) {
-        $pfp_links .= '[' . ($i + 1) . '] ' . $urls[$i] . "<br />\n";
+        $pfp_links .= '[' . ($i + 1) . '] ' . check_plain($urls[$i]) . "<br />\n";
       }
       $links = filter_xss(variable_get('print_text_links', t('Links')));
       $print['pfp_links'] = "<p><strong>$links:</strong><br />$pfp_links</p>";
