@@ -192,12 +192,16 @@ function print_pdf_settings() {
     $form['settings']['print_pdf_wkhtmltopdf_options'] = array(
       '#type' => 'textfield',
       '#title' => t('wkhtmltopdf options'),
+      '#size' => 60,
+      '#maxlength' => 250,
       '#default_value' => variable_get('print_pdf_wkhtmltopdf_options', PRINT_PDF_WKHTMLTOPDF_OPTIONS),
       '#description' => t('(wkhtmltopdf only) Set any additional options to be passed to the wkhtmltopdf executable. Tokens may be used in these options (see list below).'),
     );
     $form['settings']['print_pdf_xvfb_options'] = array(
       '#type' => 'textfield',
       '#title' => t('Xvfb options'),
+      '#size' => 60,
+      '#maxlength' => 250,
       '#default_value' => variable_get('print_pdf_xvfb_options', PRINT_PDF_XVFB_OPTIONS),
       '#description' => t('(wkhtmltopdf only) Set any additional options to be passed to the Xvfb executable.'),
     );
