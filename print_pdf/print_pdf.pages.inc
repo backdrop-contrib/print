@@ -314,7 +314,7 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
 
     if (stristr(PHP_OS, 'Win')) {
       // It seems Windows can't use the pipe properly so get the contents from a file and then delete it.
-      $pdf = file_get_contents($pdf_outputg);
+      $pdf = file_get_contents($pdf_output);
       unlink($pdf_output);
     }
     else {
