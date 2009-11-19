@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Print 6.x\n"
 "POT-Creation-Date: 2009-11-19 17:46+0100\n"
-"PO-Revision-Date: 2009-11-19 20:13+0100\n"
+"PO-Revision-Date: 2009-11-19 20:41+0100\n"
 "Last-Translator: Magnus Gunnarsson <seals@passagen.se>\n"
 "Language-Team: drupalsverige.se\n"
 "MIME-Version: 1.0\n"
@@ -398,7 +398,7 @@ msgstr "Textsträng"
 #: print.admin.inc:349
 #: print.pages.inc:256
 msgid "Published on %site_name"
-msgstr "Publicerad %site_name"
+msgstr "Publicerad på %site_name"
 
 #: print.admin.inc:353
 #: print.pages.inc:291
@@ -760,7 +760,7 @@ msgstr "Skicka sida per e-post"
 
 #: print_mail/print_mail.module:70
 msgid "e-mail"
-msgstr "e-post"
+msgstr "E-post"
 
 #: print_mail/print_mail.info:0
 msgid "Provides the capability to send the web page by e-mail"
