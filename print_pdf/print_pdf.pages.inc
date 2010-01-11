@@ -87,7 +87,7 @@ function print_pdf_controller() {
   elseif (basename($print_pdf_pdf_tool) == 'tcpdf.php') {
     _print_pdf_tcpdf($print, $html, $pdf_filename);
   }
-  elseif (basename($print_pdf_pdf_tool, '.exe') == 'wkhtmltopdf') {
+  elseif (substr(basename($print_pdf_pdf_tool, '.exe'), 0, 11) == 'wkhtmltopdf') {
     _print_pdf_wkhtmltopdf($print, $html, $pdf_filename);
   }
   else {
