@@ -373,9 +373,9 @@ function _print_rewrite_urls($matches) {
     if (preg_match('!^(?:href|src)\s*?=(.*)!i', $attribs[$i], $urls) > 0) {
       $url = trim($urls[1], " \t\n\r\0\x0B\"'");
 
-      if (strpos($url, '://') || preg_match('!^mailto:.*?@.*?\..*?$!iu', $url)) {
+      if (strpos(html_entity_decode($url), '://') || preg_match('!^mailto:.*?@.*?\..*?$!iu', html_entity_decode($url))) {
         // URL is absolute, do nothing
-        $newurl = urldecode($url);
+        $newurl = $url;
       }
       else {
         if ($url[0] == '#') {
@@ -388,7 +388,7 @@ function _print_rewrite_urls($matches) {
               $path = "node/$path";
             }
             // Printer-friendly URLs is on, so we need to make it absolute
-            $newurl = url($path, array('fragment' => substr(urldecode($url), 1), 'absolute' => TRUE));
+            $newurl = url($path, array('fragment' => substr($url, 1), 'absolute' => TRUE));
           }
           // Because base href is the original page, change the link to
           // still be usable inside the print page
@@ -398,14 +398,14 @@ function _print_rewrite_urls($matches) {
           // URL is relative, convert it into absolute URL
           if ($url[0] == '/') {
             // If it starts with '/' just append it to the server name
-            $newurl = $base_root . '/' . trim(urldecode($url), '/');
+            $newurl = $base_root . '/' . trim($url, '/');
           }
           elseif (preg_match('!^(?:index.php)?\?q=!i', $url)) {
             // If it starts with ?q=, just prepend with the base URL
-            $newurl = $base_url . '/' . trim(urldecode($url), '/');
+            $newurl = $base_url . '/' . trim($url, '/');
           }
           else {
-            $newurl = url(trim(urldecode($url), '/'), array('absolute' => TRUE));
+            $newurl = url(trim($url, '/'), array('absolute' => TRUE));
           }
           $matches[1] = str_replace($url, $newurl, $matches[1]);
         }
@@ -417,7 +417,7 @@ function _print_rewrite_urls($matches) {
   if (count($matches) == 4) {
     $ret .= $matches[2] . $matches[3];
     if ((!empty($_print_urls)) && (isset($newurl))) {
-      $ret .= ' <span class="print-footnote">[' . _print_friendly_urls(trim(stripslashes($newurl))) . ']</span>';
+      $ret .= ' <span class="print-footnote">[' . _print_friendly_urls(trim($newurl)) . ']</span>';
     }
   }
 
