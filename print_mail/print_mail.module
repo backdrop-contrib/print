@@ -475,13 +475,8 @@ function print_mail_link_allowed($args) {
     static $node_type = FALSE;
 
     $node = $args['node'];
-    if ($node_type === FALSE) {
-      if (isset($node->type)) {
-        $node_type = $node->type;
-      }
-      else {
-        $node_type = '';
-      }
+    if (isset($node->type)) {
+      $node_type = $node->type;
     }
     // Node
     $print_mail_node_link_visibility = variable_get('print_mail_node_link_visibility', PRINT_MAIL_NODE_LINK_VISIBILITY_DEFAULT);
