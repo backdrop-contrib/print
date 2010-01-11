@@ -394,6 +394,7 @@ function print_form_alter(&$form, &$form_state, $form_id) {
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
       '#weight' => (function_exists('cck_extra_field_weight') && isset($form['type'])) ? cck_extra_field_weight($form['type']['#value'], 'print') : PRINT_TYPE_FIELDS_WEIGHT,
+      '#group' => 'additional_settings',
     );
 
     $form['print']['label'] = array(
