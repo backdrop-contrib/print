@@ -214,7 +214,8 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   else {
     $print['css'] = drupal_get_css($drupal_css);
     if (!empty($print_css)) {
-      $print['css'] .= "<link type='text/css' rel='stylesheet' media='all' href='$user_css' />\n";
+      $query_string = '?'. substr(variable_get('css_js_query_string', '0'), 0, 1);
+      $print['css'] .= "<link type='text/css' rel='stylesheet' media='all' href='${user_css}${query_string}' />\n";
     }
   }
 
