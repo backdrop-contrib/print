@@ -185,7 +185,9 @@ function print_menu() {
  */
 function print_block_list() {
       $block[0]['info'] = t('Printer, e-mail and PDF versions');
+      $block[0]['cache'] = BLOCK_CACHE_PER_PAGE;
       $block[1]['info'] = t('Most printed');
+      $block[1]['cache'] = BLOCK_CACHE_GLOBAL;
       return $block;
 }
 

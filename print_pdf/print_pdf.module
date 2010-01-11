@@ -130,6 +130,7 @@ function print_pdf_menu() {
  */
 function print_pdf_block_list() {
       $block[0]['info'] = t('Most PDFd');
+      $block[0]['cache'] = BLOCK_CACHE_GLOBAL;
       return $block;
 }
 

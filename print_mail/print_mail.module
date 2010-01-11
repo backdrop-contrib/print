@@ -103,6 +103,7 @@ function print_mail_menu() {
  */
 function print_mail_block_list() {
       $block[0]['info'] = t('Most emailed');
+      $block[0]['cache'] = BLOCK_CACHE_GLOBAL;
       return $block;
 }
 
