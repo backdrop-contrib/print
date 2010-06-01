@@ -204,10 +204,10 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   }
 
   // Decode HTML entities in image filenames
-  $pattern = "!<img\s[^>]*?src\s*?=\s*?['\"]?${base_url}[^>]*?>!is";
+  $pattern = "!<img\s[^>]*?src\s*?=\s*?['\"]?{$base_url}[^>]*?>!is";
   $html = preg_replace_callback($pattern, create_function('$matches', 'return html_entity_decode($matches[0], ENT_QUOTES);'), $html);
   // Remove queries from the image URL
-  $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?${base_url}.*?)(?:%3F|\?)[\w=&]+([^>]*?>)!is";
+  $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?{$base_url}[^>]*?)(?:%3F|\?)[\w=&]+([^>]*?>)!is";
   $html = preg_replace($pattern, '$1$2', $html);
 
   require_once(DRUPAL_ROOT . '/' . $print_pdf_pdf_tool);
