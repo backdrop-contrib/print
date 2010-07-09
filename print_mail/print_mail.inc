@@ -64,6 +64,7 @@ function print_mail_form($form_state) {
     '#type' => 'textfield',
     '#title' => t('Your e-mail'),
     '#size' => 62,
+    '#required' => TRUE,
   );
   $form['fld_from_name'] = array(
     '#type' => 'textfield',
@@ -76,11 +77,13 @@ function print_mail_form($form_state) {
     '#rows' => 3,
     '#resizable' => FALSE,
     '#description' => t('Enter multiple addresses separated by commas and/or different lines.'),
+    '#required' => TRUE,
   );
   $form['fld_subject'] = array(
     '#type' => 'textfield',
     '#title' => t('Subject'),
     '#size' => 62,
+    '#required' => TRUE,
   );
   if (!empty($title)) {
     $form['fld_title'] = array(
@@ -93,6 +96,7 @@ function print_mail_form($form_state) {
     '#type' => 'textarea',
     '#title' => t('Your message'),
     '#rows' => 6,
+    '#required' => TRUE,
   );
 
   if ($print_mail_teaser_choice) {
@@ -216,21 +220,10 @@ function print_mail_form_validate($form, &$form_state) {
     }
   }
 
-  $subject = trim($form_state['values']['fld_subject']);
-  if (empty($subject)) {
-    form_set_error('fld_subject', t('You must enter a subject.'));
-  }
-  $message = trim($form_state['values']['txt_message']);
-  if (empty($message)) {
-    form_set_error('txt_message', t('You must enter a message.'));
-  }
-
   $form_state['values']['fld_from_addr'] = $from_addr;
   $form_state['values']['fld_from_name'] = trim($form_state['values']['fld_from_name']);
   // Re-create the string from the re-organized array
   $form_state['values']['txt_to_addrs'] = implode(', ', $to_array);
-  $form_state['values']['fld_subject'] = $subject;
-  $form_state['values']['txt_message'] = $message;
 }
 
 /**
