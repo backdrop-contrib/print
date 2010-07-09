@@ -56,10 +56,7 @@ wkhtmltopdf support:
   2. Place the wkhtmltopdf executable into the print module lib directory
   (usually sites/all/modules/print/lib). You can also place a symbolic link
   to the executable.
-  3. You will need a running X Server or the virtual (headless) X
-  framebuffer server: Xvfb. Place the Xvfb binary or a symbolic link to it
-  in the print module lib directory (usually sites/all/modules/print/lib).
-  4. Check http://code.google.com/p/wkhtmltopdf/ for further information.
+  3. Check http://code.google.com/p/wkhtmltopdf/ for further information.
 
 UPDATE
 ------

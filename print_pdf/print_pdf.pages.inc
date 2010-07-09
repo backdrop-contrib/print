@@ -281,22 +281,8 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
   $print_pdf_page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
   $print_pdf_content_disposition = variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT);
   $print_pdf_wkhtmltopdf_options = variable_get('print_pdf_wkhtmltopdf_options', PRINT_PDF_WKHTMLTOPDF_OPTIONS);
-  $print_pdf_xvfb_options = variable_get('print_pdf_xvfb_options', PRINT_PDF_XVFB_OPTIONS);
 
-  $xvfb_binary = key(file_scan_directory(drupal_get_path('module', 'print'), '!^Xvfb$!'));
   $dpi = 96;
-
-  // If available, launch a temporary X server
-  if (isset($xvfb_binary)) {
-    $xdisplay = variable_get('print_pdf_wkhtmltopdf_xdisplay', 10);
-    variable_set('print_pdf_wkhtmltopdf_xdisplay', ($xdisplay == 4990) ? 10 : $xdisplay + 10);
-    $xdisplay += mt_rand(0, 9);
-
-    $xcmd = realpath($xvfb_binary) . " :$xdisplay -screen 0 320x200x24 -dpi $dpi -terminate -nolisten tcp -tst $print_pdf_xvfb_options";
-
-    $xdescriptor = array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'w'));
-    $xprocess = proc_open($xcmd, $xdescriptor, $xpipes, NULL, NULL);
-  }
 
   if (function_exists('token_replace') && !empty($print_pdf_wkhtmltopdf_options)) {
     $print_pdf_wkhtmltopdf_options = token_replace($print_pdf_wkhtmltopdf_options, 'node', $print['node']);
@@ -306,7 +292,7 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
   $pdf_output = (stristr(PHP_OS, 'Win')) ? tempnam(variable_get('file_temporary_path', conf_path() . '/private/temp'), 'pdf') : '-';
   $cmd = realpath($print_pdf_pdf_tool) . " --page-size $print_pdf_paper_size --orientation $print_pdf_page_orientation --dpi $dpi $print_pdf_wkhtmltopdf_options - $pdf_output";
 
-  $process = proc_open($cmd, $descriptor, $pipes, NULL, isset($xvfb_binary) ? array('DISPLAY' => ':' . $xdisplay) : NULL);
+  $process = proc_open($cmd, $descriptor, $pipes, NULL, NULL);
 
   if (is_resource($process)) {
     fwrite($pipes[0], $html);
@@ -330,18 +316,6 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
     fclose($pipes[2]);
 
     $retval = proc_terminate($process);
-  }
-  if (isset($xvfb_binary)) {
-    fclose($xpipes[0]);
-    fclose($xpipes[1]);
-    stream_set_blocking($xpipes[2], 0);
-    $xerror = stream_get_contents($xpipes[2]);
-    if (!empty($xerror)) {
-      watchdog('print_pdf', 'wkhtmltopdf Xvfb: ' . $xerror);
-    }
-    fclose($xpipes[2]);
-
-    proc_terminate($xprocess);
   }
 
   if (!empty($pdf)) {
