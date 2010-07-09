@@ -47,7 +47,7 @@ function print_mail_theme() {
       'arguments' => array(),
     ),
     'print_mail_form' => array(
-      'arguments' => array('form'),
+      'arguments' => array('form' => NULL),
       'file' => 'print_mail.inc',
     ),
   );
