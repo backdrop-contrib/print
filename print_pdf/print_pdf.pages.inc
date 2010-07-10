@@ -61,6 +61,8 @@ function print_pdf_controller() {
     $print['logo'] = preg_replace($pattern, $replacement, $print['logo']);
     $print['footer_message'] = preg_replace($pattern, $replacement, $print['footer_message']);
   }
+  // Send to printer option causes problems with PDF
+  $print['sendtoprinter'] = '';
 
   $node = $print['node'];
   ob_start();
