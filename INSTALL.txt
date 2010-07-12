@@ -32,7 +32,11 @@ dompdf support:
   4. Grant write access to the lib/fonts directory to your webserver user.
   5. If you're using dompdf-0.5.1, delete the dompdf.php file as it contains
   a security vulnerability
-  6. Check http://code.google.com/p/dompdf/ for further information.
+  6. If you're using dompdf-0.6 or later, you can try to enable the Unicode
+  support, but you'll need to add some Unicode fonts. See 
+  http://groups.google.com/group/dompdf/browse_thread/thread/9f7bc0162b04d5cf
+  for further info on this.
+  7. Check http://code.google.com/p/dompdf/ for further information.
 
 TCPDF support:
   TCPDF seems to be more actively developed than dompdf, but it's support

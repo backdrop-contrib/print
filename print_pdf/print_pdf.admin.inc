@@ -189,6 +189,12 @@ function print_pdf_settings() {
       '#maxlength' => 3,
       '#description' => t('(TCPDF only) Set the font size to be used for normal text. This is the base value for the scaling applied to other text styles.'),
     );
+    $form['settings']['print_pdf_dompdf_unicode'] = array(
+      '#type' => 'checkbox',
+      '#title' => t("Use dompdf's Unicode Mode"),
+      '#default_value' => variable_get('print_pdf_dompdf_unicode', PRINT_PDF_DOMPDF_UNICODE_DEFAULT),
+      '#description' => t("If enabled, dompdf's Unicode mode is used. If not, the module will attempt to convert some non-ASCII chars to ISO-8859-1."),
+    );
     $form['settings']['print_pdf_wkhtmltopdf_options'] = array(
       '#type' => 'textfield',
       '#title' => t('wkhtmltopdf options'),
