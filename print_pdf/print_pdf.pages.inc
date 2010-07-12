@@ -83,6 +83,10 @@ function print_pdf_controller() {
   else {
     $pdf_filename = str_replace('/', '_', $path) . '.pdf';
   }
+  if (function_exists('transliteration_clean_filename')) {
+    $pdf_filename = transliteration_clean_filename($pdf_filename, language_default('language'));
+  }
+
   if (basename($print_pdf_pdf_tool) == 'dompdf_config.inc.php') {
     _print_pdf_dompdf($print, $html, $pdf_filename);
   }
