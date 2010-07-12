@@ -168,9 +168,9 @@ function print_pdf_settings() {
     );
     $form['settings']['print_pdf_autoconfig'] = array(
       '#type' => 'checkbox',
-      '#title' => t('Auto-configure the TCPDF settings'),
+      '#title' => t('Auto-configure the PDF tool settings'),
       '#default_value' => variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT),
-      '#description' => t('(TCPDF only) If you disable this option, the TCDPF settings in tcpdf/config/tcpdf_config.php file must be configured manually.'),
+      '#description' => t('If you disable this option, the pdf tool settings must be configured manually. For TCDPF, edit the tcpdf/config/tcpdf_config.php file. For dompdf, edit the dompdf/dompdf_config.inc.php file.'),
     );
     $form['settings']['print_pdf_font_family'] = array(
       '#type' => 'textfield',

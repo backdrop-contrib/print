@@ -123,6 +123,13 @@ function _print_pdf_dompdf($print, $html, $filename) {
   $print_pdf_paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
   $print_pdf_page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
   $print_pdf_content_disposition = variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT);
+
+  if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
+    define("DOMPDF_ENABLE_PHP", FALSE);
+    define("DOMPDF_ENABLE_REMOTE", TRUE);
+    define("DOMPDF_TEMP_DIR", file_directory_temp());
+  }
+
   require_once(DRUPAL_ROOT . '/' . $print_pdf_pdf_tool);
   spl_autoload_register('DOMPDF_autoload');
 
