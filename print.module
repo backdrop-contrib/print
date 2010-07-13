@@ -52,6 +52,7 @@ define('PRINT_COMMENTS_DEFAULT', 0);
 define('PRINT_NEWWINDOW_DEFAULT', 1);
 
 define('PRINT_HTML_LINK_POS_DEFAULT', 'link');
+define('PRINT_HTML_LINK_TEASER_DEFAULT', 0);
 define('PRINT_HTML_SHOW_LINK_DEFAULT', 1);
 define('PRINT_HTML_NODE_LINK_VISIBILITY_DEFAULT', 0);
 define('PRINT_HTML_NODE_LINK_PAGES_DEFAULT', '');
@@ -749,8 +750,9 @@ function _print_page_match($visibility, $path, $pages) {
  *   PRINT_ALLOW_BOOK_LINK if a link is allowed in a book node
  */
 function print_link_allowed($args) {
-  if (!empty($args['teaser']) || !user_access('access print')) {
-    // If showing only the teaser or the user is not allowed or link is disabled
+  if ((!empty($args['teaser']) && !variable_get('print_html_link_teaser', PRINT_HTML_LINK_TEASER_DEFAULT))
+      || !user_access('access print')) {
+    // If the teaser link is disabled or the user is not allowed
     return FALSE;
   }
   if (!empty($args['path'])) {

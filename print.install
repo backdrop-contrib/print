@@ -42,6 +42,7 @@ function print_uninstall() {
   variable_del('print_sourceurl_forcenode');
   variable_del('print_html_show_link');
   variable_del('print_html_link_pos');
+  variable_del('print_html_link_teaser');
   variable_del('print_html_node_link_visibility');
   variable_del('print_html_node_link_pages');
   variable_del('print_html_link_class');

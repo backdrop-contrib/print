@@ -13,6 +13,7 @@ define('PRINTMAIL_PATH', 'printmail');
 define('PRINT_MAIL_FORMAT', 'mail');
 
 define('PRINT_MAIL_LINK_POS_DEFAULT', 'link');
+define('PRINT_MAIL_LINK_TEASER_DEFAULT', 0);
 define('PRINT_MAIL_SHOW_LINK_DEFAULT', 1);
 define('PRINT_MAIL_NODE_LINK_VISIBILITY_DEFAULT', 0);
 define('PRINT_MAIL_NODE_LINK_PAGES_DEFAULT', '');
@@ -467,8 +468,9 @@ function print_mail_insert_link($path = NULL, $node = NULL) {
  *   PRINT_ALLOW_BOOK_LINK if a link is allowed in a book node
  */
 function print_mail_link_allowed($args) {
-  if (!empty($args['teaser']) || !user_access('access send to friend')) {
-    // If showing only the teaser or the user is not allowed or link is disabled
+  if ((!empty($args['teaser']) && !variable_get('print_mail_link_teaser', PRINT_MAIL_LINK_TEASER_DEFAULT))
+      || !user_access('access send to friend')) {
+    // If the teaser link is disabled or the user is not allowed
     return FALSE;
   }
   if (!empty($args['path'])) {

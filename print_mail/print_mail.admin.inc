@@ -30,6 +30,13 @@ function print_mail_settings() {
     '#description' => t('Choose the location of the link(s) to the send by e-mail page. The Links area is usually below the node content, whereas the Content corner is placed in the upper-right corner of the node content. Unselect all options to disable the link. Even if the link is disabled, you can still send a node by e-mail by going to !path/nid where nid is the numeric id of the node.', array('!path' => PRINTMAIL_PATH)),
   );
 
+  $form['settings']['print_mail_link_teaser'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Display send by e-mail link in teaser'),
+    '#default_value' => variable_get('print_mail_link_teaser', PRINT_MAIL_LINK_TEASER_DEFAULT),
+    '#description' => t('Enabling this will display the link in teaser mode.'),
+  );
+
   $form['settings']['adv_link'] = array(
     '#type' => 'fieldset',
     '#title' => t('Advanced link options'),

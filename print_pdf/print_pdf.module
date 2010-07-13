@@ -15,6 +15,7 @@ define('PRINT_PDF_FORMAT', 'pdf');
 define('PRINT_PDF_LIB_PATH', 'sites/all/libraries');
 
 define('PRINT_PDF_LINK_POS_DEFAULT', 'link');
+define('PRINT_PDF_LINK_TEASER_DEFAULT', 0);
 define('PRINT_PDF_SHOW_LINK_DEFAULT', 1);
 define('PRINT_PDF_NODE_LINK_VISIBILITY_DEFAULT', 0);
 define('PRINT_PDF_NODE_LINK_PAGES_DEFAULT', '');
@@ -481,8 +482,9 @@ function print_pdf_insert_link($path = NULL, $node = NULL) {
  */
 function print_pdf_link_allowed($args) {
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
-  if (!empty($args['teaser']) || !user_access('access PDF version') || (empty($print_pdf_pdf_tool))) {
-    // If showing only the teaser or the user is not allowed or link is disabled
+  if ((!empty($args['teaser']) && !variable_get('print_pdf_link_teaser', PRINT_PDF_LINK_TEASER_DEFAULT))
+      || !user_access('access PDF version') || (empty($print_pdf_pdf_tool))) {
+    // If the teaser link is disabled or the user is not allowed
     return FALSE;
   }
   if (!empty($args['path'])) {

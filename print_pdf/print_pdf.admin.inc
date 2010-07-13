@@ -42,6 +42,13 @@ function print_pdf_settings() {
       '#description' => t('Choose the location of the link(s) to the PDF version. The Links area is usually below the node content, whereas the Content corner is placed in the upper-right corner of the node content. Unselect all options to disable the link. Even if the link is disabled, you can still view the PDF version of a node by going to !path/nid where nid is the numeric id of the node.', array('!path' => PRINTPDF_PATH)),
     );
 
+    $form['settings']['print_pdf_link_teaser'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Display link to the PDF version in teaser'),
+      '#default_value' => variable_get('print_pdf_link_teaser', PRINT_PDF_LINK_TEASER_DEFAULT),
+      '#description' => t('Enabling this will display the link in teaser mode.'),
+    );
+
     $form['settings']['adv_link'] = array(
       '#type' => 'fieldset',
       '#title' => t('Advanced link options'),
