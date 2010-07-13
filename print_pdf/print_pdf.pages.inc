@@ -17,7 +17,6 @@ require_once(DRUPAL_ROOT . '/' . drupal_get_path('module', 'print') . '/print.pa
  * Generate a PDF version of the printer-friendly page
  *
  * @see print_controller()
- * @see _print_get_template()
  * @see _print_pdf_dompdf()
  * @see _print_pdf_tcpdf()
  */
@@ -65,10 +64,7 @@ function print_pdf_controller() {
   $print['sendtoprinter'] = '';
 
   $node = $print['node'];
-  ob_start();
-  include_once(DRUPAL_ROOT . '/' . _print_get_template(PRINT_PDF_FORMAT, $print['type']));
-  $html = ob_get_contents();
-  ob_end_clean();
+  $html = theme('print_page', $print, PRINT_PDF_FORMAT, $node);
 
   // Convert the a href elements, to make sure no relative links remain
   $pattern = '!<(a\s[^>]*?)>!is';

@@ -109,7 +109,47 @@ function print_theme() {
     'print_format_link' => array(
       'arguments' => array(),
     ),
+    'print_node' => array(
+      'arguments' => array('node' => NULL, 'teaser' => FALSE, 'page' => FALSE, 'type' => PRINT_HTML_FORMAT),
+      'template' => 'print_node',
+    ),
+    'print_page' => array(
+      'arguments' => array('print' => NULL, 'type' => PRINT_HTML_FORMAT, 'node' => NULL),
+      'template' => 'print',
+    ),
   );
+}
+
+/**
+ * Clones the node theme registry for print_node so that it works with existing node templates
+ */
+function print_theme_registry_alter(&$theme_registry) {
+  $theme_registry['print_node']['theme paths'] += $theme_registry['node']['theme paths'];
+}
+
+/**
+ * Renders the content of the node using the theme api
+ */
+function print_preprocess_print_node(&$vars) {
+  $format = $vars['type'];
+  $type = $vars['node']->type;
+  $vars['template_files'][] = "node";
+  $vars['template_files'][] = "node-$type";
+  $vars['template_files'][] = "print_node";
+  $vars['template_files'][] = "print_node_$format";
+  $vars['template_files'][] = "print_node_$format.node-$type";
+}
+
+/**
+ * Renders the print page, where the node content gets embedded
+ */
+function print_preprocess_print_page(&$vars) {
+  $format = $vars['type'];
+  $type = $vars['node']->type;
+  $vars['template_files'][] = "print";
+  $vars['template_files'][] = "print.node-$type";
+  $vars['template_files'][] = "print_$format";
+  $vars['template_files'][] = "print_$format.node-$type";
 }
 
 /**

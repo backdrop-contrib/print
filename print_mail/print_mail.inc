@@ -277,10 +277,7 @@ function print_mail_form_submit($form, &$form_state) {
       $params['title'] = $form_state['values']['title'];
 
       $node = $print['node'];
-      ob_start();
-      include_once(DRUPAL_ROOT . '/' . _print_get_template(PRINT_MAIL_FORMAT, $print['type']));
-      $params['body'] = ob_get_contents();
-      ob_end_clean();
+      $params['body'] = theme('print_page', $print, PRINT_MAIL_FORMAT, $node);
 
       $ok = FALSE;
       if (function_exists('job_queue_add') && variable_get('print_mail_job_queue', PRINT_MAIL_JOB_QUEUE_DEFAULT)) {
