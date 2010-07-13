@@ -170,6 +170,9 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   $print['language'] = $language->language;
   $print['title'] = check_plain($node->title);
   $print['head'] = drupal_get_html_head();
+  if ($print_html_sendtoprinter) {
+    drupal_add_js('misc/drupal.js', 'core');
+  }
   $print['scripts'] = drupal_get_js();
   $print['robots_meta'] = _print_robots_meta_generator();
   $print['url'] = url($path, array('absolute' => TRUE));
@@ -220,7 +223,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   }
 
   $window_close = ($print_html_new_window && $print_html_windowclose) ? 'window.close();' : '';
-  $print['sendtoprinter'] = $print_html_sendtoprinter ? " onload='window.print();$window_close'" : '';
+  $print['sendtoprinter'] = $print_html_sendtoprinter ? "<script type='text/javascript'>Drupal.behaviors.print = function(context) {window.print();$window_close}</script>" : '';
 
   switch ($print_logo_options) {
     case 0: // none

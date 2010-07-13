@@ -14,12 +14,13 @@
     <?php print $print['head']; ?>
     <title><?php print $print['title']; ?></title>
     <?php print $print['scripts']; ?>
+    <?php print $print['sendtoprinter']; ?>
     <?php print $print['robots_meta']; ?>
     <?php print $print['base_href']; ?>
     <?php print $print['favicon']; ?>
     <?php print $print['css']; ?>
   </head>
-  <body<?php print $print['sendtoprinter']; ?>>
+  <body>
     <?php if (!empty($print['message'])) {
       print '<div class="print-message">'. $print['message'] .'</div><p />';
     } ?>
