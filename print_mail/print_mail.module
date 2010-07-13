@@ -180,10 +180,7 @@ function print_mail_node_view($node, $build_mode) {
 
   // Insert content corner links
   if (!empty($print_mail_link_pos['corner']) && ($build_mode == 'full')) {
-    $link = print_mail_insert_link(NULL, $node);
-    if ($link) {
-      $node->content['print_links']['#markup'] = preg_replace('!</span>$!', $link . '</span>', $node->content['print_links']['#markup']);
-    }
+    $node->content['print_links']['#markup'] .= print_mail_insert_link(NULL, $node);
   }
 }
 

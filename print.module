@@ -340,14 +340,13 @@ function print_node_view($node, $build_mode) {
   if ($build_mode == 'full') {
       // Insert content corner links
       $node->content['print_links'] = array(
-        '#markup' => "<span class='print-link'></span>",
+        '#prefix' => '<span class="print-link">',
+        '#markup' => '',
+        '#suffix' => '</span>',
         '#weight' => -101,
       );
       if (!empty($print_html_link_pos['corner'])) {
-        $link = print_insert_link(NULL, $node);
-        if ($link) {
-          $node->content['print_links']['#markup'] = preg_replace('!</span>$!', $link . '</span>', $node->content['print_links']['#markup']);
-        }
+        node->content['print_links']['#markup'] .= print_insert_link(NULL, $node);
       }
   }
 }

@@ -228,10 +228,7 @@ function print_pdf_node_view($node, $build_mode) {
 
   // Insert content corner links
   if ((!empty($print_pdf_link_pos['corner'])) && ($build_mode == 'full')) {
-    $link = print_pdf_insert_link(NULL, $node);
-    if ($link) {
-      $node->content['print_links']['#markup'] = preg_replace('!</span>$!', $link . '</span>', $node->content['print_links']['#markup']);
-    }
+    $node->content['print_links']['#markup'] .= print_pdf_insert_link(NULL, $node);
   }
 }
 
