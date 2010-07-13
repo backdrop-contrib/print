@@ -13,6 +13,9 @@
 
 require_once(DRUPAL_ROOT . '/' . drupal_get_path('module', 'print') . '/print.pages.inc');
 
+// Include MIME library
+@include_once('Mail/mime.php');
+
 /**
  * Menu callback for the send by e-mail form.
  *
@@ -59,6 +62,7 @@ function print_mail_form($form_state) {
 
   $form['path'] = array('#type' => 'value', '#value' => $path);
   $form['cid'] =  array('#type' => 'value', '#value' => $cid);
+  $form['title'] = array('#type' => 'value', '#value' => $title);
 
   $form['fld_from_addr'] = array(
     '#type' => 'textfield',
@@ -91,6 +95,20 @@ function print_mail_form($form_state) {
       '#title' => t('Page to be sent'),
       '#markup' => l($title, $path, array('attributes' => array('title' => t('View page')))),
     );
+  }
+  $form['fld_send_option'] = array(
+    '#type' => 'select',
+    '#title' => t('Send page as'),
+    '#default_value' => 'sendpage',
+    '#options' => array(
+      'sendlink' => 'Link',
+      'sendpage' => 'Inline HTML',
+    ),
+  );
+  if (class_exists('Mail_mime')) {
+    $form['fld_send_option']['#default_value'] = 'plain-attachment';
+    $form['fld_send_option']['#options']['inline-attachment'] = 'Inline HTML with Attachment';
+    $form['fld_send_option']['#options']['plain-attachment'] = 'Plain Text with Attachment';
   }
   $form['txt_message'] = array(
     '#type' => 'textarea',
@@ -163,6 +181,7 @@ function theme_print_mail_form($form) {
       case 'txt_to_addrs':
       case 'fld_subject':
       case 'fld_title':
+      case 'fld_send_option':
         $tmp = str_replace('<label', '<label class ="printmail-label"', $tmp);
         break;
     }
@@ -253,6 +272,9 @@ function print_mail_form_submit($form, &$form_state) {
     if ($print !== FALSE) {
       $params = array();
       $params['subject'] = $form_state['values']['fld_subject'];
+      $params['message'] = $form_state['values']['txt_message'];
+      $params['link'] = $print['url'];
+      $params['title'] = $form_state['values']['title'];
 
       $node = $print['node'];
       ob_start();
@@ -278,11 +300,11 @@ function print_mail_form_submit($form, &$form_state) {
         if (!in_array(FALSE, $can_send)) {
           if ($use_job_queue) {
             // Use job queue to send mails during cron runs
-            job_queue_add('drupal_mail', t('print_mail: From %from', array('%from' => $from)), array('print_mail', 'sendpage', $to, language_default(), $params, $from, TRUE), $this_file, TRUE);
+            job_queue_add('drupal_mail', t('print_mail: From %from', array('%from' => $from)), array('print_mail', $form_state['values']['fld_send_option'], $to, language_default(), $params, $from, TRUE), $this_file, TRUE);
           }
           else {
             // Send mail immediately using Drupal's mail handler
-            $ret = drupal_mail('print_mail', 'sendpage', $to, language_default(), $params, $from, TRUE);
+            $ret = drupal_mail('print_mail', $form_state['values']['fld_send_option'], $to, language_default(), $params, $from, TRUE);
           }
           if ($ret['result'] || $use_job_queue) {
             // Call to hook_print_mail_after_send in order to provide information to other modules.
@@ -319,12 +341,54 @@ function print_mail_form_submit($form, &$form_state) {
  * Implements hook_mail().
  */
 function print_mail_mail($key, &$message, $params) {
+  $message['subject'] = $params['subject'];
+
   switch ($key) {
     case 'sendpage':
-      $message['subject'] = $params['subject'];
       $message['body'] = $params['body'];
       $message['headers']['Content-Type'] = 'text/html; charset=utf-8';
-    break;
+      break;
+    case 'sendlink':
+      // Generate plain-text and html versions of message with link
+      $sendlink_plain = $params['message'] . '\n\n' . $params['link'];
+      $sendlink_html = $params['message'] . '<br/><br/>' . l($params['title'], $params['link']);
+
+      // Send HTML-only version if MIME library not present
+      if (!class_exists('Mail_mime')) {
+        $message['body'] = $sendlink_html;
+        $message['headers']['Content-Type'] = 'text/html; charset=utf-8';
+        break;
+      }
+      // no break on purpose
+    case 'plain-attachment':
+    case 'inline-attachment':
+      // Configure new MIME object
+      $mime = new Mail_mime("\n");
+      $mime_params['html_encoding'] = '7bit';
+
+      // Pass message contents into MIME object
+      switch ($key) {
+        case 'sendlink':
+          $mime->setTXTBody($sendlink_plain);
+          $mime->setHTMLBody($sendlink_html);
+          break;
+        case 'inline-attachment':
+          $mime->setHTMLBody($params['body']);
+          // no break on purpose
+        case 'plain-attachment':
+          $mime->setTXTBody($params['message']);
+          $mime->addAttachment($params['body'], 'text/html', 'Attachment.html', FALSE);
+          break;
+      }
+
+      // Store MIME message output in message array
+      $message['body'] = $mime->get($mime_params);
+      $message['headers'] = $mime->headers($message['headers']);
+
+      // Strip special characters from Content-Type header
+      // Required to prevent mime_header_encode() from disrupting Content-Type header
+      $message['headers']['Content-Type'] = preg_replace('/[^\x20-\x7E]/', '', $message['headers']['Content-Type']);
+      break;
   }
 }
 
