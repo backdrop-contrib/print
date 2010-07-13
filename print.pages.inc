@@ -360,6 +360,8 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
 function _print_rewrite_urls($matches) {
   global $base_url, $base_root, $_print_urls;
 
+  $include_anchors = variable_get('print_urls_anchors', PRINT_URLS_ANCHORS_DEFAULT);
+
   // first, split the html into the different tag attributes
   $pattern = '!\s*(\w+\s*=\s*"(?:\\\"|[^"])*")\s*|\s*(\w+\s*=\s*\'(?:\\\\\'|[^\'])*\')\s*|\s*(\w+\s*=\s*\w+)\s*|\s+!';
   $attribs = preg_split($pattern, $matches[1], -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
@@ -380,7 +382,7 @@ function _print_rewrite_urls($matches) {
       else {
         if ($url[0] == '#') {
           // URL is an anchor tag
-          if (!empty($_print_urls)) {
+          if ($include_anchors && (!empty($_print_urls))) {
             $path = explode('/', $_GET['q']);
             unset($path[0]);
             $path = implode('/', $path);

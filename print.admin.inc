@@ -42,6 +42,13 @@ function print_main_settings() {
                       t('Note that you can enable/disable the URL list for each content type individually from the !url.', array('!url' => l(t('Content Types page'), 'admin/build/types'))),
   );
 
+  $form['settings']['print_urls_anchors'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Include named anchors in printer-friendly URLs list'),
+    '#default_value' => variable_get('print_urls_anchors', PRINT_URLS_ANCHORS_DEFAULT),
+    '#description' => t('If set, the list of the URLs at the bottom of the page will include anchors links on the same page.'),
+  );
+
   $form['settings']['print_comments'] = array(
     '#type' => 'checkbox',
     '#title' => t('Include comments in printer-friendly version'),

@@ -34,6 +34,7 @@ function print_uninstall() {
   variable_del('print_logo_options');
   variable_del('print_css');
   variable_del('print_urls');
+  variable_del('print_urls_anchors');
   variable_del('print_comments');
   variable_del('print_newwindow');
   variable_del('print_sourceurl_enabled');

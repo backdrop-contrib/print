@@ -38,6 +38,7 @@ function print_mail_uninstall() {
   variable_del('print_mail_text_confirmation');
   variable_del('print_mail_text_message');
   variable_del('print_mail_text_subject');
+  variable_del('print_mail_text_content');
   variable_del('print_mail_job_queue');
   $settings = db_query("SELECT name FROM {variable} WHERE name LIKE 'print\_mail\_display\_%'");
   foreach ($settings as $variable) {
