@@ -213,6 +213,15 @@ function print_mail_node_load($nodes, $types) {
 }
 
 /**
+ * Implements hook_node_insert().
+ */
+function print_mail_node_insert($node) {
+  if (user_access('administer print') || user_access('node-specific print configuration')) {
+    _print_mail_node_conf_modify($node->nid, $node->print_mail_display, $node->print_mail_display_comment, $node->print_mail_display_urllist);
+  }
+}
+
+/**
  * Implements hook_node_update().
  */
 function print_mail_node_update($node) {
