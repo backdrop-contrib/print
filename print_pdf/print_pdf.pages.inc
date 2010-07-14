@@ -250,7 +250,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   $pdf->SetKeywords($keys);
   $pdf->setPDFVersion('1.6');
 
-  if (defined('LANGUAGE_RTL') && $language->direction == LANGUAGE_RTL) {
+  if ($language->direction == LANGUAGE_RTL) {
     $pdf->setRTL(TRUE);
   }
 
