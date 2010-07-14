@@ -307,7 +307,7 @@ function _print_mail_access($permission) {
     unset($parts[0]);
     $path = implode('/', $parts);
     if (is_numeric($parts[1])) {
-      $path = 'node/'. $path;
+      $path = 'node/' . $path;
     }
     // If the destination page is not accessible, don't show the form
     if (!($router_item = menu_get_item($path)) || (!$router_item['access'])) {
@@ -490,7 +490,7 @@ function print_mail_link_allowed($args) {
     $print_mail_node_link_visibility = variable_get('print_mail_node_link_visibility', PRINT_MAIL_NODE_LINK_VISIBILITY_DEFAULT);
     $print_mail_node_link_pages = variable_get('print_mail_node_link_pages', PRINT_MAIL_NODE_LINK_PAGES_DEFAULT);
 
-    if (!_print_page_match($print_mail_node_link_visibility, "node/". $node->nid, $print_mail_node_link_pages)) {
+    if (!_print_page_match($print_mail_node_link_visibility, "node/" . $node->nid, $print_mail_node_link_pages)) {
       // Page not in visibility list
       return FALSE;
     }

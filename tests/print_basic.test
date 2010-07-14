@@ -85,12 +85,12 @@ class PrintBasicTest extends DrupalWebTestCase {
     $url[8] = 'index.php?q=sample/path with spaces';
     $rel_url[5] = base_path() . $_GET['q'] . $url[5];
     $rel_url[6] = $base_root . $url[6];
-    $rel_url[7] = $base_url .'/'. $url[7];
-    $rel_url[8] = $base_url .'/'. $url[8];
-    $abs_url[5] = $base_url .'/'. $this->getq . $url[5];
+    $rel_url[7] = $base_url . '/' . $url[7];
+    $rel_url[8] = $base_url . '/' . $url[8];
+    $abs_url[5] = $base_url . '/' . $this->getq . $url[5];
     $abs_url[6] = $base_root . $url[6];
-    $abs_url[7] = $base_url .'/'. $url[7];
-    $abs_url[8] = $base_url .'/'. $url[8];
+    $abs_url[7] = $base_url . '/' . $url[7];
+    $abs_url[8] = $base_url . '/' . $url[8];
 
     $url[9] = '&#109;&#97;&#x69;&#x6c;&#x74;&#111;&#58;&#115;&#x75;&#x70;p&#111;&#114;&#x74;&#x40;e&#120;&#97;&#x6d;&#x70;&#x6c;&#101;&#46;&#x63;&#x6f;&#x6d;';
     $rel_url[9] = $url[9];

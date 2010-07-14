@@ -9,13 +9,6 @@
  */
 
 /**
- * Implements hook_install().
- */
-function print_mail_install() {
-  drupal_install_schema('print_mail');
-}
-
-/**
  * Implements hook_uninstall().
  */
 function print_mail_uninstall() {

@@ -9,13 +9,6 @@
  */
 
 /**
- * Implements hook_install().
- */
-function print_pdf_install() {
-  drupal_install_schema('print_pdf');
-}
-
-/**
  * Implements hook_uninstall().
  */
 function print_pdf_uninstall() {

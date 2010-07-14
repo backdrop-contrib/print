@@ -12,11 +12,9 @@
  * Implements hook_install().
  */
 function print_install() {
-  drupal_install_schema('print');
-
   $t = get_t();
   drupal_set_message($t('Printer-friendly Page settings are available under !link',
-    array( '!link' => l($t('Administer > Site configuration > Printer-friendly Pages'),  'admin/settings/print' ) )
+    array( '!link' => l($t('Administer > Configuration > Printer, e-mail and PDF versions'),  'admin/config/print' ) )
   ));
 }
 

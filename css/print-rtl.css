@@ -6,6 +6,8 @@ body {
 th {
   text-align: right;
 }
+.print-links,
+.print-source_url,
 .print-taxonomy {
   text-align: left;
 }

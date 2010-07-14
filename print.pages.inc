@@ -171,7 +171,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   $print['title'] = check_plain($node->title);
   $print['head'] = drupal_get_html_head();
   if ($print_html_sendtoprinter) {
-    drupal_add_js('misc/drupal.js', 'core');
+    drupal_add_js('misc/drupal.js', array('weight' => JS_LIBRARY));
   }
   $print['scripts'] = drupal_get_js();
   $print['robots_meta'] = _print_robots_meta_generator();
@@ -217,7 +217,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   else {
     $print['css'] = drupal_get_css($drupal_css);
     if (!empty($print_css)) {
-      $query_string = '?'. substr(variable_get('css_js_query_string', '0'), 0, 1);
+      $query_string = '?' . substr(variable_get('css_js_query_string', '0'), 0, 1);
       $print['css'] .= "<link type='text/css' rel='stylesheet' media='all' href='${user_css}${query_string}' />\n";
     }
   }
@@ -341,7 +341,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
     $print['taxonomy'] = theme('links', $terms);
   }
 
-  $print['content'] = $node->body;
+  $print['content'] = $node->body['und'][0]['value'];
   $print['node'] = $node;
   $print['message'] = $message;
 
@@ -505,6 +505,8 @@ function _print_url_list_enabled($node, $format = PRINT_HTML_FORMAT) {
  */
 function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $teaser = FALSE, $message = NULL) {
   global $_print_urls;
+  global $language;
+//var_dump($language);
 
   // We can take a node id
   $node = node_load($nid);
@@ -518,13 +520,8 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
     drupal_access_denied();
     return FALSE;
   }
+  $view_mode = $teaser ? 'teaser' : 'full';
   drupal_set_title($node->title);
-
-  //alert other modules that we are generating a printer-friendly page, so they can choose to show/hide info
-  $node->printing = TRUE;
-
-  //use the proper build_mode
-  $node->build_mode = 'print';
 
   // Turn off Pagination by the Paging module
   unset($node->pages);
@@ -538,7 +535,8 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
   if ($cid === NULL) {
     // Adapted (simplified) version of node_view
     //Render the node content
-    $node = node_build_content($node, $teaser, TRUE);
+    node_build_content($node, $view_mode);
+
     // Disable the links area
     unset($node->content['links']);
     // Disable fivestar widget output
@@ -546,19 +544,11 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
     // Disable service links module output
     unset($node->content['service_links']);
 
-    $content = drupal_render($node->content);
+    $build = $node->content;
+    unset($node->content);
 
     // Disable the AdSense module ads
-    $content = preg_replace('!<div class=[\'"]adsense[\'"].*?</div>!sim', '', $content);
-
-    if ($teaser) {
-      $node->teaser = $content;
-      unset($node->body);
-    }
-    else {
-      $node->body = $content;
-      unset($node->teaser);
-    }
+//    $content = preg_replace('!<div class=[\'"]adsense[\'"].*?</div>!sim', '', $content);
   }
 
   $print_comments = variable_get('print_comments', PRINT_COMMENTS_DEFAULT);
@@ -587,23 +577,20 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
     $node->body .= $comments;
   }
 
-  module_invoke_all('node_alter', $node, $teaser, TRUE);
+  $build += array(
+    '#theme' => 'print_node',
+    '#node' => $node,
+    '#view_mode' => $view_mode,
+  );
 
-  $content = theme('print_node', $node, $teaser, TRUE, $format);
-
-  if ($teaser) {
-    $node->body = $node->teaser;
-    unset($node->teaser);
-  }
+  drupal_alter('node_view', $build);
 
   //Check URL list settings
   $_print_urls = _print_url_list_enabled($node, $format);
 
   // Convert the a href elements
   $pattern = '!<(a\s[^>]*?)>(.*?)(</a>)!is';
-  $node->body = preg_replace_callback($pattern, '_print_rewrite_urls', $node->body);
-
-  init_theme();
+  $node->body['und'][0]['value'] = preg_replace_callback($pattern, '_print_rewrite_urls', $node->body['und'][0]['value']);
 
   $print = _print_var_generator($node, $message, $cid);
 
@@ -671,8 +658,6 @@ function _print_generate_path($path, $format = PRINT_HTML_FORMAT, $teaser = FALS
   $pattern = '!<(a\s[^>]*?)>(.*?)(</a>)!is';
   $node->body = preg_replace_callback($pattern, '_print_rewrite_urls', $node->body);
 
-  init_theme();
-
   $print = _print_var_generator($node, $message);
 
   return $print;
@@ -717,8 +702,6 @@ function _print_generate_book($nid, $format = PRINT_HTML_FORMAT, $teaser = FALSE
   // Convert the a href elements
   $pattern = '!<(a\s[^>]*?)>(.*?)(</a>)!is';
   $node->body = preg_replace_callback($pattern, '_print_rewrite_urls', $node->body);
-
-  init_theme();
 
   $print = _print_var_generator($node, $message);
   // The title is already displayed by the book_recurse, so avoid duplication
