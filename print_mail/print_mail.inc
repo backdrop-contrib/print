@@ -277,7 +277,7 @@ function print_mail_form_submit($form, &$form_state) {
       $params['title'] = $form_state['values']['title'];
 
       $node = $print['node'];
-      $params['body'] = theme('print_page', $print, PRINT_MAIL_FORMAT, $node);
+      $params['body'] = theme('print_page', array('print' => $print, 'type' => PRINT_MAIL_FORMAT, 'node' => $node));
 
       $ok = FALSE;
       if (function_exists('job_queue_add') && variable_get('print_mail_job_queue', PRINT_MAIL_JOB_QUEUE_DEFAULT)) {

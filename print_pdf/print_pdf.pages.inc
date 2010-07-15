@@ -43,8 +43,8 @@ function print_pdf_controller() {
   $print['logo'] = preg_replace_callback($pattern, '_print_rewrite_urls', $print['logo']);
   $print['footer_message'] = preg_replace_callback($pattern, '_print_rewrite_urls', $print['footer_message']);
   // And converted from private to public paths
-  $file_downloads = variable_get('file_downloads', FILE_DOWNLOADS_PUBLIC);
-  if ($file_downloads == FILE_DOWNLOADS_PRIVATE) {
+  $file_downloads = variable_get('file_default_scheme', 'public');
+  if ($file_downloads == 'private') {
     switch (variable_get('language_negotiation', LANGUAGE_NEGOTIATION_NONE)) {
       case LANGUAGE_NEGOTIATION_PATH_DEFAULT:
       case LANGUAGE_NEGOTIATION_PATH:
@@ -64,7 +64,7 @@ function print_pdf_controller() {
   $print['sendtoprinter'] = '';
 
   $node = $print['node'];
-  $html = theme('print_page', $print, PRINT_PDF_FORMAT, $node);
+  $html = theme('print_page', array('print' => $print, 'type' => PRINT_PDF_FORMAT, 'node' => $node));
 
   // Convert the a href elements, to make sure no relative links remain
   $pattern = '!<(a\s[^>]*?)>!is';
@@ -73,8 +73,8 @@ function print_pdf_controller() {
   $html = preg_replace("!${base_url}/" . PRINTPDF_PATH . "/.*?%2523!", '#', $html);
 
   $pdf_filename = variable_get('print_pdf_filename', PRINT_PDF_FILENAME_DEFAULT);
-  if (function_exists('token_replace') && !empty($pdf_filename)) {
-    $pdf_filename = token_replace($pdf_filename, 'node', $node) . '.pdf';
+  if (!empty($pdf_filename)) {
+    $pdf_filename = token_replace($pdf_filename, array('node' => $node)) . '.pdf';
   }
   else {
     $pdf_filename = str_replace('/', '_', $path) . '.pdf';
@@ -297,7 +297,7 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
 
   $dpi = 96;
 
-  if (function_exists('token_replace') && !empty($print_pdf_wkhtmltopdf_options)) {
+  if (!empty($print_pdf_wkhtmltopdf_options)) {
     $print_pdf_wkhtmltopdf_options = token_replace($print_pdf_wkhtmltopdf_options, 'node', $print['node']);
   }
 

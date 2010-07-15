@@ -211,31 +211,13 @@ function print_pdf_settings() {
       '#description' => t('(wkhtmltopdf only) Set any additional options to be passed to the wkhtmltopdf executable. Tokens may be used in these options (see list below).'),
     );
 
-    if (module_exists('token')) {
       $form['settings']['print_pdf_filename'] = array(
         '#type' => 'textfield',
         '#title' => t('PDF File Name'),
         '#default_value' => variable_get('print_pdf_filename', PRINT_PDF_FILENAME_DEFAULT),
         '#description' => t("If left empty the generated filename defaults to the node's path. Tokens may be used to build the filename (see following list). The .pdf extension will be appended automatically."),
       );
-      $form['settings']['print_pdf_filename_patterns'] = array(
-        '#type' => 'fieldset',
-        '#title' => t('Replacement Patterns'),
-        '#collapsible' => TRUE,
-        '#collapsed' => TRUE,
-      );
-      $descriptions = '';
-      $tokens = token_get_list('node');
-      foreach ($tokens as $token) {
-        foreach ($token as $key => $val) {
-          $descriptions .= '<dt>[' . $key . ']</dt><dd>' . $val . "</dd>\n";
-        }
-      }
-      $form['settings']['print_pdf_filename_patterns']['descriptions'] = array(
-        '#type' => 'markup',
-        '#markup' => "<dl>\n" . $descriptions . "</dl>\n",
-      );
-    }
+
     $form['#validate'][] = '_print_pdf_settings_validate';
   }
   else {
