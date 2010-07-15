@@ -45,10 +45,10 @@ function print_mail_permission() {
 function print_mail_theme() {
   return array(
     'print_mail_format_link' => array(
-      'arguments' => array(),
+      'variables' => array(),
     ),
     'print_mail_form' => array(
-      'arguments' => array('form' => NULL),
+      'variables' => array('form' => NULL),
       'file' => 'print_mail.inc',
     ),
   );
@@ -100,11 +100,11 @@ function print_mail_menu() {
 }
 
 /**
- * Implements hook_block_list().
+ * Implements hook_block_info().
  */
-function print_mail_block_list() {
+function print_mail_block_info() {
       $block[0]['info'] = t('Most emailed');
-      $block[0]['cache'] = BLOCK_CACHE_GLOBAL;
+      $block[0]['cache'] = DRUPAL_CACHE_GLOBAL;
       return $block;
 }
 

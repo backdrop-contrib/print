@@ -53,30 +53,30 @@ function print_pdf_permission() {
 function print_pdf_theme() {
   return array(
     'print_pdf_format_link' => array(
-      'arguments' => array(),
+      'variables' => array(),
     ),
     'print_pdf_dompdf_footer' => array(
-      'arguments' => array(),
+      'variables' => array(),
       'file' => 'print_pdf.pages.inc',
     ),
     'print_pdf_tcpdf_header' => array(
-      'arguments' => array(),
+      'variables' => array(),
       'file' => 'print_pdf.pages.inc',
     ),
     'print_pdf_tcpdf_page' => array(
-      'arguments' => array(),
+      'variables' => array(),
       'file' => 'print_pdf.pages.inc',
     ),
     'print_pdf_tcpdf_content' => array(
-      'arguments' => array(),
+      'variables' => array(),
       'file' => 'print_pdf.pages.inc',
     ),
     'print_pdf_tcpdf_footer' => array(
-      'arguments' => array(),
+      'variables' => array(),
       'file' => 'print_pdf.pages.inc',
     ),
     'print_pdf_tcpdf_footer2' => array(
-      'arguments' => array(),
+      'variables' => array(),
       'file' => 'print_pdf.pages.inc',
     ),
   );
@@ -126,11 +126,11 @@ function print_pdf_menu() {
 }
 
 /**
- * Implements hook_block_list().
+ * Implements hook_block_info().
  */
-function print_pdf_block_list() {
+function print_pdf_block_info() {
       $block[0]['info'] = t('Most PDFd');
-      $block[0]['cache'] = BLOCK_CACHE_GLOBAL;
+      $block[0]['cache'] = DRUPAL_CACHE_GLOBAL;
       return $block;
 }
 

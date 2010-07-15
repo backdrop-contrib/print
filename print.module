@@ -84,7 +84,7 @@ define('PRINT_TYPE_FIELDS_WEIGHT', 30);
 /**
  * Implements hook_permission().
  */
-/*function print_permission() {
+function print_permission() {
   return array(
     'access print' => array(
       'title' => t('Access the printer-friendly page'),
@@ -99,7 +99,7 @@ define('PRINT_TYPE_FIELDS_WEIGHT', 30);
       'description' => t('Enable access to the per-node settings.'),
     ),
   );
-}*/
+}
 
 /**
  * Implements hook_theme().
@@ -107,14 +107,14 @@ define('PRINT_TYPE_FIELDS_WEIGHT', 30);
 function print_theme() {
   return array(
     'print_format_link' => array(
-      'arguments' => array(),
+      'variables' => array(),
     ),
     'print_node' => array(
-      'arguments' => array('node' => NULL, 'teaser' => FALSE, 'page' => FALSE, 'type' => PRINT_HTML_FORMAT),
+      'variables' => array('node' => NULL, 'teaser' => FALSE, 'page' => FALSE, 'type' => PRINT_HTML_FORMAT),
       'template' => 'print_node',
     ),
     'print_page' => array(
-      'arguments' => array('print' => NULL, 'type' => PRINT_HTML_FORMAT, 'node' => NULL),
+      'variables' => array('print' => array(), 'type' => PRINT_HTML_FORMAT, 'node' => NULL),
       'template' => 'print',
     ),
   );
@@ -123,14 +123,14 @@ function print_theme() {
 /**
  * Clones the node theme registry for print_node so that it works with existing node templates
  */
-/*function print_theme_registry_alter(&$theme_registry) {
+function print_theme_registry_alter(&$theme_registry) {
   $theme_registry['print_node']['theme paths'] += $theme_registry['node']['theme paths'];
-}*/
+}
 
 /**
  * Renders the content of the node using the theme api
  */
-/*function print_preprocess_print_node(&$vars) {
+function print_preprocess_print_node(&$vars) {
   $format = $vars['type'];
   $type = $vars['node']->type;
   template_preprocess_node($vars);
@@ -139,19 +139,19 @@ function print_theme() {
   $vars['template_files'][] = "print_node";
   $vars['template_files'][] = "print_node_$format";
   $vars['template_files'][] = "print_node_$format.node-$type";
-}*/
+}
 
 /**
  * Renders the print page, where the node content gets embedded
  */
-/*function print_preprocess_print_page(&$vars) {
+function print_preprocess_print_page(&$vars) {
   $format = $vars['type'];
   $type = $vars['node']->type;
   $vars['template_files'][] = "print";
   $vars['template_files'][] = "print.node-$type";
   $vars['template_files'][] = "print_$format";
   $vars['template_files'][] = "print_$format.node-$type";
-}*/
+}
 
 /**
  * Implements hook_menu().
@@ -224,20 +224,20 @@ function print_menu() {
 }
 
 /**
- * Implements hook_block_list().
+ * Implements hook_block_info().
  */
-/*function print_block_list() {
+function print_block_info() {
       $block[0]['info'] = t('Printer, e-mail and PDF versions');
-      $block[0]['cache'] = BLOCK_CACHE_PER_PAGE;
+      $block[0]['cache'] = DRUPAL_CACHE_PER_PAGE;
       $block[1]['info'] = t('Most printed');
-      $block[1]['cache'] = BLOCK_CACHE_GLOBAL;
+      $block[1]['cache'] = DRUPAL_CACHE_GLOBAL;
       return $block;
-}*/
+}
 
 /**
  * Implements hook_block_view().
  */
-/*function print_block_view($delta = 0) {
+function print_block_view($delta = '') {
       switch ($delta) {
       case 0:
       $nid = preg_replace('!^node/!', '', $_GET['q']);
@@ -272,7 +272,7 @@ function print_menu() {
         break;
       }
       return $block;
-}*/
+}
 
 /**
  * Implements hook_link_alter().
@@ -341,10 +341,10 @@ function print_help($path, $arg) {
 /**
  * Implements hook_node_view().
  */
-/*function print_node_view($node, $build_mode) {
+function print_node_view($node, $view_mode) {
   $print_html_link_pos = variable_get('print_html_link_pos', array(PRINT_HTML_LINK_POS_DEFAULT => PRINT_HTML_LINK_POS_DEFAULT));
   $print_html_link_use_alias = variable_get('print_html_link_use_alias', PRINT_HTML_LINK_USE_ALIAS_DEFAULT);
-  $allowed_type = print_link_allowed(array('type' => 'node', 'node' => $node, 'teaser' => ($build_mode == 'teaser')));
+  $allowed_type = print_link_allowed(array('type' => 'node', 'node' => $node, 'teaser' => ($view_mode == 'teaser')));
   if (($allowed_type === PRINT_ALLOW_NORMAL_LINK) && !isset($node->book) && !empty($print_html_link_pos['link'])) {
     drupal_add_css(drupal_get_path('module', 'print') . '/css/printlinks.css');
     $links = array();
@@ -379,7 +379,7 @@ function print_help($path, $arg) {
     );
   }
 
-  if ($build_mode == 'full') {
+  if ($view_mode == 'full') {
       // Insert content corner links
       $node->content['print_links'] = array(
         '#prefix' => '<span class="print-link">',
@@ -388,54 +388,54 @@ function print_help($path, $arg) {
         '#weight' => -101,
       );
       if (!empty($print_html_link_pos['corner'])) {
-        node->content['print_links']['#markup'] .= print_insert_link(NULL, $node);
+        $node->content['print_links']['#markup'] .= print_insert_link(NULL, $node);
       }
   }
-}*/
+}
 
 /**
  * Implements hook_node_load().
  */
-/*function print_node_load($nodes, $types) {
+function print_node_load($nodes, $types) {
   foreach ($nodes as $node) {
     _print_set_node_fields($node);
   }
-}*/
+}
 
 /**
  * Implements hook_node_insert().
  */
-/*function print_node_insert($node) {
+function print_node_insert($node) {
   if (user_access('administer print') || user_access('node-specific print configuration')) {
     _print_node_conf_modify($node->nid, $node->print_display, $node->print_display_comment, $node->print_display_urllist);
   }
-}*/
+}
 
 /**
  * Implements hook_node_update().
  */
-/*function print_node_update($node) {
+function print_node_update($node) {
   if (user_access('administer print') || user_access('node-specific print configuration')) {
     _print_node_conf_modify($node->nid, $node->print_display, $node->print_display_comment, $node->print_display_urllist);
   }
-}*/
+}
 
 /**
  * Implements hook_node_delete().
  */
-/*function print_node_delete($node) {
+function print_node_delete($node) {
   db_delete('print_node_conf')
     ->condition('nid', $node->nid)
     ->execute();
   db_delete('print_page_counter')
     ->condition('path', 'node/' . $node->nid)
     ->execute();
-}*/
+}
 
 /**
  * Implements hook_form_alter().
  */
-/*function print_form_alter(&$form, &$form_state, $form_id) {
+function print_form_alter(&$form, &$form_state, $form_id) {
   // Add the node-type settings option to activate the printer-friendly version link
   if ((user_access('administer print') || user_access('node-specific print configuration')) &&
       (($form_id == 'node_type_form') || !empty($form['#node_edit_form']))) {
@@ -480,24 +480,24 @@ function print_help($path, $arg) {
       $form['print']['label']['#markup'] = '<p><em>' . t('The settings below only apply in case the corresponding type-specific setting is also enabled (except for the "Show link in individual comments").') . '</em></p>' . $form['print']['label']['#markup'];
     }
   }
-}*/
+}
 
 /**
  * Implements hook_cck_extra_fields().
  */
-/*function print_cck_extra_fields($type_name) {
+function print_cck_extra_fields($type_name) {
   $fields['print'] = array(
     'label' => t('Printer, e-mail and PDF versions'),
     'description' => t('Print module form.'),
     'weight' => PRINT_TYPE_FIELDS_WEIGHT,
   );
   return $fields;
-}*/
+}
 
 /**
  * Implements hook_field_build_modes().
  */
-/*function print_field_build_modes() {
+function print_field_build_modes() {
   return array(
     'print' => array(
       'title' => t('Print'),
@@ -509,7 +509,7 @@ function print_help($path, $arg) {
       ),
     ),
   );
-}*/
+}
 
 /**
  * Auxiliary function to assign the per-node settings to the node object fields

@@ -27,7 +27,7 @@ function print_controller_html() {
   $print = print_controller($path, $cid, PRINT_HTML_FORMAT);
   if ($print !== FALSE) {
     $node = $print['node'];
-    $html = theme('print_page', $print, PRINT_HTML_FORMAT, $node);
+    $html = theme('print_page', array('print' => $print, 'type' => PRINT_HTML_FORMAT, 'node' => $node));
     print $html;
 
     $nodepath = (isset($node->path)) ? drupal_get_normal_path($node->path) : 'node/' . $path;
@@ -188,8 +188,10 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   }
   $drupal_css = drupal_add_css();
   foreach ($drupal_css as $key => $types) {
+    if (strpos($key, 'themes') !== FALSE) {
     // Unset the theme's CSS
-    $drupal_css[$key]['theme'] = array();
+      unset($drupal_css[$key]);
+    }
   }
 
   // If we are sending a message via e-mail, the CSS must be embedded
@@ -505,7 +507,6 @@ function _print_url_list_enabled($node, $format = PRINT_HTML_FORMAT) {
 function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $teaser = FALSE, $message = NULL) {
   global $_print_urls;
   global $language;
-//var_dump($language);
 
   // We can take a node id
   $node = node_load($nid);
