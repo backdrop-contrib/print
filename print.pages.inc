@@ -341,7 +341,6 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
     $print['taxonomy'] = theme('links', $terms);
   }
 
-  $print['content'] = $node->body['und'][0]['value'];
   $print['node'] = $node;
   $print['message'] = $message;
 
@@ -593,6 +592,7 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
   $node->body['und'][0]['value'] = preg_replace_callback($pattern, '_print_rewrite_urls', $node->body['und'][0]['value']);
 
   $print = _print_var_generator($node, $message, $cid);
+  $print['content'] = $node->body['und'][0]['value'];
 
   return $print;
 }
@@ -659,6 +659,7 @@ function _print_generate_path($path, $format = PRINT_HTML_FORMAT, $teaser = FALS
   $node->body = preg_replace_callback($pattern, '_print_rewrite_urls', $node->body);
 
   $print = _print_var_generator($node, $message);
+  $print['content'] = $node->body;
 
   return $print;
 }
@@ -704,6 +705,8 @@ function _print_generate_book($nid, $format = PRINT_HTML_FORMAT, $teaser = FALSE
   $node->body = preg_replace_callback($pattern, '_print_rewrite_urls', $node->body);
 
   $print = _print_var_generator($node, $message);
+  $print['content'] = $node->body;
+
   // The title is already displayed by the book_recurse, so avoid duplication
   $print['title'] = '';
 

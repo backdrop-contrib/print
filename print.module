@@ -133,6 +133,7 @@ function print_theme() {
 /*function print_preprocess_print_node(&$vars) {
   $format = $vars['type'];
   $type = $vars['node']->type;
+  template_preprocess_node($vars);
   $vars['template_files'][] = "node";
   $vars['template_files'][] = "node-$type";
   $vars['template_files'][] = "print_node";
