@@ -27,14 +27,14 @@ CONFIGURATION
   Administer > Site building > Modules (admin/build/modules)
     Enable or disable the module. (default: disabled)
 
-  Administer > User management > Permissions (admin/user/permissions)
+  Administer > People > Permissions (admin/people/permissions)
     Under print module:
     access print: Enable access to the PF page and display of the PF link in
     other pages. (default: disabled)
     administer print: Enable access to the module settings page. (default:
     disabled)
 
-  Administer > Content management > Content types (admin/content/types)
+  Administer > Structure > Content types (admin/structure/types)
     For each content type it is possible to enable or disable the PF link
     via the "Show printer-friendly version link" checkbox. (default:
     enabled)
@@ -42,7 +42,7 @@ CONFIGURATION
     comments via the "Show printer-friendly version link in individual
     comments" checkbox. (default: disabled)
 
-  Administer > Site configuration > Printer-friendly (admin/settings/print)
+  Administer > Configuration > Printer, e-mail and PDF versions (admin/config/print)
     This is where all the module-specific configuration options can be set.
 
 - To modify the template of printer friendly pages, simply edit the

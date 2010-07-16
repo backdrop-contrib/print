@@ -470,14 +470,12 @@ function print_form_alter(&$form, &$form_state, $form_id) {
       $form['print']['print_display']['#default_value'] = variable_get('print_display_' . $form['#node_type']->type, PRINT_TYPE_SHOW_LINK_DEFAULT);
       $form['print']['print_display_comment']['#default_value'] = variable_get('print_display_comment_' . $form['#node_type']->type, PRINT_TYPE_COMMENT_LINK_DEFAULT);
       $form['print']['print_display_urllist']['#default_value'] = variable_get('print_display_urllist_' . $form['#node_type']->type, PRINT_TYPE_URLLIST_DEFAULT);
-      $form['print']['label']['#markup'] = '<p><em>' . t('The settings below only apply when some of the corresponding module-wide link settings are enabled.') . '</em></p>' . $form['print']['label']['#markup'];
     }
     else {
       $node = $form['#node'];
-      $form['print']['print_display']['#default_value'] = isset($node->print_display) ? $node->print_display : PRINT_TYPE_SHOW_LINK_DEFAULT;
-      $form['print']['print_display_comment']['#default_value'] = isset($node->print_display_comment) ? $node->print_display_comment : PRINT_TYPE_COMMENT_LINK_DEFAULT;
-      $form['print']['print_display_urllist']['#default_value'] = isset($node->print_display_urllist) ? $node->print_display_urllist : PRINT_TYPE_URLLIST_DEFAULT;
-      $form['print']['label']['#markup'] = '<p><em>' . t('The settings below only apply in case the corresponding type-specific setting is also enabled (except for the "Show link in individual comments").') . '</em></p>' . $form['print']['label']['#markup'];
+      $form['print']['print_display']['#default_value'] = isset($node->print_display) ? $node->print_display : variable_get('print_display_' . $node->type, PRINT_TYPE_SHOW_LINK_DEFAULT);
+      $form['print']['print_display_comment']['#default_value'] = isset($node->print_display_comment) ? $node->print_display_comment : variable_get('print_display_comment_' . $node->type, PRINT_TYPE_COMMENT_LINK_DEFAULT);
+      $form['print']['print_display_urllist']['#default_value'] = isset($node->print_display_urllist) ? $node->print_display_urllist : variable_get('print_display_urllist_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT);
     }
   }
 }
@@ -525,9 +523,9 @@ function _print_set_node_fields(&$node) {
   else {
     $res = FALSE;
   }
-  $node->print_display = $res ? intval($res->link) : PRINT_TYPE_SHOW_LINK_DEFAULT;
-  $node->print_display_comment = $res ? intval($res->comments) : PRINT_TYPE_COMMENT_LINK_DEFAULT;
-  $node->print_display_urllist = $res ? intval($res->url_list) : PRINT_TYPE_URLLIST_DEFAULT;
+  $node->print_display = $res ? intval($res->link) : variable_get('print_display_' . $node->type, PRINT_TYPE_SHOW_LINK_DEFAULT);
+  $node->print_display_comment = $res ? intval($res->comments) : variable_get('print_display_comment_' . $node->type, PRINT_TYPE_COMMENT_LINK_DEFAULT);
+  $node->print_display_urllist = $res ? intval($res->url_list) : variable_get('print_display_urllist_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT);
 }
 
 /**
@@ -566,13 +564,6 @@ function _print_get_title($path) {
  *   value of the url_list field (0 or 1)
  */
 function _print_node_conf_modify($nid, $link, $comments, $url_list) {
-  if (($link == PRINT_TYPE_SHOW_LINK_DEFAULT) && ($comments == PRINT_TYPE_COMMENT_LINK_DEFAULT) &&
-      ($url_list == PRINT_TYPE_URLLIST_DEFAULT)) {
-    db_delete('print_node_conf')
-      ->condition('nid', $nid)
-      ->execute();
-  }
-  else {
     db_merge('print_node_conf')
       ->key(array('nid' => $nid))
       ->fields(array(
@@ -581,7 +572,6 @@ function _print_node_conf_modify($nid, $link, $comments, $url_list) {
         'url_list' => $url_list,
       ))
       ->execute();
-  }
 }
 
 /**
@@ -821,17 +811,15 @@ function print_link_allowed($args) {
       // Link is for a comment, return the configured setting
       $res = db_query("SELECT comments FROM {print_node_conf} WHERE nid = :nid", array(':nid' => $node->nid))
                 ->fetch();
-      $print_display_comment = $res ? intval($res->comments) : PRINT_TYPE_COMMENT_LINK_DEFAULT;
-      if (($print_display_comment) ||
-          variable_get('print_display_comment_' . $node_type, PRINT_TYPE_COMMENT_LINK_DEFAULT)) {
+      $print_display_comment = $res ? intval($res->comments) : variable_get('print_display_comment_' . $node_type, PRINT_TYPE_COMMENT_LINK_DEFAULT);
+      if ($print_display_comment) {
         return PRINT_ALLOW_NORMAL_LINK;
       }
     }
     else {
       // Node link
-      if ((!$node->print_display) || (isset($node_type) &&
-          !variable_get('print_display_' . $node_type, PRINT_TYPE_SHOW_LINK_DEFAULT))) {
-        // Link for this node type is disabled
+      if (!$node->print_display) {
+        // Link for this node is disabled
         return FALSE;
       }
       elseif (isset($node->book)) {
