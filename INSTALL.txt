@@ -5,8 +5,7 @@ Decompress the print-n.x-n.n.tar.gz file into your Drupal modules
 directory (usually sites/all/modules, see http://drupal.org/node/176044 for
 more information).
 
-Enable the print module: Administer > Site building > Modules
-  (admin/build/modules)
+Enable the print module: Administer > Modules (admin/modules)
 
 PDF TOOL
 --------

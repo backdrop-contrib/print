@@ -173,6 +173,19 @@ function print_pdf_requirements($phase) {
           'severity' => REQUIREMENT_ERROR,
         );
       }
+      else {
+        if (basename($print_pdf_pdf_tool) == 'dompdf_config.inc.php') {
+          $directory = dirname($print_pdf_pdf_tool) .'/lib/fonts';
+          if (!is_dir($directory) || !is_writable($directory)) {
+            $requirements['print_pdf_tool'] = array(
+              'title' => $t('DOMPDF font cache directory'),
+              'value' => $t('Non-writable permissions'),
+              'description' => $t('You must change the %fontdir permissions to be writable, as dompdf requires write-access to that directory.', array('%fontdir' => $directory)),
+              'severity' => REQUIREMENT_ERROR,
+            );
+          }
+        }
+      }
       break;
   }
   return $requirements;

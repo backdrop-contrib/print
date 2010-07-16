@@ -24,7 +24,7 @@ CONFIGURATION
 
 - There are several settings that can be configured in the following places:
 
-  Administer > Site building > Modules (admin/build/modules)
+  Administer > Modules (admin/modules)
     Enable or disable the module. (default: disabled)
 
   Administer > People > Permissions (admin/people/permissions)
