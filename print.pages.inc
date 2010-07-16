@@ -238,7 +238,8 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
       $logo_url = strip_tags($print_logo_url);
       break;
   }
-  $print['logo'] = $logo_url ? "<img class='print-logo' src='" . check_url($logo_url) . "' alt='' />\n" : '';
+  $site_name = variable_get('site_name', 'Drupal');
+  $print['logo'] = $logo_url ? "<img class='print-logo' src='" . check_url($logo_url) . "' alt='$site_name' id='logo' />\n" : '';
 
   switch ($print_footer_options) {
     case 0: // none
