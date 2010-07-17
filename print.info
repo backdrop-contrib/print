@@ -7,3 +7,4 @@ files[] = print.module
 files[] = print.admin.inc
 files[] = print.pages.inc
 files[] = print.install
+configure = admin/config/print

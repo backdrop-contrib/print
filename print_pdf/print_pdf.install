@@ -3,7 +3,7 @@
 
 /**
  * @file
- * Install file of the print_pdf module
+ * Install, update and uninstall functions for the print_pdf module.
  *
  * @ingroup print
  */
@@ -12,8 +12,6 @@
  * Implements hook_uninstall().
  */
 function print_pdf_uninstall() {
-  drupal_uninstall_schema('print_pdf');
-
   variable_del('print_pdf_settings');
   variable_del('print_pdf_show_link');
   variable_del('print_pdf_link_pos');
@@ -47,11 +45,13 @@ function print_pdf_uninstall() {
  */
 function print_pdf_schema() {
   $schema['print_pdf_node_conf'] = array(
+    'description' => 'PDF version node-specific configuration settings',
     'fields' => array(
       'nid' => array(
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
+        'description' => 'The {node}.nid of the node.',
       ),
       'link' => array(
         'type' => 'int',
@@ -59,6 +59,7 @@ function print_pdf_schema() {
         'not null' => TRUE,
         'default' => 1,
         'size' => 'tiny',
+        'description' => 'Show link',
       ),
       'comments' => array(
         'type' => 'int',
@@ -66,6 +67,7 @@ function print_pdf_schema() {
         'not null' => TRUE,
         'default' => 1,
         'size' => 'tiny',
+        'description' => 'Show link in individual comments',
       ),
       'url_list' => array(
         'type' => 'int',
@@ -73,17 +75,20 @@ function print_pdf_schema() {
         'not null' => TRUE,
         'default' => 1,
         'size' => 'tiny',
+        'description' => 'Show Printer-friendly URLs list',
       ),
     ),
     'primary key' => array('nid'),
   );
 
   $schema['print_pdf_page_counter'] = array(
+    'description' => 'PDF version access counter',
     'fields' => array(
       'path' => array(
         'type' => 'varchar',
         'length' => 128,
         'not null' => TRUE,
+        'description' => 'Page path',
       ),
       'totalcount' => array(
         'type' => 'int',
@@ -91,12 +96,14 @@ function print_pdf_schema() {
         'not null' => TRUE,
         'default' => 0,
         'size' => 'big',
+        'description' => 'Number of page accesses',
       ),
       'timestamp' => array(
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
         'default' => 0,
+        'description' => 'Last access',
       ),
     ),
     'primary key' => array('path'),

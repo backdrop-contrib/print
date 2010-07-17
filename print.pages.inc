@@ -275,7 +275,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
     if (is_int($cid)) {
       $url .= '#comment-$cid';
     }
-    $retrieved_date = format_date(REQUEST_TIME, 'small');
+    $retrieved_date = format_date(REQUEST_TIME, 'short');
     $print_text_retrieved = filter_xss(variable_get('print_text_retrieved', t('retrieved on %date')));
     $retrieved = t($print_text_retrieved, array('%date' => $retrieved_date));
     $print['printdate'] = $print_sourceurl_date ? " ($retrieved)" : '';
@@ -296,7 +296,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
       $print['submitted'] = t($print_text_by, array('%author' => $by_author));
 
       $print_text_created = filter_xss(variable_get('print_text_created', t('Created %date')));
-      $created_datetime = format_date($node->created, 'small');
+      $created_datetime = format_date($node->created, 'short');
       $print['created'] = t($print_text_created, array('%date' => $created_datetime));
     }
     else {
@@ -629,7 +629,7 @@ function _print_generate_path($path, $format = PRINT_HTML_FORMAT, $teaser = FALS
   $node->body = menu_execute_active_handler($path);
 
   // It may happen that a drupal_not_found is called in the above call
-  if (preg_match('/404 Not Found/', drupal_get_headers()) == 1) {
+  if (preg_match('/404 Not Found/', drupal_get_http_header()) == 1) {
     return FALSE;
   }
 

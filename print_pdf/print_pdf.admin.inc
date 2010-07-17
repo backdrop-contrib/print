@@ -260,13 +260,7 @@ function _print_pdf_tools() {
     return -1;
   }
   else {
-    // Instead of array_combine(), use this to maintain PHP4 compatibility
-    $tools2 = array();
-    foreach ($tools as $key => $val) {
-      $tools2[$val] = $val;
-    }
-
-    return $tools2;
+    return array_combine($tools, $tools);
   }
 }
 

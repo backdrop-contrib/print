@@ -342,7 +342,7 @@ function print_mail_mail($key, &$message, $params) {
 
   switch ($key) {
     case 'sendpage':
-      $message['body'] = $params['body'];
+      $message['body'] = check_plain($params['body']);
       $message['headers']['Content-Type'] = 'text/html; charset=utf-8';
       break;
     case 'sendlink':
@@ -352,7 +352,7 @@ function print_mail_mail($key, &$message, $params) {
 
       // Send HTML-only version if MIME library not present
       if (!class_exists('Mail_mime')) {
-        $message['body'] = $sendlink_html;
+        $message['body'] = check_plain($sendlink_html);
         $message['headers']['Content-Type'] = 'text/html; charset=utf-8';
         break;
       }
@@ -379,7 +379,7 @@ function print_mail_mail($key, &$message, $params) {
       }
 
       // Store MIME message output in message array
-      $message['body'] = $mime->get($mime_params);
+      $message['body'] = check_plain($mime->get($mime_params));
       $message['headers'] = $mime->headers($message['headers']);
 
       // Strip special characters from Content-Type header

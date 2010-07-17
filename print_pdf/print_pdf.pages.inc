@@ -298,7 +298,7 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
   $dpi = 96;
 
   if (!empty($print_pdf_wkhtmltopdf_options)) {
-    $print_pdf_wkhtmltopdf_options = token_replace($print_pdf_wkhtmltopdf_options, 'node', $print['node']);
+    $print_pdf_wkhtmltopdf_options = token_replace($print_pdf_wkhtmltopdf_options, array('node' => $print['node']));
   }
 
   $descriptor = array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'w'));

@@ -86,10 +86,6 @@ define('PRINT_TYPE_FIELDS_WEIGHT', 30);
  */
 function print_permission() {
   return array(
-    'access print' => array(
-      'title' => t('Access the printer-friendly page'),
-      'description' => t('View the printer-friendly pages and the links to them in the original pages.'),
-    ),
     'administer print' => array(
       'title' => t('Administer the module'),
       'description' => t('Perform maintenance tasks for the print module.'),
@@ -97,6 +93,10 @@ function print_permission() {
     'node-specific print configuration' => array(
       'title' => t('Node-specific configuration'),
       'description' => t('Enable access to the per-node settings.'),
+    ),
+    'access print' => array(
+      'title' => t('Access the printer-friendly page'),
+      'description' => t('View the printer-friendly pages and the links to them in the original pages.'),
     ),
   );
 }
@@ -134,11 +134,12 @@ function print_preprocess_print_node(&$vars) {
   $format = $vars['type'];
   $type = $vars['node']->type;
   template_preprocess_node($vars);
-  $vars['template_files'][] = "node";
-  $vars['template_files'][] = "node-$type";
-  $vars['template_files'][] = "print_node";
-  $vars['template_files'][] = "print_node_$format";
-  $vars['template_files'][] = "print_node_$format.node-$type";
+
+  $variables['theme_hook_suggestions'][] = "node";
+  $variables['theme_hook_suggestions'][] = "node__$type";
+  $variables['theme_hook_suggestions'][] = "print_node";
+  $variables['theme_hook_suggestions'][] = "print_node_$format";
+  $variables['theme_hook_suggestions'][] = "print_node_$format.node__$type";
 }
 
 /**
@@ -147,10 +148,10 @@ function print_preprocess_print_node(&$vars) {
 function print_preprocess_print_page(&$vars) {
   $format = $vars['type'];
   $type = $vars['node']->type;
-  $vars['template_files'][] = "print";
-  $vars['template_files'][] = "print.node-$type";
-  $vars['template_files'][] = "print_$format";
-  $vars['template_files'][] = "print_$format.node-$type";
+  $variables['theme_hook_suggestions'][] = "print";
+  $variables['theme_hook_suggestions'][] = "print.node__$type";
+  $variables['theme_hook_suggestions'][] = "print_$format";
+  $variables['theme_hook_suggestions'][] = "print_$format.node__$type";
 }
 
 /**

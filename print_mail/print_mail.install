@@ -3,7 +3,7 @@
 
 /**
  * @file
- * Install file of the print_mail module
+ * Install, update and uninstall functions for the print_mail module.
  *
  * @ingroup print
  */
@@ -12,8 +12,6 @@
  * Implements hook_uninstall().
  */
 function print_mail_uninstall() {
-  drupal_uninstall_schema('print_mail');
-
   variable_del('print_mail_settings');
   variable_del('print_mail_show_link');
   variable_del('print_mail_link_pos');
@@ -45,11 +43,13 @@ function print_mail_uninstall() {
  */
 function print_mail_schema() {
   $schema['print_mail_node_conf'] = array(
+    'description' => 'Send by e-mail node-specific configuration settings',
     'fields' => array(
       'nid' => array(
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
+        'description' => 'The {node}.nid of the node.',
       ),
       'link' => array(
         'type' => 'int',
@@ -57,6 +57,7 @@ function print_mail_schema() {
         'not null' => TRUE,
         'default' => 1,
         'size' => 'tiny',
+        'description' => 'Show link',
       ),
       'comments' => array(
         'type' => 'int',
@@ -64,6 +65,7 @@ function print_mail_schema() {
         'not null' => TRUE,
         'default' => 1,
         'size' => 'tiny',
+        'description' => 'Show link in individual comments',
       ),
       'url_list' => array(
         'type' => 'int',
@@ -71,17 +73,20 @@ function print_mail_schema() {
         'not null' => TRUE,
         'default' => 1,
         'size' => 'tiny',
+        'description' => 'Show Printer-friendly URLs list',
       ),
     ),
     'primary key' => array('nid'),
   );
 
   $schema['print_mail_page_counter'] = array(
+    'description' => 'Send by e-mail version access counter',
     'fields' => array(
       'path' => array(
         'type' => 'varchar',
         'length' => 128,
         'not null' => TRUE,
+        'description' => 'Page path',
       ),
       'totalcount' => array(
         'type' => 'int',
@@ -89,12 +94,14 @@ function print_mail_schema() {
         'not null' => TRUE,
         'default' => 0,
         'size' => 'big',
+        'description' => 'Number of page accesses',
       ),
       'timestamp' => array(
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
         'default' => 0,
+        'description' => 'Last access',
       ),
       'sentcount' => array(
         'type' => 'int',
@@ -102,12 +109,14 @@ function print_mail_schema() {
         'not null' => TRUE,
         'default' => 0,
         'size' => 'big',
+        'description' => 'Number of sent emails',
       ),
       'sent_timestamp' => array(
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
         'default' => 0,
+        'description' => 'Last e-mail sent',
       ),
     ),
     'primary key' => array('path'),
