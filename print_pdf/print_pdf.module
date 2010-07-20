@@ -56,27 +56,27 @@ function print_pdf_theme() {
       'variables' => array(),
     ),
     'print_pdf_dompdf_footer' => array(
-      'variables' => array(),
+      'variables' => array('html' => ''),
       'file' => 'print_pdf.pages.inc',
     ),
     'print_pdf_tcpdf_header' => array(
-      'variables' => array(),
+      'variables' => array('pdf' => NULL, 'html' => '', 'font' => array()),
       'file' => 'print_pdf.pages.inc',
     ),
     'print_pdf_tcpdf_page' => array(
-      'variables' => array(),
+      'variables' => array('pdf' => NULL),
       'file' => 'print_pdf.pages.inc',
     ),
     'print_pdf_tcpdf_content' => array(
-      'variables' => array(),
+      'variables' => array('pdf' => NULL, 'html' => '', 'font' => array()),
       'file' => 'print_pdf.pages.inc',
     ),
     'print_pdf_tcpdf_footer' => array(
-      'variables' => array(),
+      'variables' => array('pdf' => NULL, 'html' => '', 'font' => array()),
       'file' => 'print_pdf.pages.inc',
     ),
     'print_pdf_tcpdf_footer2' => array(
-      'variables' => array(),
+      'variables' => array('pdf' => NULL),
       'file' => 'print_pdf.pages.inc',
     ),
   );
