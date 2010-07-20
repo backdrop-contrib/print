@@ -21,7 +21,7 @@ require_once(DRUPAL_ROOT . '/' . drupal_get_path('module', 'print') . '/print.pa
  *
  * @ingroup forms
  */
-function print_mail_form($form_state) {
+function print_mail_form($form, &$form_state) {
   global $user;
 
   $print_mail_hourly_threshold = variable_get('print_mail_hourly_threshold', PRINT_MAIL_HOURLY_THRESHOLD);
@@ -144,7 +144,7 @@ function print_mail_form($form_state) {
   );
 
   if ($user->uid != 0) {
-    $user_name = check_plain(strip_tags(theme('username', $user)));
+    $user_name = check_plain(strip_tags(theme('username', array('account' => $user))));
     $form['fld_from_addr']['#default_value'] = $user->mail;
     $form['fld_from_addr']['#disabled'] = TRUE;
     $form['fld_from_addr']['#value'] = $user->mail;
@@ -342,7 +342,7 @@ function print_mail_mail($key, &$message, $params) {
 
   switch ($key) {
     case 'sendpage':
-      $message['body'] = check_plain($params['body']);
+      $message['body'][] = check_plain($params['body']);
       $message['headers']['Content-Type'] = 'text/html; charset=utf-8';
       break;
     case 'sendlink':
@@ -352,7 +352,7 @@ function print_mail_mail($key, &$message, $params) {
 
       // Send HTML-only version if MIME library not present
       if (!class_exists('Mail_mime')) {
-        $message['body'] = check_plain($sendlink_html);
+        $message['body'][] = check_plain($sendlink_html);
         $message['headers']['Content-Type'] = 'text/html; charset=utf-8';
         break;
       }
@@ -366,20 +366,20 @@ function print_mail_mail($key, &$message, $params) {
       // Pass message contents into MIME object
       switch ($key) {
         case 'sendlink':
-          $mime->setTXTBody($sendlink_plain);
+          $mime->setTxtBody($sendlink_plain);
           $mime->setHTMLBody($sendlink_html);
           break;
         case 'inline-attachment':
           $mime->setHTMLBody($params['body']);
           // no break on purpose
         case 'plain-attachment':
-          $mime->setTXTBody($params['message']);
+          $mime->setTxtBody($params['message']);
           $mime->addAttachment($params['body'], 'text/html', 'Attachment.html', FALSE);
           break;
       }
 
       // Store MIME message output in message array
-      $message['body'] = check_plain($mime->get($mime_params));
+      $message['body'][] = check_plain($mime->get($mime_params));
       $message['headers'] = $mime->headers($message['headers']);
 
       // Strip special characters from Content-Type header
