@@ -124,7 +124,7 @@ function print_theme() {
  * Clones the node theme registry for print_node so that it works with existing node templates
  */
 function print_theme_registry_alter(&$theme_registry) {
-  $theme_registry['print_node']['theme paths'] += $theme_registry['node']['theme paths'];
+//  $theme_registry['print_node']['theme path'] += $theme_registry['node']['theme path'];
 }
 
 /**

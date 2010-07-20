@@ -197,12 +197,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   // If we are sending a message via e-mail, the CSS must be embedded
   if (!empty($message)) {
     $style = '';
-    $css_files = array();
-    foreach ($drupal_css as $types) {
-      foreach ($types as $values) {
-        $css_files = array_merge($css_files, array_keys($values));
-      }
-    }
+    $css_files = array_keys($drupal_css);
     if (!empty($print_css)) {
       // Convert to a local path, by removing the base_path
       $pattern = '!^' . base_path() . '!';
@@ -340,8 +335,8 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   if (module_exists('taxonomy')) {
 // TODO make this work when taxonomy works again
 //    $terms = taxonomy_link('taxonomy terms', $node);
-    $terms = taxonomy_preview_terms($node);
-    $print['taxonomy'] = theme('links', $terms);
+//    $terms = taxonomy_preview_terms($node);
+    $print['taxonomy'] = theme('links', array('links' => $terms));
   }
 
   $print['node'] = $node;

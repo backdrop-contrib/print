@@ -150,7 +150,7 @@ function _print_pdf_dompdf($print, $html, $filename) {
   $dompdf->set_protocol($protocol);
 
 // dompdf can't handle footers cleanly, so disable the following
-//  $html = theme('print_pdf_dompdf_footer', $html);
+//  $html = theme('print_pdf_dompdf_footer', array('html' => $html));
 
   // If dompdf Unicode support is disabled, try to convert to ISO-8859-1 and then to HTML entities
   if (!variable_get('print_pdf_dompdf_unicode', PRINT_PDF_DOMPDF_UNICODE_DEFAULT)) {
@@ -254,9 +254,9 @@ function _print_pdf_tcpdf($print, $html, $filename) {
     $pdf->setRTL(TRUE);
   }
 
-  $pdf = theme('print_pdf_tcpdf_header', $pdf, $html, $font);
-  $pdf = theme('print_pdf_tcpdf_footer', $pdf, $html, $font);
-  $pdf = theme('print_pdf_tcpdf_page', $pdf);
+  $pdf = theme('print_pdf_tcpdf_header', array('pdf' => $pdf, 'html' => $html, 'font' => $font));
+  $pdf = theme('print_pdf_tcpdf_footer', array('pdf' => $pdf, 'html' => $html, 'font' => $font));
+  $pdf = theme('print_pdf_tcpdf_page', array('pdf' => $pdf));
 
   //initialize document
   $pdf->AliasNbPages();
@@ -264,7 +264,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   // add a page
   $pdf->AddPage();
 
-  $pdf = theme('print_pdf_tcpdf_content', $pdf, $html, $font);
+  $pdf = theme('print_pdf_tcpdf_content', array('pdf' => $pdf, 'html' => $html, 'font' => $font));
 
   // reset pointer to the last page
   $pdf->lastPage();
@@ -350,9 +350,9 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
  *   contents of the body of the HTML from the original node
  * @see theme_print_pdf_tcpdf_footer()
  */
-function theme_print_pdf_dompdf_footer($html) {
-  preg_match('!<div class="print-footer">(.*?)</div>!si', $html, $tpl_footer);
-  $html = str_replace($tpl_footer[0], '', $html);
+function theme_print_pdf_dompdf_footer($vars) {
+  preg_match('!<div class="print-footer">(.*?)</div>!si', $vars['html'], $tpl_footer);
+  $html = str_replace($tpl_footer[0], '', $vars['html']);
 
   $text = '<script type="text/php">
     if (isset($pdf)) {
@@ -397,10 +397,11 @@ function theme_print_pdf_dompdf_footer($html) {
  *   array with the font definition (font name, styles and size)
  * @see theme_print_pdf_tcpdf_header()
  */
-function theme_print_pdf_tcpdf_header($pdf, $html, $font) {
-  preg_match('!<div class="print-logo">(.*?)</div>!si', $html, $tpl_logo);
-  preg_match('!<h1 class="print-title">(.*?)</h1>!si', $html, $tpl_title);
-  preg_match('!<div class="print-site_name">(.*?)</div>!si', $html, $tpl_site_name);
+function theme_print_pdf_tcpdf_header($vars) {
+  $pdf = $vars['pdf'];
+  preg_match('!<div class="print-logo">(.*?)</div>!si', $vars['html'], $tpl_logo);
+  preg_match('!<h1 class="print-title">(.*?)</h1>!si', $vars['html'], $tpl_title);
+  preg_match('!<div class="print-site_name">(.*?)</div>!si', $vars['html'], $tpl_site_name);
 
   $ratio = 0;
   $logo = '';
@@ -412,7 +413,7 @@ function theme_print_pdf_tcpdf_header($pdf, $html, $font) {
   }
 
   // set header font
-  $pdf->setHeaderFont($font);
+  $pdf->setHeaderFont($vars['font']);
   // set header margin
   $pdf->SetHeaderMargin(5);
   // set header data
@@ -428,7 +429,8 @@ function theme_print_pdf_tcpdf_header($pdf, $html, $font) {
  *   current TCPDF object
  * @see theme_print_pdf_tcpdf_page()
  */
-function theme_print_pdf_tcpdf_page($pdf) {
+function theme_print_pdf_tcpdf_page($vars) {
+  $pdf = $vars['pdf'];
   // set margins
   $pdf->SetMargins(15, 20, 15);
   // set auto page breaks
@@ -454,11 +456,12 @@ function theme_print_pdf_tcpdf_page($pdf) {
  *   array with the font definition (font name, styles and size)
  * @see theme_print_pdf_tcpdf_content()
  */
-function theme_print_pdf_tcpdf_content($pdf, $html, $font) {
+function theme_print_pdf_tcpdf_content($vars) {
+  $pdf = $vars['pdf'];
   // set content font
-  $pdf->setFont($font[0], $font[1], $font[2]);
+  $pdf->setFont($vars['font'][0], $vars['font'][1], $vars['font'][2]);
 
-  preg_match('!<body.*?>(.*)</body>!sim', $html, $matches);
+  preg_match('!<body.*?>(.*)</body>!sim', $vars['html'], $matches);
   $pattern = '!(?:<div class="print-(?:logo|site_name|breadcrumb|footer)">.*?</div>|<hr class="print-hr" />)!si';
   $matches[1] = preg_replace($pattern, '', $matches[1]);
 
@@ -491,13 +494,14 @@ function theme_print_pdf_tcpdf_content($pdf, $html, $font) {
  *   array with the font definition (font name, styles and size)
  * @see theme_print_pdf_tcpdf_footer()
  */
-function theme_print_pdf_tcpdf_footer($pdf, $html, $font) {
-  preg_match('!<div class="print-footer">(.*?)</div>!si', $html, $tpl_footer);
+function theme_print_pdf_tcpdf_footer($vars) {
+  $pdf = $vars['pdf'];
+  preg_match('!<div class="print-footer">(.*?)</div>!si', $vars['html'], $tpl_footer);
   $footer = trim(preg_replace('!</?div[^>]*?>!i', '', $tpl_footer[1]));
 
   // set footer font
-  $font[2] *= 0.8;
-  $pdf->setFooterFont($font);
+  $vars['font'][2] *= 0.8;
+  $pdf->setFooterFont($vars['font']);
   // set footer margin
   $pdf->SetFooterMargin(10);
   // set footer data
@@ -513,7 +517,8 @@ function theme_print_pdf_tcpdf_footer($pdf, $html, $font) {
  *   current TCPDF object
  * @see theme_print_pdf_tcpdf_footer2()
  */
-function theme_print_pdf_tcpdf_footer2($pdf) {
+function theme_print_pdf_tcpdf_footer2($vars) {
+  $pdf = $vars['pdf'];
   //Position at 1.5 cm from bottom
   $pdf->writeHTMLCell(0, 15, 15, -10, $pdf->footer, 0, 0, 0, TRUE, '');
 
