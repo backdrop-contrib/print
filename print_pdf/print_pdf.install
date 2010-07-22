@@ -134,7 +134,7 @@ function print_pdf_schema() {
 function print_pdf_update_7000(&$sandbox) {
   $renamed_deltas = array(
     'print_pdf' => array(
-      '0' => 'print_pdf top',
+      '0' => 'print_pdf-top',
     ),
   );
 

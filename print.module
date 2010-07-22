@@ -228,10 +228,10 @@ function print_menu() {
  * Implements hook_block_info().
  */
 function print_block_info() {
-      $block[0]['info'] = t('Printer, e-mail and PDF versions');
-      $block[0]['cache'] = DRUPAL_CACHE_PER_PAGE;
-      $block[1]['info'] = t('Most printed');
-      $block[1]['cache'] = DRUPAL_CACHE_GLOBAL;
+      $block['print-links']['info'] = t('Printer, e-mail and PDF versions');
+      $block['print-links']['cache'] = DRUPAL_CACHE_PER_PAGE;
+      $block['print-top']['info'] = t('Most printed');
+      $block['print-top']['cache'] = DRUPAL_CACHE_GLOBAL;
       return $block;
 }
 
@@ -240,7 +240,7 @@ function print_block_info() {
  */
 function print_block_view($delta = '') {
       switch ($delta) {
-      case 0:
+      case 'print-links':
       $nid = preg_replace('!^node/!', '', $_GET['q']);
       if (is_numeric($nid)) {
         $node = node_load($nid);
@@ -259,7 +259,7 @@ function print_block_view($delta = '') {
         }
       }
         break;
-      case 1:
+      case 'print-top':
         $block['subject'] = t('Most printed');
         $result = db_query_range("SELECT path FROM {print_page_counter} ORDER BY totalcount DESC", 0, 3)
                     ->fetchAll();
@@ -639,10 +639,10 @@ function _print_format_link_aux($type = 0, $text = '', $img = '') {
     $html = TRUE;
     switch ($type) {
     case 2:
-      $text = theme('image', $img, $text, $text, array('class' => 'print-icon'));
+      $text = theme('image', array('path' => $img, 'alt' => $text, 'title' => $text, 'attributes' => array('class' => 'print-icon')));
       break;
     case 3:
-      $text = theme('image', $img, $text, $text, array('class' => 'print-icon print-icon-margin')) . $text;
+      $text = theme('image', array('path' => $img, 'alt' => $text, 'title' => $text, 'attributes' => array('class' => 'print-icon print-icon-margin'))) . $text;
       break;
     }
   }

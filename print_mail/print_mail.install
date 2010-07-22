@@ -147,7 +147,7 @@ function print_mail_schema() {
 function print_mail_update_7000(&$sandbox) {
   $renamed_deltas = array(
     'print_mail' => array(
-      '0' => 'print_mail top',
+      '0' => 'print_mail-top',
     ),
   );
 

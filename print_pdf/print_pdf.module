@@ -31,7 +31,7 @@ define('PRINT_PDF_PAGE_ORIENTATION_DEFAULT', 'portrait');
 define('PRINT_PDF_AUTOCONFIG_DEFAULT', 1);
 define('PRINT_PDF_FONT_FAMILY_DEFAULT', 'dejavusans');
 define('PRINT_PDF_FONT_SIZE_DEFAULT', 10);
-define('PRINT_PDF_FILENAME_DEFAULT', '[site:name] - [node:title] - [date:custom:Y-m-d]');
+define('PRINT_PDF_FILENAME_DEFAULT', '[site:name] - [node:title] - [node:changed]');
 define('PRINT_PDF_DOMPDF_UNICODE_DEFAULT', 0);
 define('PRINT_PDF_WKHTMLTOPDF_OPTIONS', "--footer-font-size 7 --footer-right '[page]'");
 
@@ -129,8 +129,8 @@ function print_pdf_menu() {
  * Implements hook_block_info().
  */
 function print_pdf_block_info() {
-      $block[0]['info'] = t('Most PDFd');
-      $block[0]['cache'] = DRUPAL_CACHE_GLOBAL;
+      $block['print_pdf-top']['info'] = t('Most PDFd');
+      $block['print_pdf-top']['cache'] = DRUPAL_CACHE_GLOBAL;
       return $block;
 }
 
@@ -139,7 +139,7 @@ function print_pdf_block_info() {
  */
 function print_pdf_block_view($delta = 0) {
       switch ($delta) {
-      case 0:
+      case 'print_pdf-top':
         $block['subject'] = t('Most PDFd');
         $result = db_query_range("SELECT path FROM {print_pdf_page_counter} ORDER BY totalcount DESC", 0, 3)
                     ->fetchAll();

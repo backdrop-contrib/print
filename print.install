@@ -161,8 +161,8 @@ function print_schema() {
 function print_update_7000(&$sandbox) {
   $renamed_deltas = array(
     'print' => array(
-      '0' => 'print links',
-      '1' => 'print top',
+      '0' => 'print-links',
+      '1' => 'print-top',
     ),
   );
 

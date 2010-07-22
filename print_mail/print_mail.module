@@ -103,8 +103,8 @@ function print_mail_menu() {
  * Implements hook_block_info().
  */
 function print_mail_block_info() {
-      $block[0]['info'] = t('Most emailed');
-      $block[0]['cache'] = DRUPAL_CACHE_GLOBAL;
+      $block['print_mail-top']['info'] = t('Most emailed');
+      $block['print_mail-top']['cache'] = DRUPAL_CACHE_GLOBAL;
       return $block;
 }
 
@@ -113,7 +113,7 @@ function print_mail_block_info() {
  */
 function print_mail_block_view($delta = 0) {
       switch ($delta) {
-      case 0:
+      case 'print_mail-top':
         $block['subject'] = t('Most emailed');
         $result = db_query_range("SELECT path FROM {print_mail_page_counter} ORDER BY sentcount DESC", 0, 3)
                     ->fetchAll();
