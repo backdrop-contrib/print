@@ -9,6 +9,22 @@
  */
 
 /**
+ * Implements hook_enable().
+ */
+function print_mail_enable() {
+  $t = get_t(); 
+
+  // Module weight
+  db_update('system')
+    ->fields(array(
+      'weight' => 1,
+    ))
+    ->condition('type', 'module')
+    ->condition('name', 'print_mail')
+    ->execute();
+}
+
+/**
  * Implements hook_uninstall().
  */
 function print_mail_uninstall() {
@@ -124,3 +140,16 @@ function print_mail_schema() {
 
   return $schema;
 }
+
+/**
+ * Remove hardcoded numeric deltas from all blocks
+ */
+function print_mail_update_7000(&$sandbox) {
+  $renamed_deltas = array(
+    'print_mail' => array(
+      '0' => 'print_mail top',
+    ),
+  );
+
+  update_fix_d7_block_deltas($sandbox, $renamed_deltas, array());      
+} 

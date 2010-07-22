@@ -19,6 +19,22 @@ function print_install() {
 }
 
 /**
+ * Implements hook_enable().
+ */
+function print_enable() {
+  $t = get_t(); 
+
+  // Module weight
+  db_update('system')
+    ->fields(array(
+      'weight' => 0,
+    ))
+    ->condition('type', 'module')
+    ->condition('name', 'print')
+    ->execute();
+}
+
+/**
  * Implements hook_uninstall().
  */
 function print_uninstall() {
@@ -137,4 +153,18 @@ function print_schema() {
   );
 
   return $schema;
+}
+
+/**
+ * Remove hardcoded numeric deltas from all blocks
+ */
+function print_update_7000(&$sandbox) {
+  $renamed_deltas = array(
+    'print' => array(
+      '0' => 'print links',
+      '1' => 'print top',
+    ),
+  );
+
+  update_fix_d7_block_deltas($sandbox, $renamed_deltas, array());
 }

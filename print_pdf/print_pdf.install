@@ -9,6 +9,22 @@
  */
 
 /**
+ * Implements hook_enable().
+ */
+function print_pdf_enable() {
+  $t = get_t(); 
+
+  // Module weight
+  db_update('system')
+    ->fields(array(
+      'weight' => 2,
+    ))
+    ->condition('type', 'module')
+    ->condition('name', 'print_pdf')
+    ->execute();
+}
+
+/**
  * Implements hook_uninstall().
  */
 function print_pdf_uninstall() {
@@ -110,4 +126,21 @@ function print_pdf_schema() {
   );
 
   return $schema;
+}
+
+/**
+ * Remove hardcoded numeric deltas from all blocks
+ */
+function print_pdf_update_7000(&$sandbox) {
+  $renamed_deltas = array(
+    'print_pdf' => array(
+      '0' => 'print_pdf top',
+    ),
+  );
+
+  update_fix_d7_block_deltas($sandbox, $renamed_deltas, array());
+
+  if (variable_get('print_pdf_filename', '') == '[site-name] - [title] - [mod-yyyy]-[mod-mm]-[mod-dd]') {
+    variable_set('print_pdf_filename', '[site:name] - [node:title] - [node:changed]');
+  }
 }
