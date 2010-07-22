@@ -141,6 +141,6 @@ function print_pdf_update_7000(&$sandbox) {
   update_fix_d7_block_deltas($sandbox, $renamed_deltas, array());
 
   if (variable_get('print_pdf_filename', '') == '[site-name] - [title] - [mod-yyyy]-[mod-mm]-[mod-dd]') {
-    variable_set('print_pdf_filename', '[site:name] - [node:title] - [node:changed]');
+    variable_set('print_pdf_filename', '[site:name] - [node:title] - [node:changed:custom:Y-m-d]');
   }
 }
