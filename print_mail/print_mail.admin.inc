@@ -11,6 +11,9 @@
  * @ingroup print
  */
 
+// Include MIME library
+@include_once('Mail/mime.php');
+
 /**
  * Menu callback for the send by e-mail module settings form.
  *
@@ -145,6 +148,20 @@ function print_mail_settings() {
     '#default_value' => variable_get('print_mail_teaser_choice', PRINT_MAIL_TEASER_CHOICE_DEFAULT),
     '#description' => t('If checked, the user will be able to choose between sending the full content or only the teaser at send time.'),
   );
+
+  $form['settings']['print_mail_send_option_default'] = array(
+    '#type' => 'select',
+    '#title' => t('Default e-mail sending format'),
+    '#default_value' => variable_get('print_mail_send_option_default', PRINT_MAIL_SEND_OPTION_DEFAULT),
+    '#options' => array(
+      'sendlink' => 'Link',
+      'sendpage' => 'Inline HTML',
+    ),
+  );
+  if (class_exists('Mail_mime')) {
+    $form['settings']['print_mail_send_option_default']['#options']['inline-attachment'] = 'Inline HTML with Attachment';
+    $form['settings']['print_mail_send_option_default']['#options']['plain-attachment'] = 'Plain Text with Attachment';
+  }
 
   if (module_exists('job_queue')) {
     $form['settings']['print_mail_job_queue'] = array(
