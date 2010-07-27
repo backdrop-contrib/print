@@ -24,12 +24,12 @@ function print_main_settings() {
 
   $form['settings']['print_css'] = array(
     '#type' => 'textfield',
-    '#title' => t('Stylesheet URL'),
+    '#title' => t('Custom Stylesheet'),
     '#default_value' => variable_get('print_css', PRINT_CSS_DEFAULT),
     '#size' => 60,
     '#maxlength' => 250,
-    '#description' => t('The URL to your custom print cascading stylesheet, if any. When none is specified, the default module CSS file is used.') . '<br />' .
-                      t('Macros: %b (base path: "%base"), %t (path to theme: "%theme")', array('%base' => base_path(), '%theme' => path_to_theme())) . '<br />' .
+    '#description' => t('The path to your custom print cascading stylesheet, if any. The path provided must be relative to the base path. When none is specified, the default module CSS file is used.') . '<br />' .
+                      t('Macros: %t (path to theme: "%theme")', array('%theme' => path_to_theme())) . '<br />' .
                       t('Requires the <em>administer site configuration</em> permission.'),
     '#disabled' => !user_access('administer site configuration'),
   );
@@ -172,11 +172,10 @@ function _print_main_settings_validate($form, &$form_state) {
     }
   }
 
-  // Check that the stylesheet URL is a local URL, if it is an absolute URL, then it must start with the site's base URL
-  if (preg_match('!^http://.*!', $form_state['values']['print_css'], $matches)) {
-    if (!preg_match("!^$base_url/!", $matches[0])) {
-      form_set_error('print_css', t("Stylesheet URL must be a relative path or start with the site's base URL"));
-    }
+  // Check that the stylesheet path is indeed valid and relative to base_path()
+  $print_css = realpath($_SERVER["DOCUMENT_ROOT"].base_path()) .'/'. strtr($form_state['values']['print_css'], array('%t' => path_to_theme()));
+  if (!is_file($print_css) || !is_readable($print_css)) {
+    form_set_error('print_css', t("File %file is not readable by the web server.", array('%file' => $print_css)));
   }
 }
 

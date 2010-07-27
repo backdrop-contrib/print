@@ -180,8 +180,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   $print['favicon'] = theme_get_setting('toggle_favicon') ? "<link rel='shortcut icon' href='" . theme_get_setting('favicon') . "' type='image/x-icon' />\n" : '';
 
   if (!empty($print_css)) {
-    $replace_pairs = array('%b' => base_path(), '%t' => path_to_theme());
-    $user_css = check_url(strtr($print_css, $replace_pairs));
+    drupal_add_css(strtr($print_css, array('%t' => path_to_theme())));
   }
   else {
     drupal_add_css(drupal_get_path('module', 'print') . '/css/print.css');
@@ -198,11 +197,6 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   if (!empty($message)) {
     $style = '';
     $css_files = array_keys($drupal_css);
-    if (!empty($print_css)) {
-      // Convert to a local path, by removing the base_path
-      $pattern = '!^' . base_path() . '!';
-      $css_files[] = preg_replace($pattern, '', $user_css);
-    }
     foreach ($css_files as $filename) {
       $res = file_exists($filename) ? file_get_contents($filename, TRUE) : FALSE;
       if ($res != FALSE) {
@@ -213,10 +207,6 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   }
   else {
     $print['css'] = drupal_get_css($drupal_css);
-    if (!empty($print_css)) {
-      $query_string = '?' . substr(variable_get('css_js_query_string', '0'), 0, 1);
-      $print['css'] .= "<link type='text/css' rel='stylesheet' media='all' href='${user_css}${query_string}' />\n";
-    }
   }
 
   $window_close = ($print_html_new_window && $print_html_windowclose) ? 'window.close();' : '';

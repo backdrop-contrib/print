@@ -125,6 +125,7 @@ function print_theme() {
  */
 function print_theme_registry_alter(&$theme_registry) {
 //  $theme_registry['print_node']['theme path'] += $theme_registry['node']['theme path'];
+//  $theme_registry['print_page']['theme path'] += $theme_registry['page']['theme path'];
 }
 
 /**
@@ -134,7 +135,6 @@ function print_preprocess_print_node(&$vars) {
   $format = $vars['type'];
   $type = $vars['node']->type;
   template_preprocess_node($vars);
-
   $variables['theme_hook_suggestions'][] = "node";
   $variables['theme_hook_suggestions'][] = "node__$type";
   $variables['theme_hook_suggestions'][] = "print_node";
@@ -148,6 +148,9 @@ function print_preprocess_print_node(&$vars) {
 function print_preprocess_print_page(&$vars) {
   $format = $vars['type'];
   $type = $vars['node']->type;
+  $vars['show_blocks'] = FALSE;
+  $vars['show_messages'] = FALSE;
+  template_preprocess_page($vars);
   $variables['theme_hook_suggestions'][] = "print";
   $variables['theme_hook_suggestions'][] = "print.node__$type";
   $variables['theme_hook_suggestions'][] = "print_$format";
