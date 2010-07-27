@@ -379,7 +379,7 @@ function print_node_view($node, $view_mode) {
     $node->content['links']['print_html'] = array(
       '#theme' => 'links',
       '#links' => $links,
-      '#attributes' => array('class' => 'links inline'),
+      '#attributes' => array('class' => array('links', 'inline')),
     );
   }
 
@@ -605,7 +605,7 @@ function print_fill_attributes($title = '', $class = '', $new_window = FALSE) {
   $attributes = array();
   $attributes['title'] = $title;
   if (!empty($class)) {
-    $attributes['class'] = $class;
+    $attributes['class'] = array($class);
   }
 
   if ($new_window) {
@@ -642,10 +642,10 @@ function _print_format_link_aux($type = 0, $text = '', $img = '') {
     $html = TRUE;
     switch ($type) {
     case 2:
-      $text = theme('image', array('path' => $img, 'alt' => $text, 'title' => $text, 'attributes' => array('class' => 'print-icon')));
+      $text = theme('image', array('path' => $img, 'alt' => $text, 'title' => $text, 'attributes' => array('class' => array('print-icon'))));
       break;
     case 3:
-      $text = theme('image', array('path' => $img, 'alt' => $text, 'title' => $text, 'attributes' => array('class' => 'print-icon print-icon-margin'))) . $text;
+      $text = theme('image', array('path' => $img, 'alt' => $text, 'title' => $text, 'attributes' => array('class' => array('print-icon', 'print-icon-margin')))) . $text;
       break;
     }
   }

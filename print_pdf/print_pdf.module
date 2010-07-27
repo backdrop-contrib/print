@@ -236,7 +236,7 @@ function print_pdf_node_view($node, $build_mode) {
     $node->content['links']['print_pdf'] = array(
       '#theme' => 'links',
       '#links' => $links,
-      '#attributes' => array('class' => 'links inline'),
+      '#attributes' => array('class' => array('links', 'inline')),
     );
   }
 
