@@ -131,10 +131,10 @@ function print_theme_registry_alter(&$theme_registry) {
 /**
  * Renders the content of the node using the theme api
  */
-function print_preprocess_print_node(&$vars) {
-  $format = $vars['type'];
-  $type = $vars['node']->type;
-  template_preprocess_node($vars);
+function print_preprocess_print_node(&$variables) {
+  $format = $variables['type'];
+  $type = $variables['node']->type;
+  template_preprocess_node($variables);
   $variables['theme_hook_suggestions'][] = "node";
   $variables['theme_hook_suggestions'][] = "node__$type";
   $variables['theme_hook_suggestions'][] = "print_node";
@@ -145,12 +145,12 @@ function print_preprocess_print_node(&$vars) {
 /**
  * Renders the print page, where the node content gets embedded
  */
-function print_preprocess_print_page(&$vars) {
-  $format = $vars['type'];
-  $type = $vars['node']->type;
-  $vars['show_blocks'] = FALSE;
-  $vars['show_messages'] = FALSE;
-  template_preprocess_page($vars);
+function print_preprocess_print_page(&$variables) {
+  $format = $variables['type'];
+  $type = $variables['node']->type;
+  $variables['show_blocks'] = FALSE;
+  $variables['show_messages'] = FALSE;
+  template_preprocess_page($variables);
   $variables['theme_hook_suggestions'][] = "print";
   $variables['theme_hook_suggestions'][] = "print.node__$type";
   $variables['theme_hook_suggestions'][] = "print_$format";
