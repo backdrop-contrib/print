@@ -59,7 +59,7 @@ function print_pdf_controller() {
   }
   else {
     $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?(?:${lang}/)?([^>]*?>)!is";
-    $replacement = '$1file://'. realpath($_SERVER["DOCUMENT_ROOT"].base_path()) .'/$2';
+    $replacement = '$1file://'. realpath($_SERVER["DOCUMENT_ROOT"] . base_path()) .'/$2';
   }
   $print['content'] = preg_replace($pattern, $replacement, $print['content']);
   $print['logo'] = preg_replace($pattern, $replacement, $print['logo']);
