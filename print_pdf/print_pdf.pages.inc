@@ -68,7 +68,7 @@ function print_pdf_controller() {
   $print['sendtoprinter'] = '';
 
   $node = $print['node'];
-  $html = theme('print_page', array('print' => $print, 'type' => PRINT_PDF_FORMAT, 'node' => $node));
+  $html = theme('print', array('print' => $print, 'type' => PRINT_PDF_FORMAT, 'node' => $node));
 
   // Convert the a href elements, to make sure no relative links remain
   $pattern = '!<(a\s[^>]*?)>!is';

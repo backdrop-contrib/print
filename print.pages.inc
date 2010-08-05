@@ -27,7 +27,7 @@ function print_controller_html() {
   $print = print_controller($path, $cid, PRINT_HTML_FORMAT);
   if ($print !== FALSE) {
     $node = $print['node'];
-    $html = theme('print_page', array('print' => $print, 'type' => PRINT_HTML_FORMAT, 'node' => $node));
+    $html = theme('print', array('print' => $print, 'type' => PRINT_HTML_FORMAT, 'node' => $node));
     print $html;
 
     $nodepath = (isset($node->path)) ? drupal_get_normal_path($node->path) : 'node/' . $path;
@@ -323,7 +323,6 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
   }
 
   if (module_exists('taxonomy')) {
-// TODO make this work when taxonomy works again
 //    $terms = taxonomy_link('taxonomy terms', $node);
 //    $terms = taxonomy_preview_terms($node);
     $print['taxonomy'] = theme('links', array('links' => $terms));
