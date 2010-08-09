@@ -21,7 +21,7 @@ require_once(DRUPAL_ROOT . '/' . drupal_get_path('module', 'print') . '/print.pa
  * @see _print_pdf_tcpdf()
  */
 function print_pdf_controller() {
-  global $base_url, $language;
+  global $base_url;
 
   // Disable caching for generated PDFs, as Drupal doesn't ouput the proper headers from the cache
   $GLOBALS['conf']['cache'] = FALSE;
@@ -42,28 +42,7 @@ function print_pdf_controller() {
   $print['content'] = preg_replace_callback($pattern, '_print_rewrite_urls', $print['content']);
   $print['logo'] = preg_replace_callback($pattern, '_print_rewrite_urls', $print['logo']);
   $print['footer_message'] = preg_replace_callback($pattern, '_print_rewrite_urls', $print['footer_message']);
-  // And converted from private to public paths
-  switch (variable_get('language_negotiation', LANGUAGE_NEGOTIATION_NONE)) {
-    case LANGUAGE_NEGOTIATION_PATH_DEFAULT:
-    case LANGUAGE_NEGOTIATION_PATH:
-      $lang = $language->language;
-      break;
-    default:
-      $lang = '';
-      break;
-  }
-  $file_downloads = variable_get('file_default_scheme', 'public');
-  if ($file_downloads == 'private') {
-    $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?(?:${lang}/)?system/files/([^>]*?>)!is";
-    $replacement = '$1file://' . realpath(file_directory_path()) . '/$2';
-  }
-  else {
-    $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?(?:${lang}/)?([^>]*?>)!is";
-    $replacement = '$1file://'. realpath($_SERVER["DOCUMENT_ROOT"] . base_path()) .'/$2';
-  }
-  $print['content'] = preg_replace($pattern, $replacement, $print['content']);
-  $print['logo'] = preg_replace($pattern, $replacement, $print['logo']);
-  $print['footer_message'] = preg_replace($pattern, $replacement, $print['footer_message']);
+
   // Send to printer option causes problems with PDF
   $print['sendtoprinter'] = '';
 
@@ -112,6 +91,44 @@ function print_pdf_controller() {
 }
 
 /**
+ * Convert image paths to the file:// protocol
+ *
+ * In some Drupal setups, the use of the 'private' filesystem or Apache's
+ * configuration prevent access to the images of the page. This function
+ * tries to circumnvent those problems by accessing files in the local
+ * filesystem.
+ *
+ * @param $html
+ *   contents of the post-processed template already with the node data
+ * @see print_pdf_controller()
+ */
+function _print_pdf_file_access_images($html) {
+  global $base_url, $language;
+
+  // And converted from private to public paths
+  switch (variable_get('language_negotiation', LANGUAGE_NEGOTIATION_NONE)) {
+    case LANGUAGE_NEGOTIATION_PATH_DEFAULT:
+    case LANGUAGE_NEGOTIATION_PATH:
+      $lang = $language->language;
+      break;
+    default:
+      $lang = '';
+      break;
+  }
+  $file_downloads = variable_get('file_default_scheme', 'public');
+  if ($file_downloads == 'private') {
+    $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?(?:${lang}/)?system/files/([^>]*?>)!is";
+    $replacement = '$1file://' . realpath(file_directory_path()) . '/$2';
+    $html = preg_replace($pattern, $replacement, $html);
+  }
+  $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?(?:${lang}/)?([^>]*?>)!is";
+  $replacement = '$1file://'. realpath($_SERVER["DOCUMENT_ROOT"] . base_path()) .'/$2';
+  $html = preg_replace($pattern, $replacement, $html);
+
+  return $html;
+}
+
+/**
  * Generate the PDF file using the dompdf library
  *
  * @param $print
@@ -137,6 +154,9 @@ function _print_pdf_dompdf($print, $html, $filename) {
 
   require_once(DRUPAL_ROOT . '/' . $print_pdf_pdf_tool);
   spl_autoload_register('DOMPDF_autoload');
+
+  // Try to use local file access for image files
+  $html = _print_pdf_file_access_images($html);
 
   // dompdf seems to have problems with something in system.css so let's not use it
   $html = preg_replace('!<link.*?modules/system/system.css.*?/>!', '', $html);
@@ -219,6 +239,9 @@ function _print_pdf_tcpdf($print, $html, $filename) {
     define('K_CELL_HEIGHT_RATIO', 1.25);
     define('K_SMALL_RATIO', 2/3);
   }
+
+  // Try to use local file access for image files
+  $html = _print_pdf_file_access_images($html);
 
   // Decode HTML entities in image filenames
   $pattern = "!<img\s[^>]*?src\s*?=\s*?['\"]?{$base_url}[^>]*?>!is";
