@@ -185,6 +185,17 @@ function print_pdf_requirements($phase) {
             );
           }
         }
+        elseif (substr(basename($print_pdf_pdf_tool, '.exe'), 0, 11) == 'wkhtmltopdf') {
+          $version = _print_pdf_wkhtmltopdf_version();
+          if (version_compare($version, '0.9.6', '<')) {
+            $requirements['print_pdf_tool'] = array(
+              'title' => $t('wkhtmltopdf version'),
+              'value' => $t('Unsupported version'),
+              'description' => $t('The currently selected version of wkhtmltopdf (@version) is not supported. Please update to a <a href="@url">newer version</a>.', array('@version' => $version, '@url' => url('http://code.google.com/p/wkhtmltopdf/'))),
+              'severity' => REQUIREMENT_ERROR,
+            );
+          }
+        }
       }
       break;
   }
@@ -562,4 +573,21 @@ function print_pdf_link_allowed($args) {
     return _print_page_match($print_pdf_sys_link_visibility, $_GET['q'], $print_pdf_sys_link_pages);
   }
   return FALSE;
+}
+
+function _print_pdf_wkhtmltopdf_version() {
+  $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
+  $descriptor = array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'w'));
+   
+  $cmd = realpath($print_pdf_pdf_tool) ." --version";
+  $process = proc_open($cmd, $descriptor, $pipes, NULL, NULL);
+  if (is_resource($process)) {
+    $out = preg_match('!.*?(\d+\.\d+\.\d+).*$!m', stream_get_contents($pipes[1]), $matches);
+    fclose($pipes[0]);
+    fclose($pipes[1]);
+    fclose($pipes[2]);
+    $retval = proc_terminate($process);
+  }
+
+  return ($matches[1]);
 }

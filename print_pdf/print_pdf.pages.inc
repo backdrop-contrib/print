@@ -328,6 +328,20 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
     $print_pdf_wkhtmltopdf_options = token_replace($print_pdf_wkhtmltopdf_options, array('node' => $print['node']));
   }
 
+  $version = _print_pdf_wkhtmltopdf_version();
+
+  // 0.10.0 beta2 identifies itself as 0.9.9
+  if (version_compare($version, '0.9.9', '>=')) {
+    $print_pdf_wkhtmltopdf_options = '--disable-local-file-access '. $print_pdf_wkhtmltopdf_options;
+  }
+  elseif (version_compare($version, '0.9.6', '>=')) {
+    $print_pdf_wkhtmltopdf_options = '--disallow-local-file-access '. $print_pdf_wkhtmltopdf_options;
+  }
+  else {
+    drupal_goto($print['url']);
+    exit;
+  }
+
   $descriptor = array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'w'));
   $cmd = realpath($print_pdf_pdf_tool) . " --page-size $print_pdf_paper_size --orientation $print_pdf_page_orientation --dpi $dpi $print_pdf_wkhtmltopdf_options - -";
 
