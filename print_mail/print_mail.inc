@@ -101,13 +101,13 @@ function print_mail_form($form, &$form_state) {
     '#title' => t('Send page as'),
     '#default_value' => variable_get('print_mail_send_option_default', PRINT_MAIL_SEND_OPTION_DEFAULT),
     '#options' => array(
-      'sendlink' => 'Link',
-      'sendpage' => 'Inline HTML',
+      'sendlink' => t('Link'),
+      'sendpage' => t('Inline HTML'),
     ),
   );
   if (class_exists('Mail_mime')) {
-    $form['fld_send_option']['#options']['inline-attachment'] = 'Inline HTML with Attachment';
-    $form['fld_send_option']['#options']['plain-attachment'] = 'Plain Text with Attachment';
+    $form['fld_send_option']['#options']['inline-attachment'] = t('Inline HTML with Attachment');
+    $form['fld_send_option']['#options']['plain-attachment'] = t('Plain Text with Attachment');
   }
   $form['txt_message'] = array(
     '#type' => 'textarea',

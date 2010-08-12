@@ -154,13 +154,13 @@ function print_mail_settings() {
     '#title' => t('Default e-mail sending format'),
     '#default_value' => variable_get('print_mail_send_option_default', PRINT_MAIL_SEND_OPTION_DEFAULT),
     '#options' => array(
-      'sendlink' => 'Link',
-      'sendpage' => 'Inline HTML',
+      'sendlink' => t('Link'),
+      'sendpage' => t('Inline HTML'),
     ),
   );
   if (class_exists('Mail_mime')) {
-    $form['settings']['print_mail_send_option_default']['#options']['inline-attachment'] = 'Inline HTML with Attachment';
-    $form['settings']['print_mail_send_option_default']['#options']['plain-attachment'] = 'Plain Text with Attachment';
+    $form['settings']['print_mail_send_option_default']['#options']['inline-attachment'] = t('Inline HTML with Attachment');
+    $form['settings']['print_mail_send_option_default']['#options']['plain-attachment'] = t('Plain Text with Attachment');
   }
 
   if (module_exists('job_queue')) {
