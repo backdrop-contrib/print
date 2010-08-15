@@ -173,9 +173,11 @@ function _print_main_settings_validate($form, &$form_state) {
   }
 
   // Check that the stylesheet path is indeed valid and relative to base_path()
-  $print_css = realpath($_SERVER["DOCUMENT_ROOT"] . base_path()) .'/'. strtr($form_state['values']['print_css'], array('%t' => path_to_theme()));
-  if (!is_file($print_css) || !is_readable($print_css)) {
-    form_set_error('print_css', t("File %file is not readable by the web server.", array('%file' => $print_css)));
+  if (!empty($form_state['values']['print_css'])) {
+    $print_css = dirname($_SERVER['SCRIPT_FILENAME']) .'/'. strtr($form_state['values']['print_css'], array('%t' => path_to_theme()));
+    if (!is_file($print_css) || !is_readable($print_css)) {
+      form_set_error('print_css', t("File %file is not readable by the web server.", array('%file' => $print_css)));
+    }
   }
 }
 
