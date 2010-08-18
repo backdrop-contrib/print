@@ -17,6 +17,15 @@
  * @ingroup forms
  */
 function print_main_settings() {
+  $print_css = variable_get('print_css', PRINT_CSS_DEFAULT);
+  // Check that the stylesheet path is indeed valid and relative to base_path()
+  if (!empty($print_css)) {
+    $css_path = dirname($_SERVER['SCRIPT_FILENAME']) .'/'. strtr($print_css, array('%t' => drupal_get_path('theme', variable_get('theme_default', 'garland'))));
+    if (!is_file($css_path) || !is_readable($css_path)) {
+      drupal_set_message(t("File %file is not readable by the web server.", array('%file' => $css_path)), 'warning', FALSE);
+    }
+  }
+
   $form['settings'] = array(
     '#type' => 'fieldset',
     '#title' => t('Common Settings'),
@@ -29,7 +38,7 @@ function print_main_settings() {
     '#size' => 60,
     '#maxlength' => 250,
     '#description' => t('The path to your custom print cascading stylesheet, if any. The path provided must be relative to the base path. When none is specified, the default module CSS file is used.') . '<br />' .
-                      t('Macros: %t (path to theme: "%theme")', array('%theme' => path_to_theme())) . '<br />' .
+                      t('Macros: %t (path to theme: "%theme")', array('%theme' => drupal_get_path('theme', variable_get('theme_default', 'bartik')))) . '<br />'.
                       t('Requires the <em>administer site configuration</em> permission.'),
     '#disabled' => !user_access('administer site configuration'),
   );
@@ -169,14 +178,6 @@ function _print_main_settings_validate($form, &$form_state) {
     if (file_unmanaged_copy($file, $filename, FILE_EXISTS_REPLACE)) {
       $form_state['values']['print_logo_options'] = 2;
       $form_state['values']['print_logo_url'] = base_path() . $file->filepath;
-    }
-  }
-
-  // Check that the stylesheet path is indeed valid and relative to base_path()
-  if (!empty($form_state['values']['print_css'])) {
-    $print_css = dirname($_SERVER['SCRIPT_FILENAME']) .'/'. strtr($form_state['values']['print_css'], array('%t' => path_to_theme()));
-    if (!is_file($print_css) || !is_readable($print_css)) {
-      form_set_error('print_css', t("File %file is not readable by the web server.", array('%file' => $print_css)));
     }
   }
 }
