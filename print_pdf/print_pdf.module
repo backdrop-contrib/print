@@ -167,15 +167,23 @@ function print_pdf_requirements($phase) {
       $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
       if (empty($print_pdf_pdf_tool)) {
         $requirements['print_pdf_tool'] = array(
-          'title' => $t('PDF version'),
+          'title' => $t('PDF generation library'),
           'value' => $t('No PDF tool selected'),
-          'description' => $t('Please configure it in the <a href="@url">PDF settings page</a>. ', array('@url' => url('admin/config/print/pdf'))),
+          'description' => $t('Please configure it in the <a href="@url">PDF settings page</a>.', array('@url' => url('admin/config/print/pdf'))),
           'severity' => REQUIREMENT_ERROR,
         );
       }
       else {
-        if (basename($print_pdf_pdf_tool) == 'dompdf_config.inc.php') {
-          $directory = dirname($print_pdf_pdf_tool) .'/lib/fonts';
+        if (!is_file($print_pdf_pdf_tool) || !is_readable($print_pdf_pdf_tool)) {
+          $requirements['print_pdf_tool'] = array(
+            'title' => $t('PDF generation tool'),
+            'value' => $t('File not found'),
+            'description' => $t('The currently selected PDF generation library (%file) is no longer accessible.', array('%file' => $print_pdf_pdf_tool)),
+            'severity' => REQUIREMENT_ERROR,
+          );
+        }
+        elseif (basename($print_pdf_pdf_tool) == 'dompdf_config.inc.php') {
+          $directory = dirname($print_pdf_pdf_tool) . '/lib/fonts';
           if (!is_dir($directory) || !is_writable($directory)) {
             $requirements['print_pdf_tool'] = array(
               'title' => $t('DOMPDF font cache directory'),
@@ -186,14 +194,24 @@ function print_pdf_requirements($phase) {
           }
         }
         elseif (substr(basename($print_pdf_pdf_tool, '.exe'), 0, 11) == 'wkhtmltopdf') {
-          $version = _print_pdf_wkhtmltopdf_version();
-          if (version_compare($version, '0.9.6', '<')) {
+          if (function_exists('is_executable') && !is_executable($print_pdf_pdf_tool)) {
             $requirements['print_pdf_tool'] = array(
-              'title' => $t('wkhtmltopdf version'),
-              'value' => $t('Unsupported version'),
-              'description' => $t('The currently selected version of wkhtmltopdf (@version) is not supported. Please update to a <a href="@url">newer version</a>.', array('@version' => $version, '@url' => url('http://code.google.com/p/wkhtmltopdf/'))),
+              'title' => $t('wkhtmltopdf library'),
+              'value' => $t('Non-executable permissions'),
+              'description' => $t('You must modify the permissions of the wkhtmltopdf file (%file) to make it executable.', array('%file' => $print_pdf_pdf_tool)),
               'severity' => REQUIREMENT_ERROR,
             );
+          }
+          else {
+            $version = _print_pdf_wkhtmltopdf_version();
+            if (version_compare($version, '0.9.6', '<')) {
+              $requirements['print_pdf_tool'] = array(
+                'title' => $t('wkhtmltopdf library'),
+                'value' => $t('Unsupported version'),
+                'description' => $t('The currently selected version of wkhtmltopdf (@version) is not supported. Please update to a <a href="@url">newer version</a>.', array('@version' => $version, '@url' => url('http://code.google.com/p/wkhtmltopdf/'))),
+                'severity' => REQUIREMENT_ERROR,
+              );
+            }
           }
         }
       }
