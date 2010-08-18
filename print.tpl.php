@@ -12,11 +12,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="<?php print $print['language']; ?>" xml:lang="<?php print $print['language']; ?>">
   <head>
     <?php print $print['head']; ?>
+    <?php print $print['base_href']; ?>
     <title><?php print $print['title']; ?></title>
     <?php print $print['scripts']; ?>
     <?php print $print['sendtoprinter']; ?>
     <?php print $print['robots_meta']; ?>
-    <?php print $print['base_href']; ?>
     <?php print $print['favicon']; ?>
     <?php print $print['css']; ?>
   </head>
