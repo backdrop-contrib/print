@@ -452,6 +452,10 @@ function _print_friendly_urls($url = 0) {
  *   TRUE if URL list should be displayed, FALSE otherwise
  */
 function _print_url_list_enabled($node, $format = PRINT_HTML_FORMAT) {
+  if (!isset($node->type)) {
+     return TRUE;
+  }
+
   switch ($format) {
     case PRINT_HTML_FORMAT:
       $node_urllist = isset($node->print_display_urllist) ? $node->print_display_urllist : variable_get('print_display_urllist_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT);

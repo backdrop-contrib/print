@@ -140,10 +140,15 @@ function print_preprocess_print_node(&$variables) {
  */
 function print_preprocess_print(&$variables) {
   $format = $variables['type'];
-  $type = $variables['node']->type;
-  $variables['show_blocks'] = FALSE;
-  $variables['page']['#show_messages'] = FALSE;
-  template_preprocess_page($variables);
+  if (isset($variables['node']->type)) {
+    $type = $variables['node']->type;
+    $variables['show_blocks'] = FALSE;
+    $variables['page']['#show_messages'] = FALSE;
+    template_preprocess_page($variables);
+  }
+  else {
+    $type = '';
+  }
   $variables['theme_hook_suggestions'][] = "print";
   $variables['theme_hook_suggestions'][] = "print__node_{$type}";
   $variables['theme_hook_suggestions'][] = "print__{$format}";
