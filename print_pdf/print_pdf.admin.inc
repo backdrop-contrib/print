@@ -217,7 +217,18 @@ function print_pdf_settings() {
         '#default_value' => variable_get('print_pdf_filename', PRINT_PDF_FILENAME_DEFAULT),
         '#description' => t("If left empty the generated filename defaults to the node's path. Tokens may be used to build the filename (see following list). The .pdf extension will be appended automatically."),
       );
-
+    if (module_exists('token')) {
+      $form['settings']['print_pdf_filename_patterns'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Replacement Patterns'),
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
+      );
+      $form['settings']['print_pdf_filename_patterns']['descriptions'] = array(
+        '#theme' => 'token_tree',
+        '#token_types' => array('node'),
+      );
+    }
     $form['#validate'][] = '_print_pdf_settings_validate';
   }
   else {
