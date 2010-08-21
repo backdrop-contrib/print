@@ -122,7 +122,7 @@ function _print_pdf_file_access_images($html) {
     $html = preg_replace($pattern, $replacement, $html);
   }
   $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?(?:${lang}/)?([^>]*?>)!is";
-  $replacement = '$1file://'. dirname($_SERVER['SCRIPT_FILENAME']) .'/$2';
+  $replacement = '$1file://' . dirname($_SERVER['SCRIPT_FILENAME']) . '/$2';
   $html = preg_replace($pattern, $replacement, $html);
 
   return $html;
@@ -332,10 +332,10 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
 
   // 0.10.0 beta2 identifies itself as 0.9.9
   if (version_compare($version, '0.9.9', '>=')) {
-    $print_pdf_wkhtmltopdf_options = '--disable-local-file-access '. $print_pdf_wkhtmltopdf_options;
+    $print_pdf_wkhtmltopdf_options = '--disable-local-file-access ' . $print_pdf_wkhtmltopdf_options;
   }
   elseif (version_compare($version, '0.9.6', '>=')) {
-    $print_pdf_wkhtmltopdf_options = '--disallow-local-file-access '. $print_pdf_wkhtmltopdf_options;
+    $print_pdf_wkhtmltopdf_options = '--disallow-local-file-access ' . $print_pdf_wkhtmltopdf_options;
   }
   else {
     drupal_goto($print['url']);

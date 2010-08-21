@@ -22,7 +22,7 @@ function print_install() {
  * Implements hook_enable().
  */
 function print_enable() {
-  $t = get_t(); 
+  $t = get_t();
 
   // Module weight
   db_update('system')
