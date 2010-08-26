@@ -322,12 +322,6 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
     }
   }
 
-  if (module_exists('taxonomy')) {
-//    $terms = taxonomy_link('taxonomy terms', $node);
-//    $terms = taxonomy_preview_terms($node);
-    $print['taxonomy'] = theme('links', array('links' => $terms));
-  }
-
   $print['node'] = $node;
   $print['message'] = $message;
 
@@ -573,15 +567,17 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
 
   drupal_alter('node_view', $build);
 
+  $content = render($build);
+
   //Check URL list settings
   $_print_urls = _print_url_list_enabled($node, $format);
 
   // Convert the a href elements
   $pattern = '!<(a\s[^>]*?)>(.*?)(</a>)!is';
-  $node->body['und'][0]['value'] = preg_replace_callback($pattern, '_print_rewrite_urls', $node->body['und'][0]['value']);
+  $content = preg_replace_callback($pattern, '_print_rewrite_urls', $content);
 
   $print = _print_var_generator($node, $message, $cid);
-  $print['content'] = $node->body['und'][0]['value'];
+  $print['content'] = $content;
 
   return $print;
 }

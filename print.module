@@ -127,7 +127,7 @@ function print_theme() {
 function print_preprocess_print_node(&$variables) {
   $format = $variables['type'];
   $type = $variables['node']->type;
-//  template_preprocess_node($variables);
+  template_preprocess_node($variables);
   $variables['theme_hook_suggestions'][] = "node";
   $variables['theme_hook_suggestions'][] = "node__$type";
   $variables['theme_hook_suggestions'][] = "print_node";
