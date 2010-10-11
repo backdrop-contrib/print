@@ -71,8 +71,6 @@ function print_uninstall() {
   variable_del('print_footer_user');
   variable_del('print_html_link_text');
   variable_del('print_html_link_use_alias');
-  variable_del('print_text_by');
-  variable_del('print_text_created');
   variable_del('print_text_links');
   variable_del('print_text_published');
   variable_del('print_text_retrieved');

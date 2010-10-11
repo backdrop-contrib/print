@@ -111,11 +111,12 @@ function print_theme() {
     ),
     'print_node' => array(
       'variables' => array('node' => NULL, 'teaser' => FALSE, 'page' => FALSE, 'type' => PRINT_HTML_FORMAT),
+      'render element' => 'elements',
       'template' => 'print_node',
-      'base hook' => 'node',
     ),
     'print' => array(
       'variables' => array('print' => array(), 'type' => PRINT_HTML_FORMAT, 'node' => NULL),
+      'render element' => 'page',
       'template' => 'print',
     ),
   );
@@ -125,14 +126,15 @@ function print_theme() {
  * Implements hook_preprocess_HOOK().
  */
 function print_preprocess_print_node(&$variables) {
-  $format = $variables['type'];
+  $variables['node'] = $variables['elements']['#node'];
   $type = $variables['node']->type;
+//  $format = $variables['type'];
   template_preprocess_node($variables);
   $variables['theme_hook_suggestions'][] = "node";
-  $variables['theme_hook_suggestions'][] = "node__$type";
+  $variables['theme_hook_suggestions'][] = "node__{$type}";
   $variables['theme_hook_suggestions'][] = "print_node";
-  $variables['theme_hook_suggestions'][] = "print_node_$format";
-  $variables['theme_hook_suggestions'][] = "print_node_$format.node__$type";
+//  $variables['theme_hook_suggestions'][] = "print_node_{$format}";
+//  $variables['theme_hook_suggestions'][] = "print_node_{$format}.node__{$type}";
 }
 
 /**
@@ -150,9 +152,9 @@ function print_preprocess_print(&$variables) {
     $type = '';
   }
   $variables['theme_hook_suggestions'][] = "print";
-  $variables['theme_hook_suggestions'][] = "print__node_{$type}";
+  $variables['theme_hook_suggestions'][] = "print__node__{$type}";
   $variables['theme_hook_suggestions'][] = "print__{$format}";
-  $variables['theme_hook_suggestions'][] = "print__{$format}_node_{$type}";
+  $variables['theme_hook_suggestions'][] = "print__{$format}__node__{$type}";
 }
 
 /**

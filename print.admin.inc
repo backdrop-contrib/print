@@ -364,14 +364,6 @@ function print_main_strings_settings() {
     '#type' => 'textfield',
     '#default_value' => variable_get('print_text_published', t('Published on %site_name')),
   );
-  $form['print_main_text']['print_text_by'] = array(
-    '#type' => 'textfield',
-    '#default_value' => variable_get('print_text_by', t('By %author')),
-  );
-  $form['print_main_text']['print_text_created'] = array(
-    '#type' => 'textfield',
-    '#default_value' => variable_get('print_text_created', t('Created %date')),
-  );
   $form['print_main_text']['print_text_source_url'] = array(
     '#type' => 'textfield',
     '#default_value' => variable_get('print_text_source_url', t('Source URL')),

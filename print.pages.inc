@@ -272,30 +272,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
     $print['source_url'] = '';
   }
 
-  if (isset($node->type)) {
-    $node_type = $node->type;
-
-    if (theme_get_setting("toggle_node_info_$node_type")) {
-      $print_text_by = filter_xss(variable_get('print_text_by', t('By %author')));
-      $by_author = ($node->name ? $node->name : variable_get('anonymous', t('Anonymous')));
-      $print['submitted'] = t($print_text_by, array('%author' => $by_author));
-
-      $print_text_created = filter_xss(variable_get('print_text_created', t('Created %date')));
-      $created_datetime = format_date($node->created, 'short');
-      $print['created'] = t($print_text_created, array('%date' => $created_datetime));
-    }
-    else {
-      $print['submitted'] = '';
-      $print['created'] = '';
-    }
-
-    $print['type'] = $node->type;
-  }
-  else {
-    $print['submitted'] = '';
-    $print['created'] = '';
-    $print['type'] = '';
-  }
+  $print['type'] = (isset($node->type)) ? $node->type : '';
 
   menu_set_active_item($path);
   $breadcrumb = drupal_get_breadcrumb();
@@ -488,7 +465,10 @@ function _print_url_list_enabled($node, $format = PRINT_HTML_FORMAT) {
  */
 function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $teaser = FALSE, $message = NULL) {
   global $_print_urls;
-  global $language;
+
+  if (!isset($langcode)) {
+    $langcode = $GLOBALS['language_content']->language;
+  }
 
   // We can take a node id
   $node = node_load($nid);
@@ -560,9 +540,10 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
   }
 
   $build += array(
-    '#theme' => 'print_node',
+    '#theme' => 'node',
     '#node' => $node,
     '#view_mode' => $view_mode,
+    '#language' => $langcode,
   );
 
   drupal_alter('node_view', $build);
