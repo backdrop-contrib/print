@@ -1,4 +1,3 @@
-# $Id$
 #
 # Russian translation of Drupal (print)
 # Copyright 2007 Vlad Savitsky <vs@solti.com.ua>

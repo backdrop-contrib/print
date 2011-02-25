@@ -1,4 +1,3 @@
-# $Id$
 #
 # Nederlands translation of Drupal (print)
 # Copyright 2004 Hendrik Eeckhaut <Hendrik.Eeckhaut@UGent.be>

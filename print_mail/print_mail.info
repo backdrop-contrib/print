@@ -1,4 +1,3 @@
-; $Id$
 name = "Send by e-mail"
 description = "Provides the capability to send the web page by e-mail"
 core=7.x

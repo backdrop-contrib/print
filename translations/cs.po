@@ -1,4 +1,3 @@
-# $Id$
 #
 # Czech translation of Drupal (print)
 # Copyright 2006 Whit <whit@drupal-cz.info>

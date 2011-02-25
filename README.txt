@@ -125,4 +125,3 @@ ACKNOWLEDGMENTS
 The print, pdf and mail icons are copyright Plone Foundation. Thanks for
 letting me use them!
 
-// $Id$

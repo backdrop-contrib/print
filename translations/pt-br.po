@@ -1,4 +1,3 @@
-# $Id$
 #
 # Portuguese (Brazil) translation of Drupal (print)
 # Copyright Edmilson Ferreira da Silva <search@google>

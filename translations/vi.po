@@ -1,4 +1,3 @@
-# $Id$
 #
 # Vietnamese translation of Drupal (print)
 # Copyright 2008 NAME <thehong@toila.net>

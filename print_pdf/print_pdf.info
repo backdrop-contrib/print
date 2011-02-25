@@ -1,4 +1,3 @@
-; $Id$
 name = "PDF version"
 description = "Adds the capability to export pages as PDF."
 core=7.x

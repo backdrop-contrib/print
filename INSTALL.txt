@@ -90,4 +90,3 @@ Note that pattern matching in robots.txt is a Google extension (see
 http://www.google.com/support/webmasters/bin/answer.py?answer=40367 for more
 information).
 
-// $Id$

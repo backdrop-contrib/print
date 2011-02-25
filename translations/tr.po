@@ -1,4 +1,3 @@
-# $Id$
 #
 # Turkish translation of Drupal (print)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
