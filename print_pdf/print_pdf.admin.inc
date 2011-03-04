@@ -33,13 +33,6 @@ function print_pdf_settings() {
       '#description' => t('This option selects the PDF generation tool being used by this module to create the PDF version.'),
     );
 
-    $form['settings']['print_pdf_tcpdf_subsetting'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Enable TCPDF font subsetting'),
-      '#default_value' => variable_get('print_pdf_tcpdf_subsetting', PRINT_PDF_TCPDF_SUBSETTING_DEFAULT),
-      '#description' => t('Only embed those font characters that are actually used.  This can generates smaller PDF files but may significantly slow down processing.  This option has no effect unless TCPDF is selected above.'),
-    );
-
     $form['settings']['print_pdf_link_pos'] = array(
       '#type' => 'checkboxes',
       '#title' => t('PDF version link'),
@@ -201,6 +194,12 @@ function print_pdf_settings() {
       '#size' => 2,
       '#maxlength' => 3,
       '#description' => t('(TCPDF only) Set the font size to be used for normal text. This is the base value for the scaling applied to other text styles.'),
+    );
+    $form['settings']['print_pdf_font_subsetting'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enable font subsetting'),
+      '#default_value' => variable_get('print_pdf_font_subsetting', PRINT_PDF_FONT_SUBSETTING_DEFAULT),
+      '#description' => t('(TCPDF only) Only embed those font characters that are actually used.  This can generates smaller PDF files but may significantly slow down processing.'),
     );
     $form['settings']['print_pdf_dompdf_unicode'] = array(
       '#type' => 'checkbox',

@@ -31,10 +31,10 @@ define('PRINT_PDF_PAGE_ORIENTATION_DEFAULT', 'portrait');
 define('PRINT_PDF_AUTOCONFIG_DEFAULT', 1);
 define('PRINT_PDF_FONT_FAMILY_DEFAULT', 'dejavusans');
 define('PRINT_PDF_FONT_SIZE_DEFAULT', 10);
+define('PRINT_PDF_FONT_SUBSETTING_DEFAULT', 0);
 define('PRINT_PDF_FILENAME_DEFAULT', '[site:name] - [node:title] - [node:changed:custom:Y-m-d]');
 define('PRINT_PDF_DOMPDF_UNICODE_DEFAULT', 0);
 define('PRINT_PDF_WKHTMLTOPDF_OPTIONS', "--footer-font-size 7 --footer-right '[page]'");
-define('PRINT_PDF_TCPDF_SUBSETTING_DEFAULT', 0);
 
 /**
  * Implements hook_permission().
