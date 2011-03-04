@@ -116,11 +116,11 @@ function _print_pdf_file_access_images($html) {
   }
   $file_downloads = variable_get('file_default_scheme', 'public');
   // The following is broken in Drupal-7, since file_directory_path() doesn't exist anymore.
-  //if ($file_downloads == 'private') {
-    //$pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?(?:${lang}/)?system/files/([^>]*?>)!is";
-    // $replacement = '$1file://' . realpath(file_directory_path()) . '/$2';
-    // $html = preg_replace($pattern, $replacement, $html);
-  //}
+/*  if ($file_downloads == 'private') {
+    $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?(?:${lang}/)?system/files/([^>]*?>)!is";
+    $replacement = '$1file://' . realpath(file_directory_path()) . '/$2';
+    $html = preg_replace($pattern, $replacement, $html);
+  }*/
   $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?(?:${lang}/)?([^>]*?>)!is";
   $replacement = '$1file://' . dirname($_SERVER['SCRIPT_FILENAME']) . '/$2';
   $html = preg_replace($pattern, $replacement, $html);
@@ -276,7 +276,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   $keys = implode(' ', explode("\n", trim(strip_tags($print['taxonomy']))));
   $pdf->SetKeywords($keys);
   $pdf->setPDFVersion('1.6');
-  $pdf->setFontSubsetting(variable_get('print_pdf_tcpdf_subsetting',FALSE));
+  $pdf->setFontSubsetting(variable_get('print_pdf_font_subsetting',FALSE));
 
   if ($language->direction == LANGUAGE_RTL) {
     $pdf->setRTL(TRUE);
