@@ -41,9 +41,6 @@ function print_mail_form($form, &$form_state) {
   $path = explode('/', $_GET['q']);
   unset($path[0]);
   $path = implode('/', $path);
-  if (is_numeric($path)) {
-    $path = 'node/' . $path;
-  }
   $cid = isset($_GET['comment']) ? (int)$_GET['comment'] : NULL;
   $title = _print_get_title($path);
 

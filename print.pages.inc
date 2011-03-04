@@ -590,12 +590,7 @@ function _print_generate_path($path, $format = PRINT_HTML_FORMAT, $teaser = FALS
   menu_set_active_item($path);
   // Adapted from index.php.
   $node = new stdClass();
-  $node->body = menu_execute_active_handler($path);
-
-  // It may happen that a drupal_not_found is called in the above call
-  if (preg_match('/404 Not Found/', drupal_get_http_header()) == 1) {
-    return FALSE;
-  }
+  $node->body = menu_execute_active_handler($path, FALSE);
 
   if (is_int($node->body)) {
     switch ($node->body) {
@@ -612,6 +607,7 @@ function _print_generate_path($path, $format = PRINT_HTML_FORMAT, $teaser = FALS
 
   $node->title = drupal_get_title();
   $node->path = $path;
+  $node->changed = 0;
 
   // Delete any links area
   $node->body = preg_replace('!\s*<div class="links">.*?</div>!sim', '', $node->body);
