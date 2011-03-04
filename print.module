@@ -39,7 +39,8 @@
 define('PRINT_PATH', 'print');
 
 define('PRINT_HTML_FORMAT', 'html');
-
+define('PRINT_MAIL_FORMAT', 'mail');
+define('PRINT_PDF_FORMAT', 'pdf');
 define('PRINT_LOGO_OPTIONS_DEFAULT', 1);
 define('PRINT_LOGO_URL_DEFAULT', '');
 define('PRINT_FOOTER_OPTIONS_DEFAULT', 1);

@@ -9,7 +9,8 @@
 
 define('PRINTMAIL_PATH', 'printmail');
 
-define('PRINT_MAIL_FORMAT', 'mail');
+// Defined in print.module
+//define('PRINT_MAIL_FORMAT', 'mail');
 
 define('PRINT_MAIL_LINK_POS_DEFAULT', 'link');
 define('PRINT_MAIL_LINK_TEASER_DEFAULT', 0);
