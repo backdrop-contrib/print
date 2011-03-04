@@ -893,5 +893,5 @@ function print_query_string_encode($query, $exclude = array(), $parent = '') {
     }
   }
 
-  return implode('&', $params);
+  return $params;
 }
