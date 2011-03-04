@@ -423,7 +423,7 @@ function _print_friendly_urls($url = 0) {
  */
 function _print_url_list_enabled($node, $format = PRINT_HTML_FORMAT) {
   if (!isset($node->type)) {
-    return TRUE;
+    return variable_get('print_urls', PRINT_URLS_DEFAULT);
   }
 
   switch ($format) {
