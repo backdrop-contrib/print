@@ -201,13 +201,13 @@ function print_mail_strings_settings() {
     '#description' => t("e-mail subject line. The sender's name will appear in place of !user in the subject. The web site name will be inserted in place of !site. The page title replaces !title."),
   );
   $form['print_mail_text']['print_mail_text_message'] = array(
-    '#type' => 'textfield',
+    '#type' => 'textarea',
     '#title' => t('Message Preamble'),
     '#default_value' => variable_get('print_mail_text_message', t('Message from sender')),
     '#description' => t('e-mail message preamble. The sender will be able to add their own message after this.'),
   );
   $form['print_mail_text']['print_mail_text_content'] = array(
-    '#type' => 'textfield',
+    '#type' => 'textarea',
     '#title' => t('Message Content'),
     '#default_value' => variable_get('print_mail_text_content', ''),
     '#description' => t('Set the default contents of the message.'),
