@@ -484,7 +484,7 @@ function theme_print_pdf_tcpdf_header($vars) {
   // set header margin
   $pdf->SetHeaderMargin(5);
   // set header data
-  $pdf->SetHeaderData($logo, 10 * $ratio, html_entity_decode($tpl_title[1], ENT_QUOTES, 'UTF-8'), strip_tags($tpl_site_name[1]));
+  $pdf->SetHeaderData($logo, 10 * $ratio, html_entity_decode($tpl_title[1], ENT_QUOTES, 'UTF-8'), html_entity_decode(strip_tags($tpl_site_name[1]), ENT_QUOTES, 'UTF-8'));
 
   return $pdf;
 }
