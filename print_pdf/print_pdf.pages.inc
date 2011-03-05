@@ -29,8 +29,35 @@ function print_pdf_controller() {
   $path = implode('/', $args);
   $cid = isset($_GET['comment']) ? (int)$_GET['comment'] : NULL;
 
-  $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
+  $pdf_filename = variable_get('print_pdf_filename', PRINT_PDF_FILENAME_DEFAULT);
+  if (!empty($pdf_filename)) {
+    $pdf_filename = token_replace($pdf_filename, array('node' => $node)) . '.pdf';
+  }
+  else {
+    $pdf_filename = str_replace('/', '_', $path) . '.pdf';
+  }
+  if (function_exists('transliteration_clean_filename')) {
+    $pdf_filename = transliteration_clean_filename($pdf_filename, language_default('language'));
+  }
 
+  $pdf = print_pdf_generate_path($path, $cid, $pdf_filename);
+  if ($pdf == NULL) {
+    drupal_goto($print['url']);
+    exit;
+  }
+
+  $nodepath = (isset($node->path)) ? drupal_get_normal_path($node->path) : 'node/' . $path;
+  db_merge('print_pdf_page_counter')
+    ->key(array('path' => $nodepath))
+    ->fields(array(
+        'totalcount' => 1,
+        'timestamp' => REQUEST_TIME,
+    ))
+    ->expression('totalcount', 'totalcount + :inc', array(':inc' => 1))
+    ->execute();
+}
+
+function print_pdf_generate_path($path, $cid = NULL, $pdf_filename = NULL) {
   $print = print_controller($path, $cid, PRINT_PDF_FORMAT);
   if ($print === FALSE) {
     return;
@@ -54,39 +81,25 @@ function print_pdf_controller() {
   // And make anchor links relative again, to permit in-PDF navigation
   $html = preg_replace("!${base_url}/" . PRINTPDF_PATH . "/.*?%2523!", '#', $html);
 
-  $pdf_filename = variable_get('print_pdf_filename', PRINT_PDF_FILENAME_DEFAULT);
-  if (!empty($pdf_filename)) {
-    $pdf_filename = token_replace($pdf_filename, array('node' => $node)) . '.pdf';
-  }
-  else {
-    $pdf_filename = str_replace('/', '_', $path) . '.pdf';
-  }
-  if (function_exists('transliteration_clean_filename')) {
-    $pdf_filename = transliteration_clean_filename($pdf_filename, language_default('language'));
-  }
+  return print_pdf_generate_html($print, $html, $pdf_filename);
+}
+
+function print_pdf_generate_html($print, $html, $filename = NULL) {
+  $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
 
   if (basename($print_pdf_pdf_tool) == 'dompdf_config.inc.php') {
-    _print_pdf_dompdf($print, $html, $pdf_filename);
+    return _print_pdf_dompdf($print, $html, $filename);
   }
   elseif (basename($print_pdf_pdf_tool) == 'tcpdf.php') {
-    _print_pdf_tcpdf($print, $html, $pdf_filename);
+    return _print_pdf_tcpdf($print, $html, $filename);
   }
   elseif (substr(basename($print_pdf_pdf_tool, '.exe'), 0, 11) == 'wkhtmltopdf') {
-    _print_pdf_wkhtmltopdf($print, $html, $pdf_filename);
+    return _print_pdf_wkhtmltopdf($print, $html, $filename);
   }
-  else {
+  elseif ($filename) {
     return drupal_not_found();
   }
-
-  $nodepath = (isset($node->path)) ? drupal_get_normal_path($node->path) : 'node/' . $path;
-  db_merge('print_pdf_page_counter')
-    ->key(array('path' => $nodepath))
-    ->fields(array(
-        'totalcount' => 1,
-        'timestamp' => REQUEST_TIME,
-    ))
-    ->expression('totalcount', 'totalcount + :inc', array(':inc' => 1))
-    ->execute();
+  return NULL;
 }
 
 /**
@@ -140,7 +153,7 @@ function _print_pdf_file_access_images($html) {
  *   name of the PDF file to be generated
  * @see print_pdf_controller()
  */
-function _print_pdf_dompdf($print, $html, $filename) {
+function _print_pdf_dompdf($print, $html, $filename = NULL) {
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
   $print_pdf_paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
   $print_pdf_page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
@@ -205,7 +218,13 @@ function _print_pdf_dompdf($print, $html, $filename) {
   $dompdf->load_html($html);
 
   $dompdf->render();
-  $dompdf->stream($filename, array('Attachment' => ($print_pdf_content_disposition == 2)));
+  if ($filename) {
+    $dompdf->stream($filename, array('Attachment' => ($print_pdf_content_disposition == 2)));
+    return TRUE;
+  }
+  else {
+    return $dompdf->output();
+  }
 }
 
 /**
@@ -219,7 +238,7 @@ function _print_pdf_dompdf($print, $html, $filename) {
  *   name of the PDF file to be generated
  * @see print_pdf_controller()
  */
-function _print_pdf_tcpdf($print, $html, $filename) {
+function _print_pdf_tcpdf($print, $html, $filename = NULL) {
   global $base_url, $language;
 
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
@@ -295,9 +314,15 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   // try to recover from any warning/error
   ob_clean();
 
-  //Close and output PDF document
-  $output_dest = ($print_pdf_content_disposition == 2) ? 'D' : 'I';
-  $pdf->Output($filename, $output_dest);
+  if ($filename) {
+    //Close and output PDF document
+    $output_dest = ($print_pdf_content_disposition == 2) ? 'D' : 'I';
+    $pdf->Output($filename, $output_dest);
+    return TRUE;
+  }
+  else {
+    return $pdf = $pdf->Output('', 'S');
+  }
 }
 
 /**
@@ -311,7 +336,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
  *   name of the PDF file to be generated
  * @see print_pdf_controller()
  */
-function _print_pdf_wkhtmltopdf($print, $html, $filename) {
+function _print_pdf_wkhtmltopdf($print, $html, $filename = NULL) {
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
   $print_pdf_paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
   $print_pdf_page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
@@ -361,22 +386,27 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename) {
   }
 
   if (!empty($pdf)) {
-    if (headers_sent()) {
-      die("Unable to stream pdf: headers already sent");
+    if ($filename) {
+      if (headers_sent()) {
+        die("Unable to stream pdf: headers already sent");
+      }
+      header("Cache-Control: private");
+      header("Content-Type: application/pdf");
+
+      $attachment =  ($print_pdf_content_disposition == 2) ?  "attachment" :  "inline";
+
+      header("Content-Disposition: $attachment; filename=\"$filename\"");
+
+      echo $pdf;
+      flush();
+      return TRUE;
     }
-    header("Cache-Control: private");
-    header("Content-Type: application/pdf");
-
-    $attachment =  ($print_pdf_content_disposition == 2) ?  "attachment" :  "inline";
-
-    header("Content-Disposition: $attachment; filename=\"$filename\"");
-
-    echo $pdf;
-    flush();
+    else {
+      return $pdf;
+    }
   }
   else {
-    drupal_goto($print['url']);
-    exit;
+    return NULL;
   }
 }
 
