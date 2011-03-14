@@ -140,7 +140,7 @@ function print_mail_form($form, &$form_state) {
   );
   $form['btn_clear'] = array(
     '#type' => 'markup',
-    '#markup' => '<input type="reset" name="clear" value="' . t('Clear form') . '" class="form-submit" /> ',
+    '#markup' => '<input type="reset" name="clear" id="edit-btn-clear" value="' . t('Clear form') . '" class="form-submit" />',
   );
   $form['btn_cancel'] = array(
     '#name' => 'cancel',
