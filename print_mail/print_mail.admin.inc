@@ -194,6 +194,12 @@ function print_mail_strings_settings() {
     '#description' => t('Text used in the link to the send by-email form.'),
   );
 
+  $form['print_mail_text']['print_mail_text_title'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Form page title'),
+    '#default_value' => variable_get('print_mail_text_title', t('Send page by e-mail')),
+    '#description' => t("Text used as the page title of the mail submission form. Requires a menu rebuild to apply."),
+  );
   $form['print_mail_text']['print_mail_text_subject'] = array(
     '#type' => 'textfield',
     '#title' => t('Message Subject'),

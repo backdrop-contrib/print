@@ -62,7 +62,7 @@ function print_mail_menu() {
   $items = array();
 
   $items[PRINTMAIL_PATH] = array(
-    'title' => 'Send page by e-mail',
+    'title' => variable_get('print_mail_text_title', 'Send page by e-mail'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_mail_form'),
     'access callback' => '_print_mail_access',
