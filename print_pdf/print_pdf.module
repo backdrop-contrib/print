@@ -194,6 +194,18 @@ function print_pdf_requirements($phase) {
             );
           }
         }
+        elseif (basename($print_pdf_pdf_tool) == 'tcpdf.php') {
+          $version = _print_pdf_tcpdf_version();
+
+          if (version_compare($version, '5.9.012', '<')) {
+            $requirements['print_pdf_tool'] = array(
+              'title' => $t('TCPDF library'),
+              'value' => $t('Unsupported version'),
+              'description' => $t('The currently selected version of TCPDF (@version) is not supported. Please update to a <a href="@url">newer version</a>.', array('@version' => $version, '@url' => url('http://www.tcpdf.org'))),
+              'severity' => REQUIREMENT_ERROR,
+            );
+          }
+        }
         elseif (substr(basename($print_pdf_pdf_tool, '.exe'), 0, 11) == 'wkhtmltopdf') {
           if (function_exists('is_executable') && !is_executable($print_pdf_pdf_tool)) {
             $requirements['print_pdf_tool'] = array(
@@ -594,6 +606,21 @@ function print_pdf_link_allowed($args) {
   return FALSE;
 }
 
+/**
+ * Find out the version of the TCPDF library
+ */
+function _print_pdf_tcpdf_version() {
+  $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
+  require_once(DRUPAL_ROOT . '/' . $print_pdf_pdf_tool);
+
+  $pdf = new TCPDF();
+
+  return $pdf->getTCPDFVersion();
+}
+
+/**
+ * Find out the version of the wkhtmltopdf library
+ */
 function _print_pdf_wkhtmltopdf_version() {
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
   $descriptor = array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'w'));

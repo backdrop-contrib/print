@@ -10,7 +10,7 @@
  * @ingroup print
  */
 
-require_once(DRUPAL_ROOT . '/' . drupal_get_path('module', 'print') . '/print.pages.inc');
+module_load_include('inc', 'print', 'print.pages');
 
 /**
  * Generate a PDF version of the printer-friendly page
@@ -251,13 +251,7 @@ function _print_pdf_tcpdf($print, $html, $filename) {
   $html = preg_replace($pattern, '$1$2', $html);
 
   require_once(DRUPAL_ROOT . '/' . $print_pdf_pdf_tool);
-  if (strpos(PDF_PRODUCER, 'PHP4') === FALSE) {
-    require_once(DRUPAL_ROOT . '/' . drupal_get_path('module', 'print_pdf') . '/print_pdf.class.inc');
-  }
-  else {
-    drupal_set_message(t("The PHP4 version of TCPDF is not supported. Please upgrade it."), 'error', FALSE);
-    drupal_goto($_GET['q']);
-  }
+  module_load_include('inc', 'print_pdf', 'print_pdf.class');
 
   $font = Array(
     check_plain(variable_get('print_pdf_font_family', PRINT_PDF_FONT_FAMILY_DEFAULT)),
@@ -478,9 +472,7 @@ function theme_print_pdf_tcpdf_page($vars) {
   // set auto page breaks
   $pdf->SetAutoPageBreak(TRUE, 15);
   // set image scale factor
-  sscanf(PDF_PRODUCER, "TCPDF %d.%d.%d", $major, $minor, $build);
-  $imagescale = (($major >= 4) && ($minor >= 6) && ($build >= 2)) ? 1 : 4;
-  $pdf->setImageScale($imagescale);
+  $pdf->setImageScale(1);
   // set image compression quality
   $pdf->setJPEGQuality(100);
 
