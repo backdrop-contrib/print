@@ -311,43 +311,29 @@ function print_mail_job_queue_functions() {
  */
 function _print_mail_access($permission) {
   $page_access = TRUE;
-  $user_access = TRUE;
-  $reasons = array();
-  global $user;
   $parts = explode('/', $_GET['q']);
-  if (count($parts) > 1) {
-    unset($parts[0]);
-    $path = implode('/', $parts);
-    // If the destination page is not accessible, don't show the form
-    if ($router_item = menu_get_item($path)) {
-      if (!$router_item['access']) {
+  if ($parts[0] == PRINTMAIL_PATH) {
+    if (count($parts) > 1) {
+      unset($parts[0]);
+      $path = implode('/', $parts);
+      if (ctype_digit($parts[1])) {
+        if (drupal_lookup_path('source', $path)) {
+          // This is a numeric alias
+          $path = drupal_get_normal_path($path);
+        }
+        else {
+          // normal nid
+          $path = 'node/' . $path;
+        }
+      }
+      // If the destination page is not accessible, don't show the form
+      if (!($router_item = menu_get_item($path)) || (!$router_item['access'])) {
 	$page_access = FALSE;
-	$reasons[] = (empty($router_item['access_callback'])
-		     ? 'access_callback'
-		     : $router_item['access_callback']
-		     ) . ' = FALSE';
       }
     }
-    else {
-      $page_access = FALSE;
-      $reasons[] = 'no valid menu entry was found.';
-    }
   }
-  if (!user_access($permission)) {
-    $user_access = FALSE;
-    $reasons[] = t('User %uid cannot %permission',
-		  array('%uid' => $user->uid,
-			'%permission' => $permission));
-  }
-  if ($page_access && $user_access) {
-    return TRUE;
-  }
-  else {
-    watchdog('Access to %path denied because: %reasons.',
-	     array('%path' => $path,
-		   '%reasons' => implode('; ', $reasons)));
-    return FALSE;
-  }
+
+  return (user_access($permission) && $page_access);
 }
 
 /**
