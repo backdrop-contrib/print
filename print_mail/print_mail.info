@@ -7,4 +7,4 @@ files[] = print_mail.module
 files[] = print_mail.inc
 files[] = print_mail.admin.inc
 files[] = print_mail.install
-configure = admin/config/print/email
+configure = admin/config/user-interface/print/email

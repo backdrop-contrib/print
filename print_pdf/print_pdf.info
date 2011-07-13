@@ -7,4 +7,4 @@ files[] = print_pdf.module
 files[] = print_pdf.admin.inc
 files[] = print_pdf.pages.inc
 files[] = print_pdf.install
-configure = admin/config/print/pdf
+configure = admin/config/user-interface/print/pdf

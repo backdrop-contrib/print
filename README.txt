@@ -42,7 +42,7 @@ CONFIGURATION
     comments via the "Show printer-friendly version link in individual
     comments" checkbox. (default: disabled)
 
-  Administer > Configuration > Printer, e-mail and PDF versions (admin/config/print)
+  Administer > Configuration > Printer, e-mail and PDF versions (admin/config/user-interface/print)
     This is where all the module-specific configuration options can be set.
 
 - To modify the template of printer friendly pages, simply edit the
