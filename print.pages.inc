@@ -185,8 +185,8 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
     drupal_add_css(drupal_get_path('module', 'print') . '/css/print.css');
   }
   $drupal_css = drupal_add_css();
-  foreach ($drupal_css as $key => $types) {
-    if (strpos($key, 'themes') !== FALSE) {
+  foreach ($drupal_css as $key => $css_file) {
+    if ($css_file['group'] == CSS_THEME) {
     // Unset the theme's CSS
       unset($drupal_css[$key]);
     }
