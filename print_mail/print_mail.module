@@ -445,7 +445,7 @@ function print_mail_insert_link($path = NULL, $node = NULL) {
           $path = drupal_get_path_alias($path);
         }
         else {
-          $path = 'node/' . $nid;
+          $path = $nid;
         }
       }
       $path = PRINTMAIL_PATH . '/' . $path;
