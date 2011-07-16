@@ -74,7 +74,7 @@ function print_controller($path, $cid = NULL, $format = PRINT_HTML_FORMAT, $teas
       $path = '';
     }
   }
-  if (!is_numeric($path)) {
+  if (!ctype_digit($path)) {
     // Indirect call with print/alias
     // If there is a path alias with these arguments, generate a printer-friendly version for it
     $path = drupal_get_normal_path($path);
@@ -84,7 +84,7 @@ function print_controller($path, $cid = NULL, $format = PRINT_HTML_FORMAT, $teas
     }
   }
   $parts = explode('/', $path);
-  if (is_numeric($parts[0]) && (count($parts) == 1)) {
+  if (ctype_digit($parts[0]) && (count($parts) == 1)) {
     $print = _print_generate_node($path, $cid, $format, $teaser, $message);
   }
   else {
@@ -345,7 +345,7 @@ function _print_rewrite_urls($matches) {
             $path = explode('/', $_GET['q']);
             unset($path[0]);
             $path = implode('/', $path);
-            if (is_numeric($path)) {
+            if (ctype_digit($path)) {
               $path = "node/$path";
             }
             // Printer-friendly URLs is on, so we need to make it absolute
@@ -585,7 +585,7 @@ function _print_generate_path($path, $format = PRINT_HTML_FORMAT, $teaser = FALS
 
   // Handle node tabs
   $parts = explode('/', $path);
-  if (is_numeric($parts[0]) && (count($parts) > 1)) {
+  if (ctype_digit($parts[0]) && (count($parts) > 1)) {
     $path = 'node/' . $path;
   }
 

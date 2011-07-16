@@ -245,7 +245,7 @@ function print_block_view($delta = '') {
       switch ($delta) {
       case 'print-links':
       $nid = preg_replace('!^node/!', '', $_GET['q']);
-      if (is_numeric($nid)) {
+      if (ctype_digit($nid)) {
         $node = node_load($nid);
       }
       else {
@@ -551,7 +551,7 @@ function _print_set_node_fields(&$node) {
 function _print_get_title($path) {
   $path = drupal_get_normal_path($path);
   $nid = preg_replace('!^node/!', '', $path);
-  if (is_numeric($nid)) {
+  if (ctype_digit($nid)) {
     $res = db_query("SELECT title FROM {node} WHERE nid = :nid", array(':nid' => $nid))
               ->fetchField();
   }
@@ -800,7 +800,7 @@ function print_link_allowed($args) {
   }
   if (!empty($args['path'])) {
     $nid = preg_replace('!^node/!', '', drupal_get_normal_path($args['path']));
-    if (is_numeric($nid)) {
+    if (ctype_digit($nid)) {
       $args['node'] = node_load($nid);
     }
   }
