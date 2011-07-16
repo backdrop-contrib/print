@@ -268,6 +268,11 @@ function _print_pdf_tools() {
   $pattern = '!^(?:dompdf_config.inc.php|tcpdf.php|wkhtmltopdf.*)$!';
   $tools = array_keys(file_scan_directory(drupal_get_path('module', 'print'), $pattern));
   $tools = array_merge($tools, array_keys(file_scan_directory(PRINT_PDF_LIB_PATH, $pattern)));
+  if (module_exists('libraries')) {
+    $tools = array_merge($tools, array_keys(file_scan_directory(libraries_get_path('dompdf'), '!^dompdf_config.inc.php$!')));
+    $tools = array_merge($tools, array_keys(file_scan_directory(libraries_get_path('tcpdf'), '!^tcpdf.php$!')));
+    $tools = array_merge($tools, array_keys(file_scan_directory(libraries_get_path('wkhtmltopdf'), '!^wkhtmltopdf!')));
+  }
 
   $num_tools = count($tools);
 
