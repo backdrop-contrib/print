@@ -41,8 +41,15 @@ function print_mail_form($form, &$form_state) {
   $path = explode('/', $_GET['q']);
   unset($path[0]);
   $path = implode('/', $path);
-  if (is_numeric($path)) {
-    $path = 'node/' . $path;
+  if (ctype_digit($path)) {
+    if (drupal_lookup_path('source', $path)) {
+      // This is a numeric alias
+      $path = drupal_get_normal_path($path);
+    }
+    else {
+      // normal nid
+      $path = 'node/' . $path;
+    }
   }
   $cid = isset($_GET['comment']) ? (int)$_GET['comment'] : NULL;
   $title = _print_get_title($path);
@@ -195,6 +202,10 @@ function theme_print_mail_form($form) {
  */
 function print_mail_form_validate($form, &$form_state) {
   if (array_key_exists('cancel', $form_state['input'])) {
+    form_set_error(NULL,'',TRUE);
+    drupal_get_messages('error');
+
+    drupal_goto(preg_replace('!^book/export/html/!', 'node/', $form_state['values']['path']));
     return;
   }
   $from_addr = trim($form_state['values']['fld_from_addr']);
@@ -385,15 +396,6 @@ function print_mail_mail($key, &$message, $params) {
       $message['headers']['Content-Type'] = preg_replace('/[^\x20-\x7E]/', '', $message['headers']['Content-Type']);
       break;
   }
-}
-
-/**
- * Process the send by-email form cancel submission.
- *
- * @ingroup forms
- */
-function print_mail_form_cancel($form, &$form_state) {
-  $form_state['redirect'] = preg_replace('!^book/export/html/!', 'node/', $form_state['values']['path']);
 }
 
 /**
