@@ -228,6 +228,25 @@ function print_mail_strings_settings() {
     '#default_value' => variable_get('print_mail_text_confirmation', t('Thank you for spreading the word about !site.')),
     '#description' => t('This message will be displayed after the user successfully submits the form.'),
   );
+  $form['print_mail_text']['reset'] = array(
+    '#type' => 'submit',
+    '#value' => t('Reset to defaults'),
+    '#submit' => array('print_mail_strings_settings_delete'),
+  );
 
   return system_settings_form($form);
+}
+
+/**
+ * Reset button callback for text strings settings form
+ *
+ * @ingroup forms
+ */
+function print_mail_strings_settings_delete() {
+  variable_del('print_mail_link_text');
+  variable_del('print_mail_text_title');
+  variable_del('print_mail_text_subject');
+  variable_del('print_mail_text_message');
+  variable_del('print_mail_text_content');
+  variable_del('print_mail_text_confirmation');
 }

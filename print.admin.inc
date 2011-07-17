@@ -379,8 +379,25 @@ function print_main_strings_settings() {
     '#type' => 'textfield',
     '#default_value' => variable_get('print_text_links', t('Links')),
   );
+  $form['print_main_text']['reset'] = array(
+    '#type' => 'submit',
+    '#value' => t('Reset to defaults'),
+    '#submit' => array('print_main_strings_settings_delete'),
+  );
 
   return system_settings_form($form);
+}
+
+/**
+ * Reset button callback for text strings settings form
+ *
+ * @ingroup forms
+ */
+function print_main_strings_settings_delete() {
+  variable_del('print_text_published');
+  variable_del('print_text_source_url');
+  variable_del('print_text_retrieved');
+  variable_del('print_text_links');
 }
 
 /**
@@ -402,6 +419,20 @@ function print_html_strings_settings() {
     '#default_value' => variable_get('print_html_link_text', t('Printer-friendly version')),
     '#description' => t('Text used in the link to the printer-friendly version.'),
   );
+  $form['print_html_text']['reset'] = array(
+    '#type' => 'submit',
+    '#value' => t('Reset to defaults'),
+    '#submit' => array('print_html_strings_settings_delete'),
+  );
 
   return system_settings_form($form);
+}
+
+/**
+ * Reset button callback for text strings settings form
+ *
+ * @ingroup forms
+ */
+function print_html_strings_settings_delete() {
+  variable_del('print_html_link_text');
 }
