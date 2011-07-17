@@ -297,11 +297,9 @@ function _print_pdf_tcpdf($print, $html, $filename = NULL) {
   $pdf = new PrintTCPDF($orientation , 'mm', $print_pdf_paper_size, TRUE);
 
   // set document information
-  $pdf->SetAuthor(strip_tags($print['submitted']));
+  $pdf->SetAuthor(strip_tags($print['node']->name));
   $pdf->SetCreator(variable_get('site_name', 'Drupal'));
   $pdf->SetTitle(html_entity_decode($print['title'], ENT_QUOTES, 'UTF-8'));
-  $keys = implode(' ', explode("\n", trim(strip_tags($print['taxonomy']))));
-  $pdf->SetKeywords($keys);
   $pdf->setPDFVersion('1.6');
   $pdf->setFontSubsetting(variable_get('print_pdf_font_subsetting',FALSE));
 
@@ -477,7 +475,7 @@ function theme_print_pdf_dompdf_footer($vars) {
 function theme_print_pdf_tcpdf_header($vars) {
   $pdf = $vars['pdf'];
   preg_match('!<div class="print-logo">(.*?)</div>!si', $vars['html'], $tpl_logo);
-  preg_match('!<h1 class="print-title">(.*?)</h1>!si', $vars['html'], $tpl_title);
+  preg_match('!<title>(.*?)</title>!si', $vars['html'], $tpl_title);
   preg_match('!<div class="print-site_name">(.*?)</div>!si', $vars['html'], $tpl_site_name);
 
   $ratio = 0;
