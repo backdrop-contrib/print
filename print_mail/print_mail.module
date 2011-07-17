@@ -326,6 +326,9 @@ function _print_mail_access($permission) {
           $path = 'node/' . $path;
         }
       }
+      else {
+        $path = drupal_get_normal_path($path);
+      }
       // If the destination page is not accessible, don't show the form
       if (!($router_item = menu_get_item($path)) || (!$router_item['access'])) {
 	$page_access = FALSE;

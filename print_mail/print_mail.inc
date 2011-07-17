@@ -38,10 +38,10 @@ function print_mail_form($form, &$form_state) {
   $form = array();
 
   // Remove the printmail/ prefix
-  $path = explode('/', $_GET['q']);
-  unset($path[0]);
-  $path = implode('/', $path);
-  if (ctype_digit($path)) {
+  $path_arr = explode('/', $_GET['q']);
+  unset($path_arr[0]);
+  $path = implode('/', $path_arr);
+  if (ctype_digit($path_arr[1])) {
     if (drupal_lookup_path('source', $path)) {
       // This is a numeric alias
       $path = drupal_get_normal_path($path);
