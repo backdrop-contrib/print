@@ -20,8 +20,6 @@ module_load_include('inc', 'print', 'print.pages');
  * @see _print_pdf_tcpdf()
  */
 function print_pdf_controller() {
-  global $base_url;
-
   // Disable caching for generated PDFs, as Drupal doesn't ouput the proper headers from the cache
   $GLOBALS['conf']['cache'] = FALSE;
 
@@ -71,6 +69,8 @@ function print_pdf_controller() {
 }
 
 function print_pdf_generate_path($path, $cid = NULL, $pdf_filename = NULL) {
+  global $base_url;
+
   $print = print_controller($path, $cid, PRINT_PDF_FORMAT);
   if ($print === FALSE) {
     return;
