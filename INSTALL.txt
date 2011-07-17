@@ -51,7 +51,9 @@ TCPDF support:
   2. Extract the contents of the downloaded package into one of the
   supported paths.  There is no need to modify the config/tcpdf_config.php
   file, as the module self-configures TCPDF.
-  3. Check http://tcpdf.sourceforge.net/ for further information.
+  3. Grant write access to the cache and images directories to your
+  webserver user.
+  4. Check http://tcpdf.sourceforge.net/ for further information.
 
 wkhtmltopdf support:
 
