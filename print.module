@@ -505,18 +505,14 @@ function print_cck_extra_fields($type_name) {
 }
 
 /**
- * Implements hook_field_build_modes().
+ * Implements hook_entity_info_alter().
  */
-function print_field_build_modes() {
-  return array(
+function print_entity_info_alter(&$info) {
+  // Add the 'Print' view mode for nodes.
+  $info['node']['view modes'] += array(
     'print' => array(
-      'title' => t('Print'),
-      'build modes' => array(
-        'print' => array(
-          'title' => t('Print'),
-          'views style' => TRUE,
-        ),
-      ),
+      'label' => t('Print'),
+      'custom settings' => FALSE,
     ),
   );
 }

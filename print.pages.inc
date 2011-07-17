@@ -481,8 +481,9 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
     drupal_access_denied();
     return FALSE;
   }
-  $view_mode = $teaser ? 'teaser' : 'full';
   drupal_set_title($node->title);
+
+  $view_mode = $teaser ? 'teaser' : 'print';
 
   // Turn off Pagination by the Paging module
   unset($node->pages);
