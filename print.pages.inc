@@ -596,6 +596,9 @@ function _print_generate_path($path, $format = PRINT_HTML_FORMAT, $teaser = FALS
   // Adapted from index.php.
   $node = new stdClass();
   $node->body = menu_execute_active_handler($path, FALSE);
+  if (is_array($node->body)) {
+    $node->body = drupal_render($node->body);
+  }
 
   if (is_int($node->body)) {
     switch ($node->body) {
