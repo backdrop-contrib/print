@@ -242,11 +242,16 @@ function print_block_info() {
  * Implements hook_block_view().
  */
 function print_block_view($delta = '') {
-      switch ($delta) {
-      case 'print-links':
+  switch ($delta) {
+    case 'print-links':
       $nid = preg_replace('!^node/!', '', $_GET['q']);
       if (ctype_digit($nid)) {
         $node = node_load($nid);
+        if (!node_access('view', $node)) {
+          // If the user doesn't have access to the node, don't show any links
+          $block['content'] == '';
+          return;
+        }
       }
       else {
         $node = NULL;
@@ -261,21 +266,21 @@ function print_block_view($delta = '') {
           }
         }
       }
-        break;
-      case 'print-top':
-        $block['subject'] = t('Most printed');
-        $result = db_query_range("SELECT path FROM {print_page_counter} ORDER BY totalcount DESC", 0, 3)
-                    ->fetchAll();
-        if (count($result)) {
-          $block['content'] = '<div class="item-list"><ul>';
-          foreach ($result as $obj) {
-            $block['content'] .= '<li>' . l(_print_get_title($obj->path), $obj->path) . '</li>';
-          }
-          $block['content'] .= '</ul></div>';
+      break;
+    case 'print-top':
+      $block['subject'] = t('Most printed');
+      $result = db_query_range("SELECT path FROM {print_page_counter} ORDER BY totalcount DESC", 0, 3)
+                  ->fetchAll();
+      if (count($result)) {
+        $block['content'] = '<div class="item-list"><ul>';
+        foreach ($result as $obj) {
+          $block['content'] .= '<li>' . l(_print_get_title($obj->path), $obj->path) . '</li>';
         }
-        break;
+        $block['content'] .= '</ul></div>';
       }
-      return $block;
+      break;
+  }
+  return $block;
 }
 
 /**
