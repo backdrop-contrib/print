@@ -483,7 +483,7 @@ function print_mail_insert_link($path = NULL, $node = NULL) {
 function print_mail_link_allowed($args) {
   $view_mode = isset($args['view_mode']) ? $args['view_mode'] : '';
   if ((($view_mode == 'teaser') && !variable_get('print_mail_link_teaser', PRINT_MAIL_LINK_TEASER_DEFAULT))
-      || !in_array($view_mode, array('full', 'teaser')) || !user_access('access send to friend')) {
+      || !in_array($view_mode, array('full', 'teaser', '')) || !user_access('access send to friend')) {
     // If the teaser link is disabled or the user is not allowed
     return FALSE;
   }

@@ -551,7 +551,7 @@ function print_pdf_link_allowed($args) {
   $view_mode = isset($args['view_mode']) ? $args['view_mode'] : '';
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
   if ((($view_mode == 'teaser') && !variable_get('print_pdf_link_teaser', PRINT_PDF_LINK_TEASER_DEFAULT))
-      || !in_array($view_mode, array('full', 'teaser')) || !user_access('access PDF version') || (empty($print_pdf_pdf_tool))) {
+      || !in_array($view_mode, array('full', 'teaser', '')) || !user_access('access PDF version') || (empty($print_pdf_pdf_tool))) {
     // If the teaser link is disabled or the user is not allowed
     return FALSE;
   }

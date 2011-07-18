@@ -796,7 +796,7 @@ function _print_page_match($visibility, $path, $pages) {
 function print_link_allowed($args) {
   $view_mode = isset($args['view_mode']) ? $args['view_mode'] : '';
   if ((($view_mode == 'teaser') && !variable_get('print_html_link_teaser', PRINT_HTML_LINK_TEASER_DEFAULT))
-      || !in_array($view_mode, array('full', 'teaser')) || !user_access('access print')) {
+      || !in_array($view_mode, array('full', 'teaser', '')) || !user_access('access print')) {
     // If the teaser link is disabled or the user is not allowed
     return FALSE;
   }
