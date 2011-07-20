@@ -102,19 +102,6 @@ function print_mail_form($form, &$form_state) {
       '#markup' => l($title, $path, array('attributes' => array('title' => t('View page')))),
     );
   }
-  $form['fld_send_option'] = array(
-    '#type' => 'select',
-    '#title' => t('Send page as'),
-    '#default_value' => variable_get('print_mail_send_option_default', PRINT_MAIL_SEND_OPTION_DEFAULT),
-    '#options' => array(
-      'sendlink' => t('Link'),
-      'sendpage' => t('Inline HTML'),
-    ),
-  );
-  if (class_exists('Mail_mime')) {
-    $form['fld_send_option']['#options']['inline-attachment'] = t('Inline HTML with Attachment');
-    $form['fld_send_option']['#options']['plain-attachment'] = t('Plain Text with Attachment');
-  }
   $form['txt_message'] = array(
     '#type' => 'textarea',
     '#title' => t('Your message'),
@@ -186,7 +173,6 @@ function theme_print_mail_form($form) {
       case 'txt_to_addrs':
       case 'fld_subject':
       case 'fld_title':
-      case 'fld_send_option':
         $tmp = str_replace('<label', '<label class ="printmail-label"', $tmp);
         break;
     }
@@ -279,9 +265,11 @@ function print_mail_form_submit($form, &$form_state) {
     $print['content'] = preg_replace_callback($pattern, '_print_mail_encode_urls', $print['content']);
 
     if ($print !== FALSE) {
+      $print_mail_send_option_default = variable_get('print_mail_send_option_default', PRINT_MAIL_SEND_OPTION_DEFAULT);
+
       $params = array();
       $params['subject'] = $form_state['values']['fld_subject'];
-      $params['message'] = $form_state['values']['txt_message'];
+      $params['message'] = $sender_message;
       $params['link'] = $print['url'];
       $params['title'] = $form_state['values']['title'];
 
@@ -306,11 +294,11 @@ function print_mail_form_submit($form, &$form_state) {
         if (!in_array(FALSE, $can_send)) {
           if ($use_job_queue) {
             // Use job queue to send mails during cron runs
-            job_queue_add('drupal_mail', t('print_mail: From %from', array('%from' => $from)), array('print_mail', $form_state['values']['fld_send_option'], $to, language_default(), $params, $from, TRUE), $this_file, TRUE);
+            job_queue_add('drupal_mail', t('print_mail: From %from', array('%from' => $from)), array('print_mail', $print_mail_send_option_default, $to, language_default(), $params, $from, TRUE), $this_file, TRUE);
           }
           else {
             // Send mail immediately using Drupal's mail handler
-            $ret = drupal_mail('print_mail', $form_state['values']['fld_send_option'], $to, language_default(), $params, $from, TRUE);
+            $ret = drupal_mail('print_mail', $print_mail_send_option_default, $to, language_default(), $params, $from, TRUE);
           }
           if ($ret['result'] || $use_job_queue) {
             // Call to hook_print_mail_after_send in order to provide information to other modules.
