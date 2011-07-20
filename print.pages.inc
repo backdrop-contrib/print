@@ -27,6 +27,7 @@ function print_controller_html() {
   if ($print !== FALSE) {
     $node = $print['node'];
     $html = theme('print', array('print' => $print, 'type' => PRINT_HTML_FORMAT, 'node' => $node));
+    drupal_send_headers();
     print $html;
 
     $nodepath = (isset($node->path)) ? drupal_get_normal_path($node->path) : 'node/' . $path;
