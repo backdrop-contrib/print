@@ -230,7 +230,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
       $footer = '';
       break;
     case 1: // theme's
-      $footer = variable_get('site_footer', FALSE) . "\n" . theme('blocks', 'footer');
+      $footer = variable_get('site_footer', FALSE) . "\n" . drupal_render(block_get_blocks_by_region('footer'));
       break;
     case 2: // user-specifed
       $footer = $print_footer_user;
