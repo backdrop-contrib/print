@@ -75,11 +75,10 @@ function print_controller($path, $cid = NULL, $format = PRINT_HTML_FORMAT, $teas
       $path = '';
     }
   }
-  if (!ctype_digit($path)) {
+  if ($alias = drupal_lookup_path('source', $path)) {
     // Indirect call with print/alias
     // If there is a path alias with these arguments, generate a printer-friendly version for it
-    $path = drupal_get_normal_path($path);
-    $ret = preg_match('!^node/(.*)!i', $path, $matches);
+    $ret = preg_match('!^node/(.*)!i', $alias, $matches);
     if ($ret == 1) {
       $path = $matches[1];
     }

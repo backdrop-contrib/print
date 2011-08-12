@@ -27,21 +27,18 @@ function print_pdf_controller() {
   $path = implode('/', $args);
   $cid = isset($_GET['comment']) ? (int)$_GET['comment'] : NULL;
 
-  if (ctype_digit($args[0])) {
-    if (drupal_lookup_path('source', $path)) {
-      // This is a numeric alias
-      $path = drupal_get_normal_path($path);
-      $path_arr = explode('/', $path);
-      $node = node_load($path_arr[1]);
-    }
-    else {
-      // normal nid
-      $node = node_load($args[0]);
-    }
+  if ($alias = drupal_lookup_path('source', $path)) {
+    // Alias
+    $path_arr = explode('/', $alias);
+    $node = node_load($path_arr[1]);
+  }
+  elseif (ctype_digit($args[0])) {
+    // normal nid
+    $node = node_load($args[0]);
   }
 
   $pdf_filename = variable_get('print_pdf_filename', PRINT_PDF_FILENAME_DEFAULT);
-  if (!empty($pdf_filename)) {
+  if (!empty($pdf_filename) && !empty($node)) {
     $pdf_filename = token_replace($pdf_filename, array('node' => $node)) . '.pdf';
   }
   else {
