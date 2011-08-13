@@ -176,6 +176,12 @@ function print_pdf_settings() {
       '#default_value' => variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT),
       '#description' => t('Choose the page orientation of the generated PDF.'),
     );
+    $form['settings']['print_pdf_images_via_file'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Access images via local file access'),
+      '#default_value' => variable_get('print_pdf_images_via_file', PRINT_PDF_IMAGES_VIA_FILE_DEFAULT),
+      '#description' => t("Enabling this option will make the tool use local file access for image files. This option is not recommended to use in conjunction with modules like imagecache which generate the image after it's first accessed. However, it may be necessary in low-end hosting services where the web server is not allowed to open URLs and the user can't modify that configuration setting."),
+    );
     $form['settings']['print_pdf_autoconfig'] = array(
       '#type' => 'checkbox',
       '#title' => t('Auto-configure the PDF tool settings'),

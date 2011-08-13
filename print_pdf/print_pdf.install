@@ -41,6 +41,7 @@ function print_pdf_uninstall() {
   variable_del('print_pdf_content_disposition');
   variable_del('print_pdf_paper_size');
   variable_del('print_pdf_page_orientation');
+  variable_del('print_pdf_images_via_file');
   variable_del('print_pdf_font_family');
   variable_del('print_pdf_font_size');
   variable_del('print_pdf_link_text');
