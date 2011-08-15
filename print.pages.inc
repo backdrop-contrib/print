@@ -423,24 +423,35 @@ function _print_friendly_urls($url = 0) {
  */
 function _print_url_list_enabled($node, $format = PRINT_HTML_FORMAT) {
   if (!isset($node->type)) {
-    return variable_get('print_urls', PRINT_URLS_DEFAULT);
+    switch ($format) {
+      case PRINT_HTML_FORMAT:
+        $node_urllist = variable_get('print_display_sys_urllist', PRINT_TYPE_SYS_URLLIST_DEFAULT);
+        break;
+      case PRINT_MAIL_FORMAT:
+        $node_urllist = variable_get('print_mail_display_sys_urllist', PRINT_TYPE_SYS_URLLIST_DEFAULT);
+        break;
+      case PRINT_PDF_FORMAT:
+        $node_urllist = variable_get('print_pdf_display_sys_urllist', PRINT_TYPE_SYS_URLLIST_DEFAULT);
+        break;
+      default:
+        $node_urllist = PRINT_TYPE_SYS_URLLIST_DEFAULT;
+    }
   }
-
-  switch ($format) {
-    case PRINT_HTML_FORMAT:
-      $node_urllist = isset($node->print_display_urllist) ? $node->print_display_urllist : variable_get('print_display_urllist_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT);
-      $fmt = '';
-      break;
-    case PRINT_MAIL_FORMAT:
-      $node_urllist = isset($node->print_mail_display_urllist) ? $node->print_mail_display_urllist : variable_get('print_mail_display_urllist_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT);
-      $fmt = $format . '_';
-      break;
-    case PRINT_PDF_FORMAT:
-      $node_urllist = isset($node->print_pdf_display_urllist) ? $node->print_pdf_display_urllist : variable_get('print_pdf_display_urllist_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT);
-      $fmt = $format . '_';
-      break;
+  else {
+    switch ($format) {
+      case PRINT_HTML_FORMAT:
+        $node_urllist = isset($node->print_display_urllist) ? $node->print_display_urllist : variable_get('print_display_urllist_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT);
+        break;
+      case PRINT_MAIL_FORMAT:
+        $node_urllist = isset($node->print_mail_display_urllist) ? $node->print_mail_display_urllist : variable_get('print_mail_display_urllist_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT);
+        break;
+      case PRINT_PDF_FORMAT:
+        $node_urllist = isset($node->print_pdf_display_urllist) ? $node->print_pdf_display_urllist : variable_get('print_pdf_display_urllist_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT);
+        break;
+      default:
+        $node_urllist = PRINT_TYPE_URLLIST_DEFAULT;
+    }
   }
-  if (!isset($node_urllist)) $node_urllist = PRINT_TYPE_URLLIST_DEFAULT;
 
   // Get value of Printer-friendly URLs setting
   return (variable_get('print_urls', PRINT_URLS_DEFAULT) && ($node_urllist));

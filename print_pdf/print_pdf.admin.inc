@@ -244,6 +244,14 @@ function print_pdf_settings() {
         '#token_types' => array('node'),
       );
     }
+
+    $form['settings']['print_pdf_display_sys_urllist'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Printer-friendly URLs list in system pages'),
+      '#default_value' => variable_get('print_pdf_display_sys_urllist', PRINT_TYPE_SYS_URLLIST_DEFAULT),
+      '#description' => t('Enabling this option will display a list of printer-friendly destination URLs at the bottom of the page.'),
+    );
+
     $form['#validate'][] = '_print_pdf_settings_validate';
   }
   else {
