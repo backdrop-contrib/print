@@ -650,7 +650,8 @@ function _print_pdf_wkhtmltopdf_version() {
   $cmd = realpath($print_pdf_pdf_tool) . ' --version';
   $process = proc_open($cmd, $descriptor, $pipes, NULL, NULL);
   if (is_resource($process)) {
-    $out = preg_match('!.*?(\d+\.\d+\.\d+).*$!m', stream_get_contents($pipes[1]), $matches);
+    $content = stream_get_contents($pipes[1]);
+    $out = preg_match('!.*?(\d+\.\d+\.\d+).*$!m', $content, $matches);
     fclose($pipes[0]);
     fclose($pipes[1]);
     fclose($pipes[2]);
