@@ -292,6 +292,7 @@ function _print_pdf_tools() {
     $tools = array_merge($tools, array_keys(file_scan_directory(libraries_get_path('wkhtmltopdf'), '!^wkhtmltopdf!')));
   }
 
+
   $num_tools = count($tools);
 
   if ($num_tools == 0) {

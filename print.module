@@ -125,10 +125,35 @@ function print_theme() {
  * Implements hook_preprocess_HOOK().
  */
 function print_preprocess_print_node(&$variables) {
+  static $hooks = NULL;
+  if (!isset($hooks)) {
+    drupal_theme_initialize();
+    $hooks = theme_get_registry();
+  }
+
+  //Stolen from theme() so that ALL preprocess functions are called
+  $hook = 'node';
+  $info = $hooks[$hook];
+  if (isset($info['preprocess functions']) || isset($info['process functions'])) {
+    $variables['theme_hook_suggestions'] = array();
+    foreach (array('preprocess functions', 'process functions') as $phase) {
+      if (!empty($info[$phase])) {
+        foreach ($info[$phase] as $processor_function) {
+          if (function_exists($processor_function)) {
+            // We don't want a poorly behaved process function changing $hook.
+            $hook_clone = $hook;
+            $processor_function($variables, $hook_clone);
+          }
+        }
+      }
+    }
+  }
+
   $variables['node'] = $variables['elements']['#node'];
   $type = $variables['node']->type;
-//  $format = $variables['type'];
-  template_preprocess_node($variables);
+  $format = $variables['type'];
+//  template_preprocess_node($variables);
+
   $variables['theme_hook_suggestions'][] = "node";
   $variables['theme_hook_suggestions'][] = "node__{$type}";
   $variables['theme_hook_suggestions'][] = "print_node";
@@ -140,17 +165,36 @@ function print_preprocess_print_node(&$variables) {
  * Implements hook_preprocess_HOOK().
  */
 function print_preprocess_print(&$variables) {
+  static $hooks = NULL;
+  if (!isset($hooks)) {
+    drupal_theme_initialize();
+    $hooks = theme_get_registry();
+  }
+
+  $variables['page']['#show_messages'] = FALSE;
+
+  //Stolen from theme() so that ALL preprocess functions are called
+  $hook = 'page';
+  $info = $hooks[$hook];
+  if (isset($info['preprocess functions']) || isset($info['process functions'])) {
+    $variables['theme_hook_suggestions'] = array();
+    foreach (array('preprocess functions', 'process functions') as $phase) {
+      if (!empty($info[$phase])) {
+        foreach ($info[$phase] as $processor_function) {
+          if (function_exists($processor_function)) {
+            // We don't want a poorly behaved process function changing $hook.
+            $hook_clone = $hook;
+            $processor_function($variables, $hook_clone);
+          }
+        }
+      }
+    }
+  }
+
   $format = $variables['type'];
-  if (isset($variables['node']->type)) {
-    $type = $variables['node']->type;
-    $variables['show_blocks'] = FALSE;
-    $variables['page']['#show_messages'] = FALSE;
-    template_preprocess_page($variables);
-  }
-  else {
-    $type = '';
-  }
-  $variables['theme_hook_suggestions'][] = "print";
+  $type = (isset($variables['node']->type)) ? $variables['node']->type : '';
+
+//  $variables['theme_hook_suggestions'][] = "print";
   $variables['theme_hook_suggestions'][] = "print__node__{$type}";
   $variables['theme_hook_suggestions'][] = "print__{$format}";
   $variables['theme_hook_suggestions'][] = "print__{$format}__node__{$type}";
@@ -350,16 +394,17 @@ function print_help($path, $arg) {
  * Implements hook_node_view().
  */
 function print_node_view($node, $view_mode) {
+  $type = 'node';
   $print_html_link_pos = variable_get('print_html_link_pos', array(PRINT_HTML_LINK_POS_DEFAULT => PRINT_HTML_LINK_POS_DEFAULT));
   $print_html_link_use_alias = variable_get('print_html_link_use_alias', PRINT_HTML_LINK_USE_ALIAS_DEFAULT);
-  $allowed_type = print_link_allowed(array('type' => 'node', 'node' => $node, 'view_mode' => $view_mode));
+  $allowed_type = print_link_allowed(array('type' => $type, 'node' => $node, 'view_mode' => $view_mode));
   if (($allowed_type === PRINT_ALLOW_NORMAL_LINK) && !isset($node->book) && !empty($print_html_link_pos['link'])) {
     drupal_add_css(drupal_get_path('module', 'print') . '/css/printlinks.css');
     $links = array();
     $format = theme('print_format_link');
 
     $query_arr = $_GET;
-    if ('node' == 'comment') {
+    if ($type == 'comment') {
       $query_arr['comment'] = $node->cid;
     }
     $query = print_query_string_encode($query_arr, array('q'));
@@ -460,7 +505,7 @@ function print_form_alter(&$form, &$form_state, $form_id) {
       '#title' => t('Printer, e-mail and PDF versions'),
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
-      '#weight' => (function_exists('cck_extra_field_weight') && isset($form['type'])) ? cck_extra_field_weight($form['type']['#value'], 'print') : PRINT_TYPE_FIELDS_WEIGHT,
+      '#weight' => PRINT_TYPE_FIELDS_WEIGHT,
       '#group' => 'additional_settings',
     );
 
@@ -494,18 +539,6 @@ function print_form_alter(&$form, &$form_state, $form_id) {
       $form['print']['print_display_urllist']['#default_value'] = isset($node->print_display_urllist) ? $node->print_display_urllist : variable_get('print_display_urllist_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT);
     }
   }
-}
-
-/**
- * Implements hook_cck_extra_fields().
- */
-function print_cck_extra_fields($type_name) {
-  $fields['print'] = array(
-    'label' => t('Printer, e-mail and PDF versions'),
-    'description' => t('Print module form.'),
-    'weight' => PRINT_TYPE_FIELDS_WEIGHT,
-  );
-  return $fields;
 }
 
 /**
