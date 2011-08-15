@@ -112,10 +112,12 @@ function print_theme() {
     ),
     'print_node' => array(
       'variables' => array('node' => NULL, 'teaser' => FALSE, 'page' => FALSE, 'type' => PRINT_HTML_FORMAT),
+      'render element' => 'elements',
       'template' => 'print_node',
     ),
     'print' => array(
       'variables' => array('print' => array(), 'type' => PRINT_HTML_FORMAT, 'node' => NULL),
+      'render element' => 'page',
       'template' => 'print',
     ),
   );
