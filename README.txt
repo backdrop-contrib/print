@@ -50,14 +50,11 @@ print.tpl.php or the css/print.css files.
 
 - It is possible to set per-content-type and/or theme-specific templates
   which are searched for in the following order: 
-   1. print_[format].node-[type].tpl.php in the theme directory
-   2. print_[format].node-[type].tpl.php in the module directory 
-   3. print_[format].tpl.php in the theme directory
-   4. print_[format].tpl.php in the module directory 
-   5. print.node-[type].tpl.php in the theme directory
-   6. print.node-[type].tpl.php in the module directory 
-   7. print.tpl.php in the theme directory
-   8. print.tpl.php in the module directory (supplied by the module)
+   1. print--[format]--node--[type].tpl.php in the theme directory
+   2. print--[format].tpl.php in the theme directory
+   3. print--node--[type].tpl.php in the theme directory
+   4. print.tpl.php in the theme directory
+   5. print.tpl.php in the module directory (supplied by the module)
 
   format is either html, mail or pdf, and type is Drupal's node type (e.g.
   page, story, etc.)
