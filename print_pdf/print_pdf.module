@@ -636,7 +636,8 @@ function _print_pdf_tcpdf_version() {
   }
   require_once(DRUPAL_ROOT . '/' . $print_pdf_pdf_tool);
 
-  $pdf = new TCPDF();
+  // Hide warnings, as some TCPDF constants may still be undefined
+  @$pdf = new TCPDF();
 
   return $pdf->getTCPDFVersion();
 }
