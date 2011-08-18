@@ -639,7 +639,12 @@ function _print_pdf_tcpdf_version() {
   // Hide warnings, as some TCPDF constants may still be undefined
   @$pdf = new TCPDF();
 
-  return $pdf->getTCPDFVersion();
+  if (method_exists($pdf, 'getTCPDFVersion')) {
+    return $pdf->getTCPDFVersion();
+  }
+  else {
+    return 'unknown';
+  }
 }
 
 /**
