@@ -933,3 +933,11 @@ function print_query_string_encode($query, $exclude = array(), $parent = '') {
 
   return $params;
 }
+
+/**
+ * Implements hook_contextual_links_view_alter().
+ */
+function print_contextual_links_view_alter(&$element, $items) {
+  // Hide contextual links, always
+  $element['#attributes']['class'][] = 'element-hidden';
+}
