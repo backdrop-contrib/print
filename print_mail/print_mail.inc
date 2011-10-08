@@ -99,7 +99,7 @@ function print_mail_form($form, &$form_state) {
     $form['fld_title'] = array(
       '#type' => 'item',
       '#title' => t('Page to be sent'),
-      '#markup' => l($title, $path, array('attributes' => array('title' => t('View page')))),
+      '#markup' => l(t($title), $path, array('attributes' => array('title' => t('View page')))),
     );
   }
   $form['txt_message'] = array(
