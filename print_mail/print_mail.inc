@@ -248,7 +248,7 @@ function print_mail_form_validate($form, &$form_state) {
 function print_mail_form_submit($form, &$form_state) {
   if (!array_key_exists('cancel', $form_state['values'])) {
     if (!empty($form_state['values']['fld_from_name'])) {
-      $from = '"' . $form_state['values']['fld_from_name'] . '" <' . $form_state['values']['fld_from_addr'] . '>';
+      $from = '"' . mime_header_encode($form_state['values']['fld_from_name']) . '" <' . $form_state['values']['fld_from_addr'] . '>';
     }
     else {
       $from = $form_state['values']['fld_from_addr'];
