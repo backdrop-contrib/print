@@ -327,22 +327,21 @@ function print_block_view($delta = '') {
 }
 
 /**
- * Implements hook_link_alter().
+ * Implements hook_node_view_alter().
  */
-function print_link_alter(array &$links, $node) {
-  foreach ($links as $module => $link) {
-    if (strpos($module, 'book_printer') !== FALSE) {
-      $print_html_book_link = variable_get('print_html_book_link', PRINT_HTML_BOOK_LINK_DEFAULT);
+function print_node_view_alter(&$build) {
+  if (isset($build['links']['book']['#links']['book_printer'])) {
+    $print_html_book_link = variable_get('print_html_book_link', PRINT_HTML_BOOK_LINK_DEFAULT);
 
-      if ($print_html_book_link) {
-        $print_html_link_pos = variable_get('print_html_link_pos', array(PRINT_HTML_LINK_POS_DEFAULT => PRINT_HTML_LINK_POS_DEFAULT));
+    if ($print_html_book_link) {
+      $print_html_link_pos = variable_get('print_html_link_pos', array(PRINT_HTML_LINK_POS_DEFAULT => PRINT_HTML_LINK_POS_DEFAULT));
 
-        if (!empty($print_html_link_pos['link'])) {
+      if (!empty($print_html_link_pos['link'])) {
         $format = theme('print_format_link');
 
         switch ($print_html_book_link) {
           case 1:
-            $path = $link['href'];
+            $path = $build['links']['book']['#links']['book_printer']['href'];
             break;
           case 2:
             $print_html_link_use_alias = variable_get('print_html_link_use_alias', PRINT_HTML_LINK_USE_ALIAS_DEFAULT);
@@ -350,16 +349,15 @@ function print_link_alter(array &$links, $node) {
             break;
         }
 
-        $links[$module] = array(
+        $build['links']['book']['#links']['book_printer'] = array(
           'href' => PRINT_PATH . '/' . $path,
           'title' => $format['text'],
           'attributes' => $format['attributes'],
           'html' => $format['html'],
         );
-        }
-        else {
-          unset($links[$module]);
-        }
+      }
+      else {
+        unset($build['links']['book']['#links']['book_printer']);
       }
     }
   }
