@@ -62,7 +62,7 @@ function print_mail_form($form, &$form_state) {
           'totalcount' => 1,
           'timestamp' => REQUEST_TIME,
       ))
-      ->expression('totalcount', 'totalcount + :inc', array(':inc' => 1))
+      ->expression('totalcount', 'totalcount + 1')
       ->execute();
   }
 

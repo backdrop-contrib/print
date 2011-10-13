@@ -54,14 +54,14 @@ function print_pdf_controller() {
     exit;
   }
 
-  $nodepath = (isset($node->path)) ? drupal_get_normal_path($node->path) : 'node/' . $path;
+  $nodepath = (isset($node->path) && is_string($node->path)) ? drupal_get_normal_path($node->path) : 'node/' . $path;
   db_merge('print_pdf_page_counter')
     ->key(array('path' => $nodepath))
     ->fields(array(
         'totalcount' => 1,
         'timestamp' => REQUEST_TIME,
     ))
-    ->expression('totalcount', 'totalcount + :inc', array(':inc' => 1))
+    ->expression('totalcount', 'totalcount + 1')
     ->execute();
 }
 
