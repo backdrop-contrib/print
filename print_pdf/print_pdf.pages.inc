@@ -27,22 +27,27 @@ function print_pdf_controller() {
   $path = implode('/', $args);
   $cid = isset($_GET['comment']) ? (int)$_GET['comment'] : NULL;
 
-  if ($alias = drupal_lookup_path('source', $path)) {
-    // Alias
-    $path_arr = explode('/', $alias);
-    $node = node_load($path_arr[1]);
-  }
-  elseif (ctype_digit($args[0])) {
-    // normal nid
-    $node = node_load($args[0]);
-  }
+  if (!empty($path)) {
+    if ($alias = drupal_lookup_path('source', $path)) {
+      // Alias
+      $path_arr = explode('/', $alias);
+      $node = node_load($path_arr[1]);
+    }
+    elseif (ctype_digit($args[0])) {
+      // normal nid
+      $node = node_load($args[0]);
+    }
 
-  $pdf_filename = variable_get('print_pdf_filename', PRINT_PDF_FILENAME_DEFAULT);
-  if (!empty($pdf_filename) && !empty($node)) {
-    $pdf_filename = token_replace($pdf_filename, array('node' => $node)) . '.pdf';
+    $pdf_filename = variable_get('print_pdf_filename', PRINT_PDF_FILENAME_DEFAULT);
+    if (!empty($pdf_filename) && !empty($node)) {
+      $pdf_filename = token_replace($pdf_filename, array('node' => $node)) . '.pdf';
+    }
+    else {
+      $pdf_filename = str_replace('/', '_', $path) . '.pdf';
+    }
   }
   else {
-    $pdf_filename = str_replace('/', '_', $path) . '.pdf';
+    $pdf_filename = 'page.pdf';
   }
   if (function_exists('transliteration_clean_filename')) {
     $pdf_filename = transliteration_clean_filename($pdf_filename, language_default('language'));
@@ -296,7 +301,9 @@ function _print_pdf_tcpdf($print, $html, $filename = NULL) {
   $pdf = new PrintTCPDF($orientation , 'mm', $print_pdf_paper_size, TRUE);
 
   // set document information
-  $pdf->SetAuthor(strip_tags($print['node']->name));
+  if (property_exists($print['node'], 'name')) {
+    $pdf->SetAuthor(strip_tags($print['node']->name));
+  }
   $pdf->SetCreator(variable_get('site_name', 'Drupal'));
   $pdf->SetTitle(html_entity_decode($print['title'], ENT_QUOTES, 'UTF-8'));
   $pdf->setPDFVersion('1.6');

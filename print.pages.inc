@@ -71,8 +71,8 @@ function print_controller($path, $cid = NULL, $format = PRINT_HTML_FORMAT, $teas
 
     $ref = $_SERVER['HTTP_REFERER'];
     $path = preg_replace("!^$base_url/!", '', $ref);
-    if ($path === $ref) {
-      $path = '';
+    if (($path === $ref) || empty($path)) {
+      $path = variable_get('site_frontpage', 'node');
     }
   }
   if ($alias = drupal_lookup_path('source', $path)) {
