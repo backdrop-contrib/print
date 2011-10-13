@@ -325,8 +325,17 @@ function print_pdf_help($path, $arg) {
  * Implements hook_node_load().
  */
 function print_pdf_node_load($nodes, $types) {
+  $ids = array();
   foreach ($nodes as $node) {
-    _print_pdf_set_node_fields($node);
+    $ids[] = $node->nid;
+  }
+
+  $result = db_query('SELECT nid, link, comments, url_list FROM {print_pdf_node_conf} WHERE nid IN (:nids)', array(':nids' => $ids))->fetchAllAssoc('nid');
+
+  foreach ($nodes as $node) {
+    $node->print_pdf_display = isset($result[$node->nid]) ? intval($result[$node->nid]->link) : variable_get('print_pdf_display_' . $node->type, PRINT_TYPE_SHOW_LINK_DEFAULT);
+    $node->print_pdf_display_comment = isset($result[$node->nid]) ? intval($result[$node->nid]->comments) : variable_get('print_pdf_display_comment_' . $node->type, PRINT_TYPE_COMMENT_LINK_DEFAULT);
+    $node->print_pdf_display_urllist = isset($result[$node->nid]) ? intval($result[$node->nid]->url_list) : variable_get('print_pdf_display_urllist_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT);
   }
 }
 
@@ -411,25 +420,6 @@ function print_pdf_form_alter(&$form, &$form_state, $form_id) {
       $form['print']['print_pdf_display_urllist']['#default_value'] = isset($node->print_pdf_display_urllist) ? $node->print_pdf_display_urllist : variable_get('print_pdf_display_urllist_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT);
     }
   }
-}
-
-/**
- * Auxiliary function to assign the per-node settings to the node object fields
- *
- * @param $node
- *   node to be modified
- */
-function _print_pdf_set_node_fields(&$node) {
-  if (isset($node->nid)) {
-    $res = db_query("SELECT link, comments, url_list FROM {print_pdf_node_conf} WHERE nid = :nid", array(':nid' => $node->nid))
-              ->fetch();
-  }
-  else {
-    $res = FALSE;
-  }
-  $node->print_pdf_display = $res ? intval($res->link) : variable_get('print_pdf_display_' . $node->type, PRINT_TYPE_SHOW_LINK_DEFAULT);
-  $node->print_pdf_display_comment = $res ? intval($res->comments) : variable_get('print_pdf_display_comment_' . $node->type, PRINT_TYPE_COMMENT_LINK_DEFAULT);
-  $node->print_pdf_display_urllist = $res ? intval($res->url_list) : variable_get('print_pdf_display_urllist_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT);
 }
 
 /**
