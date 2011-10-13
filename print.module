@@ -193,11 +193,14 @@ function print_preprocess_print(&$variables) {
 
   $format = $variables['type'];
   $type = (isset($variables['node']->type)) ? $variables['node']->type : '';
+  $nid = (isset($variables['node']->nid)) ? $variables['node']->nid : '';
 
 //  $variables['theme_hook_suggestions'][] = "print";
   $variables['theme_hook_suggestions'][] = "print__node__{$type}";
+  $variables['theme_hook_suggestions'][] = "print__node__{$type}__{$nid}";
   $variables['theme_hook_suggestions'][] = "print__{$format}";
   $variables['theme_hook_suggestions'][] = "print__{$format}__node__{$type}";
+  $variables['theme_hook_suggestions'][] = "print__{$format}__node__{$type}__{$nid}";
 }
 
 /**
