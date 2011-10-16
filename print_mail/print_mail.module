@@ -614,3 +614,47 @@ function print_mail_views_data_alter(&$data) {
     ),
   );
 }
+
+/**
+ * Implements hook_rules_action_info().
+ * @ingroup rules
+ */
+function print_mail_rules_action_info() {
+  return array(
+    'print_mail_action_submit' => array(
+      'label' => t('Send node as HTML formated email'),
+      'group' => t('Node'),
+      'named parameter' => TRUE,
+      'parameter' => array(
+        'from'      => array('type' => 'text', 'label' => t('From email adress')),
+        'from_name' => array('type' => 'text', 'label' => t('From name')),
+        'to'        => array('type' => 'text', 'label' => t('Send email to')),
+        'subject'   => array('type' => 'text', 'label' => t('Subject')),
+        'message'   => array('type' => 'text', 'label' => t('The message that should be displayed.')),
+        'node'      => array('type' => 'node', 'label' => t('Content')),
+      ),
+    ),
+  );
+}
+
+/**
+ * Action handler for the print_mail_action_submit
+ * @ingroup rules
+ */
+function print_mail_action_submit($node, $settings) {
+  require_once(DRUPAL_ROOT . '/' . drupal_get_path('module', 'print_mail') . '/print_mail.inc');
+
+  $form_state['values'] = array(
+    'path' => 'node/' . $node['node']->nid,
+    'cid' => NULL,
+    'title' => $node['node']->title,
+    'fld_from_addr' => $settings->settings['from'],
+    'fld_from_name' => $settings->settings['from_name'],
+    'txt_to_addrs' => $settings->settings['to'],
+    'fld_subject' => $settings->settings['subject'],
+    'txt_message' => $settings->settings['message'],
+    'chk_teaser' => FALSE,
+  );
+
+  print_mail_form_submit(NULL, $form_state);
+}
