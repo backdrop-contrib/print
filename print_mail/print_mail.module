@@ -551,3 +551,40 @@ function print_mail_link_allowed($args) {
   }
   return FALSE;
 }
+
+/**
+* Implementation of hook_nollom_form_list().
+*/
+function print_mail_mollom_form_list() {
+  $forms['print_mail_form'] = array(
+    'title' => t('Send page form'),
+    'entity' => 'print_mail',
+  );
+  return $forms;
+}
+
+/**
+* Implementation of hook_mollom_form_info().
+*/
+function print_mail_mollom_form_info($form_id) {
+  switch ($form_id) {
+    case 'print_mail_form':
+      $form_info = array(
+        'elements' => array(
+          'fld_from_addr' => t('Sender e-mail'),
+          'fld_from_name' => t('Sender name'),
+          'txt_to_addrs' => t('Recipients'),
+          'fld_subject' => t('Subject'),
+          'fld_title' => t('Page to be sent'),
+          'txt_message' => t('Your message'),
+        ),
+        'mapping' => array(
+          'post_title' => 'fld_title',
+          'author_name' => 'fld_from_name',
+          'author_mail' => 'fld_from_addr',
+        ),
+      );
+      break;
+  }
+  return $form_info;
+}
