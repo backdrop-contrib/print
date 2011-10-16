@@ -18,7 +18,7 @@
 function print_main_settings() {
   $print_css = variable_get('print_css', PRINT_CSS_DEFAULT);
   // Check that the stylesheet path is indeed valid and relative to base_path()
-  if (!empty($print_css)) {
+  if (!empty($print_css) && empty($_POST)) {
     $css_path = dirname($_SERVER['SCRIPT_FILENAME']) . '/' . strtr($print_css, array('%t' => drupal_get_path('theme', variable_get('theme_default', 'garland'))));
     if (!is_file($css_path) || !is_readable($css_path)) {
       drupal_set_message(t("File %file is not readable by the web server.", array('%file' => $css_path)), 'warning', FALSE);
@@ -33,12 +33,12 @@ function print_main_settings() {
   $form['settings']['print_css'] = array(
     '#type' => 'textfield',
     '#title' => t('Custom Stylesheet'),
-    '#default_value' => variable_get('print_css', PRINT_CSS_DEFAULT),
+    '#default_value' => $print_css,
     '#size' => 60,
     '#maxlength' => 250,
     '#description' => t('The path to your custom print cascading stylesheet, if any. The path provided must be relative to the base path. When none is specified, the default module CSS file is used.') . '<br />' .
                       t('Macros: %t (path to theme: "%theme")', array('%theme' => drupal_get_path('theme', variable_get('theme_default', 'bartik')))) . '<br />' .
-                      t('Requires the <em>administer site configuration</em> permission.'),
+                      t('Requires the <em>Administer site configuration</em> permission.'),
     '#disabled' => !user_access('administer site configuration'),
   );
 
