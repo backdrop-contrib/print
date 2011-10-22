@@ -650,7 +650,7 @@ function _print_pdf_wkhtmltopdf_version() {
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
   $descriptor = array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'w'));
 
-  $cmd = realpath($print_pdf_pdf_tool) . ' --version';
+  $cmd = '"' . realpath($print_pdf_pdf_tool) . '" --version';
   $process = proc_open($cmd, $descriptor, $pipes, NULL, NULL);
   if (is_resource($process)) {
     $content = stream_get_contents($pipes[1]);
