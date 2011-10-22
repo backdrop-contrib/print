@@ -348,7 +348,7 @@ function print_node_view_alter(&$build) {
             break;
           case 2:
             $print_html_link_use_alias = variable_get('print_html_link_use_alias', PRINT_HTML_LINK_USE_ALIAS_DEFAULT);
-            $path = ($print_html_link_use_alias && isset($node->path)) ? $node->path : $node->nid;
+            $path = ($print_html_link_use_alias) ? drupal_get_path_alias('node/' . $build['#node']->nid) : $build['#node']->nid;
             break;
         }
 
