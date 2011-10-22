@@ -94,7 +94,7 @@ function print_pdf_generate_path($path, $cid = NULL, $pdf_filename = NULL) {
   $pattern = '!<(a\s[^>]*?)>!is';
   $html = preg_replace_callback($pattern, '_print_rewrite_urls', $html);
   // And make anchor links relative again, to permit in-PDF navigation
-  $html = preg_replace("!${base_url}/" . PRINTPDF_PATH . "/.*?%2523!", '#', $html);
+  $html = preg_replace("!${base_url}/" . PRINTPDF_PATH . '/.*?#!', '#', $html);
 
   return print_pdf_generate_html($print, $html, $pdf_filename);
 }
