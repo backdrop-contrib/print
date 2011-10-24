@@ -38,7 +38,7 @@ function print_mail_form($form, &$form_state) {
     }
     drupal_goto(PRINTMAIL_PATH . '/' . $path);
   }
-  else if (ctype_digit($path_arr[1])) {
+  elseif (ctype_digit($path_arr[1])) {
     if (drupal_lookup_path('source', $path)) {
       // This is a numeric alias
       $path = drupal_get_normal_path($path);
@@ -200,7 +200,7 @@ function theme_print_mail_form($form) {
  */
 function print_mail_form_validate($form, &$form_state) {
   if (array_key_exists('cancel', $form_state['input'])) {
-    form_set_error(NULL,'',TRUE);
+    form_set_error(NULL, '', TRUE);
     drupal_get_messages('error');
 
     drupal_goto(preg_replace('!^book/export/html/!', 'node/', $form_state['values']['path']));
@@ -241,7 +241,7 @@ function print_mail_form_validate($form, &$form_state) {
 
   // In all fields, prevent insertion of custom headers
   foreach ($form_state['values'] as $key => $string) {
-    if ( (substr($key, 0, 4) == 'fld_') && ((strpos($string, "\n") !== FALSE) || (strpos($string, "\r") !== FALSE)) ) {
+    if ( (drupal_substr($key, 0, 4) == 'fld_') && ((strpos($string, "\n") !== FALSE) || (strpos($string, "\r") !== FALSE)) ) {
       form_set_error($key, 'Found invalid character');
     }
   }

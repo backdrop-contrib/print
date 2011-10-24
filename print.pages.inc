@@ -352,7 +352,7 @@ function _print_rewrite_urls($matches) {
               $path = "node/$path";
             }
             // Printer-friendly URLs is on, so we need to make it absolute
-            $newurl = url($path, array('fragment' => substr($url, 1), 'absolute' => TRUE));
+            $newurl = url($path, array('fragment' => drupal_substr($url, 1), 'absolute' => TRUE));
           }
           // Because base href is the original page, change the link to
           // still be usable inside the print page

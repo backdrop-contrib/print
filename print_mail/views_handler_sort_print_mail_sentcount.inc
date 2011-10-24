@@ -1,6 +1,9 @@
 <?php
 
 /**
+ * @file
+ * Views sort handler for the print_mail module
+ *
  * Extend the default sort handler.
  * Add a relationship with custom join to print's emailed counter
  */

@@ -347,7 +347,7 @@ function _print_mail_access($permission) {
       }
       // If the destination page is not accessible, don't show the form
       if (!($router_item = menu_get_item($path)) || (!$router_item['access'])) {
-	$page_access = FALSE;
+        $page_access = FALSE;
       }
     }
   }
@@ -553,8 +553,8 @@ function print_mail_link_allowed($args) {
 }
 
 /**
-* Implementation of hook_nollom_form_list().
-*/
+ * Implements hook_nollom_form_list().
+ */
 function print_mail_mollom_form_list() {
   $forms['print_mail_form'] = array(
     'title' => t('Send page form'),
@@ -564,8 +564,8 @@ function print_mail_mollom_form_list() {
 }
 
 /**
-* Implementation of hook_mollom_form_info().
-*/
+ * Implemenents hook_mollom_form_info().
+ */
 function print_mail_mollom_form_info($form_id) {
   switch ($form_id) {
     case 'print_mail_form':
