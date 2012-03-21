@@ -68,6 +68,8 @@ function print_pdf_controller() {
     ))
     ->expression('totalcount', 'totalcount + 1')
     ->execute();
+
+  drupal_exit();
 }
 
 function print_pdf_generate_path($path, $cid = NULL, $pdf_filename = NULL) {
