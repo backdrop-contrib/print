@@ -924,7 +924,7 @@ function print_query_string_encode($query, $exclude = array(), $parent = '') {
       $params[] = print_query_string_encode($value, $exclude, $key);
     }
     else {
-      $params[] = $key . '=' . rawurlencode($value);
+      $params[$key] = rawurlencode($value);
     }
   }
 
