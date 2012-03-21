@@ -560,7 +560,8 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
     '#language' => $langcode,
   );
 
-  drupal_alter('node_view', $build);
+  $type = 'node';
+  drupal_alter(array('node_view', 'entity_view'), $build, $type);
 
   $content = render($build);
 
