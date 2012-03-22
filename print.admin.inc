@@ -164,19 +164,18 @@ function print_main_settings() {
  * Validate print_main_settings form.
  */
 function _print_main_settings_validate($form, &$form_state) {
-  global $base_url;
+  global $base_root;
 
   // Check for a new uploaded logo, and use that instead.
   if ($file = file_save_upload('print_logo_upload', array('file_validate_is_image' => array()))) {
-    $parts = pathinfo($file->filename);
-    $filename = 'print_logo.' . drupal_strtolower($parts['extension']);
-
     // The image was saved using file_save_upload() and was added to the
     // files table as a temporary file. We'll make a copy and let the garbage
     // collector delete the original upload.
-    if (file_unmanaged_copy($file->filename, $filename, FILE_EXISTS_REPLACE)) {
+    if ($filename = file_unmanaged_copy($file->uri)) {
+      $wrapper = file_stream_wrapper_get_instance_by_uri($filename);
+
       $form_state['values']['print_logo_options'] = 2;
-      $form_state['values']['print_logo_url'] = base_path() . $file->filepath;
+      $form_state['values']['print_logo_url'] = str_replace($base_root, '', $wrapper->getExternalUrl());
     }
   }
 }
