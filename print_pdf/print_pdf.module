@@ -143,7 +143,7 @@ function print_pdf_block_view($delta = 0) {
       switch ($delta) {
       case 'print_pdf-top':
         $block['subject'] = t('Most PDFd');
-        $result = db_query_range("SELECT path FROM {print_pdf_page_counter} ORDER BY totalcount DESC", 0, 3)
+        $result = db_query_range("SELECT path FROM {print_pdf_page_counter} LEFT JOIN {node} ON path = CONCAT('node/', node.nid) WHERE status != 0 OR status IS NULL ORDER BY totalcount DESC", 0, 3)
                     ->fetchAll();
         if (count($result)) {
           $block['content'] = '<div class="item-list"><ul>';

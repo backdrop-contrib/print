@@ -116,7 +116,7 @@ function print_mail_block_view($delta = 0) {
       switch ($delta) {
       case 'print_mail-top':
         $block['subject'] = t('Most emailed');
-        $result = db_query_range("SELECT path FROM {print_mail_page_counter} ORDER BY sentcount DESC", 0, 3)
+        $result = db_query_range("SELECT path FROM {print_mail_page_counter} LEFT JOIN {node} ON path = CONCAT('node/', node.nid) WHERE status != 0 OR status IS NULL ORDER BY sentcount DESC", 0, 3)
                     ->fetchAll();
         if (count($result)) {
           $block['content'] = '<div class="item-list"><ul>';
