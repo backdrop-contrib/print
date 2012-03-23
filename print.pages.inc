@@ -522,35 +522,20 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
 
     $build = $node->content;
     unset($node->content);
-
-    // Disable the AdSense module ads
-//    $content = preg_replace('!<div class=[\'"]adsense[\'"].*?</div>!sim', '', $content);
   }
 
   $print_comments = variable_get('print_comments', PRINT_COMMENTS_DEFAULT);
 
-  if (function_exists('comment_render') && (($cid != NULL) || ($print_comments))) {
+  if (function_exists('comment_node_page_additions') && (($cid != NULL) || ($print_comments))) {
     //Print only the requested comment (or if $cid is NULL, all of them)
-    $comments = comment_render($node, $cid);
 
-    //Remove the comment forms
-    $comments = preg_replace('!<form.*?id="comment-.*?">.*?</form>!sim', '', $comments);
-    //Remove the 'Post new comment' title
-    $comments = preg_replace('!<h2.*?>' . t('Post new comment') . '</h2>!', '', $comments);
-    //Remove the comment title hyperlink
-    $comments = preg_replace('!(<h3.*?>.*?)<a.*?>(.*?)</a>(.*?</h3>)!i', '$1$2$3', $comments);
-    //Remove the comment author link
-    $pattern = '!(<(?:span|div) class="submitted">.*?)<a.*?>(.*?)</a>(.*?</(?:span|div)>)!sim';
-    if (preg_match($pattern, $comments)) {
-      $comments = preg_replace($pattern , '$1$2$3', $comments);
+    $comments = comment_node_page_additions($node);
+    unset($comments['comment_form']);
+    foreach ($comments['comments'] as &$comment) {
+      unset($comment['links']);
     }
-    //Remove the comment links
-    $comments = preg_replace('!\s*<ul class="links">.*?</ul>!sim', '', $comments);
-    if ($cid != NULL) {
-      // Single comment requested, output only the comment
-      unset($node->body);
-    }
-    $node->body .= $comments;
+
+    $build['comments'] = $comments;
   }
 
   $build += array(
