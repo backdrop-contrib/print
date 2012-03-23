@@ -111,7 +111,7 @@ function print_theme() {
       'variables' => array(),
     ),
     'print_node' => array(
-      'variables' => array('node' => NULL, 'teaser' => FALSE, 'page' => FALSE, 'type' => PRINT_HTML_FORMAT),
+      'render element' => 'elements',
       'template' => 'print_node',
     ),
     'print' => array(
@@ -149,16 +149,13 @@ function print_preprocess_print_node(&$variables) {
     }
   }
 
-  $variables['node'] = $variables['elements']['#node'];
-  $type = $variables['node']->type;
-  $format = $variables['type'];
-//  template_preprocess_node($variables);
+  $type = $variables['elements']['#node']->type;
+  $format = $variables['elements']['#print_format'];
 
   $variables['theme_hook_suggestions'][] = "node";
-  $variables['theme_hook_suggestions'][] = "node__{$type}";
   $variables['theme_hook_suggestions'][] = "print_node";
-//  $variables['theme_hook_suggestions'][] = "print_node_{$format}";
-//  $variables['theme_hook_suggestions'][] = "print_node_{$format}.node__{$type}";
+  $variables['theme_hook_suggestions'][] = "print_node_{$format}";
+  $variables['theme_hook_suggestions'][] = "print_node_{$format}.node__{$type}";
 }
 
 /**
@@ -900,7 +897,7 @@ function print_link_allowed($args) {
 /**
  * Parse an array into a valid urlencoded query string.
  * Modified from drupal_query_string_encode to prevent re-encoding of
- * encoded original.
+ * encoded original. (see #301192)
  *
  * @param $query
  *   The array to be processed e.g. $_GET

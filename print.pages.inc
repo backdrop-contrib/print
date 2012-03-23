@@ -554,20 +554,17 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
   }
 
   $build += array(
-    '#theme' => 'node',
+    '#theme' => 'print_node',
     '#node' => $node,
     '#view_mode' => $view_mode,
     '#language' => $langcode,
+    '#print_format' => $format,
   );
 
   $type = 'node';
   drupal_alter(array('node_view', 'entity_view'), $build, $type);
 
   $content = render($build);
-
-  //Get rid of the annoying D7 title link
-  $pattern = '!(<h2 property="dc:title" datatype="">)\s*<a [^>]*?>(.*?)</a>\s*(</h2>)!mis';
-  $content = preg_replace($pattern, '$1$2$3', $content);
 
   //Check URL list settings
   $_print_urls = _print_url_list_enabled($node, $format);
