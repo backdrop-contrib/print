@@ -156,6 +156,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
 
   // print module settings
   $print_css = variable_get('print_css', PRINT_CSS_DEFAULT);
+  $print_keep_theme_css = variable_get('print_keep_theme_css', PRINT_KEEP_THEME_CSS_DEFAULT);
   $print_logo_options = variable_get('print_logo_options', PRINT_LOGO_OPTIONS_DEFAULT);
   $print_logo_url = variable_get('print_logo_url', PRINT_LOGO_URL_DEFAULT);
   $print_html_new_window = variable_get('print_html_new_window', PRINT_HTML_NEW_WINDOW_DEFAULT);
@@ -187,10 +188,12 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
     drupal_add_css(drupal_get_path('module', 'print') . '/css/print.css');
   }
   $drupal_css = drupal_add_css();
-  foreach ($drupal_css as $key => $css_file) {
-    if ($css_file['group'] == CSS_THEME) {
-    // Unset the theme's CSS
-      unset($drupal_css[$key]);
+  if (!$print_keep_theme_css) {
+    foreach ($drupal_css as $key => $css_file) {
+      if ($css_file['group'] == CSS_THEME) {
+      // Unset the theme's CSS
+        unset($drupal_css[$key]);
+      }
     }
   }
 

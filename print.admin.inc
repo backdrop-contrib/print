@@ -42,6 +42,13 @@ function print_main_settings() {
     '#disabled' => !user_access('administer site configuration'),
   );
 
+  $form['settings']['print_keep_theme_css'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Keep the current theme CSS'),
+    '#default_value' => variable_get('print_keep_theme_css', PRINT_KEEP_THEME_CSS_DEFAULT),
+    '#description' => t('If set, the current theme css will still be applied to the printer-friendly versions.'),
+  );
+
   $form['settings']['print_urls'] = array(
     '#type' => 'checkbox',
     '#title' => t('Printer-friendly URLs list'),
