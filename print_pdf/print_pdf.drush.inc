@@ -13,12 +13,12 @@
 define('TCPDF_DOWNLOAD_URI', 'http://sourceforge.net/projects/tcpdf/files/latest');
 
 // URI to the the latest dompdf version.. Hardcoded version unfortunately
-define('DOMPDF_DOWNLOAD_URI', 'http://dompdf.googlecode.com/files/dompdf_0-6-0_beta2.tar.gz');
+define('DOMPDF_DOWNLOAD_URI', 'http://dompdf.googlecode.com/files/dompdf_0-6-0_beta3.tar.gz');
 
 // wkhtmltopdf is a binary, requiring a different download for each platform
-define('WKHTMLTOPDF_AMD64_DOWNLOAD_URI', 'http://wkhtmltopdf.googlecode.com/files/wkhtmltopdf-0.10.0_rc2-static-amd64.tar.bz2');
-define('WKHTMLTOPDF_I386_DOWNLOAD_URI', 'http://wkhtmltopdf.googlecode.com/files/wkhtmltopdf-0.10.0_rc2-static-i386.tar.bz2');
-define('WKHTMLTOPDF_WIN_DOWNLOAD_URI', 'http://wkhtmltopdf.googlecode.com/files/wkhtmltox-0.10.0_rc2-installer.exe');
+define('WKHTMLTOPDF_AMD64_DOWNLOAD_URI', 'http://wkhtmltopdf.googlecode.com/files/wkhtmltopdf-0.11.0_rc1-static-amd64.tar.bz2');
+define('WKHTMLTOPDF_I386_DOWNLOAD_URI', 'http://wkhtmltopdf.googlecode.com/files/wkhtmltopdf-0.11.0_rc1-static-i386.tar.bz2');
+define('WKHTMLTOPDF_WIN_DOWNLOAD_URI', 'http://wkhtmltopdf.googlecode.com/files/wkhtmltox-0.11.0_rc1-installer.exe');
 define('WKHTMLTOPDF_OSX_DOWNLOAD_URI', 'http://wkhtmltopdf.googlecode.com/files/wkhtmltopdf-OSX-0.10.0_rc2-static.tar.bz2');
 
 /**
