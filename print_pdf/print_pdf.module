@@ -185,7 +185,7 @@ function print_pdf_requirements($phase) {
           );
         }
         elseif (basename($print_pdf_pdf_tool) == 'dompdf_config.inc.php') {
-          $directory = dirname($print_pdf_pdf_tool) . '/lib/fonts';
+          $directory = defined('DOMPDF_FONT_CACHE') ? DOMPDF_FONT_CACHE : dirname($print_pdf_pdf_tool) . '/lib/fonts';
           if (!is_dir($directory) || !is_writable($directory)) {
             $requirements['print_pdf_tool'] = array(
               'title' => $t('DOMPDF font cache directory'),
