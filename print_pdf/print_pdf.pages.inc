@@ -148,7 +148,7 @@ function _print_pdf_file_access_images($html) {
       $lang = '';
       break;
   }
-*/
+ */
   // Always convert private to local paths
   $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?(?:${lang}/)?system/files/([^>]*?>)!is";
   $replacement = '$1file://' . realpath(variable_get('file_private_path', '')) . '/$2';
