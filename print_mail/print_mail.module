@@ -37,6 +37,10 @@ function print_mail_permission() {
       'title' => t('Access the Send To Friend functionality'),
       'description' => t('Provides the ability to send pages to a friend and the links to them in the original pages.'),
     ),
+    'send unlimited e-mails' => array(
+      'title' => t('Send unlimited emails'),
+      'description' => t("Overrides the built-in hourly threshold limits when sending e-mails. This permission should only be granted to trusted users, due to it's potential in enabling the use of your site as a source of e-mail spam."),
+    ),
   );
 }
 
