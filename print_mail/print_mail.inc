@@ -48,6 +48,9 @@ function print_mail_form($form, &$form_state) {
       $path = 'node/' . $path;
     }
   }
+  else {
+    $path = drupal_get_normal_path($path);
+  }
 
   $print_mail_hourly_threshold = variable_get('print_mail_hourly_threshold', PRINT_MAIL_HOURLY_THRESHOLD);
 
@@ -108,10 +111,14 @@ function print_mail_form($form, &$form_state) {
     '#required' => TRUE,
   );
   if (!empty($title)) {
+    if (drupal_substr($path, 0, 5) == 'node/') {
+      $title = t($title);
+    }
+
     $form['fld_title'] = array(
       '#type' => 'item',
       '#title' => t('Page to be sent'),
-      '#markup' => l(t($title), $path, array('attributes' => array('title' => t('View page')))),
+      '#markup' => l($title, $path, array('attributes' => array('title' => t('View page')))),
     );
   }
   $form['txt_message'] = array(
