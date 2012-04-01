@@ -55,7 +55,7 @@ function print_pdf_controller() {
 
   $pdf = print_pdf_generate_path($path, $cid, $pdf_filename);
   if ($pdf == NULL) {
-    drupal_goto($print['url']);
+    drupal_goto($path);
     exit;
   }
 
