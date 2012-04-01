@@ -524,7 +524,7 @@ function print_mail_link_allowed($args) {
     }
     else {
       // Node link
-      if (!$node->print_mail_display) {
+      if (isset($node->print_mail_display) && !$node->print_mail_display) {
         // Link for this node is disabled
         return FALSE;
       }

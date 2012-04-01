@@ -589,7 +589,7 @@ function print_pdf_link_allowed($args) {
     }
     else {
       // Node link
-      if (!$node->print_pdf_display) {
+      if (isset($node->print_pdf_display) && !$node->print_pdf_display) {
         // Link for this node is disabled
         return FALSE;
       }

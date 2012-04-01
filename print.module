@@ -837,7 +837,7 @@ function print_link_allowed($args) {
     }
     else {
       // Node link
-      if (!$node->print_display) {
+      if (isset($node->print_display) && !$node->print_display) {
         // Link for this node is disabled
         return FALSE;
       }
