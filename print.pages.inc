@@ -57,7 +57,7 @@ function print_controller_html() {
  * @param $teaser
  *   if set to TRUE, outputs only the node's teaser
  * @param $message
- *   optional sender's message (used by the send e-mail module)
+ *   optional sender's message (used by the send email module)
  * @return
  *   array with the fields to be used in the template
  * @see _print_generate_node()
@@ -142,7 +142,7 @@ function _print_robots_meta_generator() {
  * @param $node
  *   generated node with a printer-friendly node body
  * @param $message
- *   optional sender's message (used by the send e-mail module)
+ *   optional sender's message (used by the send email module)
  * @param $cid
  *   id of current comment being generated (NULL when not generating
  *   an individual comment)
@@ -197,7 +197,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
     }
   }
 
-  // If we are sending a message via e-mail, the CSS must be embedded
+  // If we are sending a message via email, the CSS must be embedded
   if (!empty($message)) {
     $style = '';
     $css_files = array_keys($drupal_css);
@@ -475,7 +475,7 @@ function _print_url_list_enabled($node, $format = PRINT_HTML_FORMAT) {
  * @param $teaser
  *   if set to TRUE, outputs only the node's teaser
  * @param $message
- *   optional sender's message (used by the send e-mail module)
+ *   optional sender's message (used by the send email module)
  * @return
  *   filled array ready to be used in the template
  */
@@ -581,7 +581,7 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
  * @param $teaser
  *   if set to TRUE, outputs only the node's teaser
  * @param $message
- *   optional sender's message (used by the send e-mail module)
+ *   optional sender's message (used by the send email module)
  * @return
  *   filled array ready to be used in the template
  */
@@ -648,7 +648,7 @@ function _print_generate_path($path, $format = PRINT_HTML_FORMAT, $teaser = FALS
  * @param $teaser
  *   if set to TRUE, outputs only the node's teaser
  * @param $message
- *   optional sender's message (used by the send e-mail module)
+ *   optional sender's message (used by the send email module)
  * @return
  *   filled array ready to be used in the template
  */

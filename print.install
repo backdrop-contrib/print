@@ -13,7 +13,7 @@
 function print_install() {
   $t = get_t();
   drupal_set_message($t('Printer-friendly Page settings are available under !link',
-    array( '!link' => l($t('Administration > Configuration > User interface > Printer, e-mail and PDF versions'),  'admin/config/user-interface/print' ) )
+    array( '!link' => l($t('Administration > Configuration > User interface > Printer, email and PDF versions'),  'admin/config/user-interface/print' ) )
   ));
 }
 
@@ -166,4 +166,18 @@ function print_update_7000(&$sandbox) {
   );
 
   update_fix_d7_block_deltas($sandbox, $renamed_deltas, array());
+}
+
+/**
+ * Update permissions to new spellings
+ */
+function print_update_7100(&$sandbox) {
+  db_update('role_permission')
+    ->fields(array('permission' => 'access send by email'))
+    ->condition('permission', 'access send to friend')
+    ->execute();
+  db_update('role_permission')
+    ->fields(array('permission' => 'send unlimited emails'))
+    ->condition('permission', 'send unlimited e-mails')
+    ->execute();
 }

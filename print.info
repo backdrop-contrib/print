@@ -1,7 +1,7 @@
 name = "Printer-friendly pages"
 description = "Adds a printer-friendly version link to content and administrative pages."
 core=7.x
-package = "Printer, e-mail and PDF versions"
+package = "Printer, email and PDF versions"
 files[] = print.module
 files[] = print.admin.inc
 files[] = print.pages.inc

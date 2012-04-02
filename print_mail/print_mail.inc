@@ -16,7 +16,7 @@ require_once(DRUPAL_ROOT . '/' . drupal_get_path('module', 'print') . '/print.pa
 @include_once('Mail/mime.php');
 
 /**
- * Menu callback for the send by e-mail form.
+ * Menu callback for the send by email form.
  *
  * @ingroup forms
  */
@@ -54,7 +54,7 @@ function print_mail_form($form, &$form_state) {
 
   $print_mail_hourly_threshold = variable_get('print_mail_hourly_threshold', PRINT_MAIL_HOURLY_THRESHOLD);
 
-  if ((!user_access('send unlimited e-mails')) && (!flood_is_allowed('print_mail', $print_mail_hourly_threshold))) {
+  if ((!user_access('send unlimited emails')) && (!flood_is_allowed('print_mail', $print_mail_hourly_threshold))) {
     $form['flood'] = array(
       '#type' => 'markup',
       '#markup' => '<p>' . format_plural($print_mail_hourly_threshold, 'You cannot send more than 1 message per hour. Please try again later.', 'You cannot send more than @count messages per hour. Please try again later.') . '</p>',
@@ -87,7 +87,7 @@ function print_mail_form($form, &$form_state) {
 
   $form['fld_from_addr'] = array(
     '#type' => 'textfield',
-    '#title' => t('Your e-mail'),
+    '#title' => t('Your email'),
     '#size' => 62,
     '#required' => TRUE,
   );
@@ -142,7 +142,7 @@ function print_mail_form($form, &$form_state) {
   $form['btn_submit'] = array(
     '#name' => 'submit',
     '#type' => 'submit',
-    '#value' => t('Send e-mail'),
+    '#value' => t('Send email'),
   );
   $form['btn_clear'] = array(
     '#type' => 'markup',
@@ -242,7 +242,7 @@ function print_mail_form_validate($form, &$form_state) {
 
   $print_mail_hourly_threshold = variable_get('print_mail_hourly_threshold', PRINT_MAIL_HOURLY_THRESHOLD);
 
-  if ((!user_access('send unlimited e-mails')) && (!flood_is_allowed('print_mail', $print_mail_hourly_threshold - count($to_array) + 1))) {
+  if ((!user_access('send unlimited emails')) && (!flood_is_allowed('print_mail', $print_mail_hourly_threshold - count($to_array) + 1))) {
     form_set_error('txt_to_addrs',  t('You cannot send more than %number messages per hour. Please reduce the number of recipients.', array('%number' => $print_mail_hourly_threshold)));
   }
 

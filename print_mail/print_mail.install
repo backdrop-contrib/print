@@ -21,6 +21,10 @@ function print_mail_enable() {
     ->condition('type', 'module')
     ->condition('name', 'print_mail')
     ->execute();
+
+  if (module_exists('mailsystem')) {
+    mailsystem_set(array('print_mail' => 'DefaultMailSystem'));
+  }
 }
 
 /**
@@ -60,7 +64,7 @@ function print_mail_uninstall() {
  */
 function print_mail_schema() {
   $schema['print_mail_node_conf'] = array(
-    'description' => 'Send by e-mail node-specific configuration settings',
+    'description' => 'Send by email node-specific configuration settings',
     'fields' => array(
       'nid' => array(
         'type' => 'int',
@@ -97,7 +101,7 @@ function print_mail_schema() {
   );
 
   $schema['print_mail_page_counter'] = array(
-    'description' => 'Send by e-mail version access counter',
+    'description' => 'Send by email version access counter',
     'fields' => array(
       'path' => array(
         'type' => 'varchar',
@@ -133,7 +137,7 @@ function print_mail_schema() {
         'unsigned' => TRUE,
         'not null' => TRUE,
         'default' => 0,
-        'description' => 'Last e-mail sent',
+        'description' => 'Last email sent',
       ),
     ),
     'primary key' => array('path'),
@@ -153,4 +157,13 @@ function print_mail_update_7000(&$sandbox) {
   );
 
   update_fix_d7_block_deltas($sandbox, $renamed_deltas, array());
+}
+
+/**
+ * Disable MimeMailSystem for now
+ */
+function print_mail_update_7100(&$sandbox) {
+  if (module_exists('mailsystem')) {
+    mailsystem_set(array('print_mail' => 'DefaultMailSystem'));
+  }
 }

@@ -33,13 +33,13 @@ define('PRINT_MAIL_JOB_QUEUE_DEFAULT', 0);
  */
 function print_mail_permission() {
   return array(
-    'access send to friend' => array(
-      'title' => t('Access the Send To Friend functionality'),
-      'description' => t('Provides the ability to send pages to a friend and the links to them in the original pages.'),
+    'access send by email' => array(
+      'title' => t('Access the Send by email functionality'),
+      'description' => t('Provides the ability to send pages by email and the links to them in the original pages.'),
     ),
-    'send unlimited e-mails' => array(
+    'send unlimited emails' => array(
       'title' => t('Send unlimited emails'),
-      'description' => t("Overrides the built-in hourly threshold limits when sending e-mails. This permission should only be granted to trusted users, due to it's potential in enabling the use of your site as a source of e-mail spam."),
+      'description' => t("Overrides the built-in hourly threshold limits when sending emails. This permission should only be granted to trusted users, due to it's potential in enabling the use of your site as a source of email spam."),
     ),
   );
 }
@@ -66,11 +66,11 @@ function print_mail_menu() {
   $items = array();
 
   $items[PRINTMAIL_PATH] = array(
-    'title' => variable_get('print_mail_text_title', 'Send page by e-mail'),
+    'title' => variable_get('print_mail_text_title', 'Send page by email'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_mail_form'),
     'access callback' => '_print_mail_access',
-    'access arguments' => array('access send to friend'),
+    'access arguments' => array('access send by email'),
     'type' => MENU_CALLBACK,
     'file' => 'print_mail.inc',
   );
@@ -78,7 +78,7 @@ function print_mail_menu() {
     'access callback' => FALSE,
   );
   $items['admin/config/user-interface/print/email'] = array(
-    'title' => 'e-mail',
+    'title' => 'email',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_mail_settings'),
     'access arguments'  => array('administer print'),
@@ -275,7 +275,7 @@ function print_mail_form_alter(&$form, &$form_state, $form_id) {
       (($form_id == 'node_type_form') || !empty($form['#node_edit_form']))) {
     $form['print']['mail_label'] = array(
       '#type' => 'markup',
-      '#markup' => '<p><strong>' . t('Send by e-mail') . '</strong></p>',
+      '#markup' => '<p><strong>' . t('Send by email') . '</strong></p>',
     );
 
     $form['print']['print_mail_display'] = array(
@@ -310,7 +310,7 @@ function print_mail_form_alter(&$form, &$form_state, $form_id) {
  */
 function print_mail_job_queue_functions() {
   $functions['print_mail'] = array(
-   'title' => t('Send to friend'),
+   'title' => t('Send by email'),
   );
   return $functions;
 }
@@ -378,7 +378,7 @@ function _print_mail_node_conf_modify($nid, $link, $comments, $url_list) {
 }
 
 /**
- * Format the send by e-mail link
+ * Format the send by email link
  *
  * @return
  *   array of formatted attributes
@@ -387,10 +387,10 @@ function _print_mail_node_conf_modify($nid, $link, $comments, $url_list) {
 function theme_print_mail_format_link() {
   $print_mail_link_class  = variable_get('print_mail_link_class', PRINT_MAIL_LINK_CLASS_DEFAULT);
   $print_mail_show_link = variable_get('print_mail_show_link', PRINT_MAIL_SHOW_LINK_DEFAULT);
-  $print_mail_link_text = filter_xss(variable_get('print_mail_link_text', t('Send to friend')));
+  $print_mail_link_text = filter_xss(variable_get('print_mail_link_text', t('Send by email')));
 
   $img = drupal_get_path('module', 'print') . '/icons/mail_icon.gif';
-  $title = t('Send this page by e-mail.');
+  $title = t('Send this page by email.');
   $class = strip_tags($print_mail_link_class);
   $new_window = FALSE;
   $format = _print_format_link_aux($print_mail_show_link, $print_mail_link_text, $img);
@@ -402,7 +402,7 @@ function theme_print_mail_format_link() {
 }
 
 /**
- * Auxiliary function to display a formatted send by e-mail link
+ * Auxiliary function to display a formatted send by email link
  *
  * Function made available so that developers may call this function from
  * their defined pages/blocks.
@@ -465,7 +465,7 @@ function print_mail_insert_link($path = NULL, $node = NULL) {
 }
 
 /**
- * Determine a the link to send by e-mail is allowed depending on all possible settings
+ * Determine a the link to send by email is allowed depending on all possible settings
  *
  * @param $args
  *   array containing the possible parameters:
@@ -478,7 +478,7 @@ function print_mail_insert_link($path = NULL, $node = NULL) {
 function print_mail_link_allowed($args) {
   $view_mode = isset($args['view_mode']) ? $args['view_mode'] : '';
   if ((($view_mode == 'teaser') && !variable_get('print_mail_link_teaser', PRINT_MAIL_LINK_TEASER_DEFAULT))
-      || !in_array($view_mode, array('full', 'teaser', '')) || !user_access('access send to friend')) {
+      || !in_array($view_mode, array('full', 'teaser', '')) || !user_access('access send by email')) {
     // If the teaser link is disabled or the user is not allowed
     return FALSE;
   }
@@ -569,7 +569,7 @@ function print_mail_mollom_form_info($form_id) {
     case 'print_mail_form':
       $form_info = array(
         'elements' => array(
-          'fld_from_addr' => t('Sender e-mail'),
+          'fld_from_addr' => t('Sender email'),
           'fld_from_name' => t('Sender name'),
           'txt_to_addrs' => t('Recipients'),
           'fld_subject' => t('Subject'),

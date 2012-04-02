@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @defgroup print Printer, e-mail and PDF versions
+ * @defgroup print Printer, email and PDF versions
  *
  * Welcome to the print module developer's documentation. The interesting
  * functions for themers are those that start with 'theme_'.
@@ -12,7 +12,7 @@
  *   - @link print.pages.inc HTML generation @endlink
  *   - @link print.install (Un)Install routines @endlink
  *   - @link print.tpl.php Page generation template @endlink
- * - Send by e-mail
+ * - Send by email
  *   - @link print_mail.module Module main file @endlink
  *   - @link print_mail.admin.inc Settings form @endlink
  *   - @link print_mail.inc Mail form and send mail routine @endlink
@@ -192,7 +192,7 @@ function print_menu() {
     'access callback' => FALSE,
   );
   $items['admin/config/user-interface/print'] = array(
-    'title' => 'Printer, e-mail and PDF versions',
+    'title' => 'Printer, email and PDF versions',
     'description' => 'Adds a printer-friendly version link to content and administrative pages.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_html_settings'),
@@ -249,7 +249,7 @@ function print_menu() {
  * Implements hook_block_info().
  */
 function print_block_info() {
-      $block['print-links']['info'] = t('Printer, e-mail and PDF versions');
+      $block['print-links']['info'] = t('Printer, email and PDF versions');
       $block['print-links']['cache'] = DRUPAL_CACHE_PER_PAGE;
       $block['print-top']['info'] = t('Most printed');
       $block['print-top']['cache'] = DRUPAL_CACHE_GLOBAL;
@@ -484,7 +484,7 @@ function print_form_alter(&$form, &$form_state, $form_id) {
       (($form_id == 'node_type_form') || !empty($form['#node_edit_form']))) {
     $form['print'] = array(
       '#type' => 'fieldset',
-      '#title' => t('Printer, e-mail and PDF versions'),
+      '#title' => t('Printer, email and PDF versions'),
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
       '#weight' => PRINT_TYPE_FIELDS_WEIGHT,
