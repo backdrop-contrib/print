@@ -554,9 +554,13 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
 
   $content = render($build);
 
-  //Get rid of the annoying D7 title link
-  $pattern = '!(<h2 property="dc:title"[^>]*>)\s*<a [^>]*?>(.*?)</a>\s*(</h2>)!mis';
-  $content = preg_replace($pattern, '$1$2$3', $content);
+  //Get rid of any links before the content
+  $parts = explode('<div class="content', $content, 2);
+  if (count($parts) == 2) {
+    $pattern = '!(.*?)<a [^>]*?>(.*?)</a>(.*?)!mis';
+    $parts[0] = preg_replace($pattern, '$1$2$3', $parts[0]);
+    $content = implode('<div class="content', $parts);
+  }
 
   //Check URL list settings
   $_print_urls = _print_url_list_enabled($node, $format);
