@@ -287,8 +287,8 @@ function print_pdf_node_view($node, $view_mode) {
       $query = print_query_string_encode($query_arr, array('q'));
       if (empty($query)) $query = NULL;
 
-      if ($print_pdf_link_use_alias) {
-        $path = drupal_get_path_alias('node/' . $node->nid);
+      if (($print_pdf_link_use_alias) && ($alias = drupal_lookup_path('alias', 'node/' . $node->nid))) {
+        $path = $alias;
       }
       else {
         $path = $node->nid;
