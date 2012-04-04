@@ -24,7 +24,7 @@ function print_pdf_controller() {
   $GLOBALS['conf']['cache'] = FALSE;
 
   $args = func_get_args();
-  $path = implode('/', $args);
+  $path = filter_xss(implode('/', $args));
   $cid = isset($_GET['comment']) ? (int)$_GET['comment'] : NULL;
 
   if (!empty($path)) {

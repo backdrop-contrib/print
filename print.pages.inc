@@ -20,7 +20,7 @@ $_print_urls = PRINT_URLS_DEFAULT;
  */
 function print_controller_html() {
   $args = func_get_args();
-  $path = implode('/', $args);
+  $path = filter_xss(implode('/', $args));
   $cid = isset($_GET['comment']) ? (int)$_GET['comment'] : NULL;
 
   $print = print_controller($path, $cid, PRINT_HTML_FORMAT);

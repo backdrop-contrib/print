@@ -26,7 +26,7 @@ function print_mail_form($form, &$form_state) {
   // Remove the printmail/ prefix
   $path_arr = explode('/', $_GET['q']);
   unset($path_arr[0]);
-  $path = implode('/', $path_arr);
+  $path = filter_xss(implode('/', $path_arr));
   if (empty($path)) {
     // If no path was provided, let's try to generate a page for the referer
     global $base_url;
