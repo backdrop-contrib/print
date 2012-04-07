@@ -169,15 +169,7 @@ function print_update_7000(&$sandbox) {
 }
 
 /**
- * Update permissions to new spellings
+ * Empty update
  */
 function print_update_7100(&$sandbox) {
-  db_update('role_permission')
-    ->fields(array('permission' => 'access send by email'))
-    ->condition('permission', 'access send to friend')
-    ->execute();
-  db_update('role_permission')
-    ->fields(array('permission' => 'send unlimited emails'))
-    ->condition('permission', 'send unlimited e-mails')
-    ->execute();
 }

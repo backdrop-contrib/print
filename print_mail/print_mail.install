@@ -167,3 +167,17 @@ function print_mail_update_7100(&$sandbox) {
     mailsystem_set(array('print_mail' => 'DefaultMailSystem'));
   }
 }
+
+/**
+ * Update permissions to new spellings
+ */
+function print_mail_update_7101(&$sandbox) {
+  db_update('role_permission')
+    ->fields(array('permission' => 'access send by email'))
+    ->condition('permission', 'access send to friend')
+    ->execute();
+  db_update('role_permission')
+    ->fields(array('permission' => 'send unlimited emails'))
+    ->condition('permission', 'send unlimited e-mails')
+    ->execute();
+}
