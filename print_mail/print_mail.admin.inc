@@ -214,25 +214,25 @@ function print_mail_strings_settings() {
   );
   $form['print_mail_text']['print_mail_text_subject'] = array(
     '#type' => 'textfield',
-    '#title' => t('Message Subject'),
+    '#title' => t('Message subject'),
     '#default_value' => variable_get('print_mail_text_subject', t('!user has sent you a message from !site')),
     '#description' => t("email subject line. The sender's name will appear in place of !user in the subject. The web site name will be inserted in place of !site. The page title replaces !title."),
   );
   $form['print_mail_text']['print_mail_text_message'] = array(
     '#type' => 'textarea',
-    '#title' => t('Message Preamble'),
+    '#title' => t('Message preamble'),
     '#default_value' => variable_get('print_mail_text_message', t('Message from sender')),
     '#description' => t('email message preamble. The sender will be able to add their own message after this.'),
   );
   $form['print_mail_text']['print_mail_text_content'] = array(
     '#type' => 'textarea',
-    '#title' => t('Message Content'),
+    '#title' => t('Message content'),
     '#default_value' => variable_get('print_mail_text_content', ''),
     '#description' => t('Set the default contents of the message.'),
   );
   $form['print_mail_text']['print_mail_text_confirmation'] = array(
     '#type' => 'textfield',
-    '#title' => t('Thank You Message'),
+    '#title' => t('Thank you message'),
     '#default_value' => variable_get('print_mail_text_confirmation', t('Thank you for spreading the word about !site.')),
     '#description' => t('This message will be displayed after the user successfully submits the form.'),
   );

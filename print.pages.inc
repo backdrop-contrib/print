@@ -228,7 +228,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
       break;
   }
   $site_name = variable_get('site_name', 'Drupal');
-  $print['logo'] = $logo_url ? "<img class='print-logo' src='" . check_url($logo_url) . "' alt='$site_name' id='logo' />\n" : '';
+  $print['logo'] = $logo_url ? theme('image', array('path' => $logo_url, 'alt' => $site_name, 'attributes' => array('class' => 'print-logo', 'id' => 'logo'))) : '';
 
   switch ($print_footer_options) {
     case 0: // none
@@ -513,7 +513,7 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
 
   if ($cid === NULL) {
     // Adapted (simplified) version of node_view
-    //Render the node content
+    // Render the node content
     node_build_content($node, $view_mode);
 
     // Disable the links area
@@ -530,7 +530,7 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
   $print_comments = variable_get('print_comments', PRINT_COMMENTS_DEFAULT);
 
   if (function_exists('comment_node_page_additions') && (($cid != NULL) || ($print_comments))) {
-    //Print only the requested comment (or if $cid is NULL, all of them)
+    // Print only the requested comment (or if $cid is NULL, all of them)
 
     $comments = comment_node_page_additions($node);
     unset($comments['comment_form']);
@@ -554,7 +554,7 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
 
   $content = render($build);
 
-  //Get rid of any links before the content
+  // Get rid of any links before the content
   $parts = explode('<div class="content', $content, 2);
   if (count($parts) == 2) {
     $pattern = '!(.*?)<a [^>]*?>(.*?)</a>(.*?)!mis';
@@ -562,7 +562,7 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
     $content = implode('<div class="content', $parts);
   }
 
-  //Check URL list settings
+  // Check URL list settings
   $_print_urls = _print_url_list_enabled($node, $format);
 
   // Convert the a href elements
@@ -628,7 +628,7 @@ function _print_generate_path($path, $format = PRINT_HTML_FORMAT, $teaser = FALS
   // Delete any links area
   $node->body = preg_replace('!\s*<div class="links">.*?</div>!sim', '', $node->body);
 
-  //Check URL list settings
+  // Check URL list settings
   $_print_urls = _print_url_list_enabled($node, $format);
 
   // Convert the a href elements
@@ -674,7 +674,7 @@ function _print_generate_book($nid, $format = PRINT_HTML_FORMAT, $teaser = FALSE
   $tree = book_menu_subtree_data($node->book);
   $node->body = book_export_traverse($tree, 'book_node_export');
 
-  //Check URL list settings
+  // Check URL list settings
   $_print_urls = _print_url_list_enabled($node, $format);
 
   // Convert the a href elements

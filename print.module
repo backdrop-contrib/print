@@ -146,7 +146,7 @@ function print_preprocess_print(&$variables) {
 
   $variables['page']['#show_messages'] = FALSE;
 
-  //Stolen from theme() so that ALL preprocess functions are called
+  // Stolen from theme() so that ALL preprocess functions are called
   $hook = 'page';
   $info = $hooks[$hook];
   if (isset($info['preprocess functions']) || isset($info['process functions'])) {
@@ -211,6 +211,7 @@ function print_menu() {
   );
   $items['admin/config/user-interface/print/html/strings'] = array(
     'title' => 'Text strings',
+    'description' => 'Override the user-facing strings used in the printer-friendly version.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_html_strings_settings'),
     'access arguments'  => array('administer print'),
@@ -220,6 +221,7 @@ function print_menu() {
   );
   $items['admin/config/user-interface/print/common'] = array(
     'title' => 'Settings',
+    'description' => 'Settings for the common functionalities for all the print sub-modules.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_main_settings'),
     'access arguments'  => array('administer print'),
@@ -234,6 +236,7 @@ function print_menu() {
   );
   $items['admin/config/user-interface/print/common/strings'] = array(
     'title' => 'Text strings',
+    'description' => 'Override the user-facing strings used by the print module.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_main_strings_settings'),
     'access arguments'  => array('administer print'),
@@ -559,7 +562,9 @@ function _print_get_title($path) {
 }
 
 /**
- * Update the print_node_conf table to reflect the given attributes
+ * Modify the print_node_conf_table
+ *
+ * Update the print_node_conf table to reflect the given attributes.
  * If updating to the default values, delete the record.
  *
  * @param $nid
@@ -743,7 +748,7 @@ function print_insert_link($path = NULL, $node = NULL) {
 }
 
 /**
- * Determine if the provided page is enabled according to the visibility settings
+ * Check if the provided page is enabled according to the visibility settings
  *
  * @param $visibility
  *   current visibility settings:
@@ -778,7 +783,7 @@ function _print_page_match($visibility, $path, $pages) {
 }
 
 /**
- * Determine a the link to the PF version is allowed depending on all possible settings
+ * Check if the link to the PF version is allowed depending on the settings
  *
  * @param $args
  *   array containing the possible parameters:
@@ -865,6 +870,7 @@ function print_link_allowed($args) {
 
 /**
  * Parse an array into a valid urlencoded query string.
+ *
  * Modified from drupal_query_string_encode to prevent re-encoding of
  * encoded original. (see #301192)
  *

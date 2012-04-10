@@ -10,7 +10,7 @@
 define('PRINTMAIL_PATH', 'printmail');
 
 // Defined in print.module
-//define('PRINT_MAIL_FORMAT', 'mail');
+// define('PRINT_MAIL_FORMAT', 'mail');
 
 define('PRINT_MAIL_LINK_POS_DEFAULT', 'link');
 define('PRINT_MAIL_LINK_TEASER_DEFAULT', 0);
@@ -79,6 +79,7 @@ function print_mail_menu() {
   );
   $items['admin/config/user-interface/print/email'] = array(
     'title' => 'email',
+    'description' => 'Configure the settings of the send by email functionality.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_mail_settings'),
     'access arguments'  => array('administer print'),
@@ -93,6 +94,7 @@ function print_mail_menu() {
   );
   $items['admin/config/user-interface/print/email/strings'] = array(
     'title' => 'Text strings',
+    'description' => 'Override the user-facing strings used in the send by email version.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_mail_strings_settings'),
     'access arguments'  => array('administer print'),
@@ -355,6 +357,7 @@ function _print_mail_access($permission) {
 
 /**
  * Update the print_mail_node_conf table to reflect the given attributes
+ *
  * If updating to the default values, delete the record.
  *
  * @param $nid
@@ -465,7 +468,7 @@ function print_mail_insert_link($path = NULL, $node = NULL) {
 }
 
 /**
- * Determine a the link to send by email is allowed depending on all possible settings
+ * Check if the link to send by email is allowed depending on the settings
  *
  * @param $args
  *   array containing the possible parameters:
@@ -615,6 +618,7 @@ function print_mail_views_data_alter(&$data) {
 
 /**
  * Implements hook_rules_action_info().
+ *
  * @ingroup rules
  */
 function print_mail_rules_action_info() {
@@ -637,6 +641,7 @@ function print_mail_rules_action_info() {
 
 /**
  * Action handler for the print_mail_action_submit
+ *
  * @ingroup rules
  */
 function print_mail_action_submit($node, $settings) {

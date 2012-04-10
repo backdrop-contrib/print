@@ -10,7 +10,7 @@
 define('PRINTPDF_PATH', 'printpdf');
 
 // Defined in print.module
-//define('PRINT_PDF_FORMAT', 'pdf');
+// define('PRINT_PDF_FORMAT', 'pdf');
 
 define('PRINT_PDF_LIB_PATH', 'sites/all/libraries');
 
@@ -102,6 +102,7 @@ function print_pdf_menu() {
   );
   $items['admin/config/user-interface/print/pdf'] = array(
     'title' => 'PDF',
+    'description' => 'Configure the settings of the PDF generation functionality.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_pdf_settings'),
     'access arguments'  => array('administer print'),
@@ -116,6 +117,7 @@ function print_pdf_menu() {
   );
   $items['admin/config/user-interface/print/pdf/strings'] = array(
     'title' => 'Text strings',
+    'description' => 'Override the user-facing strings used in the PDF version.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_pdf_strings_settings'),
     'access arguments'  => array('administer print'),
@@ -171,7 +173,7 @@ function print_pdf_requirements($phase) {
         $requirements['print_pdf_tool'] = array(
           'title' => $t('Printer, email and PDF versions - PDF generation library'),
           'value' => $t('No PDF tool selected'),
-          'description' => $t('Please configure it in the <a href="@url">PDF settings page</a>.', array('@url' => url('admin/config/user-interface/print/pdf'))),
+          'description' => $t('Please configure it in the !url.', array('!url' => l($t('PDF settings page'), 'admin/config/user-interface/print/pdf'))),
           'severity' => REQUIREMENT_ERROR,
         );
       }
@@ -202,7 +204,7 @@ function print_pdf_requirements($phase) {
             $requirements['print_pdf_tool'] = array(
               'title' => $t('Printer, email and PDF versions - PDF generation library'),
               'value' => $t('Unsupported TCPDF version'),
-              'description' => $t('The currently selected version of TCPDF (@version) is not supported. Please update to a <a href="@url">newer version</a>.', array('@version' => $version, '@url' => url('http://sourceforge.net/projects/tcpdf/files/latest'))),
+              'description' => $t('The currently selected version of TCPDF (@version) is not supported. Please update to a !url.', array('@version' => $version, '!url' => l($t('newer version'), 'http://sourceforge.net/projects/tcpdf/files/latest'))),
               'severity' => REQUIREMENT_ERROR,
             );
           }
@@ -240,7 +242,7 @@ function print_pdf_requirements($phase) {
               $requirements['print_pdf_tool'] = array(
                 'title' => $t('Printer, email and PDF versions - PDF generation library'),
                 'value' => $t('Unsupported wkhtmltopdf version'),
-                'description' => $t('The currently selected version of wkhtmltopdf (@version) is not supported. Please update to a <a href="@url">newer version</a>.', array('@version' => $version, '@url' => url('http://code.google.com/p/wkhtmltopdf/'))),
+                'description' => $t('The currently selected version of wkhtmltopdf (@version) is not supported. Please update to a !url.', array('@version' => $version, '!url' => l($t('newer version'), 'http://code.google.com/p/wkhtmltopdf/'))),
                 'severity' => REQUIREMENT_ERROR,
               );
             }
@@ -430,6 +432,7 @@ function print_pdf_form_alter(&$form, &$form_state, $form_id) {
 
 /**
  * Update the print_pdf_node_conf table to reflect the given attributes
+ *
  * If updating to the default values, delete the record.
  *
  * @param $nid
@@ -541,7 +544,7 @@ function print_pdf_insert_link($path = NULL, $node = NULL) {
 }
 
 /**
- * Determine a the link to the PDF version is allowed depending on all possible settings
+ * Check if the link to the PDF version is allowed depending on the settings
  *
  * @param $args
  *   array containing the possible parameters:
