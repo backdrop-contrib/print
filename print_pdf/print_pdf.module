@@ -187,14 +187,16 @@ function print_pdf_requirements($phase) {
           );
         }
         elseif (basename($print_pdf_pdf_tool) == 'dompdf_config.inc.php') {
-          $directory = defined('DOMPDF_FONT_CACHE') ? DOMPDF_FONT_CACHE : dirname($print_pdf_pdf_tool) . '/lib/fonts';
-          if (!is_dir($directory) || !is_writable($directory)) {
-            $requirements['print_pdf_tool'] = array(
-              'title' => $t('DOMPDF font cache directory'),
-              'value' => $t('Non-writable permissions'),
-              'description' => $t('You must change the %fontdir permissions to be writable, as dompdf requires write-access to that directory.', array('%fontdir' => $directory)),
-              'severity' => REQUIREMENT_ERROR,
-            );
+          if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
+            $directory = dirname($print_pdf_pdf_tool) . '/lib/fonts';
+            if (!is_dir($directory) || !is_writable($directory)) {
+              $requirements['print_pdf_tool'] = array(
+                'title' => $t('DOMPDF font cache directory'),
+                'value' => $t('Non-writable permissions'),
+                'description' => $t('You must change the %fontdir permissions to be writable, as dompdf requires write-access to that directory.', array('%fontdir' => $directory)),
+                'severity' => REQUIREMENT_ERROR,
+              );
+            }
           }
         }
         elseif (basename($print_pdf_pdf_tool) == 'tcpdf.php') {
@@ -215,15 +217,17 @@ function print_pdf_requirements($phase) {
             );
           }
 
-          foreach (array('cache', 'images') as $dir) {
-            $directory = dirname($print_pdf_pdf_tool) . '/' . $dir;
-            if (!is_dir($directory) || !is_writable($directory)) {
-              $requirements['print_pdf_tool_' . $dir] = array(
-                'title' => $t('TCPDF directory'),
-                'value' => $t('Non-writable permissions'),
-                'description' => $t('You must change the %fontdir permissions to be writable, as dompdf requires write-access to that directory.', array('%fontdir' => $directory)),
-                'severity' => REQUIREMENT_ERROR,
-              );
+          if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
+            foreach (array('cache', 'images') as $dir) {
+              $directory = dirname($print_pdf_pdf_tool) . '/' . $dir;
+              if (!is_dir($directory) || !is_writable($directory)) {
+                $requirements['print_pdf_tool_' . $dir] = array(
+                  'title' => $t('TCPDF directory'),
+                  'value' => $t('Non-writable permissions'),
+                  'description' => $t('You must change the %fontdir permissions to be writable, as dompdf requires write-access to that directory.', array('%fontdir' => $directory)),
+                  'severity' => REQUIREMENT_ERROR,
+                );
+              }
             }
           }
         }
