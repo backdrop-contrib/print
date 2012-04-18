@@ -224,7 +224,7 @@ function print_pdf_requirements($phase) {
                 $requirements['print_pdf_tool_' . $dir] = array(
                   'title' => $t('TCPDF directory'),
                   'value' => $t('Non-writable permissions'),
-                  'description' => $t('You must change the %fontdir permissions to be writable, as dompdf requires write-access to that directory.', array('%fontdir' => $directory)),
+                  'description' => $t('You must change the %fontdir permissions to be writable, as TCPDF requires write-access to that directory.', array('%fontdir' => $directory)),
                   'severity' => REQUIREMENT_ERROR,
                 );
               }
