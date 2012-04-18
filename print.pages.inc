@@ -533,12 +533,16 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
     // Print only the requested comment (or if $cid is NULL, all of them)
 
     $comments = comment_node_page_additions($node);
-    unset($comments['comment_form']);
-    foreach ($comments['comments'] as &$comment) {
-      unset($comment['links']);
-    }
+    if (!empty($comments)) {
+      unset($comments['comment_form']);
+      foreach ($comments['comments'] as $key => &$comment) {
+        if (is_numeric($key)) {
+          unset($comment['links']);
+        }
+      }
 
-    $build['comments'] = $comments;
+      $build['comments'] = $comments;
+    }
   }
 
   $build += array(
