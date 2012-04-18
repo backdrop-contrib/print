@@ -489,10 +489,12 @@ function theme_print_pdf_tcpdf_header($vars) {
 
   $ratio = 0;
   $logo = '';
-  if (preg_match('!src\s*=\s*(?:\'(.*?)\'|"(.*?)"|([^\s]*))!i', $tpl_logo[1], $logo_url)) {
+  if (isset($tpl_logo[1]) && preg_match('!src\s*=\s*(?:"(.*?)"|\'(.*?)\'|([^\s]*))!i', $tpl_logo[1], $logo_url)) {
     $logo = $logo_url[1];
-    $size = getimagesize($logo);
-    $ratio = $size ? ($size[0] / $size[1]) : 0;
+    if (!empty($logo)) {
+      $size = getimagesize($logo);
+      $ratio = $size ? ($size[0] / $size[1]) : 0;
+    }
   }
 
   // set header font
