@@ -323,7 +323,7 @@ function print_node_view_alter(&$build) {
             break;
           case 2:
             $print_html_link_use_alias = variable_get('print_html_link_use_alias', PRINT_HTML_LINK_USE_ALIAS_DEFAULT);
-            $path = ($print_html_link_use_alias) ? drupal_get_path_alias('node/' . $build['#node']->nid) : $build['#node']->nid;
+            $path = ($print_html_link_use_alias && ($alias = drupal_lookup_path('alias', 'node/' . $build['#node']->nid))) ? $alias : $build['#node']->nid;
             break;
         }
 
@@ -722,8 +722,8 @@ function print_insert_link($path = NULL, $node = NULL) {
         $path = 'book/export/html/' . $nid;
       }
       else {
-        if (variable_get('print_html_link_use_alias', PRINT_HTML_LINK_USE_ALIAS_DEFAULT)) {
-          $path = drupal_get_path_alias($path);
+        if (variable_get('print_html_link_use_alias', PRINT_HTML_LINK_USE_ALIAS_DEFAULT) && ($alias = drupal_lookup_path('alias', $path))) {
+          $path = $alias;
         }
         else {
           $path = $nid;

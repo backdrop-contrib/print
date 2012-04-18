@@ -522,8 +522,8 @@ function print_pdf_insert_link($path = NULL, $node = NULL) {
         $path = 'book/export/html/' . $nid;
       }
       else {
-        if (variable_get('print_pdf_link_use_alias', PRINT_PDF_LINK_USE_ALIAS_DEFAULT)) {
-          $path = drupal_get_path_alias($path);
+        if (variable_get('print_pdf_link_use_alias', PRINT_PDF_LINK_USE_ALIAS_DEFAULT) && ($alias = drupal_lookup_path('alias', $path))) {
+          $path = $alias;
         }
         else {
           $path = $nid;
