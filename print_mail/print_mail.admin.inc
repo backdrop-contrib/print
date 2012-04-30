@@ -24,6 +24,13 @@ function print_mail_settings() {
     '#title' => t('Send by email options'),
   );
 
+  $form['settings']['print_mail_link_text'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Link text'),
+    '#default_value' => variable_get('print_mail_link_text', t('Send by email')),
+    '#description' => t('Text used in the link to the send by-email form.'),
+  );
+
   $form['settings']['print_mail_link_pos'] = array(
     '#type' => 'checkboxes',
     '#title' => t('Send by email link'),
@@ -69,33 +76,6 @@ function print_mail_settings() {
     '#maxlength' => 250,
     '#description' => t('This can be used by themers to change the link style or by jQuery modules to open in a new window (e.g. greybox or thickbox). Multiple classes can be specified, separated by spaces.'),
   );
-
-  $form['settings']['adv_link']['print_mail_node_link_visibility'] = array(
-    '#type' => 'radios',
-    '#title' => t('Link visibility'),
-    '#default_value' => variable_get('print_mail_node_link_visibility', PRINT_MAIL_NODE_LINK_VISIBILITY_DEFAULT),
-    '#options' => array(t('Show on every page except the listed pages.'), t('Show on only the listed pages.')),
-  );
-
-  $form['settings']['adv_link']['print_mail_node_link_pages'] = array(
-    '#type' => 'textarea',
-    '#default_value' => variable_get('print_mail_node_link_pages', PRINT_MAIL_NODE_LINK_PAGES_DEFAULT),
-    '#rows' => 3,
-    '#description' => t("Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>')),
-  );
-
-  if (module_exists('php')) {
-    $access = user_access('use PHP for settings');
-
-    if ($form['settings']['adv_link']['print_mail_node_link_visibility']['#default_value'] == 2 && !$access) {
-      $form['settings']['adv_link']['print_mail_node_link_visibility'] = array('#type' => 'value', '#value' => 2);
-      $form['settings']['adv_link']['print_mail_node_link_pages'] = array('#type' => 'value', '#value' => $form['settings']['adv_link']['print_mail_node_link_pages']['#default_value']);
-    }
-    elseif ($access) {
-      $form['settings']['adv_link']['print_mail_node_link_visibility']['#options'][] = t('Show if the following PHP code returns <code>TRUE</code> (PHP-mode, experts only).');
-      $form['settings']['adv_link']['print_mail_node_link_pages']['#description'] .= ' ' . t('If the PHP-mode is chosen, enter PHP code between %php. Note that executing incorrect PHP-code can break your Drupal site.', array('%php' => '<?php ?>'));
-    }
-  }
 
   $form['settings']['adv_link']['print_mail_sys_link_visibility'] = array(
     '#type' => 'radios',
@@ -184,77 +164,4 @@ function print_mail_settings() {
   );
 
   return system_settings_form($form);
-}
-
-/**
- * Menu callback for the send by email module text strings settings form.
- *
- * @ingroup forms
- */
-function print_mail_strings_settings() {
-  drupal_set_message(t("Saving these strings will disable their translation via Drupal's language system. Use the reset button to return them to the original state."), 'warning', FALSE);
-
-  $form['print_mail_text'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Text strings'),
-  );
-
-  $form['print_mail_text']['print_mail_link_text'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Link text'),
-    '#default_value' => variable_get('print_mail_link_text', t('Send by email')),
-    '#description' => t('Text used in the link to the send by-email form.'),
-  );
-
-  $form['print_mail_text']['print_mail_text_title'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Form page title'),
-    '#default_value' => variable_get('print_mail_text_title', t('Send page by email')),
-    '#description' => t("Text used as the page title of the mail submission form. Requires a menu rebuild to apply."),
-  );
-  $form['print_mail_text']['print_mail_text_subject'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Message subject'),
-    '#default_value' => variable_get('print_mail_text_subject', t('!user has sent you a message from !site')),
-    '#description' => t("email subject line. The sender's name will appear in place of !user in the subject. The web site name will be inserted in place of !site. The page title replaces !title."),
-  );
-  $form['print_mail_text']['print_mail_text_message'] = array(
-    '#type' => 'textarea',
-    '#title' => t('Message preamble'),
-    '#default_value' => variable_get('print_mail_text_message', t('Message from sender')),
-    '#description' => t('email message preamble. The sender will be able to add their own message after this.'),
-  );
-  $form['print_mail_text']['print_mail_text_content'] = array(
-    '#type' => 'textarea',
-    '#title' => t('Message content'),
-    '#default_value' => variable_get('print_mail_text_content', ''),
-    '#description' => t('Set the default contents of the message.'),
-  );
-  $form['print_mail_text']['print_mail_text_confirmation'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Thank you message'),
-    '#default_value' => variable_get('print_mail_text_confirmation', t('Thank you for spreading the word about !site.')),
-    '#description' => t('This message will be displayed after the user successfully submits the form.'),
-  );
-  $form['print_mail_text']['reset'] = array(
-    '#type' => 'submit',
-    '#value' => t('Reset to defaults'),
-    '#submit' => array('print_mail_strings_settings_delete'),
-  );
-
-  return system_settings_form($form);
-}
-
-/**
- * Reset button callback for text strings settings form
- *
- * @ingroup forms
- */
-function print_mail_strings_settings_delete() {
-  variable_del('print_mail_link_text');
-  variable_del('print_mail_text_title');
-  variable_del('print_mail_text_subject');
-  variable_del('print_mail_text_message');
-  variable_del('print_mail_text_content');
-  variable_del('print_mail_text_confirmation');
 }

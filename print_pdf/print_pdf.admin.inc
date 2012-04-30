@@ -25,6 +25,13 @@ function print_pdf_settings() {
       '#title' => t('PDF options'),
     );
 
+    $form['settings']['print_pdf_link_text'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Link text'),
+      '#default_value' => variable_get('print_pdf_link_text', t('PDF version')),
+      '#description' => t('Text used in the link to the PDF version.'),
+    );
+
     $form['settings']['print_pdf_pdf_tool'] = array(
       '#type' => 'radios',
       '#title' => t('PDF generation tool'),
@@ -78,33 +85,6 @@ function print_pdf_settings() {
       '#maxlength' => 250,
       '#description' => t('This can be used by themers to change the link style or by jQuery modules to open in a new window (e.g. greybox or thickbox). Multiple classes can be specified, separated by spaces.'),
     );
-
-    $form['settings']['adv_link']['print_pdf_node_link_visibility'] = array(
-      '#type' => 'radios',
-      '#title' => t('Link visibility'),
-      '#default_value' => variable_get('print_pdf_node_link_visibility', PRINT_PDF_NODE_LINK_VISIBILITY_DEFAULT),
-      '#options' => array(t('Show on every page except the listed pages.'), t('Show on only the listed pages.')),
-    );
-
-    $form['settings']['adv_link']['print_pdf_node_link_pages'] = array(
-      '#type' => 'textarea',
-      '#default_value' => variable_get('print_pdf_node_link_pages', PRINT_PDF_NODE_LINK_PAGES_DEFAULT),
-      '#rows' => 3,
-      '#description' => t("Enter one page per line as Drupal paths. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>')),
-    );
-
-    if (module_exists('php')) {
-      $access = user_access('use PHP for settings');
-
-      if ($form['settings']['adv_link']['print_pdf_node_link_visibility']['#default_value'] == 2 && !$access) {
-        $form['settings']['adv_link']['print_pdf_node_link_visibility'] = array('#type' => 'value', '#value' => 2);
-        $form['settings']['adv_link']['print_pdf_node_link_pages'] = array('#type' => 'value', '#value' => $form['settings']['adv_link']['print_pdf_node_link_pages']['#default_value']);
-      }
-      elseif ($access) {
-        $form['settings']['adv_link']['print_pdf_node_link_visibility']['#options'][] = t('Show if the following PHP code returns <code>TRUE</code> (PHP-mode, experts only).');
-        $form['settings']['adv_link']['print_pdf_node_link_pages']['#description'] .= ' ' . t('If the PHP-mode is chosen, enter PHP code between %php. Note that executing incorrect PHP-code can break your Drupal site.', array('%php' => '<?php ?>'));
-      }
-    }
 
     $form['settings']['adv_link']['print_pdf_sys_link_visibility'] = array(
       '#type' => 'radios',
@@ -303,41 +283,4 @@ function _print_pdf_tools() {
   else {
     return array_combine($tools, $tools);
   }
-}
-
-/**
- * Menu callback for the PDF version module text strings settings form.
- *
- * @ingroup forms
- */
-function print_pdf_strings_settings() {
-  drupal_set_message(t("Saving these strings will disable their translation via Drupal's language system. Use the reset button to return them to the original state."), 'warning');
-
-  $form['print_pdf_text'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Text strings'),
-  );
-
-  $form['print_pdf_text']['print_pdf_link_text'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Link text'),
-    '#default_value' => variable_get('print_pdf_link_text', t('PDF version')),
-    '#description' => t('Text used in the link to the PDF version.'),
-  );
-  $form['print_pdf_text']['reset'] = array(
-    '#type' => 'submit',
-    '#value' => t('Reset to defaults'),
-    '#submit' => array('print_pdf_strings_settings_delete'),
-  );
-
-  return system_settings_form($form);
-}
-
-/**
- * Reset button callback for text strings settings form
- *
- * @ingroup forms
- */
-function print_pdf_strings_settings_delete() {
-  variable_del('print_pdf_link_text');
 }
