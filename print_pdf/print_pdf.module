@@ -116,6 +116,38 @@ function print_pdf_menu() {
     'type' => MENU_LOCAL_TASK,
     'file' => 'print_pdf.admin.inc',
   );
+  $items['admin/config/user-interface/print/pdf/options'] = array(
+    'title' => 'Options',
+    'weight' => -1,
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  $items['admin/config/user-interface/print/pdf/tcpdf'] = array(
+    'title' => 'TCPDF',
+    'description' => 'Configure the TCPDF options.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('print_pdf_tcpdf_settings'),
+    'access arguments'  => array('administer print'),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'print_pdf.admin.inc',
+  );
+  $items['admin/config/user-interface/print/pdf/dompdf'] = array(
+    'title' => 'dompdf',
+    'description' => 'Configure the dompdf options.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('print_pdf_dompdf_settings'),
+    'access arguments'  => array('administer print'),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'print_pdf.admin.inc',
+  );
+  $items['admin/config/user-interface/print/pdf/wkhtmltopdf'] = array(
+    'title' => 'wkhtmltopdf',
+    'description' => 'Configure the wkhtmltopdf options.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('print_pdf_wkhtmltopdf_settings'),
+    'access arguments'  => array('administer print'),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'print_pdf.admin.inc',
+  );
 
   return $items;
 }

@@ -79,6 +79,10 @@ function print_ui_theme() {
     'print_ui_format_link' => array(
       'variables' => array('format' => ''),
     ),
+    'print_ui_settings' => array(
+      'render element' => 'form',
+      'file' => 'print_ui.admin.inc',
+    ),
   );
 }
 
@@ -87,6 +91,16 @@ function print_ui_theme() {
  */
 function print_ui_menu() {
   $items = array();
+  $items['admin/config/user-interface/print/ui'] = array(
+    'title' => 'Links',
+    'description' => 'Configure the print module links.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('print_ui_settings'),
+    'access arguments'  => array('administer print'),
+    'weight' => 9,
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'print_ui.admin.inc',
+  );
 
   return $items;
 }
@@ -614,7 +628,7 @@ function print_ui_link_allowed($link, $args) {
       // Cache this statically to avoid duplicate queries for every comment.
       static $res = array();
       if (!isset($res[$node->nid])) {
-        $res[$node->nid] = db_query("SELECT comments FROM {' . $link['module'] . '_node_conf} WHERE nid = :nid", array(':nid' => $node->nid))
+        $res[$node->nid] = db_query("SELECT comments FROM {" . $link['module'] . "_node_conf} WHERE nid = :nid", array(':nid' => $node->nid))
                                     ->fetch();
       }
       $display_comment = $res ? intval($res[$node->nid]->comments) : variable_get($link['module'] . '_display_comment_' . $node_type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
@@ -648,8 +662,8 @@ function print_ui_link_allowed($link, $args) {
   }
   else {
     // 'System' page
-    $sys_link_visibility = variable_get('print_' . $format . '_sys_link_visibility', PRINT_UI_SYS_LINK_VISIBILITY_DEFAULT);
-    $sys_link_pages = variable_get('print_' . $format . '_sys_link_pages', PRINT_UI_SYS_LINK_PAGES_DEFAULT);
+    $sys_link_visibility = variable_get('print_' . $link['format'] . '_sys_link_visibility', PRINT_UI_SYS_LINK_VISIBILITY_DEFAULT);
+    $sys_link_pages = variable_get('print_' . $link['format'] . '_sys_link_pages', PRINT_UI_SYS_LINK_PAGES_DEFAULT);
 
     return _print_ui_page_match($sys_link_visibility, $_GET['q'], $sys_link_pages);
   }

@@ -3,4 +3,5 @@ description = "Handles the links to the printer-friendly versions."
 core=7.x
 package = "Printer, email and PDF versions"
 files[] = print_ui.module
-configure = admin/config/user-interface/print_ui
+files[] = print_ui.admin.inc
+configure = admin/config/user-interface/print/ui
