@@ -36,8 +36,6 @@
  * @ingroup print
  */
 
-define('PRINT_PATH', 'print');
-
 define('PRINT_LOGO_OPTIONS_DEFAULT', 1);
 define('PRINT_LOGO_URL_DEFAULT', '');
 define('PRINT_FOOTER_OPTIONS_DEFAULT', 1);
@@ -48,7 +46,9 @@ define('PRINT_URLS_DEFAULT', 1);
 define('PRINT_URLS_ANCHORS_DEFAULT', 0);
 define('PRINT_COMMENTS_DEFAULT', 0);
 define('PRINT_NEWWINDOW_DEFAULT', 1);
+define('PRINT_TYPE_SYS_URLLIST_DEFAULT', 0);
 
+define('PRINT_HTML_NEW_WINDOW_DEFAULT', 0);
 define('PRINT_HTML_SENDTOPRINTER_DEFAULT', 0);
 define('PRINT_HTML_WINDOWCLOSE_DEFAULT', 1);
 
@@ -69,7 +69,7 @@ function print_print_link() {
     'text' => t('Printer-friendly version'),
     'description' => t('Display a printer-friendly version of this page.'),
     'permission' => 'access print',
-    'path' => PRINT_PATH,
+    'path' => 'print',
     'class' => 'print-page',
     'icon' => 'print_icon.gif',
     'module' => 'print',

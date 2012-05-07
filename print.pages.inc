@@ -263,7 +263,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
       $url = $base_url . '/' . (((bool)variable_get('clean_url', '0')) ? '' : '?q=') . $path;
     }
     if (is_int($cid)) {
-      $url .= '#comment-$cid';
+      $url .= "#comment-$cid";
     }
     $retrieved_date = format_date(REQUEST_TIME, 'short');
     $print_text_retrieved = filter_xss(variable_get('print_text_retrieved', t('retrieved on %date')));
@@ -537,7 +537,12 @@ function _print_generate_node($nid, $cid = NULL, $format = PRINT_HTML_FORMAT, $t
       unset($comments['comment_form']);
       foreach ($comments['comments'] as $key => &$comment) {
         if (is_numeric($key)) {
-          unset($comment['links']);
+          if (($cid != NULL) && ($key != $cid)) {
+            unset($comments['comments'][$key]);
+          }
+          else {
+            unset($comment['links']);
+          }
         }
       }
 

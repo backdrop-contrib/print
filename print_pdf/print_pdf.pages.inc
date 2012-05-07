@@ -294,9 +294,9 @@ function _print_pdf_tcpdf($print, $html, $filename = NULL) {
   module_load_include('inc', 'print_pdf', 'print_pdf.class');
 
   $font = Array(
-    check_plain(variable_get('print_pdf_font_family', PRINT_PDF_FONT_FAMILY_DEFAULT)),
+    check_plain(variable_get('print_pdf_font_family', PRINT_PDF_TCPDF_FONT_FAMILY_DEFAULT)),
     '',
-    check_plain(variable_get('print_pdf_font_size', PRINT_PDF_FONT_SIZE_DEFAULT)),
+    check_plain(variable_get('print_pdf_font_size', PRINT_PDF_TCPDF_FONT_SIZE_DEFAULT)),
   );
   $orientation = drupal_strtoupper($print_pdf_page_orientation[0]);
 
@@ -310,7 +310,7 @@ function _print_pdf_tcpdf($print, $html, $filename = NULL) {
   $pdf->SetCreator(variable_get('site_name', 'Drupal'));
   $pdf->SetTitle(html_entity_decode($print['title'], ENT_QUOTES, 'UTF-8'));
   $pdf->setPDFVersion('1.6');
-  $pdf->setFontSubsetting(variable_get('print_pdf_font_subsetting', FALSE));
+  $pdf->setFontSubsetting(variable_get('print_pdf_font_subsetting', PRINT_PDF_TCPDF_FONT_SUBSETTING_DEFAULT));
 
   if ($language->direction == LANGUAGE_RTL) {
     $pdf->setRTL(TRUE);

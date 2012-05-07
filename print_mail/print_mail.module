@@ -7,11 +7,6 @@
  * @ingroup print
  */
 
-define('PRINTMAIL_PATH', 'printmail');
-
-// Defined in print.module
-// define('PRINT_MAIL_FORMAT', 'mail');
-
 define('PRINT_MAIL_HOURLY_THRESHOLD', 3);
 define('PRINT_MAIL_TEASER_DEFAULT_DEFAULT', 1);
 define('PRINT_MAIL_TEASER_CHOICE_DEFAULT', 0);
@@ -27,7 +22,7 @@ function print_mail_print_link() {
     'text' => t('Send by email'),
     'description' => t('Send this page by email.'),
     'permission' => 'access send by email',
-    'path' => PRINTMAIL_PATH,
+    'path' => 'printmail',
     'class' => 'print-mail',
     'icon' => 'mail_icon.gif',
     'module' => 'print_mail',
