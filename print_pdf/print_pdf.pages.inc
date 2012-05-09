@@ -75,7 +75,8 @@ function print_pdf_controller() {
 function print_pdf_generate_path($path, $cid = NULL, $pdf_filename = NULL) {
   global $base_url;
 
-  $print = print_controller($path, $cid, PRINT_PDF_FORMAT);
+  $link = print_pdf_print_link();
+  $print = print_controller($path, $link['format'], $cid);
   if ($print === FALSE) {
     return;
   }
@@ -90,13 +91,13 @@ function print_pdf_generate_path($path, $cid = NULL, $pdf_filename = NULL) {
   $print['sendtoprinter'] = '';
 
   $node = $print['node'];
-  $html = theme('print', array('print' => $print, 'type' => PRINT_PDF_FORMAT, 'node' => $node));
+  $html = theme('print', array('print' => $print, 'type' => $link['format'], 'node' => $node));
 
   // Convert the a href elements, to make sure no relative links remain
   $pattern = '!<(a\s[^>]*?)>!is';
   $html = preg_replace_callback($pattern, '_print_rewrite_urls', $html);
   // And make anchor links relative again, to permit in-PDF navigation
-  $html = preg_replace("!${base_url}/" . PRINTPDF_PATH . '/.*?#!', '#', $html);
+  $html = preg_replace("!${base_url}/" . $link['path'] . '/.*?#!', '#', $html);
 
   return print_pdf_generate_html($print, $html, $pdf_filename);
 }

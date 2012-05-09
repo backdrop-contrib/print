@@ -89,16 +89,17 @@ function print_pdf_theme() {
  * Implements hook_menu().
  */
 function print_pdf_menu() {
+  $link = print_pdf_print_link();
   $items = array();
 
-  $items[PRINTPDF_PATH] = array(
+  $items[$link['path']] = array(
     'title' => 'Printer-friendly PDF',
     'page callback' => 'print_pdf_controller',
     'access arguments' => array('access PDF version'),
     'type' => MENU_CALLBACK,
     'file' => 'print_pdf.pages.inc',
   );
-  $items[PRINTPDF_PATH . '/' . PRINTPDF_PATH] = array(
+  $items[$link['path'] . '/' . $link['path']] = array(
     'access callback' => FALSE,
   );
   $items['admin/config/user-interface/print/pdf'] = array(

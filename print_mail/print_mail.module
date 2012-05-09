@@ -64,10 +64,11 @@ function print_mail_theme() {
  * Implements hook_menu().
  */
 function print_mail_menu() {
+  $link = print_mail_print_link();
   $items = array();
 
-  $items[PRINTMAIL_PATH] = array(
-    'title' => variable_get('print_mail_text_title', 'Send page by email'),
+  $items[$link['path']] = array(
+    'title' => 'Send by email',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('print_mail_form'),
     'access callback' => '_print_mail_access',
@@ -75,7 +76,7 @@ function print_mail_menu() {
     'type' => MENU_CALLBACK,
     'file' => 'print_mail.inc',
   );
-  $items[PRINTMAIL_PATH . '/' . PRINTMAIL_PATH] = array(
+  $items[$link['path'] . '/' . $link['path']] = array(
     'access callback' => FALSE,
   );
   $items['admin/config/user-interface/print/email'] = array(
@@ -151,9 +152,10 @@ function print_mail_job_queue_functions() {
  *   TRUE if the user has permission to view the page, FALSE otherwise
  */
 function _print_mail_access($permission) {
+  $link = print_mail_print_link();
   $page_access = TRUE;
   $parts = explode('/', $_GET['q']);
-  if ($parts[0] == PRINTMAIL_PATH) {
+  if ($parts[0] == $link['path']) {
     if (count($parts) > 1) {
       unset($parts[0]);
       $path = implode('/', $parts);
@@ -209,7 +211,7 @@ function print_mail_insert_link($path = NULL, $node = NULL) {
  */
 function print_mail_mollom_form_list() {
   $forms['print_mail_form'] = array(
-    'title' => t('Send page form'),
+    'title' => t('Send by email form'),
     'entity' => 'print_mail',
   );
   return $forms;

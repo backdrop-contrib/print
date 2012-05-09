@@ -32,7 +32,7 @@ function print_ui_settings() {
         '#title' => t('Link location'),
         '#default_value' => variable_get('print_' . $format . '_link_pos', array(PRINT_UI_LINK_POS_DEFAULT => PRINT_UI_LINK_POS_DEFAULT)),
         '#options' => array('link' => t('Links area'), 'corner' => t('Content corner'), 'block' => t('Block')),
-        '#description' => t('Choose the location of the link(s) to the printer-friendly version pages. The Links area is usually below the node content, whereas the Content corner is placed in the upper-right corner of the node content. Unselect all options to disable the link. Even if the link is disabled, you can still go to %path where nid is the numeric id of the node.', array('%path' => PRINT_PATH . '/nid')),
+        '#description' => t('Choose the location of the link(s) to the printer-friendly version pages. The Links area is usually below the node content, whereas the Content corner is placed in the upper-right corner of the node content. Unselect all options to disable the link. Even if the link is disabled, you can still go to %path where nid is the numeric id of the node.', array('%path' => $link['path'] . '/nid')),
       );
 
       $form['settings']['checkboxes']['link_teaser']['print_' . $format . '_link_teaser'] = array(
@@ -128,8 +128,8 @@ function print_ui_settings() {
  * Returns HTML for the link settings page.
  *
  * @param $variables
- * An associative array containing:
- * - form: A render element representing the form.
+ *   An associative array containing:
+ *     - form: A render element representing the form.
  *
  * @ingroup themeable
  */

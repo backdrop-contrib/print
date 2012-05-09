@@ -30,13 +30,14 @@ function print_mail_form($form, &$form_state) {
   if (empty($path)) {
     // If no path was provided, let's try to generate a page for the referer
     global $base_url;
+    $link = print_mail_print_link();
 
     $ref = $_SERVER['HTTP_REFERER'];
     $path = preg_replace("!^$base_url/!", '', $ref);
     if (($path === $ref) || empty($path)) {
       $path = variable_get('site_frontpage', 'node');
     }
-    drupal_goto(PRINTMAIL_PATH . '/' . $path);
+    drupal_goto($link['path'] . '/' . $path);
   }
   elseif (ctype_digit($path_arr[1])) {
     if (drupal_lookup_path('source', $path)) {
@@ -165,10 +166,8 @@ function print_mail_form($form, &$form_state) {
     $user_name = t('Someone');
   }
   $site_name = variable_get('site_name', t('an interesting site'));
-  $print_mail_text_subject = filter_xss(variable_get('print_mail_text_subject', t('!user has sent you a message from !site')));
-  $form['fld_subject']['#default_value'] = t($print_mail_text_subject, array('!user' => $user_name, '!site' => $site_name, '!title' => $title));
-  $print_mail_text_content = filter_xss(variable_get('print_mail_text_content', ''));
-  $form['txt_message']['#default_value'] = t($print_mail_text_content);
+  $form['fld_subject']['#default_value'] = t('!user has sent you a message from !site', array('!user' => $user_name, '!site' => $site_name, '!title' => $title));
+  $form['txt_message']['#default_value'] = t('');
 
   return $form;
 }
@@ -262,10 +261,13 @@ function print_mail_form_validate($form, &$form_state) {
 /**
  * Process the send by-email form submission.
  *
+ * @see print_controller()
  * @ingroup forms
  */
 function print_mail_form_submit($form, &$form_state) {
   if (!array_key_exists('cancel', $form_state['values'])) {
+    $link = print_mail_print_link();
+
     if (!empty($form_state['values']['fld_from_name'])) {
       $from = '"' . mime_header_encode($form_state['values']['fld_from_name']) . '" <' . $form_state['values']['fld_from_addr'] . '>';
     }
@@ -274,10 +276,9 @@ function print_mail_form_submit($form, &$form_state) {
     }
     $cid = isset($form_state['values']['cid']) ? $form_state['values']['cid'] : NULL;
 
-    $print_mail_text_message = filter_xss_admin(variable_get('print_mail_text_message', t('Message from sender')));
-    $sender_message = $print_mail_text_message . ':<br /><br /><em>' . nl2br(check_plain($form_state['values']['txt_message'])) . '</em>';
+    $sender_message = t('Message from sender') . ':<br /><br /><em>' . nl2br(check_plain($form_state['values']['txt_message'])) . '</em>';
 
-    $print = print_controller($form_state['values']['path'], $cid, PRINT_MAIL_FORMAT, $form_state['values']['chk_teaser'], $sender_message);
+    $print = print_controller($form_state['values']['path'], $link['format'], $cid, $form_state['values']['chk_teaser'], $sender_message);
 
     // Spaces in img URLs must be replaced with %20
     $pattern = '!<(img\s[^>]*?)>!is';
@@ -293,7 +294,7 @@ function print_mail_form_submit($form, &$form_state) {
       $params['title'] = $form_state['values']['title'];
 
       $node = $print['node'];
-      $params['body'] = theme('print', array('print' => $print, 'type' => PRINT_MAIL_FORMAT, 'node' => $node));
+      $params['body'] = theme('print', array('print' => $print, 'type' => $link['format'], 'node' => $node));
 
       $ok = FALSE;
       if (function_exists('job_queue_add') && variable_get('print_mail_job_queue', PRINT_MAIL_JOB_QUEUE_DEFAULT)) {
@@ -331,8 +332,7 @@ function print_mail_form_submit($form, &$form_state) {
       if ($ok) {
         watchdog('print_mail', '%name [%from] sent %page to [%to]', array('%name' => $form_state['values']['fld_from_name'], '%from' => $form_state['values']['fld_from_addr'], '%page' => $form_state['values']['path'], '%to' => $form_state['values']['txt_to_addrs']));
         $site_name = variable_get('site_name', t('us'));
-        $print_mail_text_confirmation = variable_get('print_mail_text_confirmation', t('Thank you for spreading the word about !site.'));
-        drupal_set_message(check_plain(t($print_mail_text_confirmation, array('!site' => $site_name))));
+        drupal_set_message(check_plain(t('Thank you for spreading the word about !site.', array('!site' => $site_name))));
 
         $nodepath = drupal_get_normal_path($form_state['values']['path']);
         db_update('print_mail_page_counter')

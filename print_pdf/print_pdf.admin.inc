@@ -20,16 +20,11 @@ function print_pdf_settings() {
   $pdf_tools = _print_pdf_tools();
 
   if ($pdf_tools != -1) {
+    $link = print_pdf_print_link();
+
     $form['settings'] = array(
       '#type' => 'fieldset',
       '#title' => t('PDF options'),
-    );
-
-    $form['settings']['print_pdf_link_text'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Link text'),
-      '#default_value' => variable_get('print_pdf_link_text', t('PDF version')),
-      '#description' => t('Text used in the link to the PDF version.'),
     );
 
     $form['settings']['print_pdf_pdf_tool'] = array(
@@ -116,6 +111,25 @@ function print_pdf_settings() {
       '#description' => t('Enabling this option will display a list of printer-friendly destination URLs at the bottom of the page.'),
     );
 
+    $form['settings']['link_text'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Custom link text'),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+    );
+
+    $form['settings']['link_text']['print_pdf_link_text_enabled'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enable custom link text'),
+      '#default_value' => variable_get('print_pdf_link_text_enabled', PRINT_TYPE_LINK_TEXT_ENABLED_DEFAULT),
+    );
+
+    $form['settings']['link_text']['print_pdf_link_text'] = array(
+      '#type' => 'textfield',
+      '#default_value' => variable_get('print_pdf_link_text', $link['text']),
+      '#description' => t('Text used in the link to the PDF version.'),
+    );
+
     $form['#validate'][] = '_print_pdf_settings_validate';
   }
   else {
@@ -144,6 +158,11 @@ function _print_pdf_settings_validate($form, &$form_state) {
  * @see _print_pdf_tools()
  */
 function print_pdf_tcpdf_settings() {
+  $form['settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('TCPDF options'),
+  );
+
   $form['settings']['print_pdf_font_family'] = array(
     '#type' => 'textfield',
     '#title' => t('Font family'),
@@ -189,6 +208,11 @@ function _print_pdf_tcpdf_settings_validate($form, &$form_state) {
  * @see _print_pdf_tools()
  */
 function print_pdf_dompdf_settings() {
+  $form['settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('dompdf options'),
+  );
+
   $form['settings']['print_pdf_dompdf_unicode'] = array(
     '#type' => 'checkbox',
     '#title' => t("Use dompdf's Unicode Mode"),
@@ -206,6 +230,11 @@ function print_pdf_dompdf_settings() {
  * @see _print_pdf_tools()
  */
 function print_pdf_wkhtmltopdf_settings() {
+  $form['settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('wkhtmltopdf options'),
+  );
+
   $form['settings']['print_pdf_wkhtmltopdf_options'] = array(
     '#type' => 'textfield',
     '#title' => t('wkhtmltopdf options'),

@@ -193,16 +193,11 @@ function _print_main_settings_validate($form, &$form_state) {
  * @ingroup forms
  */
 function print_html_settings() {
+  $link = print_print_link();
+
   $form['settings'] = array(
     '#type' => 'fieldset',
     '#title' => t('Web page options'),
-  );
-
-  $form['settings']['print_html_link_text'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Link text'),
-    '#default_value' => variable_get('print_html_link_text', t('Printer-friendly version')),
-    '#description' => t('Text used in the link to the printer-friendly version.'),
   );
 
   $form['settings']['print_html_new_window'] = array(
@@ -226,18 +221,18 @@ function print_html_settings() {
     '#description' => t("When the above options are enabled, this option will close the window after its contents are printed."),
   );
 
-  $form['settings']['print_display_sys_urllist'] = array(
+  $form['settings']['print_html_display_sys_urllist'] = array(
     '#type' => 'checkbox',
     '#title' => t('Printer-friendly URLs list in system pages'),
-    '#default_value' => variable_get('print_display_sys_urllist', PRINT_TYPE_SYS_URLLIST_DEFAULT),
+    '#default_value' => variable_get('print_html_display_sys_urllist', PRINT_TYPE_SYS_URLLIST_DEFAULT),
     '#description' => t('Enabling this option will display a list of printer-friendly destination URLs at the bottom of the page.'),
   );
 
   $form['settings']['print_robots_settings'] = array(
-      '#type' => 'fieldset',
-      '#title' => t('Robots META tags'),
-      '#collapsible' => TRUE,
-      '#collapsed' => FALSE,
+    '#type' => 'fieldset',
+    '#title' => t('Robots META tags'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
   );
 
   $form['settings']['print_robots_settings']['print_robots_noindex'] = array(
@@ -259,6 +254,25 @@ function print_html_settings() {
     '#title' => t('Add noarchive'),
     '#default_value' => variable_get('print_robots_noarchive', PRINT_ROBOTS_NOARCHIVE_DEFAULT),
     '#description' => t('Non-standard tag to instruct search engines to not show a "Cached" link for your printer-friendly pages. Recognized by Googlebot.'),
+  );
+
+  $form['settings']['link_text'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Custom link text'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  $form['settings']['link_text']['print_html_link_text_enabled'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable custom link text'),
+    '#default_value' => variable_get('print_html_link_text_enabled', PRINT_TYPE_LINK_TEXT_ENABLED_DEFAULT),
+  );
+
+  $form['settings']['link_text']['print_html_link_text'] = array(
+    '#type' => 'textfield',
+    '#default_value' => variable_get('print_html_link_text', $link['text']),
+    '#description' => t('Text used in the link to the printer-friendly version.'),
   );
 
   return system_settings_form($form);

@@ -27,30 +27,34 @@ function print_pdf_enable() {
  * Implements hook_uninstall().
  */
 function print_pdf_uninstall() {
-  variable_del('print_pdf_settings');
-  variable_del('print_pdf_show_link');
-  variable_del('print_pdf_link_pos');
-  variable_del('print_pdf_link_teaser');
-  variable_del('print_pdf_node_link_visibility');
-  variable_del('print_pdf_node_link_pages');
-  variable_del('print_pdf_link_class');
-  variable_del('print_pdf_sys_link_visibility');
-  variable_del('print_pdf_sys_link_pages');
-  variable_del('print_pdf_book_link');
-  variable_del('print_pdf_pdf_tool');
+  variable_del('print_pdf_autoconfig');
   variable_del('print_pdf_content_disposition');
-  variable_del('print_pdf_paper_size');
-  variable_del('print_pdf_page_orientation');
+  variable_del('print_pdf_display_sys_urllist');
+  variable_del('print_pdf_filename');
   variable_del('print_pdf_images_via_file');
+  variable_del('print_pdf_link_text');
+  variable_del('print_pdf_link_text_enabled');
+  variable_del('print_pdf_page_orientation');
+  variable_del('print_pdf_paper_size');
+  variable_del('print_pdf_pdf_tool');
+
+  variable_del('print_pdf_dompdf_unicode');
+
   variable_del('print_pdf_font_family');
   variable_del('print_pdf_font_size');
-  variable_del('print_pdf_link_text');
-  variable_del('print_pdf_link_use_alias');
-  variable_del('print_pdf_filename');
-  variable_del('print_pdf_autoconfig');
-  variable_del('print_pdf_dompdf_unicode');
+  variable_del('print_pdf_font_subsetting');
+
   variable_del('print_pdf_wkhtmltopdf_options');
-  variable_del('print_pdf_display_sys_urllist');
+
+  variable_del('print_pdf_book_link');
+  variable_del('print_pdf_link_class');
+  variable_del('print_pdf_link_pos');
+  variable_del('print_pdf_link_teaser');
+  variable_del('print_pdf_link_use_alias');
+  variable_del('print_pdf_show_link');
+  variable_del('print_pdf_sys_link_pages');
+  variable_del('print_pdf_sys_link_visibility');
+
   $settings = db_query("SELECT name FROM {variable} WHERE name LIKE 'print\_pdf\_display\_%'");
   foreach ($settings as $variable) {
     variable_del($variable->name);
@@ -144,4 +148,14 @@ function print_pdf_update_7000(&$sandbox) {
   if (variable_get('print_pdf_filename', '') == '[site-name] - [title] - [mod-yyyy]-[mod-mm]-[mod-dd]') {
     variable_set('print_pdf_filename', '[site:name] - [node:title] - [node:changed:custom:Y-m-d]');
   }
+}
+
+/**
+ * Delete old variables
+ */
+function print_pdf_update_7200(&$sandbox) {
+  variable_del('print_pdf_settings');
+
+  variable_del('print_pdf_node_link_pages');
+  variable_del('print_pdf_node_link_visibility');
 }

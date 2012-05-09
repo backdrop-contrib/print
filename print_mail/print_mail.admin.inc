@@ -19,16 +19,11 @@
  * @ingroup forms
  */
 function print_mail_settings() {
+  $link = print_mail_print_link();
+
   $form['settings'] = array(
     '#type' => 'fieldset',
     '#title' => t('Send by email options'),
-  );
-
-  $form['settings']['print_mail_link_text'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Link text'),
-    '#default_value' => variable_get('print_mail_link_text', t('Send by email')),
-    '#description' => t('Text used in the link to the send by-email form.'),
   );
 
   $form['settings']['print_mail_hourly_threshold'] = array(
@@ -81,6 +76,25 @@ function print_mail_settings() {
     '#title' => t('Printer-friendly URLs list in system pages'),
     '#default_value' => variable_get('print_mail_display_sys_urllist', PRINT_TYPE_SYS_URLLIST_DEFAULT),
     '#description' => t('Enabling this option will display a list of printer-friendly destination URLs at the bottom of the page.'),
+  );
+
+  $form['settings']['link_text'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Custom link text'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  $form['settings']['link_text']['print_mail_link_text_enabled'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable custom link text'),
+    '#default_value' => variable_get('print_mail_link_text_enabled', PRINT_TYPE_LINK_TEXT_ENABLED_DEFAULT),
+  );
+
+  $form['settings']['link_text']['print_mail_link_text'] = array(
+    '#type' => 'textfield',
+    '#default_value' => variable_get('print_mail_link_text', $link['text']),
+    '#description' => t('Text used in the link to the send by email form.'),
   );
 
   return system_settings_form($form);

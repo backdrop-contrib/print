@@ -46,7 +46,9 @@ define('PRINT_URLS_DEFAULT', 1);
 define('PRINT_URLS_ANCHORS_DEFAULT', 0);
 define('PRINT_COMMENTS_DEFAULT', 0);
 define('PRINT_NEWWINDOW_DEFAULT', 1);
+
 define('PRINT_TYPE_SYS_URLLIST_DEFAULT', 0);
+define('PRINT_TYPE_LINK_TEXT_ENABLED_DEFAULT', 0);
 
 define('PRINT_HTML_NEW_WINDOW_DEFAULT', 0);
 define('PRINT_HTML_SENDTOPRINTER_DEFAULT', 0);
@@ -165,16 +167,17 @@ function print_preprocess_print(&$variables) {
  * Implements hook_menu().
  */
 function print_menu() {
+  $link = print_print_link();
   $items = array();
 
-  $items[PRINT_PATH] = array(
+  $items[$link['path']] = array(
     'title' => 'Printer-friendly',
     'page callback' => 'print_controller_html',
     'access arguments' => array('access print'),
     'type' => MENU_CALLBACK,
     'file' => 'print.pages.inc',
   );
-  $items[PRINT_PATH . '/' . PRINT_PATH] = array(
+  $items[$link['path'] . '/' . $link['path']] = array(
     'access callback' => FALSE,
   );
   $items['admin/config/user-interface/print'] = array(
@@ -234,6 +237,17 @@ function print_block_view($delta = '') {
       break;
   }
   return $block;
+}
+
+/**
+ * Implements hook_help().
+ */
+function print_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#print':
+      // Return a line-break version of the module README
+      return _filter_autop(file_get_contents(drupal_get_path('module', 'print') . '/README.txt'));
+  }
 }
 
 /**

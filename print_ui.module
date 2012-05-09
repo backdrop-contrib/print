@@ -39,15 +39,10 @@
 define('PRINT_UI_LINK_POS_DEFAULT', 'link');
 define('PRINT_UI_LINK_TEASER_DEFAULT', 0);
 define('PRINT_UI_SHOW_LINK_DEFAULT', 1);
-define('PRINT_UI_NODE_LINK_VISIBILITY_DEFAULT', 0);
-define('PRINT_UI_NODE_LINK_PAGES_DEFAULT', '');
-define('PRINT_UI_LINK_CLASS_DEFAULT', 'print-page');
 define('PRINT_UI_SYS_LINK_VISIBILITY_DEFAULT', 1);
 define('PRINT_UI_SYS_LINK_PAGES_DEFAULT', '');
 define('PRINT_UI_LINK_USE_ALIAS_DEFAULT', 0);
 define('PRINT_UI_BOOK_LINK_DEFAULT', 1);
-
-define('PRINT_UI_NEWWINDOW_DEFAULT', 1);
 
 define('PRINT_UI_ALLOW_NORMAL_LINK', 1);
 define('PRINT_UI_ALLOW_BOOK_LINK', 2);
@@ -158,26 +153,26 @@ function print_ui_block_view($delta = '') {
  * Implements hook_help().
  */
 function print_ui_help($path, $arg) {
-  switch ($path) {
-    case 'admin/help#print':
-      // Return a line-break version of the module README
-      return _filter_autop(file_get_contents(drupal_get_path('module', 'print') . '/README.txt'));
-  }
-
   $links = '';
-  foreach (module_implements('print_link') as $module) {
-    $function = $module . '_print_link';
-    if (function_exists($function)) {
-      $link = call_user_func_array($function, array());
 
-      if ($path !== 'node/%') {
-        $links .= print_ui_insert_link($link['format']);
+  if ($path !== 'node/%') {
+    static $output = FALSE;
+
+    if ($output === FALSE) {
+      $output = TRUE;
+
+      foreach (module_implements('print_link') as $module) {
+        $function = $module . '_print_link';
+        if (function_exists($function)) {
+          $link = call_user_func_array($function, array());
+
+          $links .= print_ui_insert_link($link['format']);
+        }
+      }
+      if ($links) {
+        return "<span class='print-syslink'>$links</span>";
       }
     }
-  }
-
-  if ($links) {
-    return "<span class='print-syslink'>$links</span>";
   }
 }
 
@@ -235,8 +230,7 @@ function print_ui_node_view($node, $view_mode) {
 
       foreach (array('node', 'comment') as $type) {
         $allowed_type = print_ui_link_allowed($link, array('type' => $type, 'node' => $node, 'view_mode' => $view_mode));
-        // @todo node-book is only for the print module
-        if (($allowed_type === PRINT_UI_ALLOW_NORMAL_LINK) && !isset($node->book) && !empty($link_pos['link'])) {
+        if ($allowed_type) {
           drupal_add_css(drupal_get_path('module', 'print') . '/css/printlinks.css');
           $links = array();
           $format = theme('print_ui_format_link', array('format' => $link['format']));
@@ -268,7 +262,8 @@ function print_ui_node_view($node, $view_mode) {
             '#attributes' => array('class' => array('links', 'inline')),
           );
 
-          if ($type == 'node') {
+          // If it's a node, and configured to show the link, but it's not the html version of a book then show it
+          if (($type == 'node') && !empty($link_pos['link']) && !(isset($node->book) && ($link['format'] == 'html'))) {
             $node->content['links']['print_' . $link['format']] = $link_content;
           }
           elseif ($type == 'comment') {
@@ -313,12 +308,16 @@ function print_ui_node_load($nodes, $types) {
     if (function_exists($function)) {
       $link = call_user_func_array($function, array());
 
+      $display = 'print_' . $link['format'] . '_display';
+      $display_comment = 'print_' . $link['format'] . '_display_comment';
+      $display_urllist =  'print_' . $link['format'] . '_display_urllist';
+
       $result = db_query('SELECT nid, link, comments, url_list FROM {' . $module . '_node_conf} WHERE nid IN (:nids)', array(':nids' => $ids))->fetchAllAssoc('nid');
 
       foreach ($nodes as $node) {
-        $node->{$module . '_display'} = isset($result[$node->nid]) ? intval($result[$node->nid]->link) : variable_get($module . '_display_' . $node->type, PRINT_UI_TYPE_SHOW_LINK_DEFAULT);
-        $node->{$module . '_display_comment'} = isset($result[$node->nid]) ? intval($result[$node->nid]->comments) : variable_get($module . '_display_comment_' . $node->type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
-        $node->{$module . '_display_urllist'} = isset($result[$node->nid]) ? intval($result[$node->nid]->url_list) : variable_get($module . '_display_urllist_' . $node->type, PRINT_UI_TYPE_URLLIST_DEFAULT);
+        $node->{$display} = isset($result[$node->nid]) ? intval($result[$node->nid]->link) : variable_get($display . '_' . $node->type, PRINT_UI_TYPE_SHOW_LINK_DEFAULT);
+        $node->{$display_comment} = isset($result[$node->nid]) ? intval($result[$node->nid]->comments) : variable_get($display_comment . '_' . $node->type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
+        $node->{$display_urllist} = isset($result[$node->nid]) ? intval($result[$node->nid]->url_list) : variable_get($display_urllist . '_' . $node->type, PRINT_UI_TYPE_URLLIST_DEFAULT);
       }
     }
   }
@@ -341,16 +340,20 @@ function print_ui_node_update($node) {
       $link = call_user_func_array($function, array());
 
       if (user_access('administer print') || user_access('node-specific print configuration')) {
-        if (!isset($node->{$module . '_display'})) $node->{$module . '_display'} = variable_get($module . '_display_' . $node->type, PRINT_UI_TYPE_SHOW_LINK_DEFAULT);
-        if (!isset($node->{$module . '_display_comment'})) $node->{$module . '_display_comment'} = variable_get($module . '_display_comment_' . $node->type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
-        if (!isset($node->{$module . '_display_urllist'})) $node->{$module . '_display_urllist'} = variable_get($module . '_display_urllist_' . $node->type, PRINT_UI_TYPE_URLLIST_DEFAULT);
+        $display = 'print_' . $link['format'] . '_display';
+        $display_comment = 'print_' . $link['format'] . '_display_comment';
+        $display_urllist =  'print_' . $link['format'] . '_display_urllist';
+
+        if (!isset($node->{$display})) $node->{$display} = variable_get($display . '_' . $node->type, PRINT_UI_TYPE_SHOW_LINK_DEFAULT);
+        if (!isset($node->{$display_comment})) $node->{$display_comment} = variable_get($display_comment . '_' . $node->type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
+        if (!isset($node->{$display_urllist})) $node->{$display_urllist} = variable_get($display_urllist . '_' . $node->type, PRINT_UI_TYPE_URLLIST_DEFAULT);
 
         db_merge($module . '_node_conf')
           ->key(array('nid' => $node->nid))
           ->fields(array(
-            'link' => $node->{$module . '_display'},
-            'comments' => $node->{$module . '_display_comment'},
-            'url_list' => $node->{$module . '_display_urllist'},
+            'link' => $node->{$display},
+            'comments' => $node->{$display_comment},
+            'url_list' => $node->{$display_urllist},
           ))
           ->execute();
       }
@@ -395,34 +398,38 @@ function print_ui_form_alter(&$form, &$form_state, $form_id) {
       if (function_exists($function)) {
         $link = call_user_func_array($function, array());
 
-        $form['print'][$module . '_label'] = array(
+        $form['print']['print_' . $link['format'] . '_label'] = array(
           '#type' => 'markup',
           '#markup' => '<p><strong>' . $link['text'] . '</strong></p>',
         );
 
-        $form['print'][$module . '_display'] = array(
+        $display = 'print_' . $link['format'] . '_display';
+        $display_comment = 'print_' . $link['format'] . '_display_comment';
+        $display_urllist =  'print_' . $link['format'] . '_display_urllist';
+
+        $form['print'][$display] = array(
           '#type' => 'checkbox',
           '#title' => t('Show link'),
         );
-        $form['print'][$module . '_display_comment'] = array(
+        $form['print'][$display_comment] = array(
           '#type' => 'checkbox',
           '#title' => t('Show link in individual comments'),
         );
-        $form['print'][$module . '_display_urllist'] = array(
+        $form['print'][$display_urllist] = array(
           '#type' => 'checkbox',
           '#title' => t('Show Printer-friendly URLs list'),
         );
 
         if ($form_id == 'node_type_form') {
-          $form['print'][$module . '_display']['#default_value'] = variable_get($module . '_display_' . $form['#node_type']->type, PRINT_UI_TYPE_SHOW_LINK_DEFAULT);
-          $form['print'][$module . '_display_comment']['#default_value'] = variable_get($module . '_display_comment_' . $form['#node_type']->type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
-          $form['print'][$module . '_display_urllist']['#default_value'] = variable_get($module . '_display_urllist_' . $form['#node_type']->type, PRINT_UI_TYPE_URLLIST_DEFAULT);
+          $form['print'][$display]['#default_value'] = variable_get($display . '_' . $form['#node_type']->type, PRINT_UI_TYPE_SHOW_LINK_DEFAULT);
+          $form['print'][$display_comment]['#default_value'] = variable_get($display_comment . '_' . $form['#node_type']->type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
+          $form['print'][$display_urllist]['#default_value'] = variable_get($display_urllist . '_' . $form['#node_type']->type, PRINT_UI_TYPE_URLLIST_DEFAULT);
         }
         else {
           $node = $form['#node'];
-          $form['print'][$module . '_display']['#default_value'] = isset($node->{$module . '_display'}) ? $node->{$module . '_display'} : variable_get($module . '_display_' . $node->type, PRINT_UI_TYPE_SHOW_LINK_DEFAULT);
-          $form['print'][$module . '_display_comment']['#default_value'] = isset($node->{$module . '_display_comment'}) ? $node->{$module . '_display_comment'} : variable_get($module . '_display_comment_' . $node->type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
-          $form['print'][$module . '_display_urllist']['#default_value'] = isset($node->{$module . '_display_urllist'}) ? $node->{$module . '_display_urllist'} : variable_get($module . '_display_urllist_' . $node->type, PRINT_UI_TYPE_URLLIST_DEFAULT);
+          $form['print'][$display]['#default_value'] = isset($node->{$display}) ? $node->{$display} : variable_get($display . '_' . $node->type, PRINT_UI_TYPE_SHOW_LINK_DEFAULT);
+          $form['print'][$display_comment]['#default_value'] = isset($node->{$display_comment}) ? $node->{$display_comment} : variable_get($display_comment . '_' . $node->type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
+          $form['print'][$display_urllist]['#default_value'] = isset($node->{$display_urllist}) ? $node->{$display_urllist} : variable_get($display_urllist . '_' . $node->type, PRINT_UI_TYPE_URLLIST_DEFAULT);
         }
       }
     }
@@ -442,7 +449,7 @@ function print_ui_form_alter(&$form, &$form_state, $form_id) {
  *   array of formatted attributes
  */
 function print_ui_fill_attributes($title = '', $class = '', $new_window = FALSE) {
-  $print_newwindow = variable_get('print_newwindow', PRINT_UI_NEWWINDOW_DEFAULT);
+  $print_newwindow = variable_get('print_newwindow', PRINT_NEWWINDOW_DEFAULT);
   $print_robots_noindex = variable_get('print_robots_noindex', PRINT_ROBOTS_NOINDEX_DEFAULT);
 
   $attributes = array();
@@ -483,9 +490,10 @@ function theme_print_ui_format_link($vars) {
       $link = call_user_func_array($function, array());
 
       if ($link['format'] == $format) {
-        $link_class = variable_get('print_' . $link['format'] . '_link_class', PRINT_UI_LINK_CLASS_DEFAULT);
-        // @todo new window is diff for pdf, and none for mail
-        $new_window = variable_get('print_' . $link['format'] . '_new_window', PRINT_HTML_NEW_WINDOW_DEFAULT);
+        $link_class = variable_get('print_' . $link['format'] . '_link_class', $link['class']);
+        @todo new_window
+        $new_window = ($format == 'html') ? variable_get('print_html_new_window', PRINT_HTML_NEW_WINDOW_DEFAULT) : FALSE;
+        $new_window = ($format == 'pdf') ? (variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT) == 1) : FALSE;
         $show_link = variable_get('print_' . $link['format'] . '_show_link', PRINT_UI_SHOW_LINK_DEFAULT);
         $link_text = filter_xss(variable_get('print_' . $link['format'] . '_link_text', $link['text']));
 
@@ -609,6 +617,7 @@ function print_ui_link_allowed($link, $args) {
     // If the user is not allowed
     return FALSE;
   }
+  // @todo empty($print_pdf_pdf_tool) => return FALSE
   if (!empty($args['path'])) {
     $nid = preg_replace('!^node/!', '', drupal_get_normal_path($args['path']));
     if (ctype_digit($nid)) {
@@ -631,14 +640,15 @@ function print_ui_link_allowed($link, $args) {
         $res[$link['format']][$node->nid] = db_query("SELECT comments FROM {" . $link['module'] . "_node_conf} WHERE nid = :nid", array(':nid' => $node->nid))->fetchField();
       }
       // @todo only $res?
-      $display_comment = $res ? intval($res[$link['format']][$node->nid]) : variable_get($link['module'] . '_display_comment_' . $node_type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
+      $display_comment = $res ? intval($res[$link['format']][$node->nid]) : variable_get('print_' . $link['format'] . '_display_comment_' . $node_type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
       if ($display_comment) {
         return PRINT_UI_ALLOW_NORMAL_LINK;
       }
     }
     else {
       // Node link
-      if (isset($node->{'print_' . $link['format'] . '_display'}) && !$node->{'print_' . $link['format'] . '_display'}) {
+      $display = 'print_' . $link['format'] . '_display';
+      if (isset($node->{$display}) && !$node->{$display}) {
         // Link for this node is disabled
         return FALSE;
       }
