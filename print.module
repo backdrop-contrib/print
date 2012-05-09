@@ -70,7 +70,6 @@ function print_print_link() {
     'format' => 'html',
     'text' => t('Printer-friendly version'),
     'description' => t('Display a printer-friendly version of this page.'),
-    'permission' => 'access print',
     'path' => 'print',
     'class' => 'print-page',
     'icon' => 'print_icon.gif',
@@ -311,11 +310,24 @@ function _print_get_title($path) {
  */
 function print_insert_link($path = NULL, $node = NULL) {
   if (function_exists('print_ui_insert_link')) {
-    return print_ui_insert_link('html', $path, $node);
+    return print_ui_insert_link(print_print_link(), $path, $node);
   }
   else {
     return FALSE;
   }
+}
+
+/**
+ * Check if the link to the PF version is allowed depending on the settings
+ *
+ * @param $args
+ *   array containing the possible parameters:
+ *    teaser, node, type, path
+ * @return
+ *   FALSE if not allowed, TRUE otherwise
+ */
+function print_link_allowed($args) {
+  return (user_access('access print'));
 }
 
 /**

@@ -287,7 +287,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
       for ($i = 0; $i < $max; $i++) {
         $pfp_links .= '[' . ($i + 1) . '] ' . check_plain($urls[$i]) . "<br />\n";
       }
-      $print['pfp_links'] = "<p><strong>" .  t('Links') . "</strong><br />$pfp_links</p>";
+      $print['pfp_links'] = "<p><strong>" . t('Links') . "</strong><br />$pfp_links</p>";
     }
   }
 

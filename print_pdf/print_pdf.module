@@ -30,7 +30,6 @@ function print_pdf_print_link() {
     'format' => 'pdf',
     'text' => t('PDF version'),
     'description' => t('Display a PDF version of this page.'),
-    'permission' => 'access PDF version',
     'path' => 'printpdf',
     'class' => 'print-pdf',
     'icon' => 'pdf_icon.gif',
@@ -309,11 +308,26 @@ function print_pdf_node_delete($node) {
  */
 function print_pdf_insert_link($path = NULL, $node = NULL) {
   if (function_exists('print_ui_insert_link')) {
-    return print_ui_insert_link('pdf', $path, $node);
+    return print_ui_insert_link(print_pdf_print_link(), $path, $node);
   }
   else {
     return FALSE;
   }
+}
+
+/**
+ * Check if the link to the PDF version is allowed depending on the settings
+ *
+ * @param $args
+ *   array containing the possible parameters:
+ *    teaser, node, type, path
+ * @return
+ *   FALSE if not allowed, TRUE otherwise
+ */
+function print_pdf_link_allowed($args) {
+  $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
+
+  return (user_access('access PDF version') && (!empty($print_pdf_pdf_tool)));
 }
 
 /**

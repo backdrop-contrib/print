@@ -62,14 +62,12 @@ function print_mail_settings() {
     $form['settings']['print_mail_send_option_default']['#options']['plain-attachment'] = t('Plain Text with Attachment');
   }
 
-  if (module_exists('job_queue')) {
-    $form['settings']['print_mail_job_queue'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Send emails using Job Queue'),
-      '#default_value' => variable_get('print_mail_job_queue', PRINT_MAIL_JOB_QUEUE_DEFAULT),
-      '#description' => t("Selecting this option, email delivery will be performed by the Job Queue module during each cron run. Leaving this unselected, the email will be sent immediately, but the site will take slightly longer to reply to the user."),
-    );
-  }
+  $form['settings']['print_mail_job_queue'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Send emails using queue'),
+    '#default_value' => variable_get('print_mail_job_queue', PRINT_MAIL_JOB_QUEUE_DEFAULT),
+    '#description' => t("Selecting this option, email delivery will be performed by the system queue during each cron run. Leaving this unselected, the email will be sent immediately, but the site will take slightly longer to reply to the user."),
+  );
 
   $form['settings']['print_mail_display_sys_urllist'] = array(
     '#type' => 'checkbox',

@@ -21,7 +21,6 @@ function print_mail_print_link() {
     'format' => 'mail',
     'text' => t('Send by email'),
     'description' => t('Send this page by email.'),
-    'permission' => 'access send by email',
     'path' => 'printmail',
     'class' => 'print-mail',
     'icon' => 'mail_icon.gif',
@@ -133,14 +132,73 @@ function print_mail_node_delete($node) {
 }
 
 /**
- * Implements hook_job_queue_functions().
+ * Implements hook_cron_queue_info().
  */
-function print_mail_job_queue_functions() {
-  // @todo convert this to D7 job queue
-  $functions['print_mail'] = array(
-   'title' => t('Send by email'),
+function print_mail_cron_queue_info() {
+  $queues['print_mail_send'] = array(
+    'worker callback' => 'print_mail_send',
+    'time' => 60,
   );
-  return $functions;
+  return $queues;
+}
+
+function print_mail_send($data) {
+  drupal_mail($data['module'], $data['key'], $data['to'], $data['language'], $data['params'], $data['from']);
+}
+
+/**
+ * Implements hook_mail().
+ */
+function print_mail_mail($key, &$message, $params) {
+  $message['subject'] = $params['subject'];
+
+  switch ($key) {
+    case 'sendpage':
+      $message['body'][] = check_plain($params['body']);
+      $message['headers']['Content-Type'] = 'text/html; charset=utf-8';
+      break;
+    case 'sendlink':
+      // Generate plain-text and html versions of message with link
+      $sendlink_plain = $params['message'] . '\n\n' . $params['link'];
+      $sendlink_html = $params['message'] . '<br/><br/>' . l($params['title'], $params['link']);
+
+      // Send HTML-only version if MIME library not present
+      if (!class_exists('Mail_mime')) {
+        $message['body'][] = check_plain($sendlink_html);
+        $message['headers']['Content-Type'] = 'text/html; charset=utf-8';
+        break;
+      }
+      // no break on purpose
+    case 'plain-attachment':
+    case 'inline-attachment':
+      // Configure new MIME object
+      $mime = new Mail_mime("\n");
+      $mime_params['html_encoding'] = '7bit';
+
+      // Pass message contents into MIME object
+      switch ($key) {
+        case 'sendlink':
+          $mime->setTxtBody($sendlink_plain);
+          $mime->setHTMLBody($sendlink_html);
+          break;
+        case 'inline-attachment':
+          $mime->setHTMLBody($params['body']);
+          // no break on purpose
+        case 'plain-attachment':
+          $mime->setTxtBody($params['message']);
+          $mime->addAttachment($params['body'], 'text/html', 'Attachment.html', FALSE);
+          break;
+      }
+
+      // Store MIME message output in message array
+      $message['body'][] = check_plain($mime->get($mime_params));
+      $message['headers'] = $mime->headers($message['headers']);
+
+      // Strip special characters from Content-Type header
+      // Required to prevent mime_header_encode() from disrupting Content-Type header
+      $message['headers']['Content-Type'] = preg_replace('/[^\x20-\x7E]/', '', $message['headers']['Content-Type']);
+      break;
+  }
 }
 
 /**
@@ -199,11 +257,24 @@ function _print_mail_access($permission) {
  */
 function print_mail_insert_link($path = NULL, $node = NULL) {
   if (function_exists('print_ui_insert_link')) {
-    return print_ui_insert_link('mail', $path, $node);
+    return print_ui_insert_link(print_mail_print_link(), $path, $node);
   }
   else {
     return FALSE;
   }
+}
+
+/**
+ * Check if the link to send by email is allowed depending on the settings
+ *
+ * @param $args
+ *   array containing the possible parameters:
+ *    teaser, node, type, path
+ * @return
+ *   FALSE if not allowed, TRUE otherwise
+ */
+function print_mail_link_allowed($args) {
+  return (user_access('access send by email'));
 }
 
 /**

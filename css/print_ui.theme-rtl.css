@@ -1,10 +1,9 @@
-
 .print-link {
   /* Use these for links above the content */
   text-align: left;
   /* Use these for links in a corner of the content */
   /*
-  float:left;
+  float: left;
   */
 }
 
@@ -20,8 +19,4 @@
 
 img.print-icon-margin {
   padding-left: 4px;
-}
-
-label.printmail-label {
-  float: right;
 }
