@@ -93,6 +93,31 @@ function print_mail_menu() {
 }
 
 /**
+ * Implements hook_requirements().
+ */
+function print_mail_requirements($phase) {
+  $requirements = array();
+  $t = get_t();
+  switch ($phase) {
+    // At runtime, make sure that a PDF generation tool is selected
+    case 'runtime':
+      if (module_exists('mailsystem')) {
+        $mail_system = mailsystem_get();
+        if (!isset($mail_system['print_mail']) || ($mail_system['print_mail'] != 'DefaultMailSystem')) {
+          $requirements['print_mail_mailsystem'] = array(
+            'title' => $t('Printer, email and PDF versions - Send by email'),
+            'value' => $t('Incompatible Mail System setting detected'),
+            'description' => $t('The send by email module requires the use of the DefaultMailSystem, please configure it in the !url.', array('!url' => l($t('Mail System Settings page'), 'admin/config/system/mailsystem'))),
+            'severity' => REQUIREMENT_WARNING,
+          );
+        }
+      }
+  }
+
+  return $requirements;
+}
+
+/**
  * Implements hook_block_info().
  */
 function print_mail_block_info() {

@@ -28,6 +28,15 @@ function print_mail_enable() {
 }
 
 /**
+ * Implements hook_disable().
+ */
+function print_mail_disable() {
+  if (module_exists('mailsystem')) {
+    mailsystem_clear(array('print_mail' => ''));
+  }
+}
+
+/**
  * Implements hook_uninstall().
  */
 function print_mail_uninstall() {
