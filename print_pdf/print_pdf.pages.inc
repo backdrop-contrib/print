@@ -40,20 +40,25 @@ function print_pdf_controller() {
 
     $pdf_filename = variable_get('print_pdf_filename', PRINT_PDF_FILENAME_DEFAULT);
     if (!empty($pdf_filename) && !empty($node)) {
-      $pdf_filename = token_replace($pdf_filename, array('node' => $node)) . '.pdf';
+      $pdf_filename = token_replace($pdf_filename, array('node' => $node));
     }
     else {
-      $pdf_filename = str_replace('/', '_', $path) . '.pdf';
+      $pdf_filename = token_replace($pdf_filename, array('site'));
+      if (count(token_scan($pdf_filename))) {
+        // If there are still tokens, use a fallback solution
+        $pdf_filename = str_replace('/', '_', $path);
+      }
     }
   }
   else {
-    $pdf_filename = 'page.pdf';
+    $pdf_filename = 'page';
   }
+
   if (function_exists('transliteration_clean_filename')) {
     $pdf_filename = transliteration_clean_filename($pdf_filename, language_default('language'));
   }
 
-  $pdf = print_pdf_generate_path($path, $cid, $pdf_filename);
+  $pdf = print_pdf_generate_path($path, $cid, $pdf_filename . '.pdf');
   if ($pdf == NULL) {
     drupal_goto($path);
     exit;
