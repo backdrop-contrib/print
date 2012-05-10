@@ -18,6 +18,8 @@
  */
 function print_pdf_settings() {
   $pdf_tools = _print_pdf_tools();
+  $current_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
+  $pdf_tool_default = (in_array($current_pdf_tool, $pdf_tools)) ? $current_pdf_tool : PRINT_PDF_PDF_TOOL_DEFAULT;
 
   if ($pdf_tools != -1) {
     $link = print_pdf_print_link();
@@ -31,7 +33,7 @@ function print_pdf_settings() {
       '#type' => 'radios',
       '#title' => t('PDF generation tool'),
       '#options' => $pdf_tools,
-      '#default_value' => variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT),
+      '#default_value' => $pdf_tool_default,
       '#description' => t('This option selects the PDF generation tool being used by this module to create the PDF version.'),
     );
 
