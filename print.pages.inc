@@ -137,7 +137,6 @@ function print_preprocess_print(&$variables) {
     }
   }
 
-
   $logo_url = FALSE;
   switch (variable_get('print_logo_options', PRINT_LOGO_OPTIONS_DEFAULT)) {
     case 1: // theme's
@@ -195,15 +194,18 @@ function theme_print_published($vars) {
  */
 function theme_print_breadcrumb($vars) {
   $node = $vars['node'];
+  $old_path = $_GET['q'];
 
   $path = empty($node->nid) ? $node->path : "node/$node->nid";
   menu_set_active_item($path);
   $breadcrumb = drupal_get_breadcrumb();
   if (!empty($breadcrumb)) {
     $breadcrumb[] = menu_get_active_title();
+    menu_set_active_item($old_path);
     return filter_xss(implode(' > ', $breadcrumb));
   }
   else {
+    menu_set_active_item($old_path);
     return '';
   }
 }
