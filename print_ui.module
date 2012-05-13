@@ -1,37 +1,10 @@
 <?php
 
 /**
- * @defgroup print Printer, email and PDF versions
- *
- * Welcome to the print module developer's documentation. The interesting
- * functions for themers are those that start with 'theme_'.
- *
- * - Printer-friendly pages
- *   - @link print.module Module main file @endlink
- *   - @link print.admin.inc Settings form @endlink
- *   - @link print.pages.inc HTML generation @endlink
- *   - @link print.install (Un)Install routines @endlink
- *   - @link print.tpl.php Page generation template @endlink
- * - Send by email
- *   - @link print_mail.module Module main file @endlink
- *   - @link print_mail.admin.inc Settings form @endlink
- *   - @link print_mail.inc Mail form and send mail routine @endlink
- *   - @link print_mail.install (Un)Install routines @endlink
- * - PDF version
- *   - @link print_pdf.module Module main file @endlink
- *   - @link print_pdf.admin.inc Settings form @endlink
- *   - @link print_pdf.pages.inc PDF generation @endlink
- *   - @link print_pdf.class.inc Auxiliary PHP5 class @endlink
- *   - @link print_pdf.class_php4.inc Auxiliary PHP4 class @endlink
- *   - @link print_pdf.install (Un)Install routines @endlink
- */
-
-/**
  * @file
- * Displays Printer-friendly versions of Drupal pages.
+ * Printer-friendly pages User Interface module.
  *
- * This is the core module of the PF package, with the Drupal hooks
- * and other administrative functions.
+ * This module handles the display of the printer-friendly sub-module links.
  *
  * @ingroup print
  */
@@ -266,7 +239,7 @@ function print_ui_node_view($node, $view_mode) {
           if (($type == 'node') && !empty($link_pos['link']) && !(isset($node->book) && ($link['format'] == 'html'))) {
             $node->content['links']['print_' . $link['format']] = $link_content;
           }
-          elseif ($type == 'comment') {
+          elseif (($type == 'comment') && isset($node->content['comments']['comments'])) {
             foreach ($node->content['comments']['comments'] as $cid => $comment) {
               if (is_numeric($cid)) {
                 $link_content['#links']['print_' . $link['format']]['query']['comment'] = $cid;

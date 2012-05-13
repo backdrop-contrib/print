@@ -278,23 +278,22 @@ function print_mail_form_submit($form, &$form_state) {
 
     $sender_message = t('Message from sender') . ':<br /><br /><em>' . nl2br(check_plain($form_state['values']['txt_message'])) . '</em>';
 
-    $print = print_controller($form_state['values']['path'], $link['format'], $cid, $form_state['values']['chk_teaser'], $sender_message);
+    $node = print_controller($form_state['values']['path'], $link['format'], $cid, $form_state['values']['chk_teaser']);
 
     // Spaces in img URLs must be replaced with %20
     $pattern = '!<(img\s[^>]*?)>!is';
-    $print['content'] = preg_replace_callback($pattern, '_print_mail_encode_urls', $print['content']);
+    $node->content = preg_replace_callback($pattern, '_print_mail_encode_urls', $node->content);
 
-    if ($print !== FALSE) {
+    if ($node) {
       $print_mail_send_option_default = variable_get('print_mail_send_option_default', PRINT_MAIL_SEND_OPTION_DEFAULT);
 
       $params = array();
       $params['subject'] = $form_state['values']['fld_subject'];
       $params['message'] = $sender_message;
-      $params['link'] = $print['url'];
+      $params['link'] = $node->url;
       $params['title'] = $form_state['values']['title'];
 
-      $node = $print['node'];
-      $params['body'] = theme('print', array('print' => $print, 'type' => $link['format'], 'node' => $node));
+      $params['body'] = theme('print', array('node' => $node, 'format' => $link['format'], 'message' => $sender_message));
 
       $ok = FALSE;
       $use_job_queue = variable_get('print_mail_job_queue', PRINT_MAIL_JOB_QUEUE_DEFAULT);

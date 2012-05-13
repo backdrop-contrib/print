@@ -24,10 +24,9 @@ function print_controller_html() {
   $cid = isset($_GET['comment']) ? (int)$_GET['comment'] : NULL;
   $link = print_print_link();
 
-  $print = print_controller($path, $link['format'], $cid);
-  if ($print !== FALSE) {
-    $node = $print['node'];
-    $html = theme('print', array('print' => $print, 'type' => $link['format'], 'node' => $node));
+  $node = print_controller($path, $link['format'], $cid);
+  if ($node) {
+    $html = theme('print', array('node' => $node, 'format' => $link['format']));
     drupal_send_headers();
     print $html;
 
@@ -57,15 +56,13 @@ function print_controller_html() {
  *   comment ID of the individual comment to be rendered
  * @param $teaser
  *   if set to TRUE, outputs only the node's teaser
- * @param $message
- *   optional sender's message (used by the send email module)
  * @return
  *   array with the fields to be used in the template
  * @see _print_generate_node()
  * @see _print_generate_path()
  * @see _print_generate_book()
  */
-function print_controller($path, $format, $cid = NULL, $teaser = FALSE, $message = NULL) {
+function print_controller($path, $format, $cid = NULL, $teaser = FALSE) {
   if (empty($path)) {
     // If no path was provided, let's try to generate a page for the referer
     global $base_url;
@@ -101,9 +98,177 @@ function print_controller($path, $format, $cid = NULL, $teaser = FALSE, $message
     }
   }
 
-  $print = _print_var_generator($node, $message, $cid);
+  return $node;
+}
 
-  return $print;
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function print_preprocess_print(&$variables) {
+  global $language;
+
+  $node = $variables['node'];
+  $format = $variables['format'];
+  $path = drupal_get_path_alias(empty($node->nid) ? $node->path : "node/$node->nid");
+
+  static $hooks = NULL;
+  if (!isset($hooks)) {
+    drupal_theme_initialize();
+    $hooks = theme_get_registry();
+  }
+
+  $variables['page']['#show_messages'] = FALSE;
+
+  // Stolen from theme() so that ALL preprocess functions are called
+  $hook = 'page';
+  $info = $hooks[$hook];
+  if (isset($info['preprocess functions']) || isset($info['process functions'])) {
+    $variables['theme_hook_suggestions'] = array();
+    foreach (array('preprocess functions', 'process functions') as $phase) {
+      if (!empty($info[$phase])) {
+        foreach ($info[$phase] as $processor_function) {
+          if (function_exists($processor_function)) {
+            // We don't want a poorly behaved process function changing $hook.
+            $hook_clone = $hook;
+            $processor_function($variables, $hook_clone);
+          }
+        }
+      }
+    }
+  }
+
+
+  $logo_url = FALSE;
+  switch (variable_get('print_logo_options', PRINT_LOGO_OPTIONS_DEFAULT)) {
+    case 1: // theme's
+      $logo_url = theme_get_setting('logo');
+      break;
+    case 2: // user-specifed
+      $logo_url = strip_tags(variable_get('print_logo_url', PRINT_LOGO_URL_DEFAULT));
+      break;
+  }
+  $variables['print_logo']                     = $logo_url ? theme('image', array('path' => $logo_url, 'alt' => variable_get('site_name', 'Drupal'), 'attributes' => array('class' => 'print-logo', 'id' => 'logo'))) : NULL;
+
+  $variables['print_node']                     = $node;
+  $variables['content']                  = $node->content;
+  $variables['scripts']                  = drupal_get_js();
+  $variables['footer_scripts']           = drupal_get_js('footer');
+  $variables['sourceurl_enabled']        = variable_get('print_sourceurl_enabled', PRINT_SOURCEURL_ENABLED_DEFAULT);
+  $variables['url']                      = url($path, array('absolute' => TRUE));
+  $variables['source_url']               = url(variable_get('print_sourceurl_forcenode', PRINT_SOURCEURL_FORCENODE_DEFAULT) ? drupal_get_normal_path($path) : $path, array('alias' => TRUE, 'absolute' => TRUE));
+  $variables['cid']                      = isset($node->cid) ? $node->cid : NULL;
+  $variables['print_title']                    = check_plain($node->title);
+  $variables['head']                     = drupal_get_html_head();
+  $variables['robots_meta']              = _print_robots_meta_generator();
+  $variables['css']                      = _print_css_generator($format == 'mail');
+
+  if (variable_get('print_html_sendtoprinter', PRINT_HTML_SENDTOPRINTER_DEFAULT) && ($format == 'html')) {
+    drupal_add_js('misc/drupal.js', array('weight' => JS_LIBRARY));
+
+    $window_close = (variable_get('print_html_new_window', PRINT_HTML_NEW_WINDOW_DEFAULT) && variable_get('print_html_windowclose', PRINT_HTML_WINDOWCLOSE_DEFAULT)) ? 'window.close();' : '';
+    $variables['sendtoprinter'] = "<script type='text/javascript'>(function ($) { Drupal.behaviors.print = { attach: function(context) {window.print();$window_close}};}(jQuery));</script>";
+  }
+
+  $type = (isset($node->type)) ? $node->type : '';
+  $nid = (isset($node->nid)) ? $node->nid : '';
+
+  $variables['theme_hook_suggestions'] = array();
+  $variables['theme_hook_suggestions'][] = "print__node__{$type}";
+  $variables['theme_hook_suggestions'][] = "print__node__{$type}__{$nid}";
+  $variables['theme_hook_suggestions'][] = "print__{$format}";
+  $variables['theme_hook_suggestions'][] = "print__{$format}__node__{$type}";
+  $variables['theme_hook_suggestions'][] = "print__{$format}__node__{$type}__{$nid}";
+}
+
+/**
+ * @todo document this
+ */
+function theme_print_published($vars) {
+  global $base_url;
+
+  $published_site = variable_get('site_name', 0);
+  return $published_site ? t('Published on %site_name', array('%site_name' => $published_site)) . ' (' . l($base_url, $base_url) . ')' : '';
+}
+
+/**
+ * @todo document this
+ */
+function theme_print_breadcrumb($vars) {
+  $node = $vars['node'];
+
+  $path = empty($node->nid) ? $node->path : "node/$node->nid";
+  menu_set_active_item($path);
+  $breadcrumb = drupal_get_breadcrumb();
+  if (!empty($breadcrumb)) {
+    $breadcrumb[] = menu_get_active_title();
+    return filter_xss(implode(' > ', $breadcrumb));
+  }
+  else {
+    return '';
+  }
+}
+
+/**
+ * @todo document this
+ */
+function theme_print_footer($vars) {
+  $footer = '';
+
+  switch (variable_get('print_footer_options', PRINT_FOOTER_OPTIONS_DEFAULT)) {
+    case 1: // theme's
+      $footer_blocks = block_get_blocks_by_region('footer');
+      $footer = variable_get('site_footer', FALSE) . "\n" . drupal_render($footer_blocks);
+      break;
+    case 2: // user-specifed
+      $footer = variable_get('print_footer_user', PRINT_FOOTER_USER_DEFAULT);
+      break;
+  }
+  return filter_xss_admin($footer);
+}
+
+/**
+ * @todo document this
+ */
+function theme_print_sourceurl($vars) {
+  $sourceurl_date = variable_get('print_sourceurl_date', PRINT_SOURCEURL_DATE_DEFAULT);
+  $url = is_int($vars['cid']) ? $vars['url'] . '#comment-' . $vars['cid'] : $vars['url'];
+
+  $output = '<strong>' . t('Source URL');
+  if ($sourceurl_date && isset($vars['node'])) {
+    $output .= ' (';
+    $date = format_date($vars['node']->changed, 'short');
+
+    $output .= empty($vars['node']->nid) ? t('retrieved on !date', array('!date' => $date)) : t('modified on !date', array('!date' => $date));
+
+    $output .= ')';
+  }
+  $output .= ':</strong> ' . $url;
+
+  return $output;
+}
+
+/**
+ * @todo document this
+ */
+function theme_print_url_list($vars) {
+  global $_print_urls;
+
+  // Display the collected links at the bottom of the page. Code once taken from Kjartan Mannes' project.module
+  if (!empty($_print_urls)) {
+    $urls = _print_friendly_urls();
+    $max = count($urls);
+    $url_list = '';
+    foreach ($urls as $key => $url) {
+      $url_list .= '[' . ($key + 1) . '] ' . check_plain($url) . "<br />\n";
+    }
+    if (!empty($url_list)) {
+      return "<p><strong>" . t('Links') . "</strong><br />$url_list</p>";
+    }
+    else {
+      return '';
+    }
+  }
+
 }
 
 /**
@@ -113,76 +278,38 @@ function print_controller($path, $format, $cid = NULL, $teaser = FALSE, $message
  *   string with the meta robots tag
  */
 function _print_robots_meta_generator() {
-  $print_robots_noindex = variable_get('print_robots_noindex', PRINT_ROBOTS_NOINDEX_DEFAULT);
-  $print_robots_nofollow = variable_get('print_robots_nofollow', PRINT_ROBOTS_NOFOLLOW_DEFAULT);
-  $print_robots_noarchive = variable_get('print_robots_noarchive', PRINT_ROBOTS_NOARCHIVE_DEFAULT);
   $robots_meta = array();
 
-  if (!empty($print_robots_noindex)) {
+  if (variable_get('print_robots_noindex', PRINT_ROBOTS_NOINDEX_DEFAULT)) {
     $robots_meta[] = 'noindex';
   }
-  if (!empty($print_robots_nofollow)) {
+  if (variable_get('print_robots_nofollow', PRINT_ROBOTS_NOFOLLOW_DEFAULT)) {
     $robots_meta[] = 'nofollow';
   }
-  if (!empty($print_robots_noarchive)) {
+  if (variable_get('print_robots_noarchive', PRINT_ROBOTS_NOARCHIVE_DEFAULT)) {
     $robots_meta[] = 'noarchive';
   }
 
   if (count($robots_meta) > 0) {
-    $robots_meta = implode(', ', $robots_meta);
-    $robots_meta = "<meta name='robots' content='$robots_meta' />\n";
+    return '<meta name="robots" content=' . implode(', ', $robots_meta) . ' />';
   }
   else {
-    $robots_meta = '';
+    return '';
   }
-
-  return $robots_meta;
 }
 
 /**
- * Post-processor that fills the array for the template with common details
+ * Generates the CSS directive to include in the printer-friendly version
  *
- * @param $node
- *   generated node with a printer-friendly node body
- * @param $message
- *   optional sender's message (used by the send email module)
- * @param $cid
- *   id of current comment being generated (NULL when not generating
- *   an individual comment)
+ * @param $expand
+ *   If TRUE, the provided CSS will be expanded, instead of given as a list
+ *   of includes.
+ *
  * @return
- *   array with the fields to be used in the template
+ *   string with applicable CSS
  */
-function _print_var_generator($node, $message = NULL, $cid = NULL) {
-  global $base_url, $language, $_print_urls;
-
-  $path = empty($node->nid) ? $node->path : "node/$node->nid";
-
-  // print module settings
+function _print_css_generator($expand = TRUE) {
   $print_css = variable_get('print_css', PRINT_CSS_DEFAULT);
-  $print_keep_theme_css = variable_get('print_keep_theme_css', PRINT_KEEP_THEME_CSS_DEFAULT);
-  $print_logo_options = variable_get('print_logo_options', PRINT_LOGO_OPTIONS_DEFAULT);
-  $print_logo_url = variable_get('print_logo_url', PRINT_LOGO_URL_DEFAULT);
-  $print_html_new_window = variable_get('print_html_new_window', PRINT_HTML_NEW_WINDOW_DEFAULT);
-  $print_html_sendtoprinter = variable_get('print_html_sendtoprinter', PRINT_HTML_SENDTOPRINTER_DEFAULT);
-  $print_html_windowclose = variable_get('print_html_windowclose', PRINT_HTML_WINDOWCLOSE_DEFAULT);
-  $print_sourceurl_enabled = variable_get('print_sourceurl_enabled', PRINT_SOURCEURL_ENABLED_DEFAULT);
-  $print_sourceurl_forcenode = variable_get('print_sourceurl_forcenode', PRINT_SOURCEURL_FORCENODE_DEFAULT);
-  $print_sourceurl_date = variable_get('print_sourceurl_date', PRINT_SOURCEURL_DATE_DEFAULT);
-  $print_footer_options = variable_get('print_footer_options', PRINT_FOOTER_OPTIONS_DEFAULT);
-  $print_footer_user = variable_get('print_footer_user', PRINT_FOOTER_USER_DEFAULT);
-
-  $print['language'] = $language->language;
-  $print['title'] = check_plain($node->title);
-  $print['head'] = drupal_get_html_head();
-  if ($print_html_sendtoprinter) {
-    drupal_add_js('misc/drupal.js', array('weight' => JS_LIBRARY));
-  }
-  $print['scripts'] = drupal_get_js();
-  $print['footer_scripts'] = drupal_get_js('footer');
-  $print['robots_meta'] = _print_robots_meta_generator();
-  $print['url'] = url($path, array('absolute' => TRUE));
-  $print['base_href'] = "<base href='" . $print['url'] . "' />\n";
-  $print['favicon'] = theme_get_setting('toggle_favicon') ? "<link rel='shortcut icon' href='" . theme_get_setting('favicon') . "' type='image/x-icon' />\n" : '';
 
   if (!empty($print_css)) {
     drupal_add_css(strtr($print_css, array('%t' => path_to_theme())));
@@ -191,7 +318,7 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
     drupal_add_css(drupal_get_path('module', 'print') . '/css/print.css');
   }
   $drupal_css = drupal_add_css();
-  if (!$print_keep_theme_css) {
+  if (!variable_get('print_keep_theme_css', PRINT_KEEP_THEME_CSS_DEFAULT)) {
     foreach ($drupal_css as $key => $css_file) {
       if ($css_file['group'] == CSS_THEME) {
       // Unset the theme's CSS
@@ -200,102 +327,20 @@ function _print_var_generator($node, $message = NULL, $cid = NULL) {
     }
   }
 
-  // If we are sending a message via email, the CSS must be embedded
-  if (!empty($message)) {
+  // Expand the CSS if requested
+  if ($expand) {
     $style = '';
     $css_files = array_keys($drupal_css);
     foreach ($css_files as $filename) {
-      $res = file_exists($filename) ? file_get_contents($filename, TRUE) : FALSE;
-      if ($res != FALSE) {
-        $style .= $res;
+      if (file_exists($filename)) {
+        $style .= file_get_contents($filename, TRUE);
       }
     }
-    $print['css'] = "<style type='text/css' media='all'>$style</style>\n";
+    return "<style type='text/css' media='all'>$style</style>\n";
   }
   else {
-    $print['css'] = drupal_get_css($drupal_css);
+    return drupal_get_css($drupal_css);
   }
-
-  $window_close = ($print_html_new_window && $print_html_windowclose) ? 'window.close();' : '';
-  $print['sendtoprinter'] = $print_html_sendtoprinter ? "<script type='text/javascript'>(function ($) { Drupal.behaviors.print = { attach: function(context) {window.print();$window_close}};}(jQuery));</script>" : '';
-
-  switch ($print_logo_options) {
-    case 0: // none
-      $logo_url = 0;
-      break;
-    case 1: // theme's
-      $logo_url = theme_get_setting('logo');
-      break;
-    case 2: // user-specifed
-      $logo_url = strip_tags($print_logo_url);
-      break;
-  }
-  $site_name = variable_get('site_name', 'Drupal');
-  $print['logo'] = $logo_url ? theme('image', array('path' => $logo_url, 'alt' => $site_name, 'attributes' => array('class' => 'print-logo', 'id' => 'logo'))) : '';
-
-  switch ($print_footer_options) {
-    case 0: // none
-      $footer = '';
-      break;
-    case 1: // theme's
-      $footer_blocks = block_get_blocks_by_region('footer');
-      $footer = variable_get('site_footer', FALSE) . "\n" . drupal_render($footer_blocks);
-      break;
-    case 2: // user-specifed
-      $footer = $print_footer_user;
-      break;
-  }
-  $print['footer_message'] = filter_xss_admin($footer);
-
-  $published_site = variable_get('site_name', 0);
-  $print['site_name'] = $published_site ? t('Published on %site_name', array('%site_name' => $published_site)) . ' (' . l($base_url, $base_url) . ')' : '';
-
-  if ($print_sourceurl_enabled == 1) {
-    /* Grab and format the src URL */
-    $url = (empty($print_sourceurl_forcenode)) ? $print['url'] : $base_url . '/' . (((bool)variable_get('clean_url', '0')) ? '' : '?q=') . $path;
-
-    if (is_int($cid)) {
-      $url .= "#comment-$cid";
-    }
-    $print['printdate'] = $print_sourceurl_date ? ' (' . t('retrieved on %date', array('%date' => format_date(REQUEST_TIME, 'short'))) . ')' : '';
-
-    $print['source_url'] = '<strong>' . t('Source URL') . $print['printdate'] . ':</strong> ' . l($url, $url);
-  }
-  else {
-    $print['source_url'] = '';
-  }
-
-  $print['type'] = (isset($node->type)) ? $node->type : '';
-
-  menu_set_active_item($path);
-  $breadcrumb = drupal_get_breadcrumb();
-  if (!empty($breadcrumb)) {
-    $breadcrumb[] = menu_get_active_title();
-    $print['breadcrumb'] = filter_xss(implode(' > ', $breadcrumb));
-  }
-  else {
-    $print['breadcrumb'] = '';
-  }
-
-  // Display the collected links at the bottom of the page. Code once taken from Kjartan Mannes' project.module
-  $print['pfp_links'] = '';
-  if (!empty($_print_urls)) {
-    $urls = _print_friendly_urls();
-    $max = count($urls);
-    $pfp_links = '';
-    if ($max) {
-      for ($i = 0; $i < $max; $i++) {
-        $pfp_links .= '[' . ($i + 1) . '] ' . check_plain($urls[$i]) . "<br />\n";
-      }
-      $print['pfp_links'] = "<p><strong>" . t('Links') . "</strong><br />$pfp_links</p>";
-    }
-  }
-
-  $print['node'] = $node;
-  $print['message'] = $message;
-  $print['content'] = $node->body;
-
-  return $print;
 }
 
 /**
@@ -464,15 +509,6 @@ function _print_generate_node($nid, $format, $cid = NULL, $teaser = FALSE) {
 
   $view_mode = $teaser ? 'teaser' : 'print';
 
-  // Turn off Pagination by the Paging module
-  unset($node->pages);
-  unset($node->page_count);
-
-  // Make this page a member of the original page's organic group
-  if (function_exists('og_set_group_context') && isset($node->og_groups)) {
-    og_set_group_context($node->og_groups);
-  }
-
   if ($cid === NULL) {
     // Adapted (simplified) version of node_view
     // Render the node content
@@ -480,18 +516,17 @@ function _print_generate_node($nid, $format, $cid = NULL, $teaser = FALSE) {
 
     // Disable the links area
     unset($node->content['links']);
-    // Disable fivestar widget output
+    // Disable fivestar widget output @todo check this
     unset($node->content['fivestar_widget']);
-    // Disable service links module output
+    // Disable service links module output @todo check this
     unset($node->content['service_links']);
 
     $build = $node->content;
     unset($node->content);
   }
 
-  $print_comments = variable_get('print_comments', PRINT_COMMENTS_DEFAULT);
-
-  if (function_exists('comment_node_page_additions') && (($cid != NULL) || ($print_comments))) {
+  if (function_exists('comment_node_page_additions') &&
+      (($cid != NULL) || (variable_get('print_comments', PRINT_COMMENTS_DEFAULT)))) {
     // Print only the requested comment (or if $cid is NULL, all of them)
 
     $comments = comment_node_page_additions($node);
@@ -540,7 +575,7 @@ function _print_generate_node($nid, $format, $cid = NULL, $teaser = FALSE) {
   $pattern = '!<(a\s[^>]*?)>(.*?)(</a>)!is';
   $content = preg_replace_callback($pattern, '_print_rewrite_urls', $content);
 
-  $node->body = $content;
+  $node->content = $content;
 
   return $node;
 }
@@ -569,13 +604,13 @@ function _print_generate_path($path, $format) {
   menu_set_active_item($path);
   // Adapted from index.php.
   $node = new stdClass();
-  $node->body = menu_execute_active_handler($path, FALSE);
-  if (is_array($node->body)) {
-    $node->body = drupal_render($node->body);
+  $node->content = menu_execute_active_handler($path, FALSE);
+  if (is_array($node->content)) {
+    $node->content = drupal_render($node->content);
   }
 
-  if (is_int($node->body)) {
-    switch ($node->body) {
+  if (is_int($node->content)) {
+    switch ($node->content) {
       case MENU_NOT_FOUND:
         drupal_not_found();
         return FALSE;
@@ -589,17 +624,17 @@ function _print_generate_path($path, $format) {
 
   $node->title = drupal_get_title();
   $node->path = $path;
-  $node->changed = 0;
+  $node->changed = REQUEST_TIME;
 
   // Delete any links area
-  $node->body = preg_replace('!\s*<div class="links">.*?</div>!sim', '', $node->body);
+  $node->content = preg_replace('!\s*<div class="links">.*?</div>!sim', '', $node->content);
 
   // Check URL list settings
   $_print_urls = _print_url_list_enabled($node, $format);
 
   // Convert the a href elements
   $pattern = '!<(a\s[^>]*?)>(.*?)(</a>)!is';
-  $node->body = preg_replace_callback($pattern, '_print_rewrite_urls', $node->body);
+  $node->content = preg_replace_callback($pattern, '_print_rewrite_urls', $node->content);
 
   return $node;
 }
@@ -631,17 +666,18 @@ function _print_generate_book($nid, $format) {
   }
 
   $tree = book_menu_subtree_data($node->book);
-  $node->body = book_export_traverse($tree, 'book_node_export');
+  $node->content = book_export_traverse($tree, 'book_node_export');
 
   // Check URL list settings
   $_print_urls = _print_url_list_enabled($node, $format);
 
   // Convert the a href elements
   $pattern = '!<(a\s[^>]*?)>(.*?)(</a>)!is';
-  $node->body = preg_replace_callback($pattern, '_print_rewrite_urls', $node->body);
+  $node->content = preg_replace_callback($pattern, '_print_rewrite_urls', $node->content);
 
   // The title is already displayed by the book_recurse, so avoid duplication
-  $print['title'] = '';
+  // @todo check this
+  $node->title = '';
 
   return $node;
 }

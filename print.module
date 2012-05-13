@@ -99,8 +99,29 @@ function print_permission() {
 function print_theme() {
   return array(
     'print' => array(
-      'variables' => array('print' => array(), 'type' => '', 'node' => NULL),
+      'variables' => array('node' => NULL, 'format' => '', 'message' => ''),
       'template' => 'print',
+      'file' => 'print.pages.inc',
+    ),
+    'print_published' => array(
+      'variables' => array(),
+      'file' => 'print.pages.inc',
+    ),
+    'print_breadcrumb' => array(
+      'variables' => array('node' => NULL),
+      'file' => 'print.pages.inc',
+    ),
+    'print_footer' => array(
+      'variables' => array(),
+      'file' => 'print.pages.inc',
+    ),
+    'print_sourceurl' => array(
+      'variables' => array('url' => '', 'node' => NULL, 'cid' => NULL),
+      'file' => 'print.pages.inc',
+    ),
+    'print_url_list' => array(
+      'variables' => array(),
+      'file' => 'print.pages.inc',
     ),
   );
 }
@@ -119,47 +140,6 @@ function print_preprocess_node(&$variables) {
     $variables['theme_hook_suggestions'][] = "node__print__{$format}__node__{$type}";
     $variables['theme_hook_suggestions'][] = "node__print__{$format}__node__{$nid}";
   }
-}
-
-/**
- * Implements hook_preprocess_HOOK().
- */
-function print_preprocess_print(&$variables) {
-  static $hooks = NULL;
-  if (!isset($hooks)) {
-    drupal_theme_initialize();
-    $hooks = theme_get_registry();
-  }
-
-  $variables['page']['#show_messages'] = FALSE;
-
-  // Stolen from theme() so that ALL preprocess functions are called
-  $hook = 'page';
-  $info = $hooks[$hook];
-  if (isset($info['preprocess functions']) || isset($info['process functions'])) {
-    $variables['theme_hook_suggestions'] = array();
-    foreach (array('preprocess functions', 'process functions') as $phase) {
-      if (!empty($info[$phase])) {
-        foreach ($info[$phase] as $processor_function) {
-          if (function_exists($processor_function)) {
-            // We don't want a poorly behaved process function changing $hook.
-            $hook_clone = $hook;
-            $processor_function($variables, $hook_clone);
-          }
-        }
-      }
-    }
-  }
-
-  $format = $variables['type'];
-  $type = (isset($variables['node']->type)) ? $variables['node']->type : '';
-  $nid = (isset($variables['node']->nid)) ? $variables['node']->nid : '';
-
-  $variables['theme_hook_suggestions'][] = "print__node__{$type}";
-  $variables['theme_hook_suggestions'][] = "print__node__{$type}__{$nid}";
-  $variables['theme_hook_suggestions'][] = "print__{$format}";
-  $variables['theme_hook_suggestions'][] = "print__{$format}__node__{$type}";
-  $variables['theme_hook_suggestions'][] = "print__{$format}__node__{$type}__{$nid}";
 }
 
 /**

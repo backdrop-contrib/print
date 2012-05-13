@@ -81,43 +81,41 @@ function print_pdf_generate_path($path, $cid = NULL, $pdf_filename = NULL) {
   global $base_url;
 
   $link = print_pdf_print_link();
-  $print = print_controller($path, $link['format'], $cid);
-  if ($print === FALSE) {
-    return;
+  $node = print_controller($path, $link['format'], $cid);
+  if ($node) {
+    // @todo node is no longer print -- verify this
+    // Img elements must be set to absolute
+    $pattern = '!<(img\s[^>]*?)>!is';
+    $node->content = preg_replace_callback($pattern, '_print_rewrite_urls', $node->content);
+    $node->logo = preg_replace_callback($pattern, '_print_rewrite_urls', $node->logo);
+    $node->footer_message = preg_replace_callback($pattern, '_print_rewrite_urls', $node->footer_message);
+
+    $html = theme('print', array('node' => $node, 'format' => $link['format']));
+
+    // Convert the a href elements, to make sure no relative links remain
+    $pattern = '!<(a\s[^>]*?)>!is';
+    $html = preg_replace_callback($pattern, '_print_rewrite_urls', $html);
+    // And make anchor links relative again, to permit in-PDF navigation
+    $html = preg_replace("!${base_url}/" . $link['path'] . '/.*?#!', '#', $html);
+
+    return print_pdf_generate_html($node, $html, $pdf_filename);
   }
-
-  // Img elements must be set to absolute
-  $pattern = '!<(img\s[^>]*?)>!is';
-  $print['content'] = preg_replace_callback($pattern, '_print_rewrite_urls', $print['content']);
-  $print['logo'] = preg_replace_callback($pattern, '_print_rewrite_urls', $print['logo']);
-  $print['footer_message'] = preg_replace_callback($pattern, '_print_rewrite_urls', $print['footer_message']);
-
-  // Send to printer option causes problems with PDF
-  $print['sendtoprinter'] = '';
-
-  $node = $print['node'];
-  $html = theme('print', array('print' => $print, 'type' => $link['format'], 'node' => $node));
-
-  // Convert the a href elements, to make sure no relative links remain
-  $pattern = '!<(a\s[^>]*?)>!is';
-  $html = preg_replace_callback($pattern, '_print_rewrite_urls', $html);
-  // And make anchor links relative again, to permit in-PDF navigation
-  $html = preg_replace("!${base_url}/" . $link['path'] . '/.*?#!', '#', $html);
-
-  return print_pdf_generate_html($print, $html, $pdf_filename);
+  else {
+    return NULL;
+  }
 }
 
-function print_pdf_generate_html($print, $html, $filename = NULL) {
+function print_pdf_generate_html($node, $html, $filename = NULL) {
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
 
   if (basename($print_pdf_pdf_tool) == 'dompdf_config.inc.php') {
-    return _print_pdf_dompdf($print, $html, $filename);
+    return _print_pdf_dompdf($node, $html, $filename);
   }
   elseif (basename($print_pdf_pdf_tool) == 'tcpdf.php') {
-    return _print_pdf_tcpdf($print, $html, $filename);
+    return _print_pdf_tcpdf($node, $html, $filename);
   }
   elseif (drupal_substr(basename($print_pdf_pdf_tool, '.exe'), 0, 11) == 'wkhtmltopdf') {
-    return _print_pdf_wkhtmltopdf($print, $html, $filename);
+    return _print_pdf_wkhtmltopdf($node, $html, $filename);
   }
   elseif ($filename) {
     return drupal_not_found();
@@ -171,25 +169,28 @@ function _print_pdf_file_access_images($html) {
 /**
  * Generate the PDF file using the dompdf library
  *
- * @param $print
- *   array containing the configured data
+ * @param $node
+ *   node to be converted
  * @param $html
  *   contents of the post-processed template already with the node data
  * @param $filename
  *   name of the PDF file to be generated
  * @see print_pdf_controller()
  */
-function _print_pdf_dompdf($print, $html, $filename = NULL) {
+function _print_pdf_dompdf($node, $html, $filename = NULL) {
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
   $print_pdf_paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
   $print_pdf_page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
   $print_pdf_content_disposition = variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT);
+  $print_pdf_dompdf_unicode = TRUE;
 
   if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
+    $print_pdf_dompdf_unicode = variable_get('print_pdf_dompdf_unicode', PRINT_PDF_DOMPDF_UNICODE_DEFAULT);
+
     define("DOMPDF_ENABLE_PHP", FALSE);
     define("DOMPDF_ENABLE_REMOTE", TRUE);
     define("DOMPDF_TEMP_DIR", file_directory_temp());
-    define("DOMPDF_UNICODE_ENABLED", variable_get('print_pdf_dompdf_unicode', PRINT_PDF_DOMPDF_UNICODE_DEFAULT));
+    define("DOMPDF_UNICODE_ENABLED", $print_pdf_dompdf_unicode);
   }
 
   require_once(DRUPAL_ROOT . '/' . $print_pdf_pdf_tool);
@@ -201,7 +202,7 @@ function _print_pdf_dompdf($print, $html, $filename = NULL) {
   // dompdf seems to have problems with something in system.css so let's not use it
   $html = preg_replace('!<link.*?modules/system/system.css.*?/>!', '', $html);
 
-  $url_array  = parse_url($print['url']);
+  $url_array = parse_url($node->url);
 
   $protocol = $url_array['scheme'] . '://';
   $host = $url_array['host'];
@@ -217,25 +218,25 @@ function _print_pdf_dompdf($print, $html, $filename = NULL) {
 //  $html = theme('print_pdf_dompdf_footer', array('html' => $html));
 
   // If dompdf Unicode support is disabled, try to convert to ISO-8859-1 and then to HTML entities
-  if (!variable_get('print_pdf_dompdf_unicode', PRINT_PDF_DOMPDF_UNICODE_DEFAULT)) {
-  // Convert the euro sign to an HTML entity
-  $html = str_replace('€', '&#0128;', $html);
+  if (!$print_pdf_dompdf_unicode) {
+    // Convert the euro sign to an HTML entity
+    $html = str_replace('€', '&#0128;', $html);
 
-  // Convert from UTF-8 to ISO 8859-1 and then to HTML entities
-  if (function_exists('utf8_decode')) {
+    // Convert from UTF-8 to ISO 8859-1 and then to HTML entities
+    if (function_exists('utf8_decode')) {
     $html = utf8_decode($html);
-  }
-// iconv fails silently when it encounters something that it doesn't know, so don't use it
-//  else if (function_exists('iconv')) {
-//    $html = iconv('UTF-8', 'ISO-8859-1', $html);
-//  }
-  elseif (function_exists('mb_convert_encoding')) {
-    $html = mb_convert_encoding($html, 'ISO-8859-1', 'UTF-8');
-  }
-  elseif (function_exists('recode_string')) {
-    $html = recode_string('UTF-8..ISO_8859-1', $html);
-  }
-  $html = htmlspecialchars_decode(htmlentities($html, ENT_NOQUOTES, 'ISO-8859-1'), ENT_NOQUOTES);
+    }
+    // iconv fails silently when it encounters something that it doesn't know, so don't use it
+//    else if (function_exists('iconv')) {
+//      $html = iconv('UTF-8', 'ISO-8859-1', $html);
+//    }
+    elseif (function_exists('mb_convert_encoding')) {
+      $html = mb_convert_encoding($html, 'ISO-8859-1', 'UTF-8');
+    }
+    elseif (function_exists('recode_string')) {
+      $html = recode_string('UTF-8..ISO_8859-1', $html);
+    }
+    $html = htmlspecialchars_decode(htmlentities($html, ENT_NOQUOTES, 'ISO-8859-1'), ENT_NOQUOTES);
   }
 
   // Must get rid of tbody (dompdf goes into recursion)
@@ -256,15 +257,15 @@ function _print_pdf_dompdf($print, $html, $filename = NULL) {
 /**
  * Generate the PDF file using the TCPDF library
  *
- * @param $print
- *   array containing the configured data
+ * @param $node
+ *   node to be converted
  * @param $html
  *   contents of the post-processed template already with the node data
  * @param $filename
  *   name of the PDF file to be generated
  * @see print_pdf_controller()
  */
-function _print_pdf_tcpdf($print, $html, $filename = NULL) {
+function _print_pdf_tcpdf($node, $html, $filename = NULL) {
   global $base_url, $language;
 
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
@@ -310,11 +311,11 @@ function _print_pdf_tcpdf($print, $html, $filename = NULL) {
   $pdf = new PrintTCPDF($orientation , 'mm', $print_pdf_paper_size, TRUE);
 
   // set document information
-  if (property_exists($print['node'], 'name')) {
-    $pdf->SetAuthor(strip_tags($print['node']->name));
+  if (property_exists($node, 'name')) {
+    $pdf->SetAuthor(strip_tags($node->name));
   }
   $pdf->SetCreator(variable_get('site_name', 'Drupal'));
-  $pdf->SetTitle(html_entity_decode($print['title'], ENT_QUOTES, 'UTF-8'));
+  $pdf->SetTitle(html_entity_decode($node->title, ENT_QUOTES, 'UTF-8'));
   $pdf->setPDFVersion('1.6');
   $pdf->setFontSubsetting(variable_get('print_pdf_font_subsetting', PRINT_PDF_TCPDF_FONT_SUBSETTING_DEFAULT));
 
@@ -351,15 +352,15 @@ function _print_pdf_tcpdf($print, $html, $filename = NULL) {
 /**
  * Generate the PDF file using wkhtmltopdf
  *
- * @param $print
- *   array containing the configured data
+ * @param $node
+ *   node to be converted
  * @param $html
  *   contents of the post-processed template already with the node data
  * @param $filename
  *   name of the PDF file to be generated
  * @see print_pdf_controller()
  */
-function _print_pdf_wkhtmltopdf($print, $html, $filename = NULL) {
+function _print_pdf_wkhtmltopdf($node, $html, $filename = NULL) {
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
   $print_pdf_paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
   $print_pdf_page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
@@ -369,7 +370,7 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename = NULL) {
   $dpi = 96;
 
   if (!empty($print_pdf_wkhtmltopdf_options)) {
-    $print_pdf_wkhtmltopdf_options = token_replace($print_pdf_wkhtmltopdf_options, array('node' => $print['node']));
+    $print_pdf_wkhtmltopdf_options = token_replace($print_pdf_wkhtmltopdf_options, array('node' => $node));
   }
 
   $version = _print_pdf_wkhtmltopdf_version();
@@ -382,7 +383,7 @@ function _print_pdf_wkhtmltopdf($print, $html, $filename = NULL) {
     $print_pdf_wkhtmltopdf_options = '--disallow-local-file-access ' . $print_pdf_wkhtmltopdf_options;
   }
   else {
-    drupal_goto($print['url']);
+    drupal_goto($node->url);
     exit;
   }
 
