@@ -11,7 +11,7 @@
  */
 
 /**
- * Menu callback for the send by email module settings form.
+ * Form constructor for the send by email module settings form.
  *
  * @ingroup forms
  */
@@ -127,9 +127,9 @@ function print_ui_settings() {
 /**
  * Returns HTML for the link settings page.
  *
- * @param $variables
+ * @param array $variables
  *   An associative array containing:
- *     - form: A render element representing the form.
+ *   - form: A render element representing the form.
  *
  * @ingroup themeable
  */

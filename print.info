@@ -1,5 +1,5 @@
 name = "Printer-friendly pages"
-description = "Adds a printer-friendly version link to content and administrative pages."
+description = "Generates a printer-friendly version of Drupal pages."
 core=7.x
 package = "Printer, email and PDF versions"
 files[] = print.module

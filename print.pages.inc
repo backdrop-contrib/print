@@ -48,19 +48,22 @@ function print_controller_html() {
  * Depending on the type of node, this functions chooses the appropriate
  * generator function.
  *
- * @param $path
+ * @param string $path
  *   path of the original page
- * @param $format
+ * @param string $format
  *   format of the page being generated
- * @param $cid
+ * @param int $cid
  *   comment ID of the individual comment to be rendered
- * @param $teaser
+ * @param bool $teaser
  *   if set to TRUE, outputs only the node's teaser
- * @return
- *   array with the fields to be used in the template
+ *
+ * @return object
+ *   node-like object to be used in the print template
+ *
  * @see _print_generate_node()
  * @see _print_generate_path()
  * @see _print_generate_book()
+ * @see print_preprocess_print()
  */
 function print_controller($path, $format, $cid = NULL, $teaser = FALSE) {
   if (empty($path)) {
@@ -180,7 +183,15 @@ function print_preprocess_print(&$variables) {
 }
 
 /**
- * @todo document this
+ * Returns HTML for the published line of the print template.
+ *
+ * @param array $vars
+ *   An empty associative array
+ *
+ * @return string
+ *   HTML text with the published line
+ *
+ * @ingroup themeable
  */
 function theme_print_published($vars) {
   global $base_url;
@@ -190,7 +201,16 @@ function theme_print_published($vars) {
 }
 
 /**
- * @todo document this
+ * Returns HTML for the breadcrumb line of the print template.
+ *
+ * @param array $vars
+ *   An associative array containing:
+ *   - $node: the node object
+ *
+ * @return string
+ *   HTML text with the breadcrumb
+ *
+ * @ingroup themeable
  */
 function theme_print_breadcrumb($vars) {
   $node = $vars['node'];
@@ -211,7 +231,15 @@ function theme_print_breadcrumb($vars) {
 }
 
 /**
- * @todo document this
+ * Returns HTML for the footer of the print template.
+ *
+ * @param array $vars
+ *   An empty associative array
+ *
+ * @return string
+ *   HTML text with the footer
+ *
+ * @ingroup themeable
  */
 function theme_print_footer($vars) {
   $footer = '';
@@ -229,7 +257,18 @@ function theme_print_footer($vars) {
 }
 
 /**
- * @todo document this
+ * Returns HTML for the source URL line of the print template.
+ *
+ * @param array $vars
+ *   An associative array containing:
+ *   - $url: the URL to the full node view.
+ *   - $node: the node object.
+ *   - $cid; comment ID of the comment to display.
+ *
+ * @return string
+ *   HTML text with the footer
+ *
+ * @ingroup themeable
  */
 function theme_print_sourceurl($vars) {
   $sourceurl_date = variable_get('print_sourceurl_date', PRINT_SOURCEURL_DATE_DEFAULT);
@@ -250,7 +289,15 @@ function theme_print_sourceurl($vars) {
 }
 
 /**
- * @todo document this
+ * Returns HTML for the URL list of the print template.
+ *
+ * @param array $vars
+ *   An empty associative array
+ *
+ * @return string
+ *   HTML text with the URL list
+ *
+ * @ingroup themeable
  */
 function theme_print_url_list($vars) {
   global $_print_urls;
@@ -276,8 +323,8 @@ function theme_print_url_list($vars) {
 /**
  * Generates a robots meta tag to tell them what they may index
  *
- * @return
- *   string with the meta robots tag
+ * @return string
+ *   meta robots tag
  */
 function _print_robots_meta_generator() {
   $robots_meta = array();
@@ -303,12 +350,12 @@ function _print_robots_meta_generator() {
 /**
  * Generates the CSS directive to include in the printer-friendly version
  *
- * @param $expand
+ * @param bool $expand
  *   If TRUE, the provided CSS will be expanded, instead of given as a list
  *   of includes.
  *
- * @return
- *   string with applicable CSS
+ * @return string
+ *   applicable CSS
  */
 function _print_css_generator($expand = TRUE) {
   $print_css = variable_get('print_css', PRINT_CSS_DEFAULT);
@@ -348,14 +395,14 @@ function _print_css_generator($expand = TRUE) {
 /**
  * Callback function for the preg_replace_callback for URL-capable patterns
  *
- * Manipulate URLs to make them absolute in the URLs list, and to add a
- * [n] footnote marker.
+ * Manipulate URLs to make them absolute in the URLs list, and add a [n]
+ * footnote marker.
  *
- * @param $matches
+ * @param array $matches
  *   array with the matched tag patterns, usually <a...>+text+</a>
- * @return
- *   tag with re-written URL and when appropriate the [n] index to the
- *   URL list
+ *
+ * @return string
+ *   tag with re-written URL and, if applicable, the [n] index to the URL list
  */
 function _print_rewrite_urls($matches) {
   global $base_url, $base_root, $_print_urls;
@@ -429,9 +476,10 @@ function _print_rewrite_urls($matches) {
 /**
  * Auxiliary function to store the Printer-friendly URLs list as static.
  *
- * @param $url
+ * @param string $url
  *   absolute URL to be inserted in the list
- * @return
+ *
+ * @return array
  *   list of URLs previously stored if $url is 0, or the current count
  *   otherwise.
  */
@@ -455,11 +503,12 @@ function _print_friendly_urls($url = 0) {
 /**
  * Check URL list settings for this node
  *
- * @param node
+ * @param object $node
  *   node object
- * @param $format
+ * @param string $format
  *   format of the page being generated
- * @return
+ *
+ * @return bool
  *   TRUE if URL list should be displayed, FALSE otherwise
  */
 function _print_url_list_enabled($node, $format) {
@@ -477,16 +526,17 @@ function _print_url_list_enabled($node, $format) {
 /**
  * Prepare a Printer-friendly-ready node body for content nodes
  *
- * @param $nid
+ * @param int $nid
  *   node ID of the node to be rendered into a printer-friendly page
- * @param $format
+ * @param string $format
  *   format of the page being generated
- * @param $cid
+ * @param int $cid
  *   comment ID of the individual comment to be rendered
- * @param $teaser
+ * @param bool $teaser
  *   if set to TRUE, outputs only the node's teaser
- * @return
- *   filled array ready to be used in the template
+ *
+ * @return object
+ *   filled node-like object to be used in the print template
  */
 function _print_generate_node($nid, $format, $cid = NULL, $teaser = FALSE) {
   global $_print_urls;
@@ -518,10 +568,6 @@ function _print_generate_node($nid, $format, $cid = NULL, $teaser = FALSE) {
 
     // Disable the links area
     unset($node->content['links']);
-    // Disable fivestar widget output @todo check this
-    unset($node->content['fivestar_widget']);
-    // Disable service links module output @todo check this
-    unset($node->content['service_links']);
 
     $build = $node->content;
     unset($node->content);
@@ -585,12 +631,13 @@ function _print_generate_node($nid, $format, $cid = NULL, $teaser = FALSE) {
 /**
  * Prepare a Printer-friendly-ready node body for non-content pages
  *
- * @param $path
+ * @param string $path
  *   path of the node to be rendered into a printer-friendly page
- * @param $format
+ * @param string $format
  *   format of the page being generated
- * @return
- *   filled array ready to be used in the template
+ *
+ * @return object
+ *   filled node-like object to be used in the print template
  */
 function _print_generate_path($path, $format) {
   global $_print_urls;
@@ -645,12 +692,13 @@ function _print_generate_path($path, $format) {
 /**
  * Prepare a Printer-friendly-ready node body for book pages
  *
- * @param $nid
+ * @param int $nid
  *   node ID of the node to be rendered into a printer-friendly page
- * @param $format
+ * @param string $format
  *   format of the page being generated
- * @return
- *   filled array ready to be used in the template
+ *
+ * @return object
+ *   filled node-like object to be used in the print template
  */
 function _print_generate_book($nid, $format) {
   global $_print_urls;
@@ -676,10 +724,6 @@ function _print_generate_book($nid, $format) {
   // Convert the a href elements
   $pattern = '!<(a\s[^>]*?)>(.*?)(</a>)!is';
   $node->content = preg_replace_callback($pattern, '_print_rewrite_urls', $node->content);
-
-  // The title is already displayed by the book_recurse, so avoid duplication
-  // @todo check this
-  $node->title = '';
 
   return $node;
 }

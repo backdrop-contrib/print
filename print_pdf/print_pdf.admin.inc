@@ -11,10 +11,10 @@
  */
 
 /**
- * Menu callback for the PDF version module settings form.
+ * Form constructor for the PDF version module settings form.
  *
- * @ingroup forms
  * @see _print_pdf_tools()
+ * @ingroup forms
  */
 function print_pdf_settings() {
   $pdf_tools = _print_pdf_tools();
@@ -145,7 +145,10 @@ function print_pdf_settings() {
 }
 
 /**
- * Validate print_pdf_settings form.
+ * Form validation handler for print_pdf_settings().
+ *
+ * @see print_pdf_settings()
+ * @ingroup forms
  */
 function _print_pdf_settings_validate($form, &$form_state) {
   if (empty($form_state['values']['print_pdf_pdf_tool'])) {
@@ -154,10 +157,9 @@ function _print_pdf_settings_validate($form, &$form_state) {
 }
 
 /**
- * Menu callback for the TCPDF options settings form.
+ * Form constructor for the TCPDF options settings form.
  *
  * @ingroup forms
- * @see _print_pdf_tools()
  */
 function print_pdf_tcpdf_settings() {
   $form['settings'] = array(
@@ -195,7 +197,10 @@ function print_pdf_tcpdf_settings() {
 }
 
 /**
- * Validate print_pdf_tcpdf_settings form.
+ * Form validation handler for print_pdf_tcpdf_settings().
+ *
+ * @see print_pdf_tcpdf_settings()
+ * @ingroup forms
  */
 function _print_pdf_tcpdf_settings_validate($form, &$form_state) {
   if ($form_state['values']['print_pdf_font_size'] < 1) {
@@ -204,10 +209,9 @@ function _print_pdf_tcpdf_settings_validate($form, &$form_state) {
 }
 
 /**
- * Menu callback for the dompdf options settings form.
+ * Form constructor for the dompdf options settings form.
  *
  * @ingroup forms
- * @see _print_pdf_tools()
  */
 function print_pdf_dompdf_settings() {
   $form['settings'] = array(
@@ -226,10 +230,9 @@ function print_pdf_dompdf_settings() {
 }
 
 /**
- * Menu callback for the wkhtmltopdf options settings form.
+ * Form constructor for the wkhtmltopdf options settings form.
  *
  * @ingroup forms
- * @see _print_pdf_tools()
  */
 function print_pdf_wkhtmltopdf_settings() {
   $form['settings'] = array(
@@ -252,7 +255,7 @@ function print_pdf_wkhtmltopdf_settings() {
 /**
  * Auxiliary function to locate suitable PDF generation tools
  *
- * @return
+ * @return array
  *   array of filenames with the include-able PHP file of the located tools
  */
 function _print_pdf_tools() {

@@ -49,9 +49,6 @@ function print_mail_permission() {
  */
 function print_mail_theme() {
   return array(
-    'print_mail_format_link' => array(
-      'variables' => array(),
-    ),
     'print_mail_form' => array(
       'variables' => array('form' => NULL),
       'file' => 'print_mail.inc',
@@ -167,6 +164,19 @@ function print_mail_cron_queue_info() {
   return $queues;
 }
 
+/**
+ * Worker callback for print_mail_cron_queue_info()
+ *
+ * @param array $data
+ *   An associative array containing:
+ *   - module: A module name to invoke hook_mail() on.
+ *   - key: A key to identify the e-mail sent.
+ *   - to: The e-mail address or addresses where the message will be sent to.
+ *   - language: Language object to use to compose the e-mail.
+ *   - params: Optional parameters to build the e-mail.
+ *   - from: Sets From to this value, if given.
+ *   These are the input arguments of the drupal_mail() function.
+ */
 function print_mail_send($data) {
   drupal_mail($data['module'], $data['key'], $data['to'], $data['language'], $data['params'], $data['from']);
 }
@@ -229,9 +239,10 @@ function print_mail_mail($key, &$message, $params) {
 /**
  * Access callback to check a combination of user_acess() and page access
  *
- * @param $permission
+ * @param string $permission
  *   permission required to view the page
- * @return
+ *
+ * @return bool
  *   TRUE if the user has permission to view the page, FALSE otherwise
  */
 function _print_mail_access($permission) {
@@ -271,13 +282,14 @@ function _print_mail_access($permission) {
  * Function made available so that developers may call this function from
  * their defined pages/blocks.
  *
- * @param $path
+ * @param string $path
  *   path of the original page (optional). If not specified, the current URL
  *   is used
- * @param $node
+ * @param object $node
  *   an optional node object, to be used in defining the path, if used, the
  *   path argument is irrelevant
- * @return
+ *
+ * @return string
  *   string with the HTML link to the printer-friendly page
  */
 function print_mail_insert_link($path = NULL, $node = NULL) {
@@ -292,10 +304,11 @@ function print_mail_insert_link($path = NULL, $node = NULL) {
 /**
  * Check if the link to send by email is allowed depending on the settings
  *
- * @param $args
+ * @param array $args
  *   array containing the possible parameters:
- *    teaser, node, type, path
- * @return
+ *    view_mode, node, type, path
+ *
+ * @return bool
  *   FALSE if not allowed, TRUE otherwise
  */
 function print_mail_link_allowed($args) {

@@ -11,7 +11,7 @@
  */
 
 /**
- * Menu callback for the Printer-friendly pages module settings form.
+ * Form constructor for the Printer-friendly pages module settings form.
  *
  * @ingroup forms
  */
@@ -168,7 +168,7 @@ function print_main_settings() {
 }
 
 /**
- * Validate print_main_settings form.
+ * Form validation handler for print_main_settings().
  */
 function _print_main_settings_validate($form, &$form_state) {
   global $base_root;
@@ -188,7 +188,7 @@ function _print_main_settings_validate($form, &$form_state) {
 }
 
 /**
- * Menu callback for the Printer-friendly pages HTML settings form.
+ * Form constructor for the Printer-friendly pages HTML settings form.
  *
  * @ingroup forms
  */

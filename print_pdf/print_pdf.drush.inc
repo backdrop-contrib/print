@@ -28,7 +28,7 @@ function print_pdf_drush_command() {
   $items = array();
 
   $items['print-pdf-download'] = array(
-    'description' => 'Download a PDF library.',
+    'description' => 'Download and extract a PDF library.',
     'arguments' => array(
       'library' => dt('The PDF library to download. Either tcpdf, dompdf or wkhtmltopdf.'),
     ),
@@ -44,6 +44,9 @@ function print_pdf_drush_command() {
 
 /**
  * Download and extract PDF archive.
+ *
+ * @param string $library
+ *   library to download
  */
 function drush_print_pdf_download($library) {
   if (isset($library)) {
@@ -98,7 +101,13 @@ function drush_print_pdf_download($library) {
 }
 
 /**
- * Discover the correct URL of the package to download
+ * Discover the correct URL of the package to download.
+ *
+ * @param string $library
+ *   library to download
+ *
+ * @return string
+ *   URL of the file to download, FALSE if not known
  */
 function _drush_print_pdf_download_url($library) {
   $ret = FALSE;
@@ -135,7 +144,13 @@ function _drush_print_pdf_download_url($library) {
 }
 
 /**
- * Helper to download and extract the zip/tar archive.
+ * Helper to extract the downloaded zip/tar archive.
+ *
+ * @param string $filename
+ *   filename of the file to extract
+ *
+ * @return bool
+ *   TRUE on success, FALSE on failure
  */
 function _drush_print_pdf_download_extract($filename) {
   $arch_ret = FALSE;

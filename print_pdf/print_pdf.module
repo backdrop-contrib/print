@@ -38,6 +38,13 @@ function print_pdf_print_link() {
 }
 
 /**
+ * Implements hook_print_new_window_alter().
+ */
+function print_pdf_print_new_window_alter(&$new_window, $format) {
+  $new_window = (variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT) == 1);
+}
+
+/**
  * Implements hook_permission().
  */
 function print_pdf_permission() {
@@ -54,9 +61,6 @@ function print_pdf_permission() {
  */
 function print_pdf_theme() {
   return array(
-    'print_pdf_format_link' => array(
-      'variables' => array(),
-    ),
     'print_pdf_dompdf_footer' => array(
       'variables' => array('html' => ''),
       'file' => 'print_pdf.pages.inc',
@@ -297,13 +301,14 @@ function print_pdf_node_delete($node) {
  * Function made available so that developers may call this function from
  * their defined pages/blocks.
  *
- * @param $path
+ * @param string $path
  *   path of the original page (optional). If not specified, the current URL
  *   is used
- * @param $node
+ * @param object $node
  *   an optional node object, to be used in defining the path, if used, the
  *   path argument is irrelevant
- * @return
+ *
+ * @return bool
  *   string with the HTML link to the printer-friendly page
  */
 function print_pdf_insert_link($path = NULL, $node = NULL) {
@@ -318,10 +323,11 @@ function print_pdf_insert_link($path = NULL, $node = NULL) {
 /**
  * Check if the link to the PDF version is allowed depending on the settings
  *
- * @param $args
+ * @param array $args
  *   array containing the possible parameters:
- *    teaser, node, type, path
- * @return
+ *    view_mode, node, type, path
+ *
+ * @return bool
  *   FALSE if not allowed, TRUE otherwise
  */
 function print_pdf_link_allowed($args) {
@@ -332,6 +338,9 @@ function print_pdf_link_allowed($args) {
 
 /**
  * Find out the version of the TCPDF library
+ *
+ * @return string
+ *   version number of the tcpdf library
  */
 function _print_pdf_tcpdf_version() {
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
@@ -359,6 +368,9 @@ function _print_pdf_tcpdf_version() {
 
 /**
  * Find out the version of the wkhtmltopdf library
+ *
+ * @return string
+ *   version number of the wkhtmltopdf library
  */
 function _print_pdf_wkhtmltopdf_version() {
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);

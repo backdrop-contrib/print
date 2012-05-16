@@ -14,7 +14,7 @@
 @include_once('Mail/mime.php');
 
 /**
- * Menu callback for the send by email module settings form.
+ * Form constructor for the send by email module settings form.
  *
  * @ingroup forms
  */

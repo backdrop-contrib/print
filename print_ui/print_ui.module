@@ -412,16 +412,23 @@ function print_ui_form_alter(&$form, &$form_state, $form_id) {
 /**
  * Auxiliary function to fill the Printer-friendly link attributes
  *
- * @param $title
+ * @param string $title
  *   text to displayed by the link when hovering over it with the mouse
- * @param $class
+ * @param string $class
  *   class attribute to be used in the link
- * @param $new_window
+ * @param bool $new_window
  *   if TRUE opens the target page in a new window
- * @return
- *   array of formatted attributes
+ *
+ * @return array
+ *   An associative array containing:
+ *   - title: text to be used when hovering over the link.
+ *   - class: CSS class of the link tag.
+ *   - target: used for opening a new window with the non-javascript method
+ *   - onclick: open a new window, with the javascript method
+ *   - rel: SEO-related attribute indicating that the printer-friendly version
+ *     should not be indexed by search engine robots.
  */
-function print_ui_fill_attributes($title = '', $class = '', $new_window = FALSE) {
+function _print_ui_fill_attributes($title = '', $class = '', $new_window = FALSE) {
   $print_newwindow = variable_get('print_newwindow', PRINT_NEWWINDOW_DEFAULT);
   $print_robots_noindex = variable_get('print_robots_noindex', PRINT_ROBOTS_NOINDEX_DEFAULT);
 
@@ -450,8 +457,14 @@ function print_ui_fill_attributes($title = '', $class = '', $new_window = FALSE)
 /**
  * Format the Printer-friendly link
  *
- * @return
- *   array of formatted attributes
+ * @return array
+ *   An associative array containing:
+ *   - text: The content of the link
+ *   - html: TRUE if the text contains HTML tags, FALSE if it's plain text
+ *   - attributes: several attributes of the link tag (title, class, target,
+ *     onclick, rel)
+ *
+ * @see _print_ui_fill_attributes()
  * @ingroup themeable
  */
 function theme_print_ui_format_link($vars) {
@@ -464,9 +477,13 @@ function theme_print_ui_format_link($vars) {
 
       if ($link['format'] == $format) {
         $link_class = variable_get('print_' . $link['format'] . '_link_class', $link['class']);
-        // @todo new_window
-        $new_window = ($format == 'html') ? variable_get('print_html_new_window', PRINT_HTML_NEW_WINDOW_DEFAULT) : FALSE;
-        $new_window = ($format == 'pdf') ? (variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT) == 1) : FALSE;
+
+        $new_window = FALSE;
+        $func = $module . '_print_new_window_alter';
+        if (function_exists($func)) {
+          $func($new_window, $link['format']);
+        }
+
         $show_link = variable_get('print_' . $link['format'] . '_show_link', PRINT_UI_SHOW_LINK_DEFAULT);
         $link_text = filter_xss(variable_get('print_' . $link['format'] . '_link_text', $link['text']));
 
@@ -490,7 +507,7 @@ function theme_print_ui_format_link($vars) {
         return array(
           'text' => $text,
           'html' => $html,
-          'attributes' => print_ui_fill_attributes($link['description'], strip_tags($link_class), $new_window),
+          'attributes' => _print_ui_fill_attributes($link['description'], strip_tags($link_class), $new_window),
         );
       }
     }
@@ -503,13 +520,16 @@ function theme_print_ui_format_link($vars) {
  * Function made available so that developers may call this function from
  * their defined pages/blocks.
  *
- * @param $path
- *   path of the original page (optional). If not specified, the current URL
- *   is used
- * @param $node
- *   an optional node object, to be used in defining the path, if used, the
+ * @param array $link
+ *    array returned by the hook_print_link() call.
+ * @param string $path
+ *   (optional) path of the original. If not specified, the current URL is
+ *   used.
+ * @param object $node
+ *   (optional) node object, to be used in defining the path. If used, the
  *   path argument is irrelevant
- * @return
+ *
+ * @return string
  *   string with the HTML link to the printer-friendly page
  */
 function print_ui_insert_link($link, $path = NULL, $node = NULL) {
@@ -550,7 +570,7 @@ function print_ui_insert_link($link, $path = NULL, $node = NULL) {
     }
     drupal_add_css(drupal_get_path('module', 'print_ui') . '/css/print_ui.theme.css');
     $format = theme('print_ui_format_link', array('format' => $link['format']));
-    return '<span class="print_html">' . l($format['text'], $path, array('attributes' => $format['attributes'], 'query' => $query, 'absolute' => TRUE, 'html' => $format['html'])) . '</span>';
+    return '<span class="print_' . $link['format'] . '">' . l($format['text'], $path, array('attributes' => $format['attributes'], 'query' => $query, 'absolute' => TRUE, 'html' => $format['html'])) . '</span>';
   }
   else {
     return FALSE;
@@ -560,9 +580,12 @@ function print_ui_insert_link($link, $path = NULL, $node = NULL) {
 /**
  * Check if the link to the PF version is allowed depending on the settings
  *
- * @param $args
+ * @param array $link
+ *    array returned by the hook_print_link() call.
+ * @param array $args
  *   array containing the possible parameters:
- *    teaser, node, type, path
+ *    view_mode, node, type, path
+ *
  * @return
  *   FALSE if not allowed
  *   PRINT_UI_ALLOW_NORMAL_LINK if a normal link is allowed
@@ -648,13 +671,16 @@ function print_ui_link_allowed($link, $args) {
 /**
  * Check if the provided page is enabled according to the visibility settings
  *
- * @param $visibility
+ * @param int $visibility
  *   current visibility settings:
  *    0 for show on every page except the listed pages
  *    1 for show on only the listed pages
- * @param $pages
+ * @param string $path
+ *   current path
+ * @param string $pages
  *   list of pages
- * @return
+ *
+ * @return bool
  *   TRUE if it is enabled, FALSE otherwise
  */
 function _print_ui_page_match($visibility, $path, $pages) {
@@ -686,11 +712,14 @@ function _print_ui_page_match($visibility, $path, $pages) {
  * Modified from drupal_query_string_encode to prevent re-encoding of
  * encoded original. (see #301192)
  *
- * @param $query
+ * @param array $query
  *   The array to be processed e.g. $_GET
- * @param $exclude
+ * @param array $exclude
  *   The array filled with keys to be excluded.
- * @return
+ * @param string $parent
+ *   The be used in recursive calls.
+ *
+ * @return string
  *   urlencoded string which can be appended to/as the URL query string
  */
 function _print_ui_query_string_encode($query, $exclude = array(), $parent = '') {

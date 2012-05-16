@@ -16,7 +16,7 @@ require_once(DRUPAL_ROOT . '/' . drupal_get_path('module', 'print') . '/print.pa
 @include_once('Mail/mime.php');
 
 /**
- * Menu callback for the send by email form.
+ * Form constructor for the send by email form.
  *
  * @ingroup forms
  */
@@ -173,12 +173,17 @@ function print_mail_form($form, &$form_state) {
 }
 
 /**
- * Theme function for the send by-email form submission.
+ * Returns HTML for the send by-email form.
  *
  * Adds a class to the form labels. This class is used to place the label on
  * the left of the input fields.
  *
+ * @param array $form
+ *   Form array
+ *
+ * @see print_mail_form()
  * @ingroup forms
+ * @ingroup themeable
  */
 function theme_print_mail_form($form) {
   drupal_add_css(drupal_get_path('module', 'print_mail') . '/css/print_mail.theme.css');
@@ -200,8 +205,9 @@ function theme_print_mail_form($form) {
 }
 
 /**
- * Validate the send by-email form submission.
+ * Form validation handler for print_mail_form().
  *
+ * @see print_mail_form()
  * @ingroup forms
  */
 function print_mail_form_validate($form, &$form_state) {
@@ -259,8 +265,9 @@ function print_mail_form_validate($form, &$form_state) {
 }
 
 /**
- * Process the send by-email form submission.
+ * Form submission handler for print_mail_form().
  *
+ * @see print_mail_form()
  * @see print_controller()
  * @ingroup forms
  */
@@ -342,9 +349,10 @@ function print_mail_form_submit($form, &$form_state) {
  *
  * Replace spaces in URLs with %20
  *
- * @param $matches
+ * @param array $matches
  *   array with the matched tag patterns, usually <a...>+text+</a>
- * @return
+ *
+ * @return string
  *   tag with re-written URL
  */
 function _print_mail_encode_urls($matches) {

@@ -38,6 +38,7 @@ function print_pdf_controller() {
       $node = node_load($args[0]);
     }
 
+    // @todo fix this for empty pdf_filenames
     $pdf_filename = variable_get('print_pdf_filename', PRINT_PDF_FILENAME_DEFAULT);
     if (!empty($pdf_filename) && !empty($node)) {
       $pdf_filename = token_replace($pdf_filename, array('node' => $node));
@@ -77,13 +78,27 @@ function print_pdf_controller() {
   drupal_exit();
 }
 
+/**
+ * Gennerate a PDF for a given Drupal path.
+ *
+ * @param string $path
+ *   path of the page to convert to PDF
+ * @param int $cid
+ *   (optional) comment ID of the comment to render.
+ * @param string $pdf_filename
+ *   (optional) filename of the generated PDF
+ *
+ * @return
+ *   generated PDF page, or NULL in case of error
+ *
+ * @see print_pdf_controller()
+ */
 function print_pdf_generate_path($path, $cid = NULL, $pdf_filename = NULL) {
   global $base_url;
 
   $link = print_pdf_print_link();
   $node = print_controller($path, $link['format'], $cid);
   if ($node) {
-    // @todo node is no longer print -- verify this
     // Img elements must be set to absolute
     $pattern = '!<(img\s[^>]*?)>!is';
     $node->content = preg_replace_callback($pattern, '_print_rewrite_urls', $node->content);
@@ -105,6 +120,21 @@ function print_pdf_generate_path($path, $cid = NULL, $pdf_filename = NULL) {
   }
 }
 
+/**
+ * Gennerate a PDF version of the provided HTML.
+ *
+ * @param object $node
+ *   nodelike object being converted to PDF
+ * @param string $html
+ *   HTML content of the PDF
+ * @param string $filename
+ *   (optional) filename of the generated PDF
+ *
+ * @return
+ *   generated PDF page, or NULL in case of error
+ *
+ * @see print_pdf_controller()
+ */
 function print_pdf_generate_html($node, $html, $filename = NULL) {
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
 
@@ -117,9 +147,6 @@ function print_pdf_generate_html($node, $html, $filename = NULL) {
   elseif (drupal_substr(basename($print_pdf_pdf_tool, '.exe'), 0, 11) == 'wkhtmltopdf') {
     return _print_pdf_wkhtmltopdf($node, $html, $filename);
   }
-  elseif ($filename) {
-    return drupal_not_found();
-  }
   return NULL;
 }
 
@@ -131,8 +158,12 @@ function print_pdf_generate_html($node, $html, $filename = NULL) {
  * tries to circumnvent those problems by accessing files in the local
  * filesystem.
  *
- * @param $html
+ * @param string $html
  *   contents of the post-processed template already with the node data
+ *
+ * @return string
+ *   converted file names
+ *
  * @see print_pdf_controller()
  */
 function _print_pdf_file_access_images($html) {
@@ -169,13 +200,17 @@ function _print_pdf_file_access_images($html) {
 /**
  * Generate the PDF file using the dompdf library
  *
- * @param $node
+ * @param object $node
  *   node to be converted
- * @param $html
+ * @param string $html
  *   contents of the post-processed template already with the node data
- * @param $filename
+ * @param string $filename
  *   name of the PDF file to be generated
- * @see print_pdf_controller()
+ *
+ * @return object
+ *   PDF object or NULL in case of error
+ *
+ * @see print_pdf_generate_html()
  */
 function _print_pdf_dompdf($node, $html, $filename = NULL) {
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
@@ -257,13 +292,17 @@ function _print_pdf_dompdf($node, $html, $filename = NULL) {
 /**
  * Generate the PDF file using the TCPDF library
  *
- * @param $node
+ * @param object $node
  *   node to be converted
- * @param $html
+ * @param string $html
  *   contents of the post-processed template already with the node data
- * @param $filename
+ * @param string $filename
  *   name of the PDF file to be generated
- * @see print_pdf_controller()
+ *
+ * @return object
+ *   PDF object or NULL in case of error
+ *
+ * @see print_pdf_generate_html()
  */
 function _print_pdf_tcpdf($node, $html, $filename = NULL) {
   global $base_url, $language;
@@ -352,13 +391,17 @@ function _print_pdf_tcpdf($node, $html, $filename = NULL) {
 /**
  * Generate the PDF file using wkhtmltopdf
  *
- * @param $node
+ * @param object $node
  *   node to be converted
- * @param $html
+ * @param string $html
  *   contents of the post-processed template already with the node data
- * @param $filename
+ * @param string $filename
  *   name of the PDF file to be generated
- * @see print_pdf_controller()
+ *
+ * @return object
+ *   PDF object or NULL in case of error
+ *
+ * @see print_pdf_generate_html()
  */
 function _print_pdf_wkhtmltopdf($node, $html, $filename = NULL) {
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
@@ -437,9 +480,14 @@ function _print_pdf_wkhtmltopdf($node, $html, $filename = NULL) {
 /**
  * Format the dompdf footer contents
  *
- * @param $html
- *   contents of the body of the HTML from the original node
- * @see theme_print_pdf_tcpdf_footer()
+ * @param array $vars
+ *   An associative array containing:
+ *    - $html: contents of the body of the HTML from the original node
+ *
+ * @return string
+ *   customized HTML text
+ *
+ * @ingroup themeable
  */
 function theme_print_pdf_dompdf_footer($vars) {
   preg_match('!<div class="print-footer">(.*?)</div>!si', $vars['html'], $tpl_footer);
@@ -480,13 +528,16 @@ function theme_print_pdf_dompdf_footer($vars) {
 /**
  * Format the TCPDF header
  *
- * @param $pdf
- *   current TCPDF object
- * @param $html
- *   contents of the body of the HTML from the original node
- * @param $font
- *   array with the font definition (font name, styles and size)
- * @see theme_print_pdf_tcpdf_header()
+ * @param array $vars
+ *   An associative array containing:
+ *   - $pdf: current TCPDF object
+ *   - $html: contents of the body of the HTML from the original node
+ *   - $font: array with the font definition (font name, styles and size)
+ *
+ * @return object
+ *   modified PDF object
+ *
+ * @ingroup themeable
  */
 function theme_print_pdf_tcpdf_header($vars) {
   $pdf = $vars['pdf'];
@@ -517,9 +568,14 @@ function theme_print_pdf_tcpdf_header($vars) {
 /**
  * Format the TCPDF page settings (margins, etc)
  *
- * @param $pdf
- *   current TCPDF object
- * @see theme_print_pdf_tcpdf_page()
+ * @param array $vars
+ *   An associative array containing:
+ *   - $pdf: current TCPDF object
+ *
+ * @return object
+ *   modified PDF object
+ *
+ * @ingroup themeable
  */
 function theme_print_pdf_tcpdf_page($vars) {
   $pdf = $vars['pdf'];
@@ -538,13 +594,16 @@ function theme_print_pdf_tcpdf_page($vars) {
 /**
  * Format the TCPDF page content
  *
- * @param $pdf
- *   current TCPDF object
- * @param $html
- *   contents of the body of the HTML from the original node
- * @param $font
- *   array with the font definition (font name, styles and size)
- * @see theme_print_pdf_tcpdf_content()
+ * @param array $vars
+ *   An associative array containing:
+ *   - $pdf: current TCPDF object
+ *   - $html: contents of the body of the HTML from the original node
+ *   - $font: array with the font definition (font name, styles and size)
+ *
+ * @return object
+ *   modified PDF object
+ *
+ * @ingroup themeable
  */
 function theme_print_pdf_tcpdf_content($vars) {
   $pdf = $vars['pdf'];
@@ -576,13 +635,16 @@ function theme_print_pdf_tcpdf_content($vars) {
 /**
  * Format the TCPDF footer contents
  *
- * @param $pdf
- *   current TCPDF object
- * @param $html
- *   contents of the body of the HTML from the original node
- * @param $font
- *   array with the font definition (font name, styles and size)
- * @see theme_print_pdf_tcpdf_footer()
+ * @param array $vars
+ *   An associative array containing:
+ *   - $pdf: current TCPDF object
+ *   - $html: contents of the body of the HTML from the original node
+ *   - $font: array with the font definition (font name, styles and size)
+ *
+ * @return object
+ *   modified PDF object
+ *
+ * @ingroup themeable
  */
 function theme_print_pdf_tcpdf_footer($vars) {
   $pdf = $vars['pdf'];
@@ -603,9 +665,14 @@ function theme_print_pdf_tcpdf_footer($vars) {
 /**
  * Format the TCPDF footer layout
  *
- * @param $pdf
- *   current TCPDF object
- * @see theme_print_pdf_tcpdf_footer2()
+ * @param array $vars
+ *   An associative array containing:
+ *   - $pdf: current TCPDF object
+ *
+ * @return object
+ *   modified PDF object
+ *
+ * @ingroup themeable
  */
 function theme_print_pdf_tcpdf_footer2($vars) {
   $pdf = $vars['pdf'];

@@ -1,5 +1,5 @@
 name = "Printer-friendly pages UI"
-description = "Handles the links to the printer-friendly versions."
+description = "Manages the printer-friendly versions link display conditions."
 core=7.x
 package = "Printer, email and PDF versions"
 dependencies[] = print
