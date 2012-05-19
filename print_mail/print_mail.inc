@@ -184,6 +184,7 @@ function print_mail_form($form, &$form_state) {
  * @see print_mail_form()
  * @ingroup forms
  * @ingroup themeable
+ * @ingroup print_themeable
  */
 function theme_print_mail_form($form) {
   drupal_add_css(drupal_get_path('module', 'print_mail') . '/css/print_mail.theme.css');

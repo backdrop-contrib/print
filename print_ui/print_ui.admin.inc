@@ -132,6 +132,7 @@ function print_ui_settings() {
  *   - form: A render element representing the form.
  *
  * @ingroup themeable
+ * @ingroup print_themeable
  */
 function theme_print_ui_settings($variables) {
   $form = $variables['form'];

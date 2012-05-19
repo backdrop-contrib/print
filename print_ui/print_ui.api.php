@@ -6,10 +6,6 @@
  */
 
 /**
- * @defgroup print_hooks Print Hooks
- */
-
-/**
  * @addtogroup hooks
  * @{
  */
@@ -72,6 +68,8 @@ function hook_print_link() {
  *
  * @return bool
  *   FALSE if not allowed, TRUE otherwise
+ *
+ * @ingroup print_hooks
  */
 function hook_link_allowed($args) {
   return (user_access('access foo'));
@@ -89,6 +87,8 @@ function hook_link_allowed($args) {
  *   - node: path to the node beign displayed.
  *   - view_mode: current view mode of the node being displayed.
  *   - type: 'node' or 'comment'.
+ *
+ * @ingroup print_hooks
  */
 function hook_print_new_window_alter(&$new_window, $format) {
   if ($format == 'foo') {

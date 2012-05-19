@@ -192,6 +192,7 @@ function print_preprocess_print(&$variables) {
  *   HTML text with the published line
  *
  * @ingroup themeable
+ * @ingroup print_themeable
  */
 function theme_print_published($vars) {
   global $base_url;
@@ -211,6 +212,7 @@ function theme_print_published($vars) {
  *   HTML text with the breadcrumb
  *
  * @ingroup themeable
+ * @ingroup print_themeable
  */
 function theme_print_breadcrumb($vars) {
   $node = $vars['node'];
@@ -240,6 +242,7 @@ function theme_print_breadcrumb($vars) {
  *   HTML text with the footer
  *
  * @ingroup themeable
+ * @ingroup print_themeable
  */
 function theme_print_footer($vars) {
   $footer = '';
@@ -269,6 +272,7 @@ function theme_print_footer($vars) {
  *   HTML text with the footer
  *
  * @ingroup themeable
+ * @ingroup print_themeable
  */
 function theme_print_sourceurl($vars) {
   $sourceurl_date = variable_get('print_sourceurl_date', PRINT_SOURCEURL_DATE_DEFAULT);
@@ -298,6 +302,7 @@ function theme_print_sourceurl($vars) {
  *   HTML text with the URL list
  *
  * @ingroup themeable
+ * @ingroup print_themeable
  */
 function theme_print_url_list($vars) {
   global $_print_urls;

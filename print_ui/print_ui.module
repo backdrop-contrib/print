@@ -466,6 +466,7 @@ function _print_ui_fill_attributes($title = '', $class = '', $new_window = FALSE
  *
  * @see _print_ui_fill_attributes()
  * @ingroup themeable
+ * @ingroup print_themeable
  */
 function theme_print_ui_format_link($vars) {
   $format = $vars['format'];

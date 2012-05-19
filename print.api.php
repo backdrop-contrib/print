@@ -10,8 +10,7 @@
 /**
  * @defgroup print Printer, email and PDF versions
  *
- * Welcome to the print module developer's documentation. The interesting
- * functions for themers are those that start with 'theme_'.
+ * Files used by the print module, grouped by sub-module
  *
  * - Printer-friendly pages
  *   - @link print.module Module main file @endlink
@@ -24,11 +23,27 @@
  *   - @link print_mail.admin.inc Settings form @endlink
  *   - @link print_mail.inc Mail form and send mail routine @endlink
  *   - @link print_mail.install (Un)Install routines @endlink
+ *   - @link views_handler_sort_print_mail_sentcount.inc Views handler @endlink
  * - PDF version
  *   - @link print_pdf.module Module main file @endlink
  *   - @link print_pdf.admin.inc Settings form @endlink
  *   - @link print_pdf.pages.inc PDF generation @endlink
  *   - @link print_pdf.class.inc Auxiliary PHP5 class @endlink
- *   - @link print_pdf.class_php4.inc Auxiliary PHP4 class @endlink
  *   - @link print_pdf.install (Un)Install routines @endlink
+ *   - @link print_pdf.drush.inc Drush commands @endlink
+ * - User Interface (Links)
+ *   - @link print_ui.module Module main file @endlink
+ *   - @link print_ui.admin.inc Settings form @endlink
+ */
+
+/**
+ * @defgroup print_hooks Hooks
+ *
+ * Hooks used in the print module
+ */
+
+/**
+ * @defgroup print_themeable Themeable functions
+ *
+ * Default theme implementations of the print module
  */
