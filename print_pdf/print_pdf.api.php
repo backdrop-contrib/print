@@ -11,16 +11,16 @@
  */
 
 /**
- * Generate a PDF version of the provided HTML. 
- *   
+ * Generate a PDF version of the provided HTML.
+ *
  * @param string $html
  *   HTML content of the PDF
  * @param array $meta
  *   Meta information to be used in the PDF
  *   - url: original URL
  *   - name: author's name
- *   - title: Page title  
- *   - node: node object  
+ *   - title: Page title
+ *   - node: node object
  * @param string $filename
  *   (optional) Filename of the generated PDF
  *

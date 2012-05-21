@@ -99,7 +99,7 @@ function _print_pdf_dompdf_version($pdf_tool) {
   if (!defined('DOMPDF_DIR')) {
     return 'unknown';
   }
-  else if (!defined('DOMPDF_CHROOT')) {
+  elseif (!defined('DOMPDF_CHROOT')) {
     return '0.5.1';
   }
   elseif (!defined('DOMPDF_FONT_CACHE')) {

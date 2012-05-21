@@ -31,9 +31,9 @@ function print_pdf_mpdf_requirements($phase) {
             );
 
             foreach (array('graph_cache', 'ttfontdata', 'tmp') as $dir) {
-              $directory = dirname($tool[1]) .'/'. $dir;
+              $directory = dirname($tool[1]) . '/' . $dir;
               if (!is_dir($directory) || !is_writable($directory)) {
-                $requirements['print_pdf_tool_'. $dir] = array(
+                $requirements['print_pdf_tool_' . $dir] = array(
                   'title' => $t('mPDF library'),
                   'value' => $t('Non-writable permissions'),
                   'description' => $t('You must change the %libdir permissions to be writable, as %lib requires write-access to that directory.', array('%lib' => 'mPDF', '%libdir' => $directory)),

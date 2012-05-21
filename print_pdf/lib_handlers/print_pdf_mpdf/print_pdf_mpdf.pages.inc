@@ -32,7 +32,7 @@ function print_pdf_mpdf_print_pdf_generate($html, $meta, $filename = NULL) {
   $mpdf->SetAuthor(strip_tags($meta['name']));
   $mpdf->SetCreator(variable_get('site_name', 'Drupal'));
   // Pulled from the HTML meta data
-  //$mpdf->SetTitle(html_entity_decode($meta['title'], ENT_QUOTES, 'UTF-8'));
+  // $mpdf->SetTitle(html_entity_decode($meta['title'], ENT_QUOTES, 'UTF-8'));
 
 //  $keys = implode(' ', explode("\n", trim(strip_tags($print['taxonomy']))));
 //  $mpdf->SetKeywords($keys);
@@ -40,8 +40,8 @@ function print_pdf_mpdf_print_pdf_generate($html, $meta, $filename = NULL) {
   // Encrypt the file and grant permissions to the user to copy and print
   // No password is required to open the document
   // Owner has full rights using the password "MyPassword"
-  //$mpdf->SetProtection(array('copy','print'), '', 'MyPassword');
-  $mpdf->SetProtection(array('copy','print','print-highres'), '', '');
+  // $mpdf->SetProtection(array('copy', 'print'), '', 'MyPassword');
+  $mpdf->SetProtection(array('copy', 'print', 'print-highres'), '', '');
 
   $mpdf->WriteHTML($html);
 
@@ -49,7 +49,7 @@ function print_pdf_mpdf_print_pdf_generate($html, $meta, $filename = NULL) {
   ob_clean();
 
   if ($filename) {
-    //Close and output PDF document
+    // Close and output PDF document
     $output_dest = ($content_disposition == 2) ? 'D' : 'I';
     $mpdf->Output($filename, $output_dest);
     return TRUE;

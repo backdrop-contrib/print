@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains the administrative functions of the print_pdf_wkhtmltopdf sub-module.
+ * Contains the administrative functions of the print_pdf_wkhtmltopdf module.
  *
  * This file is included by the print_pdf_wkhtmltopdf module, and includes the
  * settings form.
