@@ -36,6 +36,8 @@ define('PRINT_ROBOTS_NOINDEX_DEFAULT', 1);
 define('PRINT_ROBOTS_NOFOLLOW_DEFAULT', 1);
 define('PRINT_ROBOTS_NOARCHIVE_DEFAULT', 0);
 
+define('PRINT_LIB_PATH', 'sites/all/libraries');
+
 /**
  * Implements hook_print_link().
  */
@@ -270,6 +272,8 @@ function _print_get_title($path) {
  *
  * @return string
  *   HTML link to the printer-friendly page
+ *
+ * @ingroup print_api
  */
 function print_insert_link($path = NULL, $node = NULL) {
   if (function_exists('print_ui_insert_link')) {
@@ -302,4 +306,25 @@ function print_contextual_links_view_alter(&$element, $items) {
   if (preg_match('!^print!', $_GET['q'])) {
     unset($element['#links']);
   }
+}
+
+/**
+ * Auxiliary function to scan all module directories for a given library.
+ *
+ * @param string $lib
+ *   The machine name of a library to return the path for.
+ * @param string $mask
+ *   The preg_match() regular expression of the files to find.
+ *
+ * @return array
+ *   An array corresponding of the matching files.
+ */
+function _print_scan_libs($lib, $mask) {
+  $tools = array_keys(file_scan_directory(drupal_get_path('module', 'print'), $mask));
+  $tools = array_merge($tools, array_keys(file_scan_directory(PRINT_LIB_PATH, $mask)));
+  if (module_exists('libraries')) {
+    $tools = array_merge($tools, array_keys(file_scan_directory(libraries_get_path($lib), $mask)));
+  }
+
+  return array_unique($tools);
 }

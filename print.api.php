@@ -8,29 +8,48 @@
  */
 
 /**
- * @defgroup print Printer, email and PDF versions
+ * @defgroup print Files
  *
  * Files used by the print module, grouped by sub-module
  *
  * - Printer-friendly pages
  *   - @link print.module Module main file @endlink
- *   - @link print.admin.inc Settings form @endlink
  *   - @link print.pages.inc HTML generation @endlink
+ *   - @link print.admin.inc Settings form @endlink
  *   - @link print.install (Un)Install routines @endlink
  *   - @link print.tpl.php Page generation template @endlink
  * - Send by email
  *   - @link print_mail.module Module main file @endlink
- *   - @link print_mail.admin.inc Settings form @endlink
  *   - @link print_mail.inc Mail form and send mail routine @endlink
+ *   - @link print_mail.admin.inc Settings form @endlink
  *   - @link print_mail.install (Un)Install routines @endlink
  *   - @link views_handler_sort_print_mail_sentcount.inc Views handler @endlink
  * - PDF version
  *   - @link print_pdf.module Module main file @endlink
- *   - @link print_pdf.admin.inc Settings form @endlink
  *   - @link print_pdf.pages.inc PDF generation @endlink
- *   - @link print_pdf.class.inc Auxiliary PHP5 class @endlink
+ *   - @link print_pdf.admin.inc Settings form @endlink
  *   - @link print_pdf.install (Un)Install routines @endlink
  *   - @link print_pdf.drush.inc Drush commands @endlink
+ *   - PDF library handlers:
+ *     - dompdf
+ *       - @link print_pdf_dompdf.module Module main file @endlink
+ *       - @link print_pdf_dompdf.pages.inc PDF generation @endlink
+ *       - @link print_pdf_dompdf.admin.inc Settings form @endlink
+ *       - @link print_pdf_dompdf.install (Un)Install routines @endlink
+ *     - mPDF
+ *       - @link print_pdf_mpdf.module Module main file @endlink
+ *       - @link print_pdf_mpdf.pages.inc PDF generation @endlink
+ *     - TCPDF
+ *       - @link print_pdf_tcpdf.module Module main file @endlink
+ *       - @link print_pdf_tcpdf.pages.inc PDF generation @endlink
+ *       - @link print_pdf_tcpdf.admin.inc Settings form @endlink
+ *       - @link print_pdf_tcpdf.install (Un)Install routines @endlink
+ *       - @link print_pdf_tcpdf.class.inc Auxiliary PHP5 class @endlink
+ *     - wkhtmltopdf
+ *       - @link print_pdf_wkhtmltopdf.module Module main file @endlink
+ *       - @link print_pdf_wkhtmltopdf.pages.inc PDF generation @endlink
+ *       - @link print_pdf_wkhtmltopdf.admin.inc Settings form @endlink
+ *       - @link print_pdf_wkhtmltopdf.install (Un)Install routines @endlink
  * - User Interface (Links)
  *   - @link print_ui.module Module main file @endlink
  *   - @link print_ui.admin.inc Settings form @endlink
@@ -46,4 +65,10 @@
  * @defgroup print_themeable Themeable functions
  *
  * Default theme implementations of the print module
+ */
+
+/**
+ * @defgroup print_api API
+ *
+ * Functions that are provided for use by third-party code.
  */

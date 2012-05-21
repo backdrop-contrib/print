@@ -7,20 +7,13 @@
  * @ingroup print
  */
 
-define('PRINT_PDF_LIB_PATH', 'sites/all/libraries');
-
 define('PRINT_PDF_PDF_TOOL_DEFAULT', 0);
 define('PRINT_PDF_CONTENT_DISPOSITION_DEFAULT', 2);
 define('PRINT_PDF_PAPER_SIZE_DEFAULT', 'A4');
 define('PRINT_PDF_PAGE_ORIENTATION_DEFAULT', 'portrait');
 define('PRINT_PDF_IMAGES_VIA_FILE_DEFAULT', 0);
 define('PRINT_PDF_AUTOCONFIG_DEFAULT', 1);
-define('PRINT_PDF_TCPDF_FONT_FAMILY_DEFAULT', 'dejavusans');
-define('PRINT_PDF_TCPDF_FONT_SIZE_DEFAULT', 10);
-define('PRINT_PDF_TCPDF_FONT_SUBSETTING_DEFAULT', FALSE);
 define('PRINT_PDF_FILENAME_DEFAULT', '[site:name] - [node:title] - [node:changed:custom:Y-m-d]');
-define('PRINT_PDF_DOMPDF_UNICODE_DEFAULT', 0);
-define('PRINT_PDF_WKHTMLTOPDF_OPTIONS', "--footer-font-size 7 --footer-right '[page]'");
 
 /**
  * Implements hook_print_link().
@@ -57,38 +50,6 @@ function print_pdf_permission() {
 }
 
 /**
- * Implements hook_theme().
- */
-function print_pdf_theme() {
-  return array(
-    'print_pdf_dompdf_footer' => array(
-      'variables' => array('html' => ''),
-      'file' => 'print_pdf.pages.inc',
-    ),
-    'print_pdf_tcpdf_header' => array(
-      'variables' => array('pdf' => NULL, 'html' => '', 'font' => array()),
-      'file' => 'print_pdf.pages.inc',
-    ),
-    'print_pdf_tcpdf_page' => array(
-      'variables' => array('pdf' => NULL),
-      'file' => 'print_pdf.pages.inc',
-    ),
-    'print_pdf_tcpdf_content' => array(
-      'variables' => array('pdf' => NULL, 'html' => '', 'font' => array()),
-      'file' => 'print_pdf.pages.inc',
-    ),
-    'print_pdf_tcpdf_footer' => array(
-      'variables' => array('pdf' => NULL, 'html' => '', 'font' => array()),
-      'file' => 'print_pdf.pages.inc',
-    ),
-    'print_pdf_tcpdf_footer2' => array(
-      'variables' => array('pdf' => NULL),
-      'file' => 'print_pdf.pages.inc',
-    ),
-  );
-}
-
-/**
  * Implements hook_menu().
  */
 function print_pdf_menu() {
@@ -119,33 +80,6 @@ function print_pdf_menu() {
     'title' => 'Options',
     'weight' => -1,
     'type' => MENU_DEFAULT_LOCAL_TASK,
-  );
-  $items['admin/config/user-interface/print/pdf/tcpdf'] = array(
-    'title' => 'TCPDF',
-    'description' => 'Configure the TCPDF options.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('print_pdf_tcpdf_settings'),
-    'access arguments'  => array('administer print'),
-    'type' => MENU_LOCAL_TASK,
-    'file' => 'print_pdf.admin.inc',
-  );
-  $items['admin/config/user-interface/print/pdf/dompdf'] = array(
-    'title' => 'dompdf',
-    'description' => 'Configure the dompdf options.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('print_pdf_dompdf_settings'),
-    'access arguments'  => array('administer print'),
-    'type' => MENU_LOCAL_TASK,
-    'file' => 'print_pdf.admin.inc',
-  );
-  $items['admin/config/user-interface/print/pdf/wkhtmltopdf'] = array(
-    'title' => 'wkhtmltopdf',
-    'description' => 'Configure the wkhtmltopdf options.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('print_pdf_wkhtmltopdf_settings'),
-    'access arguments'  => array('administer print'),
-    'type' => MENU_LOCAL_TASK,
-    'file' => 'print_pdf.admin.inc',
   );
 
   return $items;
@@ -200,85 +134,15 @@ function print_pdf_requirements($phase) {
         );
       }
       else {
-        if (!is_file($print_pdf_pdf_tool) || !is_readable($print_pdf_pdf_tool)) {
+        $tool = explode('|', $print_pdf_pdf_tool);
+
+        if (!is_file($tool[1]) || !is_readable($tool[1])) {
           $requirements['print_pdf_tool'] = array(
             'title' => $t('Printer, email and PDF versions - PDF generation library'),
             'value' => $t('File not found'),
-            'description' => $t('The currently selected PDF generation library (%file) is no longer accessible.', array('%file' => $print_pdf_pdf_tool)),
+            'description' => $t('The currently selected PDF generation library (%file) is no longer accessible.', array('%file' => $tool[1])),
             'severity' => REQUIREMENT_ERROR,
           );
-        }
-        elseif (basename($print_pdf_pdf_tool) == 'dompdf_config.inc.php') {
-          if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
-            $directory = dirname($print_pdf_pdf_tool) . '/lib/fonts';
-            if (!is_dir($directory) || !is_writable($directory)) {
-              $requirements['print_pdf_tool'] = array(
-                'title' => $t('DOMPDF font cache directory'),
-                'value' => $t('Non-writable permissions'),
-                'description' => $t('You must change the %fontdir permissions to be writable, as dompdf requires write-access to that directory.', array('%fontdir' => $directory)),
-                'severity' => REQUIREMENT_ERROR,
-              );
-            }
-          }
-        }
-        elseif (basename($print_pdf_pdf_tool) == 'tcpdf.php') {
-          $version = _print_pdf_tcpdf_version();
-
-          if (version_compare($version, '5.9.001', '<')) {
-            $requirements['print_pdf_tool'] = array(
-              'title' => $t('Printer, email and PDF versions - PDF generation library'),
-              'value' => $t('Unsupported TCPDF version'),
-              'description' => $t('The currently selected version of TCPDF (@version) is not supported. Please update to a !url.', array('@version' => $version, '!url' => l($t('newer version'), 'http://sourceforge.net/projects/tcpdf/files/latest'))),
-              'severity' => REQUIREMENT_ERROR,
-            );
-          }
-          else {
-            $requirements['print_pdf_tool'] = array(
-              'title' => $t('Printer, email and PDF versions - PDF generation library'),
-              'value' => $t('TCPDF') . ' ' . $version,
-            );
-          }
-
-          if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
-            foreach (array('cache', 'images') as $dir) {
-              $directory = dirname($print_pdf_pdf_tool) . '/' . $dir;
-              if (!is_dir($directory) || !is_writable($directory)) {
-                $requirements['print_pdf_tool_' . $dir] = array(
-                  'title' => $t('TCPDF directory'),
-                  'value' => $t('Non-writable permissions'),
-                  'description' => $t('You must change the %fontdir permissions to be writable, as TCPDF requires write-access to that directory.', array('%fontdir' => $directory)),
-                  'severity' => REQUIREMENT_ERROR,
-                );
-              }
-            }
-          }
-        }
-        elseif (drupal_substr(basename($print_pdf_pdf_tool, '.exe'), 0, 11) == 'wkhtmltopdf') {
-          if (function_exists('is_executable') && !is_executable($print_pdf_pdf_tool)) {
-            $requirements['print_pdf_tool'] = array(
-              'title' => $t('wkhtmltopdf library'),
-              'value' => $t('Non-executable permissions'),
-              'description' => $t('You must modify the permissions of the wkhtmltopdf file (%file) to make it executable.', array('%file' => $print_pdf_pdf_tool)),
-              'severity' => REQUIREMENT_ERROR,
-            );
-          }
-          else {
-            $version = _print_pdf_wkhtmltopdf_version();
-            if (version_compare($version, '0.9.6', '<')) {
-              $requirements['print_pdf_tool'] = array(
-                'title' => $t('Printer, email and PDF versions - PDF generation library'),
-                'value' => $t('Unsupported wkhtmltopdf version'),
-                'description' => $t('The currently selected version of wkhtmltopdf (@version) is not supported. Please update to a !url.', array('@version' => $version, '!url' => l($t('newer version'), 'http://code.google.com/p/wkhtmltopdf/'))),
-                'severity' => REQUIREMENT_ERROR,
-              );
-            }
-            else {
-              $requirements['print_pdf_tool'] = array(
-                'title' => $t('Printer, email and PDF versions - PDF generation library'),
-                'value' => $t('wkhtmltopdf') . ' ' . $version,
-              );
-            }
-          }
         }
       }
       break;
@@ -310,6 +174,8 @@ function print_pdf_node_delete($node) {
  *
  * @return bool
  *   string with the HTML link to the printer-friendly page
+ *
+ * @ingroup print_api
  */
 function print_pdf_insert_link($path = NULL, $node = NULL) {
   if (function_exists('print_ui_insert_link')) {
@@ -337,55 +203,35 @@ function print_pdf_link_allowed($args) {
 }
 
 /**
- * Find out the version of the TCPDF library
+ * Generate a PDF version of the provided HTML.
  *
- * @return string
- *   version number of the tcpdf library
- */
-function _print_pdf_tcpdf_version() {
-  $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
-  if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
-    // prevent TCPDF default configs
-    define('K_TCPDF_EXTERNAL_CONFIG', TRUE);
-  }
-  require_once(DRUPAL_ROOT . '/' . $print_pdf_pdf_tool);
-
-  // Hide warnings, as some TCPDF constants may still be undefined
-  @$pdf = new TCPDF();
-
-  if (method_exists($pdf, 'getTCPDFVersion')) {
-    return $pdf->getTCPDFVersion();
-  }
-  elseif (defined('PDF_PRODUCER')) {
-    sscanf(PDF_PRODUCER, "TCPDF %s", $version);
-
-    return $version;
-  }
-  else {
-    return 'unknown';
-  }
-}
-
-/**
- * Find out the version of the wkhtmltopdf library
+ * @param string $html
+ *   HTML content of the PDF
+ * @param array $meta
+ *   Meta information to be used in the PDF
+ *   - url: original URL
+ *   - name: author's name
+ *   - title: Page title
+ *   - node: node object
+ * @param string $filename
+ *   (optional) Filename of the generated PDF
  *
- * @return string
- *   version number of the wkhtmltopdf library
+ * @return
+ *   generated PDF page, or NULL in case of error
+ *
+ * @see print_pdf_controller()
+ *
+ * @ingroup print_api
  */
-function _print_pdf_wkhtmltopdf_version() {
-  $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
-  $descriptor = array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'w'));
+function print_pdf_generate_html($html, $meta, $filename = NULL) {
+  $pdf_tool = explode('|', variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT));
 
-  $cmd = '"' . realpath($print_pdf_pdf_tool) . '" --version';
-  $process = proc_open($cmd, $descriptor, $pipes, NULL, NULL);
-  if (is_resource($process)) {
-    $content = stream_get_contents($pipes[1]);
-    $out = preg_match('!.*?(\d+\.\d+\.\d+).*$!m', $content, $matches);
-    fclose($pipes[0]);
-    fclose($pipes[1]);
-    fclose($pipes[2]);
-    $retval = proc_terminate($process);
+  module_load_include('inc', $pdf_tool[0], $pdf_tool[0] . '.pages');
+
+  $function = $pdf_tool[0] . '_print_pdf_generate';
+  if (function_exists($function)) {
+    return $function($html, $meta, $filename);
   }
 
-  return ($matches[1]);
+  return NULL;
 }

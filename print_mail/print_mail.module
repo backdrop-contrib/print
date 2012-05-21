@@ -291,6 +291,8 @@ function _print_mail_access($permission) {
  *
  * @return string
  *   string with the HTML link to the printer-friendly page
+ *
+ * @ingroup print_api
  */
 function print_mail_insert_link($path = NULL, $node = NULL) {
   if (function_exists('print_ui_insert_link')) {
@@ -407,7 +409,7 @@ function print_mail_rules_action_info() {
  * @ingroup rules
  */
 function print_mail_action_submit($node, $settings) {
-  require_once(DRUPAL_ROOT . '/' . drupal_get_path('module', 'print_mail') . '/print_mail.inc');
+  module_load_include('inc', 'print_mail', 'print_mail');
 
   $form_state['values'] = array(
     'path' => 'node/' . $node['node']->nid,

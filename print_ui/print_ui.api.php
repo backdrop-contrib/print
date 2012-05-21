@@ -55,7 +55,7 @@ function hook_print_link() {
 
 /**
  * Checks if the link is allowed according to the appropriate sub-module.
- * 
+ *
  * Normally checks if the user holds the required access permission, but can
  * be used for extra checks, such as the proper module configuration, etc.
  *
@@ -77,7 +77,7 @@ function hook_link_allowed($args) {
 
 /**
  * Checks if the link is allowed according to the appropriate sub-module.
- * 
+ *
  * Normally checks if the user holds the required access permission, but can
  * be used for extra checks, such as the proper module configuration, etc.
  *
