@@ -431,6 +431,11 @@ function _print_rewrite_urls($matches) {
         // URL is absolute, do nothing
         $newurl = $url;
       }
+      elseif (strpos(html_entity_decode($url), '//') === 0) {
+        // URL is 'almost absolute', but it does not contain protocol; replace with base_path protocol
+        $newurl = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . ":" . $url;
+        $matches[1] = str_replace($url, $newurl, $matches[1]);
+      }
       else {
         if ($url[0] == '#') {
           // URL is an anchor tag
