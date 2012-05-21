@@ -726,16 +726,12 @@ function _print_ui_page_match($visibility, $path, $pages) {
 function _print_ui_query_string_encode($query, $exclude = array(), $parent = '') {
   $params = array();
   foreach ($query as $key => $value) {
-    if ($parent) {
-      $key = $parent . '[' . $key . ']';
-    }
-
     if (in_array($key, $exclude)) {
       continue;
     }
 
     if (is_array($value)) {
-      $params[] = _print_ui_query_string_encode($value, $exclude, $key);
+      $params[$key] = _print_ui_query_string_encode($value, $exclude, $key);
     }
     else {
       $params[$key] = $value;
