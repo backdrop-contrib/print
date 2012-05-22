@@ -6,4 +6,6 @@ files[] = print.module
 files[] = print.admin.inc
 files[] = print.pages.inc
 files[] = print.install
+files[] = print.views.inc
+files[] = print_join_page_counter.inc
 configure = admin/config/user-interface/print
