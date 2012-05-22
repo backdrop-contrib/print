@@ -162,7 +162,7 @@ function print_preprocess_print(&$variables) {
   $variables['print_title']                    = check_plain($node->title);
   $variables['head']                     = drupal_get_html_head();
   $variables['robots_meta']              = _print_robots_meta_generator();
-  $variables['css']                      = _print_css_generator($format == 'mail');
+  $variables['css']                      = _print_css_generator($variables['expand_css']);
 
   if (variable_get('print_html_sendtoprinter', PRINT_HTML_SENDTOPRINTER_DEFAULT) && ($format == 'html')) {
     drupal_add_js('misc/drupal.js', array('weight' => JS_LIBRARY));
@@ -362,7 +362,7 @@ function _print_robots_meta_generator() {
  * @return string
  *   applicable CSS
  */
-function _print_css_generator($expand = TRUE) {
+function _print_css_generator($expand = FALSE) {
   $print_css = variable_get('print_css', PRINT_CSS_DEFAULT);
 
   if (!empty($print_css)) {

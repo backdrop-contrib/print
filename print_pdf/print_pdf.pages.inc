@@ -99,7 +99,7 @@ function print_pdf_generate_path($path, $cid = NULL, $pdf_filename = NULL) {
   $link = print_pdf_print_link();
   $node = print_controller($path, $link['format'], $cid);
   if ($node) {
-    $html = theme('print', array('node' => $node, 'format' => $link['format']));
+    $html = theme('print', array('node' => $node, 'expand_css' => TRUE, 'format' => $link['format']));
 
     // Img elements must be set to absolute
     $pattern = '!<(img\s[^>]*?)>!is';

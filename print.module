@@ -82,7 +82,7 @@ function print_permission() {
 function print_theme() {
   return array(
     'print' => array(
-      'variables' => array('node' => NULL, 'format' => '', 'message' => ''),
+      'variables' => array('node' => NULL, 'format' => '', 'expand_css' => FALSE, 'message' => ''),
       'template' => 'print',
       'file' => 'print.pages.inc',
     ),

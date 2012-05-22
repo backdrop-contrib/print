@@ -4,6 +4,8 @@
  * @file
  * Default print module template
  *
+ * @todo document this a lot (including args to theme('print') and available variables
+ *
  * @ingroup print
  */
 ?>

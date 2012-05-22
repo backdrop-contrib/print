@@ -301,7 +301,7 @@ function print_mail_form_submit($form, &$form_state) {
       $params['link'] = $node->url;
       $params['title'] = $form_state['values']['title'];
 
-      $params['body'] = theme('print', array('node' => $node, 'format' => $link['format'], 'message' => $sender_message));
+      $params['body'] = theme('print', array('node' => $node, 'format' => $link['format'], 'expand_css' => TRUE, 'message' => $sender_message));
 
       $ok = FALSE;
       $use_job_queue = variable_get('print_mail_job_queue', PRINT_MAIL_JOB_QUEUE_DEFAULT);
