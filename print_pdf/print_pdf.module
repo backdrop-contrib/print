@@ -104,11 +104,11 @@ function print_pdf_block_view($delta = 0) {
       $result = db_query_range("SELECT path FROM {print_pdf_page_counter} LEFT JOIN {node} ON path = CONCAT('node/', node.nid) WHERE status <> 0 OR status IS NULL ORDER BY totalcount DESC", 0, 3)
                   ->fetchAll();
       if (count($result)) {
-        $block['content'] = '<div class="item-list"><ul>';
+        $items = array();
         foreach ($result as $obj) {
-          $block['content'] .= '<li>' . l(_print_get_title($obj->path), $obj->path) . '</li>';
+          $items[] = l(_print_get_title($obj->path), $obj->path);
         }
-        $block['content'] .= '</ul></div>';
+        $block['content'] = theme('item_list', array('items' => $items, 'type' => 'ul'));
       }
       break;
   }
