@@ -168,7 +168,7 @@ function print_preprocess_print(&$variables) {
     drupal_add_js('misc/drupal.js', array('weight' => JS_LIBRARY));
 
     $window_close = (variable_get('print_html_new_window', PRINT_HTML_NEW_WINDOW_DEFAULT) && variable_get('print_html_windowclose', PRINT_HTML_WINDOWCLOSE_DEFAULT)) ? 'window.close();' : '';
-    $variables['sendtoprinter'] = "<script type='text/javascript'>(function ($) { Drupal.behaviors.print = { attach: function(context) {window.print();$window_close}};}(jQuery));</script>";
+    $variables['sendtoprinter'] = '<script type="text/javascript">(function ($) { Drupal.behaviors.print = {attach: function(context) {$(window).load(function() {window.print();' . $window_close . '})}}})(jQuery);</script>';
   }
 
   $type = (isset($node->type)) ? $node->type : '';
