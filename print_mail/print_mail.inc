@@ -290,7 +290,7 @@ function print_mail_form_submit($form, &$form_state) {
 
     // Spaces in img URLs must be replaced with %20
     $pattern = '!<(img\s[^>]*?)>!is';
-    $node->content = preg_replace_callback($pattern, '_print_mail_encode_urls', $node->content);
+    $node->content = preg_replace_callback($pattern, '_print_replace_spaces', $node->content);
 
     if ($node) {
       $print_mail_send_option_default = variable_get('print_mail_send_option_default', PRINT_MAIL_SEND_OPTION_DEFAULT);
@@ -343,41 +343,4 @@ function print_mail_form_submit($form, &$form_state) {
   }
 
   $form_state['redirect'] = preg_replace('!^book/export/html/!', 'node/', $form_state['values']['path']);
-}
-
-/**
- * Callback function for the preg_replace_callback replacing spaces with %20
- *
- * Replace spaces in URLs with %20
- *
- * @param array $matches
- *   array with the matched tag patterns, usually <a...>+text+</a>
- *
- * @return string
- *   tag with re-written URL
- */
-function _print_mail_encode_urls($matches) {
-  // first, split the html into the different tag attributes
-  $pattern = '!\s*(\w+\s*=\s*"(?:\\\"|[^"])*")\s*|\s*(\w+\s*=\s*\'(?:\\\\\'|[^\'])*\')\s*|\s*(\w+\s*=\s*\w+)\s*|\s+!';
-  $attribs = preg_split($pattern, $matches[1], -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-  foreach ($attribs as $key => $value) {
-    $attribs[$key] = preg_replace('!(\w)\s*=\s*(.*)!', '$1=$2', $value);
-  }
-
-  $size = count($attribs);
-  for ($i=1; $i < $size; $i++) {
-    // If the attribute is href or src, we may need to rewrite the URL in the value
-    if (preg_match('!^(?:href|src)\s*?=(.*)!i', $attribs[$i], $urls) > 0) {
-      $url = trim($urls[1], " \t\n\r\0\x0B\"'");
-      $new_url = str_replace(' ', '%20', $url);
-      $matches[1] = str_replace($url, $new_url, $matches[1]);
-    }
-  }
-
-  $ret = '<' . $matches[1] . '>';
-  if (count($matches) == 4) {
-    $ret .= $matches[2] . $matches[3];
-  }
-
-  return $ret;
 }
