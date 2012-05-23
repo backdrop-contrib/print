@@ -209,6 +209,8 @@ function print_mail_mail($key, &$message, $params) {
       // Configure new MIME object
       $mime = new Mail_mime("\n");
       $mime_params['html_encoding'] = '7bit';
+      $mime_params['html_charset'] = 'utf-8';
+      $mime_params['text_charset'] = 'utf-8';
 
       // Pass message contents into MIME object
       switch ($key) {
