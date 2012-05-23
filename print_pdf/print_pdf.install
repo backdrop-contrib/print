@@ -38,14 +38,6 @@ function print_pdf_uninstall() {
   variable_del('print_pdf_paper_size');
   variable_del('print_pdf_pdf_tool');
 
-  variable_del('print_pdf_dompdf_unicode');
-
-  variable_del('print_pdf_font_family');
-  variable_del('print_pdf_font_size');
-  variable_del('print_pdf_font_subsetting');
-
-  variable_del('print_pdf_wkhtmltopdf_options');
-
   variable_del('print_pdf_book_link');
   variable_del('print_pdf_link_class');
   variable_del('print_pdf_link_pos');
