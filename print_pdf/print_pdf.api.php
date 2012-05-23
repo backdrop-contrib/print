@@ -31,6 +31,15 @@
  * @ingroup print_hooks
  */
 function hook_print_pdf_generate($html, $meta, $filename = NULL) {
+  $pdf = new PDF();
+  $pdf->writeHTML($html);
+  if ($filename) {
+    $pdf->Output($filename);
+    return TRUE;
+  }
+  else {
+    return $pdf->Output();
+  }
 }
 
 /**
@@ -42,7 +51,7 @@ function hook_print_pdf_generate($html, $meta, $filename = NULL) {
  * and the libraries directory in search of the unique file pattern that can
  * be used to identify the library location.
  *
- * @param array pdf_tools
+ * @param array $pdf_tools
  *   An associative array using as key the format 'module|path', and as value
  *   a string describing the discovered library, where:
  *   - module: the machine name of the module that handles this library.
@@ -60,6 +69,24 @@ function hook_print_pdf_available_libs_alter(&$pdf_tools) {
   foreach ($tools as $tool) {
     $pdf_tools['print_pdf_foo|' . $tool] = 'foo (' . dirname($tool) . ')';
   }
+}
+
+/**
+ * Alters the PDF filename.
+ *
+ * Changes the value of the PDF filename variable, just before it is used to
+ * create the file. When altering the variable, do not suffix it with the
+ * '.pdf' extension, as the module will do that automatically.
+ *
+ * @param string $pdf_filename
+ *   current value of the pdf_filename variable, after processing tokens and
+ *   any transliteration steps.
+ * @param string $path
+ *   original alias/system path of the page being converted to PDF.
+ * @ingroup print_hooks
+ */
+function hook_print_pdf_filename_alter(&$pdf_filename, &$path) {
+  $pdf_filename = 'foo';
 }
 
 /**
