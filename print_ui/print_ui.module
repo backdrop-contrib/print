@@ -629,7 +629,7 @@ function print_ui_link_allowed($link, $args) {
       if (!isset($res[$link['format']][$node->nid])) {
         $res[$link['format']][$node->nid] = db_query("SELECT comments FROM {" . $link['module'] . "_node_conf} WHERE nid = :nid", array(':nid' => $node->nid))->fetchField();
       }
-      $display_comment = ($res[$link['format']][$node->nid] !== FALSE) ? $res[$link['format']][$node->nid] : variable_get('print_' . $link['format'] . '_display_comment_' . $node_type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
+      $display_comment = ($res && ($res[$link['format']][$node->nid] !== FALSE)) ? $res[$link['format']][$node->nid] : variable_get('print_' . $link['format'] . '_display_comment_' . $node_type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
       if ($display_comment) {
         return PRINT_UI_ALLOW_NORMAL_LINK;
       }
