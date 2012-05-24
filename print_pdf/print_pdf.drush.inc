@@ -34,6 +34,18 @@ function print_pdf_drush_command() {
 }
 
 /**
+ * Implements of drush_hook_COMMAND_validate().
+ */
+function drush_print_pdf_download_validate($library = NULL) {
+  if (is_null($library)) {
+    $pdf_libs = array();
+    drush_command_invoke_all_ref('drush_pdf_libs_alter', $pdf_libs);
+
+    drush_set_error('DRUSH_PDFDL_MISSING_ARG', dt("Usage: drush !cmd <library>\nWhere <library> is one of the following: !libs\n\nTry 'drush !cmd --help' for more information.", array('!cmd' => 'print-pdf-download', '!libs' => implode(', ', array_keys($pdf_libs)))));
+  }
+}
+
+/**
  * Download and extract PDF archive.
  *
  * @param string $library
