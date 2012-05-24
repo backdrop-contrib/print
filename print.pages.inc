@@ -82,7 +82,7 @@ function print_controller($path, $format, $cid = NULL, $teaser = FALSE) {
     $path = $alias;
   }
   $parts = explode('/', $path);
-  if (($parts[0] == 'node') && (count($parts) > 1)) {
+  if (($parts[0] == 'node') && (count($parts) > 1) && ctype_digit($parts[1])) {
     array_shift($parts);
     $path = implode('/', $parts);
   }

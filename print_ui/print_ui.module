@@ -540,7 +540,7 @@ function print_ui_insert_link($link, $path = NULL, $node = NULL) {
   }
   else {
     if ($path === NULL) {
-      $nid = preg_replace('!^node/!', '', $_GET['q']);
+      $nid = preg_replace('!^node/([\d]+)!', '$1', $_GET['q']);
       $path = $_GET['q'];
     }
     else {
