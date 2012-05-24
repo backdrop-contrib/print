@@ -489,7 +489,7 @@ function theme_print_ui_format_link($vars) {
         $link_text = filter_xss(variable_get('print_' . $link['format'] . '_link_text', $link['text']));
 
         if ($show_link >= 2) {
-          $img = drupal_get_path('module', 'print') . '/icons/' . $link['icon'];
+          $img = drupal_get_path('module', $module) . '/icons/' . $link['icon'];
           switch ($show_link) {
             case 2:
               $text = theme('image', array('path' => $img, 'alt' => $link_text, 'title' => $link_text, 'attributes' => array('class' => array('print-icon'))));
