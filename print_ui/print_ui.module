@@ -23,7 +23,6 @@ define('PRINT_UI_TYPE_FIELDS_WEIGHT', 30);
 
 define('PRINT_UI_TYPE_SHOW_LINK_DEFAULT', 1);
 define('PRINT_UI_TYPE_COMMENT_LINK_DEFAULT', 0);
-define('PRINT_UI_TYPE_URLLIST_DEFAULT', 1);
 
 /**
  * Implements hook_permission().
@@ -290,7 +289,7 @@ function print_ui_node_load($nodes, $types) {
       foreach ($nodes as $node) {
         $node->{$display} = isset($result[$node->nid]) ? intval($result[$node->nid]->link) : variable_get($display . '_' . $node->type, PRINT_UI_TYPE_SHOW_LINK_DEFAULT);
         $node->{$display_comment} = isset($result[$node->nid]) ? intval($result[$node->nid]->comments) : variable_get($display_comment . '_' . $node->type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
-        $node->{$display_urllist} = isset($result[$node->nid]) ? intval($result[$node->nid]->url_list) : variable_get($display_urllist . '_' . $node->type, PRINT_UI_TYPE_URLLIST_DEFAULT);
+        $node->{$display_urllist} = isset($result[$node->nid]) ? intval($result[$node->nid]->url_list) : variable_get($display_urllist . '_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT);
       }
     }
   }
@@ -319,7 +318,7 @@ function print_ui_node_update($node) {
 
         if (!isset($node->{$display})) $node->{$display} = variable_get($display . '_' . $node->type, PRINT_UI_TYPE_SHOW_LINK_DEFAULT);
         if (!isset($node->{$display_comment})) $node->{$display_comment} = variable_get($display_comment . '_' . $node->type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
-        if (!isset($node->{$display_urllist})) $node->{$display_urllist} = variable_get($display_urllist . '_' . $node->type, PRINT_UI_TYPE_URLLIST_DEFAULT);
+        if (!isset($node->{$display_urllist})) $node->{$display_urllist} = variable_get($display_urllist . '_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT);
 
         db_merge($module . '_node_conf')
           ->key(array('nid' => $node->nid))
@@ -396,13 +395,13 @@ function print_ui_form_alter(&$form, &$form_state, $form_id) {
         if ($form_id == 'node_type_form') {
           $form['print'][$display]['#default_value'] = variable_get($display . '_' . $form['#node_type']->type, PRINT_UI_TYPE_SHOW_LINK_DEFAULT);
           $form['print'][$display_comment]['#default_value'] = variable_get($display_comment . '_' . $form['#node_type']->type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
-          $form['print'][$display_urllist]['#default_value'] = variable_get($display_urllist . '_' . $form['#node_type']->type, PRINT_UI_TYPE_URLLIST_DEFAULT);
+          $form['print'][$display_urllist]['#default_value'] = variable_get($display_urllist . '_' . $form['#node_type']->type, PRINT_TYPE_URLLIST_DEFAULT);
         }
         else {
           $node = $form['#node'];
           $form['print'][$display]['#default_value'] = isset($node->{$display}) ? $node->{$display} : variable_get($display . '_' . $node->type, PRINT_UI_TYPE_SHOW_LINK_DEFAULT);
           $form['print'][$display_comment]['#default_value'] = isset($node->{$display_comment}) ? $node->{$display_comment} : variable_get($display_comment . '_' . $node->type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
-          $form['print'][$display_urllist]['#default_value'] = isset($node->{$display_urllist}) ? $node->{$display_urllist} : variable_get($display_urllist . '_' . $node->type, PRINT_UI_TYPE_URLLIST_DEFAULT);
+          $form['print'][$display_urllist]['#default_value'] = isset($node->{$display_urllist}) ? $node->{$display_urllist} : variable_get($display_urllist . '_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT);
         }
       }
     }
