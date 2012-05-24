@@ -90,7 +90,7 @@ function print_pdf_dompdf_requirements($phase) {
  *   Filename of the tool to be analysed.
  *
  * @return string
- *   version number of the tcpdf library
+ *   version number of the dompdf library
  */
 function _print_pdf_dompdf_version($pdf_tool) {
   require_once(DRUPAL_ROOT . '/' . $pdf_tool);

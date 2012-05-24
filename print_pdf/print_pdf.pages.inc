@@ -112,15 +112,12 @@ function print_pdf_generate_path($path, $cid = NULL, $pdf_filename = NULL) {
     // And make anchor links relative again, to permit in-PDF navigation
     $html = preg_replace("!${base_url}/" . $link['path'] . '/.*?#!', '#', $html);
 
-    $meta = array();
-    if (isset($node)) {
-      $meta['node'] = $node;
-
-      // @todo get these
-      if (isset($node->url)) $meta['url'] = $node->url;
-      if (isset($node->name)) $meta['name'] = $node->name;
-      if (isset($node->title)) $meta['title'] = $node->title;
-    }
+    $meta = array(
+      'node' => $node,
+      'url' => url(drupal_get_path_alias(empty($node->nid) ? $node->path : "node/$node->nid"), array('absolute' => TRUE)),
+    );
+    if (isset($node->name)) $meta['name'] = $node->name;
+    if (isset($node->title)) $meta['title'] = $node->title;
 
     return print_pdf_generate_html($html, $meta, $pdf_filename);
   }

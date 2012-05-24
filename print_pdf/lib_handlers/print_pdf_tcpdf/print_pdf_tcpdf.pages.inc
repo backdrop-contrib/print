@@ -2,10 +2,10 @@
 
 /**
  * @file
- * Generates the PDF version using dompdf
+ * Generates the PDF version using TCPDF
  *
- * This file is included by the print_pdf_dompdf module and includes the
- * functions that interface with the dompdf library
+ * This file is included by the print_pdf_tcpdf module and includes the
+ * functions that interface with the TCPDF library
  *
  * @ingroup print
  */

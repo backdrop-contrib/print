@@ -56,7 +56,7 @@ function print_pdf_mpdf_requirements($phase) {
  *   Filename of the tool to be analysed.
  *
  * @return string
- *   version number of the tcpdf library
+ *   version number of the mpdf library
  */
 function _print_pdf_mpdf_version($pdf_tool) {
   require_once(DRUPAL_ROOT . '/' . $pdf_tool);

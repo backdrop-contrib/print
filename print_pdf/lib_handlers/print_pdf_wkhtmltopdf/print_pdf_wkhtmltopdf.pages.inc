@@ -2,10 +2,10 @@
 
 /**
  * @file
- * Generates the PDF version using dompdf
+ * Generates the PDF version using wkhtmltopdf
  *
- * This file is included by the print_pdf_dompdf module and includes the
- * functions that interface with the dompdf library
+ * This file is included by the print_pdf_wkhtmltopdf module and includes the
+ * functions that interface with the wkhtmltopdf library
  *
  * @ingroup print
  */
