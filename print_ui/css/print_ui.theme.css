@@ -15,7 +15,7 @@ div#block-print-ui-print-links span {
   display: block;
 }
 
-.print_html, .print_mail, .print_pdf {
+.print_html, .print_mail, .print_pdf, .print_epub {
   margin-left: 1em;
 }
 

@@ -59,6 +59,19 @@
  *       - @link print_pdf_wkhtmltopdf.admin.inc Settings form @endlink
  *       - @link print_pdf_wkhtmltopdf.install (Un)Install routines @endlink
  *       - @link print_pdf_wkhtmltopdf.drush.inc Drush commands @endlink
+ * - EPUB version
+ *   - @link print_epub.api.php API @endlink
+ *   - @link print_epub.module Module main file @endlink
+ *   - @link print_epub.pages.inc EPUB generation @endlink
+ *   - @link print_epub.admin.inc Settings form @endlink
+ *   - @link print_epub.install (Un)Install routines @endlink
+ *   - @link print_epub.drush.inc Drush commands @endlink
+ *   - @link print_epub.views.inc Views integration @endlink
+ *   - EPUB library handlers:
+ *     - phpepub
+ *       - @link print_epub_phpepub.module Module main file @endlink
+ *       - @link print_epub_phpepub.pages.inc EPUB generation @endlink
+ *       - @link print_epub_phpepub.drush.inc Drush commands @endlink
  * - User Interface (Links)
  *   - @link print_ui.api.php API @endlink
  *   - @link print_ui.module Module main file @endlink
