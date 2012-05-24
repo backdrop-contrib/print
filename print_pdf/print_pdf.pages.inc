@@ -149,19 +149,8 @@ function _print_pdf_file_access_images($html) {
   global $base_url, $language;
   $print_pdf_images_via_file = variable_get('print_pdf_images_via_file', PRINT_PDF_IMAGES_VIA_FILE_DEFAULT);
 
-  // @todo This needs to be rewritten from scratch for Drupal 7
-  $lang = '';
-/*
-  switch (variable_get('language_negotiation', LANGUAGE_NEGOTIATION_NONE)) {
-    case LANGUAGE_NEGOTIATION_PATH_DEFAULT:
-    case LANGUAGE_NEGOTIATION_PATH:
-      $lang = $language->language;
-      break;
-    default:
-      $lang = '';
-      break;
-  }
- */
+  $lang = language_negotiation_get_any('locale-url') ? $language->language : '';
+
   // Always convert private to local paths
   $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?(?:${lang}/)?system/files/([^>]*?>)!is";
   $replacement = '$1file://' . realpath(variable_get('file_private_path', '')) . '/$2';
