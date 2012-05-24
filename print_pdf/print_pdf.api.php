@@ -83,6 +83,7 @@ function hook_print_pdf_available_libs_alter(&$pdf_tools) {
  *   any transliteration steps.
  * @param string $path
  *   original alias/system path of the page being converted to PDF.
+ *
  * @ingroup print_hooks
  */
 function hook_print_pdf_filename_alter(&$pdf_filename, &$path) {

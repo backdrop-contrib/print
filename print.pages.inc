@@ -313,6 +313,7 @@ function theme_print_url_list($vars) {
     $max = count($urls);
     $url_list = '';
     foreach ($urls as $key => $url) {
+      drupal_alter('print_url_list', $url);
       $url_list .= '[' . ($key + 1) . '] ' . check_plain($url) . "<br />\n";
     }
     if (!empty($url_list)) {
