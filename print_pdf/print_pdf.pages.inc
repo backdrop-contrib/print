@@ -149,7 +149,7 @@ function _print_pdf_file_access_images($html) {
   global $base_url, $language;
   $print_pdf_images_via_file = variable_get('print_pdf_images_via_file', PRINT_PDF_IMAGES_VIA_FILE_DEFAULT);
 
-  $lang = language_negotiation_get_any('locale-url') ? $language->language : '';
+  $lang = (function_exists('language_negotiation_get_any') && language_negotiation_get_any('locale-url')) ? $language->language : '';
 
   // Always convert private to local paths
   $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?(?:${lang}/)?system/files/([^>]*?>)!is";
