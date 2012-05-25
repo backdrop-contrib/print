@@ -86,8 +86,10 @@ function print_controller($path, $format, $cid = NULL, $teaser = FALSE) {
     array_shift($parts);
     $path = implode('/', $parts);
   }
-  if (ctype_digit($parts[0]) && (count($parts) == 1)) {
-    $node = _print_generate_node($path, $format, $cid, $teaser);
+  $revision_view = preg_match('!^[\d]*/revisions/[\d]*/view$!', $path);
+  if (ctype_digit($parts[0]) && ((count($parts) == 1) || $revision_view)) {
+    $vid = $revision_view ? $parts[2] : NULL;
+    $node = _print_generate_node($path, $format, $vid, $cid, $teaser);
   }
   else {
     $ret = preg_match('!^book/export/html/(.*)!i', $path, $matches);
@@ -552,15 +554,17 @@ function _print_url_list_enabled($node, $format) {
  *   node ID of the node to be rendered into a printer-friendly page
  * @param string $format
  *   format of the page being generated
+ * @param int $vid
+ *   (optional) revision ID of the node to use
  * @param int $cid
- *   comment ID of the individual comment to be rendered
+ *   (optional) comment ID of the individual comment to be rendered
  * @param bool $teaser
- *   if set to TRUE, outputs only the node's teaser
+ *   (optional) if set to TRUE, outputs only the node's teaser
  *
  * @return object
  *   filled node-like object to be used in the print template
  */
-function _print_generate_node($nid, $format, $cid = NULL, $teaser = FALSE) {
+function _print_generate_node($nid, $format, $vid = NULL, $cid = NULL, $teaser = FALSE) {
   global $_print_urls;
 
   if (!isset($langcode)) {
@@ -568,7 +572,7 @@ function _print_generate_node($nid, $format, $cid = NULL, $teaser = FALSE) {
   }
 
   // We can take a node id
-  $node = node_load($nid);
+  $node = node_load($nid, $vid);
   if (!$node) {
     // Node not found
     drupal_not_found();
