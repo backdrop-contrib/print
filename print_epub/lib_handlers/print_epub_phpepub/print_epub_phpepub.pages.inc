@@ -16,12 +16,15 @@
 function print_epub_phpepub_print_epub_generate($html, $meta, $filename = NULL) {
   global $language, $base_url;
 
+  module_load_include('inc', 'print', 'includes/print');
+
   $epub_tool = explode('|', variable_get('print_epub_epub_tool', PRINT_EPUB_EPUB_TOOL_DEFAULT));
+  $images_via_file = variable_get('print_epub_images_via_file', PRINT_EPUB_IMAGES_VIA_FILE_DEFAULT);
 
   require_once(DRUPAL_ROOT . '/' . $epub_tool[1]);
 
   // Try to use local file access for image files
-  $html = _print_epub_file_access_images($html);
+  $html = _print_access_images_via_file($html, $images_via_file);
 
   // set document information
   $epub = new EPub();

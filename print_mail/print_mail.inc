@@ -273,6 +273,7 @@ function print_mail_form_validate($form, &$form_state) {
 function print_mail_form_submit($form, &$form_state) {
   if (!array_key_exists('cancel', $form_state['values'])) {
     module_load_include('inc', 'print', 'print.pages');
+    module_load_include('inc', 'print', 'includes/print');
 
     $link = print_mail_print_link();
 

@@ -73,6 +73,7 @@ function _print_pdf_mpdf_version($pdf_tool) {
  * Implements hook_print_pdf_available_libs_alter().
  */
 function print_pdf_mpdf_print_pdf_available_libs_alter(&$pdf_tools) {
+  module_load_include('inc', 'print', 'includes/print');
   $tools = _print_scan_libs('mpdf', '!^mpdf.php$!');
 
   foreach ($tools as $tool) {

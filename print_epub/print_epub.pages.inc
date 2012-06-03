@@ -115,38 +115,3 @@ function print_epub_generate_path($path, $cid = NULL, $epub_filename = NULL) {
     return NULL;
   }
 }
-
-/**
- * Convert image paths to the file:// protocol
- *
- * In some Drupal setups, the use of the 'private' filesystem or Apache's
- * configuration prevent access to the images of the page. This function
- * tries to circumnvent those problems by accessing files in the local
- * filesystem.
- *
- * @param string $html
- *   contents of the post-processed template already with the node data
- *
- * @return string
- *   converted file names
- *
- * @see print_epub_controller()
- */
-function _print_epub_file_access_images($html) {
-  global $base_url, $language;
-  $print_epub_images_via_file = variable_get('print_epub_images_via_file', PRINT_EPUB_IMAGES_VIA_FILE_DEFAULT);
-
-  $lang = (function_exists('language_negotiation_get_any') && language_negotiation_get_any('locale-url')) ? $language->language : '';
-
-  // Always convert private to local paths
-  $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?(?:${lang}/)?system/files/([^>]*?>)!is";
-  $replacement = '$1file://' . realpath(variable_get('file_private_path', '')) . '/$2';
-  $html = preg_replace($pattern, $replacement, $html);
-  if ($print_epub_images_via_file) {
-    $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?(?:${lang}/)?([^>]*?>)!is";
-    $replacement = '$1file://' . dirname($_SERVER['SCRIPT_FILENAME']) . '/$2';
-    $html = preg_replace($pattern, $replacement, $html);
-  }
-
-  return $html;
-}

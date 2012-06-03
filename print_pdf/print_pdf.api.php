@@ -64,6 +64,7 @@ function hook_print_pdf_generate($html, $meta, $filename = NULL) {
  * @ingroup print_hooks
  */
 function hook_print_pdf_available_libs_alter(&$pdf_tools) {
+  module_load_include('inc', 'print', 'includes/print');
   $tools = _print_scan_libs('foo', '!^foo.php$!');
 
   foreach ($tools as $tool) {

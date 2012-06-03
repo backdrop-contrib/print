@@ -13,4 +13,3 @@ class print_join_page_counter extends views_join {
     parent::build_join($select_query, $table, $view_query);
   }
 }
-?>

@@ -106,6 +106,7 @@ function _print_pdf_wkhtmltopdf_version($pdf_tool) {
  * Implements hook_print_pdf_available_libs_alter().
  */
 function print_pdf_wkhtmltopdf_print_pdf_available_libs_alter(&$pdf_tools) {
+  module_load_include('inc', 'print', 'includes/print');
   $tools = _print_scan_libs('wkhtmltopdf', '!^wkhtmltopdf!');
 
   foreach ($tools as $tool) {

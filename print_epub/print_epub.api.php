@@ -64,6 +64,7 @@ function hook_print_epub_generate($html, $meta, $filename = NULL) {
  * @ingroup print_hooks
  */
 function hook_print_epub_available_libs_alter(&$epub_tools) {
+  module_load_include('inc', 'print', 'includes/print');
   $tools = _print_scan_libs('foo', '!^foo.php$!');
 
   foreach ($tools as $tool) {

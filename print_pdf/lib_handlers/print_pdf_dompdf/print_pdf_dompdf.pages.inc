@@ -14,10 +14,13 @@
  * Implements hook_print_pdf_generate().
  */
 function print_pdf_dompdf_print_pdf_generate($html, $meta, $filename = NULL) {
+  module_load_include('inc', 'print', 'includes/print');
+
   $pdf_tool = explode('|', variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT));
   $paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
   $page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
   $content_disposition = variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT);
+  $images_via_file = variable_get('print_pdf_images_via_file', PRINT_PDF_IMAGES_VIA_FILE_DEFAULT);
   $unicode = TRUE;
 
   if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
@@ -35,7 +38,7 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $filename = NULL) {
   spl_autoload_register('DOMPDF_autoload');
 
   // Try to use local file access for image files
-  $html = _print_pdf_file_access_images($html);
+  $html = _print_access_images_via_file($html, $images_via_file);
 
   // Spaces in img URLs must be replaced with %20
   $pattern = '!<(img\s[^>]*?)>!is';

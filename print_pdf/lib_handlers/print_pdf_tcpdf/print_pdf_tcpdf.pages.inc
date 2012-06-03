@@ -16,14 +16,17 @@
 function print_pdf_tcpdf_print_pdf_generate($html, $meta, $filename = NULL) {
   global $base_url, $language;
 
+  module_load_include('inc', 'print', 'includes/print');
+
   $pdf_tool = explode('|', variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT));
   $paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
   $page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
   $content_disposition = variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT);
-
-  $pdf_tool_path = realpath(dirname($pdf_tool[1]));
+  $images_via_file = variable_get('print_pdf_images_via_file', PRINT_PDF_IMAGES_VIA_FILE_DEFAULT);
 
   if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
+    $pdf_tool_path = realpath(dirname($pdf_tool[1]));
+
     define('K_TCPDF_EXTERNAL_CONFIG', TRUE);
     define('K_PATH_MAIN', dirname($_SERVER['SCRIPT_FILENAME']));
     define('K_PATH_URL', $base_url);
@@ -36,7 +39,7 @@ function print_pdf_tcpdf_print_pdf_generate($html, $meta, $filename = NULL) {
   }
 
   // Try to use local file access for image files
-  $html = _print_pdf_file_access_images($html);
+  $html = _print_access_images_via_file($html, $images_via_file);
 
   // Decode HTML entities in image filenames
   $pattern = "!<img\s[^>]*?src\s*?=\s*?['\"]?{$base_url}[^>]*?>!is";
