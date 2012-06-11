@@ -11,6 +11,31 @@
  */
 
 /**
+ * Provide some information on the needs of the PDF library.
+ *
+ * @return
+ *   Associative array with the following data:
+ *   - name: name of the PDF library.
+ *   - expand_css: boolean flag indicating whether to expand the CSS files
+ *     in the HTML passed to the PDF library, or to leave it as a list of
+ *     include directives.
+ *   - write_dirs: directories to which the tool requires write-access.
+ *
+ * @ingroup print_hooks
+ */
+function hook_pdf_tool_info() {
+  return array(
+    'name' => 'foopdf',
+    'expand_css' => FALSE,
+    'write_dirs' => array(
+      'fonts',
+      'cache',
+      'tmp',
+    ),
+  );
+}
+
+/**
  * Generate a PDF version of the provided HTML.
  *
  * @param string $html

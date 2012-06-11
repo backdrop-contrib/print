@@ -8,6 +8,21 @@
  */
 
 /**
+ * Implements hook_pdf_tool_info().
+ */
+function print_pdf_mpdf_pdf_tool_info() {
+  return array(
+    'name' => 'mPDF',
+    'expand_css' => FALSE,
+    'write_dirs' => array(
+      'graph_cache',
+      'ttfontdata',
+      'tmp',
+    ),
+  );
+}
+
+/**
  * Implements hook_requirements().
  */
 function print_pdf_mpdf_requirements($phase) {

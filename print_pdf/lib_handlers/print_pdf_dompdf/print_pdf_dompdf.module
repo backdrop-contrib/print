@@ -11,6 +11,19 @@ define('PRINT_PDF_DOMPDF_UNICODE_DEFAULT', 0);
 define('PRINT_PDF_DOMPDF_FONT_SUBSETTING_DEFAULT', FALSE);
 
 /**
+ * Implements hook_pdf_tool_info().
+ */
+function print_pdf_dompdf_pdf_tool_info() {
+  return array(
+    'name' => 'dompdf',
+    'expand_css' => FALSE,
+    'write_dirs' => array(
+      'lib/fonts',
+    ),
+  );
+}
+
+/**
  * Implements hook_theme().
  */
 function print_pdf_dompdf_theme() {

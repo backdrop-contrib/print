@@ -100,7 +100,15 @@ function print_pdf_generate_path($path, $cid = NULL, $pdf_filename = NULL) {
   $link = print_pdf_print_link();
   $node = print_controller($path, $link['format'], $cid);
   if ($node) {
-    $html = theme('print', array('node' => $node, 'expand_css' => TRUE, 'format' => $link['format']));
+    // Call the current tool's hook_pdf_tool_info(), to see if we need to expand CSS
+    $pdf_tool = explode('|', variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT));
+    $function = $pdf_tool[0] . '_pdf_tool_info';
+    if (function_exists($function)) {
+      $info = $function();
+    }
+    $expand = isset($info['expand_css']) ? $info['expand_css'] : FALSE;
+
+    $html = theme('print', array('node' => $node, $expand, 'format' => $link['format']));
 
     // Img elements must be set to absolute
     $pattern = '!<(img\s[^>]*?)>!is';

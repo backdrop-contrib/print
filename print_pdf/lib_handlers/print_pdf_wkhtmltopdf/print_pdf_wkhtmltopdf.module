@@ -10,6 +10,17 @@
 define('PRINT_PDF_WKHTMLTOPDF_OPTIONS', "--footer-font-size 7 --footer-right '[page]'");
 
 /**
+ * Implements hook_pdf_tool_info().
+ */
+function print_pdf_wkhtmltopdf_pdf_tool_info() {
+  return array(
+    'name' => 'wkhtmltopdf',
+    'expand_css' => FALSE,
+    'write_dirs' => array(),
+  );
+}
+
+/**
  * Implements hook_menu().
  */
 function print_pdf_wkhtmltopdf_menu() {

@@ -12,6 +12,20 @@ define('PRINT_PDF_TCPDF_FONT_SIZE_DEFAULT', 10);
 define('PRINT_PDF_TCPDF_FONT_SUBSETTING_DEFAULT', FALSE);
 
 /**
+ * Implements hook_pdf_tool_info().
+ */
+function print_pdf_tcpdf_pdf_tool_info() {
+  return array(
+    'name' => 'TCPDF',
+    'expand_css' => TRUE,
+    'write_dirs' => array(
+      'cache',
+      'images',
+    ),
+  );
+}
+
+/**
  * Implements hook_theme().
  */
 function print_pdf_tcpdf_theme() {
