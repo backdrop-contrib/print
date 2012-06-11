@@ -151,6 +151,8 @@ function print_preprocess_print(&$variables) {
       $logo_url = strip_tags(variable_get('print_logo_url', PRINT_LOGO_URL_DEFAULT));
       break;
   }
+  $logo_url = preg_replace('!^'. base_path() .'!', '', $logo_url);
+
   $variables['print_logo']                     = $logo_url ? theme('image', array('path' => $logo_url, 'alt' => variable_get('site_name', 'Drupal'), 'attributes' => array('class' => 'print-logo', 'id' => 'logo'))) : NULL;
 
   $variables['print_node']                     = $node;
