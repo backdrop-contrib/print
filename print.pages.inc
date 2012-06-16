@@ -30,7 +30,7 @@ function print_controller_html() {
     drupal_send_headers();
     print $html;
 
-    $nodepath = (isset($node->path) && is_string($node->path)) ? drupal_get_normal_path($node->path) : 'node/' . $path;
+    $nodepath = (isset($node->nid)) ? 'node/' . $node->nid : drupal_get_normal_path($path);
     db_merge('print_page_counter')
       ->key(array('path' => $nodepath))
       ->fields(array(

@@ -66,7 +66,7 @@ function print_pdf_controller() {
     exit;
   }
 
-  $nodepath = (isset($node->path) && is_string($node->path)) ? drupal_get_normal_path($node->path) : 'node/' . $path;
+  $nodepath = (isset($node->nid)) ? 'node/' . $node->nid : drupal_get_normal_path($path);
   db_merge('print_pdf_page_counter')
     ->key(array('path' => $nodepath))
     ->fields(array(
