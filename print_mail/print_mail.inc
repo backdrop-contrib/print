@@ -299,7 +299,7 @@ function print_mail_form_submit($form, &$form_state) {
       $params = array();
       $params['subject'] = $form_state['values']['fld_subject'];
       $params['message'] = $sender_message;
-      $params['link'] = $node->url;
+      $params['link'] = url($form_state['values']['path'], array('absolute' => TRUE));
       $params['title'] = $form_state['values']['title'];
 
       $params['body'] = theme('print', array('node' => $node, 'format' => $link['format'], 'expand_css' => TRUE, 'message' => $sender_message));
