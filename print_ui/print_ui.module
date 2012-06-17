@@ -92,7 +92,7 @@ function print_ui_block_view($delta = '') {
         $node = node_load($nid);
         if (!node_access('view', $node)) {
           // If the user doesn't have access to the node, don't show any links
-          $block['content'] == '';
+          $block['content'] = '';
           return;
         }
       }
