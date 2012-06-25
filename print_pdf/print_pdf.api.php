@@ -16,23 +16,49 @@
  * @return
  *   Associative array with the following data:
  *   - name: name of the PDF library.
+ *   - min_version: minimum version of the PDF library supported by the
+ *     module.
+ *   - url: URL where the PDF library can be downloaded from.
  *   - expand_css: boolean flag indicating whether to expand the CSS files
  *     in the HTML passed to the PDF library, or to leave it as a list of
  *     include directives.
- *   - write_dirs: directories to which the tool requires write-access.
+ *   - public_dirs: directories to which the tool requires write-access,
+ *     with configurable locations.
+ *   - tool_dirs: directories to which the tool requires write-access, but
+ *     can't be configured, and are relative to the tool's root path.
  *
  * @ingroup print_hooks
  */
 function hook_pdf_tool_info() {
   return array(
     'name' => 'foopdf',
+    'min_version' => '1.0',
+    'url' => 'http://www.pdf.tool/download',
     'expand_css' => FALSE,
-    'write_dirs' => array(
+    'public_dirs' => array(
       'fonts',
       'cache',
       'tmp',
     ),
+    'tool_dirs' => array(
+      'xyz',
+    ),
   );
+}
+
+/**
+ * Find out the version of the PDF library
+ *
+ * @param string $pdf_tool
+ *   Filename of the tool to be analysed.
+ *
+ * @return string
+ *   version number of the library
+ */
+function hook_pdf_tool_version() {
+  require_once(DRUPAL_ROOT . '/' . $pdf_tool);
+
+  return '1.0';
 }
 
 /**

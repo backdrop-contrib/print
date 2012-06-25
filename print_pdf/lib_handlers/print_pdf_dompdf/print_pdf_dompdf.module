@@ -16,9 +16,10 @@ define('PRINT_PDF_DOMPDF_FONT_SUBSETTING_DEFAULT', FALSE);
 function print_pdf_dompdf_pdf_tool_info() {
   return array(
     'name' => 'dompdf',
+    'url' => 'http://code.google.com/p/dompdf/downloads/list',
     'expand_css' => FALSE,
-    'write_dirs' => array(
-      'lib/fonts',
+    'public_dirs' => array(
+      'fonts',
     ),
   );
 }
@@ -55,57 +56,9 @@ function print_pdf_dompdf_menu() {
 }
 
 /**
- * Implements hook_requirements().
+ * Implements hook_pdf_tool_version().
  */
-function print_pdf_dompdf_requirements($phase) {
-  $requirements = array();
-  $t = get_t();
-  switch ($phase) {
-    // At runtime, make sure that a PDF generation tool is selected
-    case 'runtime':
-      $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
-
-      if (!empty($print_pdf_pdf_tool)) {
-        $tool = explode('|', $print_pdf_pdf_tool);
-
-        if (is_file($tool[1]) && is_readable($tool[1])) {
-          if (basename($tool[1]) == 'dompdf_config.inc.php') {
-            $version = _print_pdf_dompdf_version($tool[1]);
-
-            $requirements['print_pdf_tool_version'] = array(
-              'title' => $t('Printer, email and PDF versions - PDF generation library'),
-              'value' => $t('dompdf') . ' ' . $version,
-            );
-
-            if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
-              $directory = dirname($tool[1]) . '/lib/fonts';
-              if (!is_dir($directory) || !is_writable($directory)) {
-                $requirements['print_pdf_tool'] = array(
-                  'title' => $t('DOMPDF font cache directory'),
-                  'value' => $t('Non-writable permissions'),
-                  'description' => $t('You must change the %libdir permissions to be writable, as %lib requires write-access to that directory.', array('%lib' => 'dompdf', '%libdir' => $directory)),
-                  'severity' => REQUIREMENT_ERROR,
-                );
-              }
-            }
-          }
-        }
-      }
-      break;
-  }
-  return $requirements;
-}
-
-/**
- * Find out the version of the dompdf library
- *
- * @param string $pdf_tool
- *   Filename of the tool to be analysed.
- *
- * @return string
- *   version number of the dompdf library
- */
-function _print_pdf_dompdf_version($pdf_tool) {
+function print_pdf_dompdf_pdf_tool_version($pdf_tool) {
   require_once(DRUPAL_ROOT . '/' . $pdf_tool);
 
   // Poor man's way to find dompdf version

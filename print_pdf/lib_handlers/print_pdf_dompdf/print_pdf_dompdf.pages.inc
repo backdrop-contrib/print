@@ -32,6 +32,7 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $filename = NULL) {
     define('DOMPDF_TEMP_DIR', file_directory_temp());
     define('DOMPDF_UNICODE_ENABLED', $unicode);
     define('DOMPDF_ENABLE_FONTSUBSETTING', $font_subsetting);
+    define('DOMPDF_FONT_CACHE', 'public://print_pdf/print_pdf_dompdf/fonts/');
   }
 
   require_once(DRUPAL_ROOT . '/' . $pdf_tool[1]);

@@ -15,8 +15,9 @@ define('PRINT_PDF_WKHTMLTOPDF_OPTIONS', "--footer-font-size 7 --footer-right '[p
 function print_pdf_wkhtmltopdf_pdf_tool_info() {
   return array(
     'name' => 'wkhtmltopdf',
+    'min_version' => '0.9.6',
+    'url' => 'http://code.google.com/p/wkhtmltopdf/downloads/list',
     'expand_css' => FALSE,
-    'write_dirs' => array(),
   );
 }
 
@@ -55,29 +56,12 @@ function print_pdf_wkhtmltopdf_requirements($phase) {
         if (is_file($tool[1]) && is_readable($tool[1])) {
           if (drupal_substr(basename($tool[1], '.exe'), 0, 11) == 'wkhtmltopdf') {
             if (function_exists('is_executable') && !is_executable($tool[1])) {
-              $requirements['print_pdf_tool'] = array(
+              $requirements['print_pdf_wkhtmltopdf'] = array(
                 'title' => $t('wkhtmltopdf library'),
                 'value' => $t('Non-executable permissions'),
                 'description' => $t('You must modify the permissions of the wkhtmltopdf file (%file) to make it executable.', array('%file' => $tool[1])),
                 'severity' => REQUIREMENT_ERROR,
               );
-            }
-            else {
-              $version = _print_pdf_wkhtmltopdf_version($tool[1]);
-              if (version_compare($version, '0.9.6', '<')) {
-                $requirements['print_pdf_tool_version'] = array(
-                  'title' => $t('Printer, email and PDF versions - PDF generation library'),
-                  'value' => $t('Unsupported wkhtmltopdf version'),
-                  'description' => $t('The currently selected version of wkhtmltopdf (@version) is not supported. Please update to a !url.', array('@version' => $version, '!url' => l($t('newer version'), 'http://code.google.com/p/wkhtmltopdf/'))),
-                  'severity' => REQUIREMENT_ERROR,
-                );
-              }
-              else {
-                $requirements['print_pdf_tool_version'] = array(
-                  'title' => $t('Printer, email and PDF versions - PDF generation library'),
-                  'value' => $t('wkhtmltopdf') . ' ' . $version,
-                );
-              }
             }
           }
         }
@@ -88,15 +72,9 @@ function print_pdf_wkhtmltopdf_requirements($phase) {
 }
 
 /**
- * Find out the version of the wkhtmltopdf library
- *
- * @param string $pdf_tool
- *   Filename of the tool to be analysed.
- *
- * @return string
- *   version number of the wkhtmltopdf library
+ * Implements hook_pdf_tool_version().
  */
-function _print_pdf_wkhtmltopdf_version($pdf_tool) {
+function print_pdf_wkhtmltopdf_pdf_tool_version($pdf_tool) {
   $descriptor = array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'w'));
 
   $cmd = '"' . realpath($pdf_tool) . '" --version';
@@ -121,7 +99,7 @@ function print_pdf_wkhtmltopdf_print_pdf_available_libs_alter(&$pdf_tools) {
   $tools = _print_scan_libs('wkhtmltopdf', '!^wkhtmltopdf!');
 
   foreach ($tools as $tool) {
-    $version = _print_pdf_wkhtmltopdf_version($tool);
+    $version = print_pdf_wkhtmltopdf_pdf_tool_version($tool);
 
     $pdf_tools['print_pdf_wkhtmltopdf|' . $tool] = 'wkhtmltopdf ' . $version . ' (' . $tool . ')';
   }

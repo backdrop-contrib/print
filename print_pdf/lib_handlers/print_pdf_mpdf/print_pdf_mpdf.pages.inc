@@ -22,6 +22,11 @@ function print_pdf_mpdf_print_pdf_generate($html, $meta, $filename = NULL) {
   $content_disposition = variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT);
   $images_via_file = variable_get('print_pdf_images_via_file', PRINT_PDF_IMAGES_VIA_FILE_DEFAULT);
 
+  if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
+    define('_MPDF_TTFONTDATAPATH', 'public://print_pdf/print_pdf_mpdf/ttfontdata/');
+    define("_MPDF_TEMP_PATH", 'public://print_pdf/print_pdf_mpdf/tmp/');
+  }
+
   require_once(DRUPAL_ROOT . '/' . $pdf_tool[1]);
 
   $format = ($page_orientation == "landscape") ? $paper_size . "-L" : $paper_size;
