@@ -40,7 +40,7 @@ function print_pdf_wkhtmltopdf_print_pdf_generate($html, $meta, $filename = NULL
     exit;
   }
 
-  $descriptor = array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'w'));
+  $descriptor = array(0 => array('pipe', 'r'), 1 => array('pipe', 'w'), 2 => array('pipe', 'a'));
   $cmd = '"' . realpath($pdf_tool[1]) . "\" --page-size $paper_size --orientation $page_orientation --dpi $dpi $wkhtmltopdf_options - -";
 
   $process = proc_open($cmd, $descriptor, $pipes, NULL, NULL);
