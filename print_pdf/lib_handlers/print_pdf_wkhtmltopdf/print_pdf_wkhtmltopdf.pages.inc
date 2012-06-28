@@ -26,7 +26,7 @@ function print_pdf_wkhtmltopdf_print_pdf_generate($html, $meta, $filename = NULL
     $wkhtmltopdf_options = token_replace($wkhtmltopdf_options, array('node' => $meta['node']));
   }
 
-  $version = _print_pdf_wkhtmltopdf_version($pdf_tool[1]);
+  $version = print_pdf_wkhtmltopdf_pdf_tool_version($pdf_tool[1]);
 
   // 0.10.0 beta2 identifies itself as 0.9.9
   if (version_compare($version, '0.9.9', '>=')) {
