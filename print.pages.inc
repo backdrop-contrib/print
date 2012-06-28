@@ -371,7 +371,7 @@ function _print_css_generator($expand = FALSE) {
   $print_css = variable_get('print_css', PRINT_CSS_DEFAULT);
 
   if (!empty($print_css)) {
-    drupal_add_css(strtr($print_css, array('%t' => path_to_theme())));
+    drupal_add_css(strtr($print_css, array('%t' => drupal_get_path('theme', variable_get('theme_default')))));
   }
   else {
     drupal_add_css(drupal_get_path('module', 'print') . '/css/print.css');
