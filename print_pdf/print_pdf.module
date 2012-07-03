@@ -255,7 +255,7 @@ function print_pdf_node_delete($node) {
  */
 function print_pdf_insert_link($path = NULL, $node = NULL) {
   if (function_exists('print_ui_insert_link')) {
-    return print_ui_insert_link(print_pdf_print_link(), $path, $node);
+    return print_ui_insert_link(print_pdf_print_link(), array('path' => $path, 'node' => $node));
   }
   else {
     return FALSE;
