@@ -285,20 +285,22 @@ function _print_mail_access($permission) {
  * their defined pages/blocks.
  *
  * @param string $path
- *   path of the original page (optional). If not specified, the current URL
- *   is used
+ *   path to be used in the link. If not specified, the current URL is used.
  * @param object $node
- *   an optional node object, to be used in defining the path, if used, the
- *   path argument is irrelevant
+ *   node object, to be used in checking node access. If the path argument is
+ *   not provided, the path used will be node/nid.
+ * @param string $location
+ *   where in the page where the link is being inserted ('link', 'corner',
+ *   'block', 'help').
  *
  * @return string
  *   string with the HTML link to the printer-friendly page
  *
  * @ingroup print_api
  */
-function print_mail_insert_link($path = NULL, $node = NULL) {
+function print_mail_insert_link($path = NULL, $node = NULL, $location = '') {
   if (function_exists('print_ui_insert_link')) {
-    return print_ui_insert_link(print_mail_print_link(), array('path' => $path, 'node' => $node));
+    return print_ui_insert_link(print_mail_print_link(), array('path' => $path, 'node' => $node, 'location' => $location));
   }
   else {
     return FALSE;
