@@ -30,9 +30,9 @@ function print_ui_settings() {
       $form['settings']['checkboxes']['link_pos']['print_' . $format . '_link_pos'] = array(
         '#type' => 'checkboxes',
         '#title' => t('Link location'),
-        '#default_value' => variable_get('print_' . $format . '_link_pos', array(PRINT_UI_LINK_POS_DEFAULT => PRINT_UI_LINK_POS_DEFAULT)),
-        '#options' => array('link' => t('Links area'), 'corner' => t('Content corner'), 'block' => t('Block')),
-        '#description' => t('Choose the location of the link(s) to the printer-friendly version pages. The Links area is usually below the node content, whereas the Content corner is placed in the upper-right corner of the node content. Unselect all options to disable the link. Even if the link is disabled, you can still go to %path where nid is the numeric id of the node.', array('%path' => $link['path'] . '/nid')),
+        '#default_value' => variable_get('print_' . $format . '_link_pos', drupal_json_decode(PRINT_UI_LINK_POS_DEFAULT)),
+        '#options' => array('link' => t('Links area'), 'corner' => t('Content corner'), 'block' => t('Block'), 'help' => t('Help area')),
+        '#description' => t('Choose the location of the link(s) to the printer-friendly version pages. The Links area is usually below the node content, whereas the Content corner is placed in the upper-right corner of the node content (these apply only in node pages). The Help area is used for system pages. Enabling the block area link will allow links of this format in the provided links module. Unselect all options to disable the link. Even if the link is disabled, you can still go to %path where nid is the numeric id of the node.', array('%path' => $link['path'] . '/nid')),
       );
 
       $form['settings']['checkboxes']['link_teaser']['print_' . $format . '_link_teaser'] = array(

@@ -184,3 +184,13 @@ function print_update_7200(&$sandbox) {
     variable_del($name);
   }
 }
+
+/**
+ * Enable block and help area links
+ */
+function print_update_7202(&$sandbox) {
+  $link_pos = variable_get('print_html_link_pos', drupal_json_decode('{ "link": "link", "block": "block", "help": "help" }'));
+  $link_pos['block'] = 'block';
+  $link_pos['help'] = 'help';
+  variable_set('print_html_link_pos', $link_pos);
+}
