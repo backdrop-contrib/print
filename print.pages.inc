@@ -27,6 +27,7 @@ function print_controller_html() {
   $node = print_controller($path, $link['format'], $cid);
   if ($node) {
     $html = theme('print', array('node' => $node, 'format' => $link['format']));
+    drupal_add_http_header('Content-Type', 'text/html; charset=utf-8');
     drupal_send_headers();
     print $html;
 
