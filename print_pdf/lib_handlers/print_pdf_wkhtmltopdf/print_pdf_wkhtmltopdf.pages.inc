@@ -54,12 +54,15 @@ function print_pdf_wkhtmltopdf_print_pdf_generate($html, $meta, $filename = NULL
 
     stream_set_blocking($pipes[2], 0);
     $error = stream_get_contents($pipes[2]);
-    if (!empty($error)) {
-      watchdog('print_pdf', 'wkhtmltopdf: ' . $error);
-    }
     fclose($pipes[2]);
 
-    $retval = proc_terminate($process);
+    $retval = proc_close($process);
+    if (!empty($error) || ($retval != 0)) {
+      if (empty($error)) {
+        $error = 'No stderr output available.';
+      }
+      watchdog('print_pdf', "wkhtmltopdf (returned $retval): $error");
+    }
   }
 
   if (!empty($pdf)) {
@@ -83,6 +86,8 @@ function print_pdf_wkhtmltopdf_print_pdf_generate($html, $meta, $filename = NULL
     }
   }
   else {
+    drupal_set_message('Unable to generate PDF file.', 'error');
+    drupal_goto($meta['url']);
     return NULL;
   }
 }

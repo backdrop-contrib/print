@@ -85,7 +85,7 @@ function print_pdf_wkhtmltopdf_pdf_tool_version($pdf_tool) {
     fclose($pipes[0]);
     fclose($pipes[1]);
     fclose($pipes[2]);
-    $retval = proc_terminate($process);
+    $retval = proc_close($process);
   }
 
   return ($matches[1]);
