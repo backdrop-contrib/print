@@ -376,7 +376,7 @@ function print_mail_views_api() {
 function print_mail_rules_action_info() {
   return array(
     'print_mail_action_submit' => array(
-      'label' => t('Send node as HTML formated email'),
+      'label' => t('Send node as HTML formatted email'),
       'group' => t('Node'),
       'named parameter' => TRUE,
       'parameter' => array(
@@ -384,7 +384,12 @@ function print_mail_rules_action_info() {
         'from_name' => array('type' => 'text', 'label' => t('From name')),
         'to'        => array('type' => 'text', 'label' => t('Send email to')),
         'subject'   => array('type' => 'text', 'label' => t('Subject')),
-        'message'   => array('type' => 'text', 'label' => t('The message that should be displayed.')),
+        'message'   => array(
+          'type' => 'text',
+          'label' => t('Message'),
+          'description' => t('The message that should be displayed (optional).'),
+          'optional' => TRUE,
+        ),
         'node'      => array('type' => 'node', 'label' => t('Content')),
       ),
     ),
