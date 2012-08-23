@@ -377,8 +377,7 @@ function print_mail_rules_action_info() {
   return array(
     'print_mail_action_submit' => array(
       'label' => t('Send node as HTML formatted email'),
-      'group' => t('Node'),
-      'named parameter' => TRUE,
+      'group' => t('Send by email'),
       'parameter' => array(
         'from'      => array('type' => 'text', 'label' => t('From email adress')),
         'from_name' => array('type' => 'text', 'label' => t('From name')),
@@ -401,18 +400,18 @@ function print_mail_rules_action_info() {
  *
  * @ingroup rules
  */
-function print_mail_action_submit($node, $settings) {
+function print_mail_action_submit($from, $from_name, $to, $subject, $message, $node) {
   module_load_include('inc', 'print_mail', 'print_mail');
 
   $form_state['values'] = array(
-    'path' => 'node/' . $node['node']->nid,
+    'path' => 'node/' . $node->nid,
     'cid' => NULL,
-    'title' => $node['node']->title,
-    'fld_from_addr' => $settings->settings['from'],
-    'fld_from_name' => $settings->settings['from_name'],
-    'txt_to_addrs' => $settings->settings['to'],
-    'fld_subject' => $settings->settings['subject'],
-    'txt_message' => $settings->settings['message'],
+    'title' => $node->title,
+    'fld_from_addr' => $from,
+    'fld_from_name' => $from_name,
+    'txt_to_addrs' => $to,
+    'fld_subject' => $subject,
+    'txt_message' => $message,
     'chk_teaser' => FALSE,
   );
 
