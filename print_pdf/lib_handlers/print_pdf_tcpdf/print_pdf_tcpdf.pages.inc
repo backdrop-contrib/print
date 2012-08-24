@@ -13,7 +13,7 @@
 /**
  * Implements hook_print_pdf_generate().
  */
-function print_pdf_tcpdf_print_pdf_generate($html, $meta, $filename = NULL) {
+function print_pdf_tcpdf_print_pdf_generate($html, $meta) {
   global $base_url, $language;
 
   module_load_include('inc', 'print', 'includes/print');
@@ -89,15 +89,7 @@ function print_pdf_tcpdf_print_pdf_generate($html, $meta, $filename = NULL) {
   // try to recover from any warning/error
   ob_clean();
 
-  if ($filename) {
-    // Close and output PDF document
-    $output_dest = ($content_disposition == 2) ? 'D' : 'I';
-    $pdf->Output($filename, $output_dest);
-    return TRUE;
-  }
-  else {
-    return $pdf = $pdf->Output('', 'S');
-  }
+  return $pdf = $pdf->Output('', 'S');
 }
 
 /**

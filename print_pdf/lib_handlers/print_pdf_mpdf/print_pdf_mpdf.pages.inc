@@ -13,7 +13,7 @@
 /**
  * Implements hook_print_pdf_generate().
  */
-function print_pdf_mpdf_print_pdf_generate($html, $meta, $filename = NULL) {
+function print_pdf_mpdf_print_pdf_generate($html, $meta) {
   module_load_include('inc', 'print', 'includes/print');
 
   $pdf_tool = explode('|', variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT));
@@ -56,13 +56,5 @@ function print_pdf_mpdf_print_pdf_generate($html, $meta, $filename = NULL) {
   // try to recover from any warning/error
   ob_clean();
 
-  if ($filename) {
-    // Close and output PDF document
-    $output_dest = ($content_disposition == 2) ? 'D' : 'I';
-    $mpdf->Output($filename, $output_dest);
-    return TRUE;
-  }
-  else {
-    return $mpdf->Output('', 'S');
-  }
+  return $mpdf->Output('', 'S');
 }

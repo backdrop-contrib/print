@@ -13,7 +13,7 @@
 /**
  * Implements hook_print_pdf_generate().
  */
-function print_pdf_wkhtmltopdf_print_pdf_generate($html, $meta, $filename = NULL) {
+function print_pdf_wkhtmltopdf_print_pdf_generate($html, $meta) {
   $pdf_tool = explode('|', variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT));
   $paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
   $page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
@@ -66,24 +66,7 @@ function print_pdf_wkhtmltopdf_print_pdf_generate($html, $meta, $filename = NULL
   }
 
   if (!empty($pdf)) {
-    if ($filename) {
-      if (headers_sent()) {
-        exit("Unable to stream pdf: headers already sent");
-      }
-      header("Cache-Control: private");
-      header("Content-Type: application/pdf");
-
-      $attachment =  ($content_disposition == 2) ?  "attachment" :  "inline";
-
-      header("Content-Disposition: $attachment; filename=\"$filename\"");
-
-      echo $pdf;
-      flush();
-      return TRUE;
-    }
-    else {
-      return $pdf;
-    }
+    return $pdf;
   }
   else {
     drupal_set_message('Unable to generate PDF file.', 'error');

@@ -72,8 +72,6 @@ function hook_pdf_tool_version() {
  *   - name: author's name
  *   - title: Page title
  *   - node: node object
- * @param string $filename
- *   (optional) Filename of the generated PDF
  *
  * @return
  *   generated PDF page, or NULL in case of error
@@ -81,16 +79,11 @@ function hook_pdf_tool_version() {
  * @see print_pdf_controller_html()
  * @ingroup print_hooks
  */
-function hook_print_pdf_generate($html, $meta, $filename = NULL) {
+function hook_print_pdf_generate($html, $meta) {
   $pdf = new PDF();
   $pdf->writeHTML($html);
-  if ($filename) {
-    $pdf->Output($filename);
-    return TRUE;
-  }
-  else {
-    return $pdf->Output();
-  }
+
+  return $pdf->Output();
 }
 
 /**

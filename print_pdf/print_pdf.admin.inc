@@ -107,6 +107,12 @@ function print_pdf_settings() {
       );
     }
 
+    $form['settings']['print_pdf_cache_enabled'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enable caching of generated PDFs'),
+      '#default_value' => variable_get('print_pdf_cache_enabled', PRINT_PDF_CACHE_ENABLED_DEFAULT),
+    );
+
     $form['settings']['print_pdf_display_sys_urllist'] = array(
       '#type' => 'checkbox',
       '#title' => t('Printer-friendly URLs list in system pages'),

@@ -102,6 +102,8 @@ function print_pdf_generate_path($path, $cid = NULL, $pdf_filename = NULL) {
   if ($node) {
     // Call the current tool's hook_pdf_tool_info(), to see if we need to expand CSS
     $pdf_tool = explode('|', variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT));
+    $cache_enabled = variable_get('print_pdf_cache_enabled', PRINT_PDF_CACHE_ENABLED_DEFAULT);
+
     $function = $pdf_tool[0] . '_pdf_tool_info';
     if (function_exists($function)) {
       $info = $function();
@@ -127,7 +129,38 @@ function print_pdf_generate_path($path, $cid = NULL, $pdf_filename = NULL) {
     if (isset($node->name)) $meta['name'] = $node->name;
     if (isset($node->title)) $meta['title'] = $node->title;
 
-    return print_pdf_generate_html($html, $meta, $pdf_filename);
+    $pdf = '';
+    $cachemiss = FALSE;
+    if ($cache_enabled && isset($node->nid)) {
+      // See if the file exists in the cache
+      $cachefile = drupal_realpath(print_pdf_cache_dir()) . '/' . $node->nid . '.pdf';
+      if (is_readable($cachefile)) {
+        // Get the PDF content from the cached file
+        $pdf = file_get_contents($cachefile);
+        if ($pdf === FALSE) {
+          watchdog('print_pdf', 'Failed to read from cached file %file', array('%file' => $cached), WATCHDOG_ERROR);
+        }
+      }
+      else {
+        $cachemiss = TRUE;
+      }
+    }
+
+    // If cache is off or file is not cached, generate one from scratch
+    if (empty($pdf)) {
+      $pdf = print_pdf_generate_html($html, $meta);
+    }
+
+    if (!empty($pdf)) {
+      // A PDF was created, save it to cache if configured
+      if ($cachemiss) {
+        if (file_unmanaged_save_data($pdf, $cachefile, FILE_EXISTS_REPLACE) == FALSE) {
+          watchdog('print_pdf', 'Failed to write to "%f".', array('%f' => $filename), WATCHDOG_ERROR);
+        }
+      }
+
+      return $pdf_filename ? print_pdf_dispose_content($pdf, $pdf_filename) : $pdf;
+    }
   }
   else {
     return NULL;

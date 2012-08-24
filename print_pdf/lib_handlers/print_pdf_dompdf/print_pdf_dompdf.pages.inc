@@ -13,7 +13,7 @@
 /**
  * Implements hook_print_pdf_generate().
  */
-function print_pdf_dompdf_print_pdf_generate($html, $meta, $filename = NULL) {
+function print_pdf_dompdf_print_pdf_generate($html, $meta) {
   module_load_include('inc', 'print', 'includes/print');
 
   $pdf_tool = explode('|', variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT));
@@ -91,13 +91,7 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $filename = NULL) {
   $dompdf->load_html($html);
 
   $dompdf->render();
-  if ($filename) {
-    $dompdf->stream($filename, array('Attachment' => ($content_disposition == 2)));
-    return TRUE;
-  }
-  else {
-    return $dompdf->output();
-  }
+  return $dompdf->output();
 }
 
 /**

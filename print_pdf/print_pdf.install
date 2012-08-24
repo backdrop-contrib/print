@@ -28,6 +28,7 @@ function print_pdf_enable() {
  */
 function print_pdf_uninstall() {
   variable_del('print_pdf_autoconfig');
+  variable_del('print_pdf_cache_enabled');
   variable_del('print_pdf_content_disposition');
   variable_del('print_pdf_display_sys_urllist');
   variable_del('print_pdf_filename');

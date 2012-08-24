@@ -14,6 +14,7 @@ define('PRINT_PDF_PAGE_ORIENTATION_DEFAULT', 'portrait');
 define('PRINT_PDF_IMAGES_VIA_FILE_DEFAULT', 0);
 define('PRINT_PDF_AUTOCONFIG_DEFAULT', 1);
 define('PRINT_PDF_FILENAME_DEFAULT', '[site:name] - [node:title] - [node:changed:custom:Y-m-d]');
+define('PRINT_PDF_CACHE_ENABLED_DEFAULT', 0);
 
 /**
  * Implements hook_print_link().
@@ -64,10 +65,29 @@ function print_pdf_init() {
     if (isset($info['public_dirs'])) {
       foreach ($info['public_dirs'] as $dir) {
         $directory = 'public://print_pdf/' . $tool[0] . '/' . $dir;
-        file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
+        $result = file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
+        if (!$result) {
+          watchdog('print_pdf', 'Failed to create directory "%dir" for %tool.', array('%dir' => $directory, '%tool' => $tool[0]), WATCHDOG_CRITICAL);
+        }
       }
     }
   }
+  if (variable_get('print_pdf_cache_enabled', PRINT_PDF_CACHE_ENABLED_DEFAULT)) {
+    $directory = print_pdf_cache_dir();
+    $result = file_prepare_directory($directory, FILE_MODIFY_PERMISSIONS | FILE_CREATE_DIRECTORY);
+    if (!$result) {
+      watchdog('print_pdf', 'Failed to create directory "%dir" for print_pdf cache.', array('%dir' => $directory), WATCHDOG_CRITICAL);
+    }
+  }
+}
+
+/**
+ * Implements hook_flush_caches()
+ */
+function print_pdf_flush_caches() {
+  print_pdf_cache_delete();
+
+  return array();
 }
 
 /**
@@ -227,12 +247,25 @@ function print_pdf_requirements($phase) {
 }
 
 /**
+ * Implements hook_node_update().
+ */
+function print_pdf_node_update($node) {
+  if (variable_get('print_pdf_cache_enabled', PRINT_PDF_CACHE_ENABLED_DEFAULT)) {
+    print_pdf_cache_delete($node->nid);
+  }
+}
+
+/**
  * Implements hook_node_delete().
  */
 function print_pdf_node_delete($node) {
   db_delete('print_pdf_page_counter')
     ->condition('path', 'node/' . $node->nid)
     ->execute();
+
+  if (variable_get('print_pdf_cache_enabled', PRINT_PDF_CACHE_ENABLED_DEFAULT)) {
+    print_pdf_cache_delete($node->nid);
+  }
 }
 
 /**
@@ -281,6 +314,66 @@ function print_pdf_link_allowed($args) {
 }
 
 /**
+ * Returns the cache directory.
+ *
+ * @return string
+ *   The scheme://path of the cache directory
+ */
+function print_pdf_cache_dir() {
+  $scheme = 'private';
+  if (!file_stream_wrapper_valid_scheme($scheme)) {
+    $scheme = 'temporary';
+  }
+  return $scheme . '://print_pdf/cache';
+}
+
+/**
+ * Deletes one or more files from the PDF cache directory.
+ *
+ * @param int nid
+ *   The scheme://path of the cache directory
+ */
+function print_pdf_cache_delete($nid = NULL) {
+  $directory = print_pdf_cache_dir();
+
+  if ($nid) {
+    file_unmanaged_delete($directory . '/' . $nid . '.pdf');
+  }
+  else {
+    file_unmanaged_delete_recursive($directory);
+  }
+}
+
+/**
+ * Displays the PDF as inline or a downloadable file.
+ *
+ * @param string $pdf
+ *   PDF content string
+ * @param string $filename
+ *   Filename of the generated PDF
+ *
+ * @return string
+ *   The disposed PDF file
+ */
+function print_pdf_dispose_content($pdf, $filename) {
+  if (headers_sent()) {
+    exit('Unable to stream pdf: headers already sent');
+  }
+  header('Cache-Control: private');
+  header('Content-Type: application/pdf');
+
+  $content_disposition = variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT);
+  $attachment =  ($content_disposition == 2) ?  'attachment' :  'inline';
+
+  header("Content-Disposition: $attachment; filename=\"$filename\"");
+
+  echo $pdf;
+  flush();
+
+  return TRUE;
+}
+
+/**
  * Generate a PDF version of the provided HTML.
  *
  * @param string $html
@@ -308,10 +401,13 @@ function print_pdf_generate_html($html, $meta, $filename = NULL) {
 
   $function = $pdf_tool[0] . '_print_pdf_generate';
   if (function_exists($function)) {
-    return $function($html, $meta, $filename);
+    $pdf = $function($html, $meta);
+  }
+  if ($filename) {
+    return print_pdf_dispose_content($pdf, $filename);
   }
 
-  return NULL;
+  return $pdf;
 }
 
 /**
