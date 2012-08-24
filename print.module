@@ -233,6 +233,15 @@ function print_entity_info_alter(&$info) {
       'custom settings' => FALSE,
     ),
   );
+  // Add the 'Print' view mode for field_collections
+  if (module_exists('field_collection')) {
+    $info['field_collection_item']['view modes'] += array(
+      'print' => array(
+        'label' => t('Print'),
+        'custom settings' => FALSE,
+      ),
+    );
+  }
 }
 
 /**
