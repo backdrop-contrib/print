@@ -116,7 +116,7 @@ function print_mail_requirements($phase) {
     case 'runtime':
       if (module_exists('mailsystem')) {
         $mail_system = mailsystem_get();
-        if (!isset($mail_system['print_mail']) || ($mail_system['print_mail'] != 'DefaultMailSystem')) {
+        if (($mail_system['default-system'] != 'DefaultMailSystem') && (!isset($mail_system['print_mail']) || ($mail_system['print_mail'] != 'DefaultMailSystem'))) {
           $requirements['print_mail_mailsystem'] = array(
             'title' => $t('Printer, email and PDF versions - Send by email'),
             'value' => $t('Incompatible Mail System setting detected'),
