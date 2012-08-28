@@ -19,8 +19,6 @@
  * @ingroup forms
  */
 function print_mail_form($form, &$form_state) {
-  global $user;
-
   // Remove the printmail/ prefix
   $path_arr = explode('/', $_GET['q']);
   unset($path_arr[0]);
@@ -49,6 +47,19 @@ function print_mail_form($form, &$form_state) {
   }
   else {
     $path = drupal_get_normal_path($path);
+  }
+
+  return print_mail_form_for_path($form, $form_state, $path);
+}
+
+/**
+ * Build email form for the page provided in the path argument.
+ *
+ * @ingroup forms
+ */
+function print_mail_form_for_path($form, &$form_state, $path, $user = NULL) {
+  if($user === NULL) {
+    global $user;
   }
 
   $print_mail_hourly_threshold = variable_get('print_mail_hourly_threshold', PRINT_MAIL_HOURLY_THRESHOLD);
