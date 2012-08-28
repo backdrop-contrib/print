@@ -250,9 +250,7 @@ function print_pdf_requirements($phase) {
  * Implements hook_node_update().
  */
 function print_pdf_node_update($node) {
-  if (variable_get('print_pdf_cache_enabled', PRINT_PDF_CACHE_ENABLED_DEFAULT)) {
-    print_pdf_cache_delete($node->nid);
-  }
+  print_pdf_cache_delete($node->nid);
 }
 
 /**
@@ -263,9 +261,7 @@ function print_pdf_node_delete($node) {
     ->condition('path', 'node/' . $node->nid)
     ->execute();
 
-  if (variable_get('print_pdf_cache_enabled', PRINT_PDF_CACHE_ENABLED_DEFAULT)) {
-    print_pdf_cache_delete($node->nid);
-  }
+  print_pdf_cache_delete($node->nid);
 }
 
 /**
@@ -331,16 +327,23 @@ function print_pdf_cache_dir() {
  * Deletes one or more files from the PDF cache directory.
  *
  * @param int nid
- *   The scheme://path of the cache directory
+ *   The node ID of the page for which the cached PDF should be deleted.
+ *   If not provided, the entire cache directory will be deleted.
  */
 function print_pdf_cache_delete($nid = NULL) {
   $directory = print_pdf_cache_dir();
 
   if ($nid) {
-    file_unmanaged_delete($directory . '/' . $nid . '.pdf');
+    $filename = $directory . '/' . $nid . '.pdf';
+    if (is_file($filename)) {
+      file_unmanaged_delete($filename);
+    }
   }
   else {
-    file_unmanaged_delete_recursive($directory);
+    // If no nid is provided, flush the entire cache.
+    if (is_dir($directory)) {
+      file_unmanaged_delete_recursive($directory);
+    }
   }
 }
 

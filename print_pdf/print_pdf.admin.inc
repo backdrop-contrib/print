@@ -75,6 +75,12 @@ function print_pdf_settings() {
       '#default_value' => variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT),
       '#description' => t('Choose the page orientation of the generated PDF.'),
     );
+
+    $form['settings']['print_pdf_cache_enabled'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enable caching of generated PDFs'),
+      '#default_value' => variable_get('print_pdf_cache_enabled', PRINT_PDF_CACHE_ENABLED_DEFAULT),
+    );
     $form['settings']['print_pdf_images_via_file'] = array(
       '#type' => 'checkbox',
       '#title' => t('Access images via local file access'),
@@ -107,12 +113,6 @@ function print_pdf_settings() {
       );
     }
 
-    $form['settings']['print_pdf_cache_enabled'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Enable caching of generated PDFs'),
-      '#default_value' => variable_get('print_pdf_cache_enabled', PRINT_PDF_CACHE_ENABLED_DEFAULT),
-    );
-
     $form['settings']['print_pdf_display_sys_urllist'] = array(
       '#type' => 'checkbox',
       '#title' => t('Printer-friendly URLs list in system pages'),
@@ -126,13 +126,11 @@ function print_pdf_settings() {
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
     );
-
     $form['settings']['link_text']['print_pdf_link_text_enabled'] = array(
       '#type' => 'checkbox',
       '#title' => t('Enable custom link text'),
       '#default_value' => variable_get('print_pdf_link_text_enabled', PRINT_TYPE_LINK_TEXT_ENABLED_DEFAULT),
     );
-
     $form['settings']['link_text']['print_pdf_link_text'] = array(
       '#type' => 'textfield',
       '#default_value' => variable_get('print_pdf_link_text', $link['text']),
