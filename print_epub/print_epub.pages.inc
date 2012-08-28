@@ -88,17 +88,19 @@ function print_epub_controller() {
  *   (optional) comment ID of the comment to render.
  * @param string $epub_filename
  *   (optional) filename of the generated EPUB
+ * @param string $view_mode
+ *   (optional) view mode to be used when rendering the content
  *
  * @return
  *   generated EPUB page, or NULL in case of error
  *
  * @see print_epub_controller()
  */
-function print_epub_generate_path($path, $cid = NULL, $epub_filename = NULL) {
+function print_epub_generate_path($path, $cid = NULL, $epub_filename = NULL, $view_mode = PRINT_VIEW_MODE) {
   global $base_url;
 
   $link = print_epub_print_link();
-  $node = print_controller($path, $link['format'], $cid);
+  $node = print_controller($path, $link['format'], $cid, $view_mode);
   if ($node) {
     $html = theme('print', array('node' => $node, 'expand_css' => TRUE, 'format' => $link['format']));
 

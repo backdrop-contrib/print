@@ -88,17 +88,19 @@ function print_pdf_controller() {
  *   (optional) comment ID of the comment to render.
  * @param string $pdf_filename
  *   (optional) filename of the generated PDF
+ * @param string $view_mode
+ *   (optional) view mode to be used when rendering the content
  *
  * @return
  *   generated PDF page, or NULL in case of error
  *
  * @see print_pdf_controller()
  */
-function print_pdf_generate_path($path, $cid = NULL, $pdf_filename = NULL) {
+function print_pdf_generate_path($path, $cid = NULL, $pdf_filename = NULL, $view_mode = PRINT_VIEW_MODE) {
   global $base_url;
 
   $link = print_pdf_print_link();
-  $node = print_controller($path, $link['format'], $cid);
+  $node = print_controller($path, $link['format'], $cid, $view_mode);
   if ($node) {
     // Call the current tool's hook_pdf_tool_info(), to see if we need to expand CSS
     $pdf_tool = explode('|', variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT));

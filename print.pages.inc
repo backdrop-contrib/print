@@ -55,8 +55,8 @@ function print_controller_html() {
  *   format of the page being generated
  * @param int $cid
  *   comment ID of the individual comment to be rendered
- * @param bool $teaser
- *   if set to TRUE, outputs only the node's teaser
+ * @param string $view_mode
+ *   (optional) view mode to be used when rendering the content
  *
  * @return object
  *   node-like object to be used in the print template
@@ -66,7 +66,7 @@ function print_controller_html() {
  * @see _print_generate_book()
  * @see print_preprocess_print()
  */
-function print_controller($path, $format, $cid = NULL, $teaser = FALSE) {
+function print_controller($path, $format, $cid = NULL, $view_mode = PRINT_VIEW_MODE) {
   if (empty($path)) {
     // If no path was provided, let's try to generate a page for the referer
     global $base_url;
@@ -90,7 +90,7 @@ function print_controller($path, $format, $cid = NULL, $teaser = FALSE) {
   $revision_view = preg_match('!^[\d]*/revisions/[\d]*/view$!', $path);
   if (ctype_digit($parts[0]) && ((count($parts) == 1) || $revision_view)) {
     $vid = $revision_view ? $parts[2] : NULL;
-    $node = _print_generate_node($path, $format, $vid, $cid, $teaser);
+    $node = _print_generate_node($path, $format, $vid, $cid, $view_mode);
   }
   else {
     $ret = preg_match('!^book/export/html/(.*)!i', $path, $matches);
@@ -561,13 +561,13 @@ function _print_url_list_enabled($node, $format) {
  *   (optional) revision ID of the node to use
  * @param int $cid
  *   (optional) comment ID of the individual comment to be rendered
- * @param bool $teaser
- *   (optional) if set to TRUE, outputs only the node's teaser
+ * @param string $view_mode
+ *   (optional) view mode to be used when rendering the content
  *
  * @return object
  *   filled node-like object to be used in the print template
  */
-function _print_generate_node($nid, $format, $vid = NULL, $cid = NULL, $teaser = FALSE) {
+function _print_generate_node($nid, $format, $vid = NULL, $cid = NULL, $view_mode = PRINT_VIEW_MODE) {
   global $_print_urls;
 
   if (!isset($langcode)) {
@@ -587,8 +587,6 @@ function _print_generate_node($nid, $format, $vid = NULL, $cid = NULL, $teaser =
     return FALSE;
   }
   drupal_set_title($node->title);
-
-  $view_mode = $teaser ? 'teaser' : 'print';
 
   if ($cid === NULL) {
     // Adapted (simplified) version of node_view

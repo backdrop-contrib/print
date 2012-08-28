@@ -298,7 +298,8 @@ function print_mail_form_submit($form, &$form_state) {
 
     $sender_message = t('Message from sender') . ':<br /><br /><em>' . nl2br(check_plain($form_state['values']['txt_message'])) . '</em>';
 
-    $node = print_controller($form_state['values']['path'], $link['format'], $cid, $form_state['values']['chk_teaser']);
+    $view_mode = $form_state['values']['chk_teaser'] ? 'teaser' : PRINT_VIEW_MODE;
+    $node = print_controller($form_state['values']['path'], $link['format'], $cid, $view_mode);
 
     // Spaces in img URLs must be replaced with %20
     $pattern = '!<(img\s[^>]*?)>!is';

@@ -10,6 +10,8 @@
  * @ingroup print
  */
 
+define('PRINT_VIEW_MODE', 'print');
+
 define('PRINT_LOGO_OPTIONS_DEFAULT', 1);
 define('PRINT_LOGO_URL_DEFAULT', '');
 define('PRINT_FOOTER_OPTIONS_DEFAULT', 1);
@@ -114,7 +116,7 @@ function print_theme() {
  * Implements hook_preprocess_HOOK().
  */
 function print_preprocess_node(&$variables) {
-  if (($variables['elements']['#view_mode'] == 'print') && isset($variables['elements']['#print_format'])) {
+  if (($variables['elements']['#view_mode'] == PRINT_VIEW_MODE) && isset($variables['elements']['#print_format'])) {
     $type = $variables['elements']['#node']->type;
     $format = $variables['elements']['#print_format'];
     $nid = $variables['elements']['#node']->nid;
@@ -244,7 +246,7 @@ function print_node_delete($node) {
 function print_entity_info_alter(&$info) {
   // Add the 'Print' view mode for nodes.
   $info['node']['view modes'] += array(
-    'print' => array(
+    PRINT_VIEW_MODE => array(
       'label' => t('Print'),
       'custom settings' => FALSE,
     ),
@@ -252,7 +254,7 @@ function print_entity_info_alter(&$info) {
   // Add the 'Print' view mode for field_collections
   if (module_exists('field_collection')) {
     $info['field_collection_item']['view modes'] += array(
-      'print' => array(
+      PRINT_VIEW_MODE => array(
         'label' => t('Print'),
         'custom settings' => FALSE,
       ),
