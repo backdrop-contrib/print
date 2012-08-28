@@ -23,8 +23,8 @@ function print_pdf_mpdf_print_pdf_generate($html, $meta) {
   $images_via_file = variable_get('print_pdf_images_via_file', PRINT_PDF_IMAGES_VIA_FILE_DEFAULT);
 
   if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
-    define('_MPDF_TTFONTDATAPATH', 'public://print_pdf/print_pdf_mpdf/ttfontdata/');
-    define("_MPDF_TEMP_PATH", 'public://print_pdf/print_pdf_mpdf/tmp/');
+    define('_MPDF_TTFONTDATAPATH', drupal_realpath('public://print_pdf/print_pdf_mpdf/ttfontdata/'));
+    define("_MPDF_TEMP_PATH", drupal_realpath('public://print_pdf/print_pdf_mpdf/tmp/'));
   }
 
   require_once(DRUPAL_ROOT . '/' . $pdf_tool[1]);
