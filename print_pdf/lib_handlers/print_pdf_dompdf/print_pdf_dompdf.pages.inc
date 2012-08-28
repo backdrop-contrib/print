@@ -41,9 +41,11 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta) {
   // Try to use local file access for image files
   $html = _print_access_images_via_file($html, $images_via_file);
 
-  // Spaces in img URLs must be replaced with %20
-  $pattern = '!<(img\s[^>]*?)>!is';
-  $html = preg_replace_callback($pattern, '_print_replace_spaces', $html);
+  // Spaces in img URLs must be replaced with %20, when using external access
+  if (!$images_via_file) {
+    $pattern = '!<(img\s[^>]*?)>!is';
+    $html = preg_replace_callback($pattern, '_print_replace_spaces', $html);
+  }
 
   // dompdf seems to have problems with something in system.css so let's not use it
   $html = preg_replace('!<link.*?modules/system/system.css.*?/>!', '', $html);
