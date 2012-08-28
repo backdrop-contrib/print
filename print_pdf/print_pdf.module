@@ -127,6 +127,22 @@ function print_pdf_menu() {
 }
 
 /**
+ * Implements hook_variable_info().
+ */
+function print_pdf_variable_info($options) {
+  $link = print_pdf_print_link();
+
+  $variable['print_pdf_link_text'] = array(
+    'title' => t('PDF version'),
+    'description' => t('Text used in the link to the PDF version.'),
+    'type' => 'string',
+    'default' => t($link['text']),
+  );
+
+  return $variable;
+}
+
+/**
  * Implements hook_block_info().
  */
 function print_pdf_block_info() {

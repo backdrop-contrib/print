@@ -171,6 +171,22 @@ function print_menu() {
 }
 
 /**
+ * Implements hook_variable_info().
+ */
+function print_variable_info($options) {
+  $link = print_print_link();
+
+  $variable['print_html_link_text'] = array(
+    'title' => t('Printer-friendly version'),
+    'description' => t('Text used in the link to the printer-friendly version.'),
+    'type' => 'string',
+    'default' => t($link['text']),
+  );
+
+  return $variable;
+}
+
+/**
  * Implements hook_block_info().
  */
 function print_block_info() {

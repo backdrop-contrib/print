@@ -82,13 +82,11 @@ function print_mail_settings() {
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
-
   $form['settings']['link_text']['print_mail_link_text_enabled'] = array(
     '#type' => 'checkbox',
     '#title' => t('Enable custom link text'),
     '#default_value' => variable_get('print_mail_link_text_enabled', PRINT_TYPE_LINK_TEXT_ENABLED_DEFAULT),
   );
-
   $form['settings']['link_text']['print_mail_link_text'] = array(
     '#type' => 'textfield',
     '#default_value' => variable_get('print_mail_link_text', $link['text']),

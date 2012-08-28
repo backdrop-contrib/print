@@ -90,6 +90,22 @@ function print_mail_menu() {
 }
 
 /**
+ * Implements hook_variable_info().
+ */
+function print_mail_variable_info($options) {
+  $link = print_mail_print_link();
+
+  $variable['print_mail_link_text'] = array(
+    'title' => t('Send by email'),
+    'description' => t('Text used in the link to the send by email form.'),
+    'type' => 'string',
+    'default' => t($link['text']),
+  );
+
+  return $variable;
+}
+
+/**
  * Implements hook_requirements().
  */
 function print_mail_requirements($phase) {

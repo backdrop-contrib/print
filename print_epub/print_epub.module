@@ -75,6 +75,22 @@ function print_epub_menu() {
 }
 
 /**
+ * Implements hook_variable_info().
+ */
+function print_epub_variable_info($options) {
+  $link = print_epub_print_link();
+
+  $variable['print_epub_link_text'] = array(
+    'title' => t('EPUB version'),
+    'description' => t('Text used in the link to the EPUB version.'),
+    'type' => 'string',
+    'default' => t($link['text']),
+  );
+
+  return $variable;
+}
+
+/**
  * Implements hook_block_info().
  */
 function print_epub_block_info() {
