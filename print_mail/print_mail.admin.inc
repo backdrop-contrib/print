@@ -34,6 +34,13 @@ function print_mail_settings() {
     '#description' => t('The maximum number of emails a user can send per hour.'),
   );
 
+  $form['settings']['print_mail_use_reply_to'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use Reply-To header'),
+    '#default_value' => variable_get('print_mail_use_reply_to', PRINT_MAIL_USE_REPLY_TO),
+    '#description' => t("When enabled, any email sent will use the provided user and username in the 'Reply-To' header, with the site's email address used in the 'From' header (configured in !link). Enabling this helps in preventing email being flagged as spam.", array('!link' => l(t('Site information'), 'admin/config/system/site-information'))),
+  );
+
   $form['settings']['print_mail_teaser_default'] = array(
     '#type' => 'checkbox',
     '#title' => t('Send only the teaser'),

@@ -287,34 +287,38 @@ function print_mail_form_submit($form, &$form_state) {
     module_load_include('inc', 'print', 'includes/print');
 
     $link = print_mail_print_link();
-
-    if (!empty($form_state['values']['fld_from_name'])) {
-      $from = '"' . mime_header_encode($form_state['values']['fld_from_name']) . '" <' . $form_state['values']['fld_from_addr'] . '>';
-    }
-    else {
-      $from = $form_state['values']['fld_from_addr'];
-    }
     $cid = isset($form_state['values']['cid']) ? $form_state['values']['cid'] : NULL;
-
-    $sender_message = t('Message from sender') . ':<br /><br /><em>' . nl2br(check_plain($form_state['values']['txt_message'])) . '</em>';
-
     $view_mode = $form_state['values']['chk_teaser'] ? 'teaser' : PRINT_VIEW_MODE;
     $node = print_controller($form_state['values']['path'], $link['format'], $cid, $view_mode);
-
-    // Spaces in img URLs must be replaced with %20
-    $pattern = '!<(img\s[^>]*?)>!is';
-    $node->content = preg_replace_callback($pattern, '_print_replace_spaces', $node->content);
 
     if ($node) {
       $print_mail_send_option_default = variable_get('print_mail_send_option_default', PRINT_MAIL_SEND_OPTION_DEFAULT);
 
       $params = array();
       $params['subject'] = $form_state['values']['fld_subject'];
-      $params['message'] = $sender_message;
+      $params['message'] = t('Message from sender') . ':<br /><br /><em>' . nl2br(check_plain($form_state['values']['txt_message'])) . '</em>';
       $params['link'] = url($form_state['values']['path'], array('absolute' => TRUE));
       $params['title'] = $form_state['values']['title'];
 
-      $params['body'] = theme('print', array('node' => $node, 'format' => $link['format'], 'expand_css' => TRUE, 'message' => $sender_message));
+      // If a name is provided, make From: in the format Common Name <address>
+      if (!empty($form_state['values']['fld_from_name'])) {
+        $from = '"' . mime_header_encode($form_state['values']['fld_from_name']) . '" <' . $form_state['values']['fld_from_addr'] . '>';
+      }
+      else {
+        $from = $form_state['values']['fld_from_addr'];
+      }
+
+      // If using reply-to, move the From: info to the params array, so that it is passed to hook_mail later
+      if (variable_get('print_mail_use_reply_to', PRINT_MAIL_USE_REPLY_TO)) {
+        $params['from'] = $from;
+        $from = NULL;
+      }
+
+      // Spaces in img URLs must be replaced with %20
+      $pattern = '!<(img\s[^>]*?)>!is';
+      $node->content = preg_replace_callback($pattern, '_print_replace_spaces', $node->content);
+
+      $params['body'] = theme('print', array('node' => $node, 'format' => $link['format'], 'expand_css' => TRUE, 'message' => $params['message']));
 
       // Img elements must be set to absolute
       $pattern = '!<(img\s[^>]*?)>!is';

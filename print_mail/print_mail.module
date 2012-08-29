@@ -8,6 +8,7 @@
  */
 
 define('PRINT_MAIL_HOURLY_THRESHOLD', 3);
+define('PRINT_MAIL_USE_REPLY_TO', TRUE);
 define('PRINT_MAIL_TEASER_DEFAULT_DEFAULT', 1);
 define('PRINT_MAIL_TEASER_CHOICE_DEFAULT', 0);
 define('PRINT_MAIL_SEND_OPTION_DEFAULT', 'sendpage');
@@ -202,6 +203,10 @@ function print_mail_send($data) {
  */
 function print_mail_mail($key, &$message, $params) {
   $message['subject'] = $params['subject'];
+
+  if (isset($params['from'])) {
+    $message['headers']['Reply-To'] = $params['from'];
+  }
 
   switch ($key) {
     case 'sendpage':
