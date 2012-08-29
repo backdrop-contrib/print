@@ -747,7 +747,7 @@ function _print_ui_page_match($visibility, $path, $pages) {
 function _print_ui_query_string_encode($query, $exclude = array(), $parent = '') {
   $params = array();
   foreach ($query as $key => $value) {
-    if (in_array($key, $exclude)) {
+    if (in_array($key, $exclude, TRUE)) {
       continue;
     }
 
