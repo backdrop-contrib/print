@@ -81,6 +81,29 @@ function print_pdf_settings() {
       '#title' => t('Enable caching of generated PDFs'),
       '#default_value' => variable_get('print_pdf_cache_enabled', PRINT_PDF_CACHE_ENABLED_DEFAULT),
     );
+
+    $form['settings']['print_pdf_cache_lifetime'] = array(
+      '#type' => 'select',
+      '#title' => t('Cache Lifetime'),
+      '#options' => array(
+        '0'      => 'None',
+        '10800'  => '3 hours',
+        '21600'  => '6 hours',
+        '43200'  => '12 hours',
+        '64800'  => '18 hours',
+        '86400'  => '24 hours',
+        '129600' => '36 hours',
+        '172800' => '2 days',
+        '259200' => '3 days',
+        '345600' => '4 days',
+        '432000' => '5 days',
+        '518400' => '6 days',
+        '604800' => '7 days',
+      ),
+      '#default_value' => variable_get('print_pdf_cache_lifetime', PRINT_PDF_CACHE_LIFETIME_DEFAULT),
+      '#description' => t('The lifetime of cached PDFs. A cached PDF is only removed when a node is updated, deleted, or cron is run and the last access is older than this value.'),
+    );
+
     $form['settings']['print_pdf_images_via_file'] = array(
       '#type' => 'checkbox',
       '#title' => t('Access images via local file access'),

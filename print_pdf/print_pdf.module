@@ -15,6 +15,7 @@ define('PRINT_PDF_IMAGES_VIA_FILE_DEFAULT', 0);
 define('PRINT_PDF_AUTOCONFIG_DEFAULT', 1);
 define('PRINT_PDF_FILENAME_DEFAULT', '[site:name] - [node:title] - [node:changed:custom:Y-m-d]');
 define('PRINT_PDF_CACHE_ENABLED_DEFAULT', 0);
+define('PRINT_PDF_CACHE_LIFETIME_DEFAULT', 86400); // 1 day
 
 /**
  * Implements hook_print_link().
@@ -323,6 +324,34 @@ function print_pdf_link_allowed($args) {
   $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
 
   return (user_access('access PDF version') && (!empty($print_pdf_pdf_tool)));
+}
+
+/**
+ * Implements hook_cron().
+ */
+function print_pdf_cron() {
+  print_pdf_cache_clean();
+}
+
+/**
+ * Removes pdf files for nodes/paths if they are older than the lifetime.
+ */
+function print_pdf_cache_clean() {
+  $lifetime = variable_get('print_pdf_cache_lifetime', PRINT_PDF_CACHE_LIFETIME_DEFAULT);
+
+  if ($lifetime > 0) {
+    $files = file_scan_directory(print_pdf_cache_dir(), '!\d+\.pdf$!');
+    foreach ($files as $file) {
+      // For all files in the cache directory, see when they were last accessed
+      $result = db_query("SELECT timestamp FROM {print_pdf_page_counter} WHERE path = :path", array(':path' => 'node/' . $file->name))
+                   ->fetchField();
+
+      // Keep the file only if the last access was within the cache max life value
+      if (($result === FALSE) || ($result + $lifetime < REQUEST_TIME)) {
+        print_pdf_cache_delete($file->name);
+      }
+    }
+  }
 }
 
 /**
