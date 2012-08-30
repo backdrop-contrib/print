@@ -275,14 +275,24 @@ function _print_get_title($path) {
   $path = drupal_get_normal_path($path);
   $nid = preg_replace('!^node/!', '', $path);
   if (ctype_digit($nid)) {
-    $res = db_query("SELECT title FROM {node} WHERE nid = :nid", array(':nid' => $nid))
+    return db_query("SELECT title FROM {node} WHERE nid = :nid", array(':nid' => $nid))
               ->fetchField();
   }
   else {
-    $res = db_query("SELECT link_title FROM {menu_links} WHERE link_path = :link_path", array(':link_path' => $path))
-              ->fetchField();
+    // Not a node, try to get title from the menu system
+    $menu_item = menu_get_item($path);
+    if (!empty($menu_item['title'])) {
+      return $menu_item['title'];
+    }
+    elseif (substr($menu_item['page_callback'], 0, 6) == 'views_') {
+      // It's a view, load the view to have access to the title
+      $view = views_get_view($menu_item['page_arguments']['0']);
+      return $view->get_title();
+    }
+    else {
+      return NULL;
+    }
   }
-  return $res;
 }
 
 /**
