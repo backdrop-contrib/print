@@ -195,7 +195,9 @@ function print_mail_form_for_path($form, &$form_state, $path, $user = NULL) {
  * @ingroup themeable
  * @ingroup print_themeable
  */
-function theme_print_mail_form($form) {
+function theme_print_mail_form($variables) {
+  $form = $variables['form'];
+
   drupal_add_css(drupal_get_path('module', 'print_mail') . '/css/print_mail.theme.css');
   $content = '';
   foreach (element_children($form) as $key) {

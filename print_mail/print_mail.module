@@ -51,7 +51,7 @@ function print_mail_permission() {
 function print_mail_theme() {
   return array(
     'print_mail_form' => array(
-      'variables' => array('form' => NULL),
+      'render element' => 'form',
       'file' => 'print_mail.inc',
     ),
   );
