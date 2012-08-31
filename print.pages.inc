@@ -26,7 +26,11 @@ function print_controller_html() {
 
   $node = print_controller($path, $link['format'], $cid);
   if ($node) {
-    $html = theme('print', array('node' => $node, 'format' => $link['format']));
+    // Handle the query
+    $query = $_GET;
+    unset($query['q']);
+
+    $html = theme('print', array('node' => $node, 'query' => $query, 'format' => $link['format']));
     drupal_add_http_header('Content-Type', 'text/html; charset=utf-8');
     drupal_send_headers();
     print $html;
@@ -161,8 +165,8 @@ function print_preprocess_print(&$variables) {
   $variables['scripts']                  = drupal_get_js();
   $variables['footer_scripts']           = drupal_get_js('footer');
   $variables['sourceurl_enabled']        = variable_get('print_sourceurl_enabled', PRINT_SOURCEURL_ENABLED_DEFAULT);
-  $variables['url']                      = url($path, array('absolute' => TRUE));
-  $variables['source_url']               = url(variable_get('print_sourceurl_forcenode', PRINT_SOURCEURL_FORCENODE_DEFAULT) ? drupal_get_normal_path($path) : $path, array('alias' => TRUE, 'absolute' => TRUE));
+  $variables['url']                      = url($path, array('absolute' => TRUE, 'query' => $variables['query']));
+  $variables['source_url']               = url(variable_get('print_sourceurl_forcenode', PRINT_SOURCEURL_FORCENODE_DEFAULT) ? drupal_get_normal_path($path) : $path, array('alias' => TRUE, 'absolute' => TRUE, 'query' => $variables['query']));
   $variables['cid']                      = isset($node->cid) ? $node->cid : NULL;
   $variables['print_title']                    = check_plain($node->title);
   $variables['head']                     = drupal_get_html_head();

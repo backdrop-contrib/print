@@ -49,7 +49,11 @@ function print_mail_form($form, &$form_state) {
     $path = drupal_get_normal_path($path);
   }
 
-  return print_mail_form_for_path($form, $form_state, $path);
+  // Handle the query
+  $query = $_GET;
+  unset($query['q']);
+
+  return print_mail_form_for_path($form, $form_state, $path, $query);
 }
 
 /**
@@ -57,7 +61,7 @@ function print_mail_form($form, &$form_state) {
  *
  * @ingroup forms
  */
-function print_mail_form_for_path($form, &$form_state, $path, $user = NULL) {
+function print_mail_form_for_path($form, &$form_state, $path, $query = NULL, $user = NULL) {
   if($user === NULL) {
     global $user;
   }
@@ -92,6 +96,7 @@ function print_mail_form_for_path($form, &$form_state, $path, $user = NULL) {
   }
 
   $form['path'] = array('#type' => 'value', '#value' => $path);
+  $form['query'] = array('#type' => 'value', '#value' => $query);
   $form['cid'] =  array('#type' => 'value', '#value' => $cid);
   $form['title'] = array('#type' => 'value', '#value' => $title);
 
@@ -121,6 +126,7 @@ function print_mail_form_for_path($form, &$form_state, $path, $user = NULL) {
     '#required' => TRUE,
   );
   if (!empty($title)) {
+    // To prevent useless translation strings, try to translate only node titles
     if (drupal_substr($path, 0, 5) == 'node/') {
       $title = t($title);
     }
@@ -128,7 +134,7 @@ function print_mail_form_for_path($form, &$form_state, $path, $user = NULL) {
     $form['fld_title'] = array(
       '#type' => 'item',
       '#title' => t('Page to be sent'),
-      '#markup' => l($title, $path, array('attributes' => array('title' => t('View page')))),
+      '#markup' => l($title, $path, array('attributes' => array('title' => t('View page')), 'query' => $query)),
     );
   }
   $form['txt_message'] = array(
@@ -227,7 +233,7 @@ function print_mail_form_validate($form, &$form_state) {
     form_set_error(NULL, '', TRUE);
     drupal_get_messages('error');
 
-    drupal_goto(preg_replace('!^book/export/html/!', 'node/', $form_state['values']['path']));
+    drupal_goto(preg_replace('!^book/export/html/!', 'node/', $form_state['values']['path']), array('query' => $form_state['values']['query']));
     return;
   }
   $from_addr = trim($form_state['values']['fld_from_addr']);
@@ -299,7 +305,7 @@ function print_mail_form_submit($form, &$form_state) {
       $params = array();
       $params['subject'] = $form_state['values']['fld_subject'];
       $params['message'] = t('Message from sender') . ':<br /><br /><em>' . nl2br(check_plain($form_state['values']['txt_message'])) . '</em>';
-      $params['link'] = url($form_state['values']['path'], array('absolute' => TRUE));
+      $params['link'] = url($form_state['values']['path'], array('absolute' => TRUE, 'query' => $form_state['values']['query']));
       $params['title'] = $form_state['values']['title'];
 
       // If a name is provided, make From: in the format Common Name <address>
@@ -320,7 +326,7 @@ function print_mail_form_submit($form, &$form_state) {
       $pattern = '!<(img\s[^>]*?)>!is';
       $node->content = preg_replace_callback($pattern, '_print_replace_spaces', $node->content);
 
-      $params['body'] = theme('print', array('node' => $node, 'format' => $link['format'], 'expand_css' => TRUE, 'message' => $params['message']));
+      $params['body'] = theme('print', array('node' => $node, 'query' => $form_state['values']['query'], 'format' => $link['format'], 'expand_css' => TRUE, 'message' => $params['message']));
 
       // Img elements must be set to absolute
       $pattern = '!<(img\s[^>]*?)>!is';
@@ -352,7 +358,8 @@ function print_mail_form_submit($form, &$form_state) {
         }
       }
       if ($ok) {
-        watchdog('print_mail', '%name [%from] sent %page to [%to]', array('%name' => $form_state['values']['fld_from_name'], '%from' => $form_state['values']['fld_from_addr'], '%page' => $form_state['values']['path'], '%to' => $form_state['values']['txt_to_addrs']));
+        $query = empty($form_state['values']['query']) ? '' : '?' . rawurldecode(drupal_http_build_query($form_state['values']['query']));
+        watchdog('print_mail', '%name [%from] sent %page to [%to]', array('%name' => $form_state['values']['fld_from_name'], '%from' => $form_state['values']['fld_from_addr'], '%page' => $form_state['values']['path'] . $query, '%to' => $form_state['values']['txt_to_addrs']));
         $site_name = variable_get('site_name', t('us'));
         drupal_set_message(check_plain(t('Thank you for spreading the word about !site.', array('!site' => $site_name))));
 
@@ -369,5 +376,5 @@ function print_mail_form_submit($form, &$form_state) {
     }
   }
 
-  $form_state['redirect'] = preg_replace('!^book/export/html/!', 'node/', $form_state['values']['path']);
+  $form_state['redirect'] = array(preg_replace('!^book/export/html/!', 'node/', $form_state['values']['path']), array('query' => $form_state['values']['query']));
 }

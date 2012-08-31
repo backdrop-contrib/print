@@ -27,6 +27,10 @@ function print_pdf_controller() {
   $path = filter_xss(implode('/', $args));
   $cid = isset($_GET['comment']) ? (int)$_GET['comment'] : NULL;
 
+  // Handle the query
+  $query = $_GET;
+  unset($query['q']);
+
   if (!empty($path)) {
     if ($alias = drupal_lookup_path('source', $path)) {
       // Alias
@@ -60,7 +64,7 @@ function print_pdf_controller() {
 
   drupal_alter('print_pdf_filename', $pdf_filename, $path);
 
-  $pdf = print_pdf_generate_path($path, $cid, $pdf_filename . '.pdf');
+  $pdf = print_pdf_generate_path($path, $query, $cid, $pdf_filename . '.pdf');
   if ($pdf == NULL) {
     drupal_goto($path);
     exit;
@@ -84,6 +88,8 @@ function print_pdf_controller() {
  *
  * @param string $path
  *   path of the page to convert to PDF
+ * @param array $query
+ *   (optional) array of key/value pairs as used in the url() function for the query
  * @param int $cid
  *   (optional) comment ID of the comment to render.
  * @param string $pdf_filename
@@ -96,7 +102,7 @@ function print_pdf_controller() {
  *
  * @see print_pdf_controller()
  */
-function print_pdf_generate_path($path, $cid = NULL, $pdf_filename = NULL, $view_mode = PRINT_VIEW_MODE) {
+function print_pdf_generate_path($path, $query = NULL, $cid = NULL, $pdf_filename = NULL, $view_mode = PRINT_VIEW_MODE) {
   global $base_url;
 
   $link = print_pdf_print_link();
@@ -112,7 +118,7 @@ function print_pdf_generate_path($path, $cid = NULL, $pdf_filename = NULL, $view
     }
     $expand = isset($info['expand_css']) ? $info['expand_css'] : FALSE;
 
-    $html = theme('print', array('node' => $node, $expand, 'format' => $link['format']));
+    $html = theme('print', array('node' => $node, 'query' => $query, $expand, 'format' => $link['format']));
 
     // Img elements must be set to absolute
     $pattern = '!<(img\s[^>]*?)>!is';

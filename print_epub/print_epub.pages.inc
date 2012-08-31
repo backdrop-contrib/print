@@ -27,6 +27,10 @@ function print_epub_controller() {
   $path = filter_xss(implode('/', $args));
   $cid = isset($_GET['comment']) ? (int)$_GET['comment'] : NULL;
 
+  // Handle the query
+  $query = $_GET;
+  unset($query['q']);
+
   if (!empty($path)) {
     if ($alias = drupal_lookup_path('source', $path)) {
       // Alias
@@ -60,7 +64,7 @@ function print_epub_controller() {
 
   drupal_alter('print_epub_filename', $epub_filename, $path);
 
-  $epub = print_epub_generate_path($path, $cid, $epub_filename . '.epub');
+  $epub = print_epub_generate_path($path, $query, $cid, $epub_filename . '.epub');
   if ($epub == NULL) {
     drupal_goto($path);
     exit;
@@ -84,6 +88,8 @@ function print_epub_controller() {
  *
  * @param string $path
  *   path of the page to convert to EPUB
+ * @param array $query
+ *   (optional) array of key/value pairs as used in the url() function for the query
  * @param int $cid
  *   (optional) comment ID of the comment to render.
  * @param string $epub_filename
@@ -96,13 +102,13 @@ function print_epub_controller() {
  *
  * @see print_epub_controller()
  */
-function print_epub_generate_path($path, $cid = NULL, $epub_filename = NULL, $view_mode = PRINT_VIEW_MODE) {
+function print_epub_generate_path($path, $query = NULL, $cid = NULL, $epub_filename = NULL, $view_mode = PRINT_VIEW_MODE) {
   global $base_url;
 
   $link = print_epub_print_link();
   $node = print_controller($path, $link['format'], $cid, $view_mode);
   if ($node) {
-    $html = theme('print', array('node' => $node, 'expand_css' => TRUE, 'format' => $link['format']));
+    $html = theme('print', array('node' => $node, 'query' => $query, 'expand_css' => TRUE, 'format' => $link['format']));
 
     $meta = array(
       'node' => $node,
