@@ -13,14 +13,18 @@
 /**
  * Implements hook_print_pdf_generate().
  */
-function print_pdf_tcpdf_print_pdf_generate($html, $meta) {
+function print_pdf_tcpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $page_orientation = NULL) {
   global $base_url, $language;
 
   module_load_include('inc', 'print', 'includes/print');
 
   $pdf_tool = explode('|', variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT));
-  $paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
-  $page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
+  if (empty($paper_size)) {
+    $paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
+  }
+  if (empty($page_orientation)) {
+    $page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
+  }
   $content_disposition = variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT);
   $images_via_file = variable_get('print_pdf_images_via_file', PRINT_PDF_IMAGES_VIA_FILE_DEFAULT);
 

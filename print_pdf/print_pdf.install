@@ -92,6 +92,17 @@ function print_pdf_schema() {
         'size' => 'tiny',
         'description' => 'Show Printer-friendly URLs list',
       ),
+      'size' => array(
+        'type' => 'varchar',
+        'length' => 9,
+        'description' => 'Paper size',
+      ),
+      'orientation' => array(
+        'type' => 'varchar',
+        'length' => 9,
+        'description' => 'Page orientation',
+      ),
+
     ),
     'primary key' => array('nid'),
   );
@@ -187,4 +198,22 @@ function print_pdf_update_7202(&$sandbox) {
   $link_pos['block'] = 'block';
   $link_pos['help'] = 'help';
   variable_set('print_pdf_link_pos', $link_pos);
+}
+
+/**
+* Add Size and Orientation fields for per content type Size and Orientation
+*/
+function print_pdf_update_7203(&$sandbox) {
+  $spec = array(
+    'type' => 'varchar',
+    'length' => 9,
+    'description' => 'Paper size',
+  );
+  db_add_field('print_pdf_node_conf', 'size', $spec);
+  $spec = array(
+    'type' => 'varchar',
+    'length' => 9,
+    'description' => 'Page orientation',
+  );
+  db_add_field('print_pdf_node_conf', 'orientation', $spec);
 }

@@ -320,12 +320,12 @@ function print_ui_node_insert($node) {
  * Implements hook_node_update().
  */
 function print_ui_node_update($node) {
-  foreach (module_implements('print_link') as $module) {
-    $function = $module . '_print_link';
-    if (function_exists($function)) {
-      $link = call_user_func_array($function, array());
+  if (user_access('administer print') || user_access('node-specific print configuration')) {
+    foreach (module_implements('print_link') as $module) {
+      $function = $module . '_print_link';
+      if (function_exists($function)) {
+        $link = call_user_func_array($function, array());
 
-      if (user_access('administer print') || user_access('node-specific print configuration')) {
         $display = 'print_' . $link['format'] . '_display';
         $display_comment = 'print_' . $link['format'] . '_display_comment';
         $display_urllist =  'print_' . $link['format'] . '_display_urllist';
@@ -384,38 +384,39 @@ function print_ui_form_alter(&$form, &$form_state, $form_id) {
       if (function_exists($function)) {
         $link = call_user_func_array($function, array());
 
-        $form['print']['print_' . $link['format'] . '_label'] = array(
-          '#type' => 'markup',
-          '#markup' => '<p><strong>' . $link['text'] . '</strong></p>',
+        $form['print']['print_' . $link['format']] = array(
+          '#type' => 'fieldset',
+          '#title' => $link['text'],
+          '#collapsible' => TRUE,
         );
 
         $display = 'print_' . $link['format'] . '_display';
         $display_comment = 'print_' . $link['format'] . '_display_comment';
         $display_urllist =  'print_' . $link['format'] . '_display_urllist';
 
-        $form['print'][$display] = array(
+        $form['print']['print_' . $link['format']][$display] = array(
           '#type' => 'checkbox',
           '#title' => t('Show link'),
         );
-        $form['print'][$display_comment] = array(
+        $form['print']['print_' . $link['format']][$display_comment] = array(
           '#type' => 'checkbox',
           '#title' => t('Show link in individual comments'),
         );
-        $form['print'][$display_urllist] = array(
+        $form['print']['print_' . $link['format']][$display_urllist] = array(
           '#type' => 'checkbox',
           '#title' => t('Show Printer-friendly URLs list'),
         );
 
         if ($form_id == 'node_type_form') {
-          $form['print'][$display]['#default_value'] = variable_get($display . '_' . $form['#node_type']->type, PRINT_UI_TYPE_SHOW_LINK_DEFAULT);
-          $form['print'][$display_comment]['#default_value'] = variable_get($display_comment . '_' . $form['#node_type']->type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
-          $form['print'][$display_urllist]['#default_value'] = variable_get($display_urllist . '_' . $form['#node_type']->type, PRINT_TYPE_URLLIST_DEFAULT);
+          $form['print']['print_' . $link['format']][$display]['#default_value'] = variable_get($display . '_' . $form['#node_type']->type, PRINT_UI_TYPE_SHOW_LINK_DEFAULT);
+          $form['print']['print_' . $link['format']][$display_comment]['#default_value'] = variable_get($display_comment . '_' . $form['#node_type']->type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
+          $form['print']['print_' . $link['format']][$display_urllist]['#default_value'] = variable_get($display_urllist . '_' . $form['#node_type']->type, PRINT_TYPE_URLLIST_DEFAULT);
         }
         else {
           $node = $form['#node'];
-          $form['print'][$display]['#default_value'] = isset($node->{$display}) ? $node->{$display} : variable_get($display . '_' . $node->type, PRINT_UI_TYPE_SHOW_LINK_DEFAULT);
-          $form['print'][$display_comment]['#default_value'] = isset($node->{$display_comment}) ? $node->{$display_comment} : variable_get($display_comment . '_' . $node->type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
-          $form['print'][$display_urllist]['#default_value'] = isset($node->{$display_urllist}) ? $node->{$display_urllist} : variable_get($display_urllist . '_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT);
+          $form['print']['print_' . $link['format']][$display]['#default_value'] = isset($node->{$display}) ? $node->{$display} : variable_get($display . '_' . $node->type, PRINT_UI_TYPE_SHOW_LINK_DEFAULT);
+          $form['print']['print_' . $link['format']][$display_comment]['#default_value'] = isset($node->{$display_comment}) ? $node->{$display_comment} : variable_get($display_comment . '_' . $node->type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
+          $form['print']['print_' . $link['format']][$display_urllist]['#default_value'] = isset($node->{$display_urllist}) ? $node->{$display_urllist} : variable_get($display_urllist . '_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT);
         }
       }
     }

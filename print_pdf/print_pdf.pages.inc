@@ -137,6 +137,9 @@ function print_pdf_generate_path($path, $query = NULL, $cid = NULL, $pdf_filenam
     if (isset($node->name)) $meta['name'] = $node->name;
     if (isset($node->title)) $meta['title'] = $node->title;
 
+    $paper_size = isset($node->print_pdf_size) ? $node->print_pdf_size : NULL;
+    $page_orientation = isset($node->print_pdf_orientation) ? $node->print_pdf_orientation : NULL;
+
     $pdf = '';
     $cachemiss = FALSE;
     if ($cache_enabled && isset($node->nid)) {
@@ -156,7 +159,7 @@ function print_pdf_generate_path($path, $query = NULL, $cid = NULL, $pdf_filenam
 
     // If cache is off or file is not cached, generate one from scratch
     if (empty($pdf)) {
-      $pdf = print_pdf_generate_html($html, $meta);
+      $pdf = print_pdf_generate_html($html, $meta, NULL, $paper_size, $page_orientation);
     }
 
     if (!empty($pdf)) {

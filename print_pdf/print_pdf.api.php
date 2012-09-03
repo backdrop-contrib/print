@@ -72,6 +72,10 @@ function hook_pdf_tool_version() {
  *   - name: author's name
  *   - title: Page title
  *   - node: node object
+ * @param string $paper_size
+ *   (optional) Paper size of the generated PDF
+ * @param string $page_orientation
+ *   (optional) Page orientation of the generated PDF
  *
  * @return
  *   generated PDF page, or NULL in case of error
@@ -79,7 +83,7 @@ function hook_pdf_tool_version() {
  * @see print_pdf_controller_html()
  * @ingroup print_hooks
  */
-function hook_print_pdf_generate($html, $meta) {
+function hook_print_pdf_generate($html, $meta, $paper_size = NULL, $page_orientation = NULL) {
   $pdf = new PDF();
   $pdf->writeHTML($html);
 
