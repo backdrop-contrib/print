@@ -54,6 +54,14 @@ function print_mail_theme() {
       'render element' => 'form',
       'file' => 'print_mail.inc',
     ),
+    'print_mail_sendlink_html' => array(
+      'variables' => array('params' => NULL),
+      'file' => 'print_mail.inc',
+    ),
+    'print_mail_sendlink_plain' => array(
+      'variables' => array('params' => NULL),
+      'file' => 'print_mail.inc',
+    ),
   );
 }
 
@@ -215,8 +223,8 @@ function print_mail_mail($key, &$message, $params) {
       break;
     case 'sendlink':
       // Generate plain-text and html versions of message with link
-      $sendlink_plain = $params['message'] . '\n\n' . $params['link'];
-      $sendlink_html = $params['message'] . '<br/><br/>' . l($params['title'], $params['link']);
+      $sendlink_plain = theme('print_mail_sendlink_plain', $params);
+      $sendlink_html = theme('print_mail_sendlink_html', $params);
 
       // Send HTML-only version if MIME library not present
       if (!class_exists('Mail_mime')) {

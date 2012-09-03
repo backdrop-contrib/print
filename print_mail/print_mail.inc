@@ -223,6 +223,36 @@ function theme_print_mail_form($variables) {
 }
 
 /**
+ * Theme function for the email sending just the link.
+ *
+ * Allows themes and modules to override the default sendlink plain text format.
+ *
+ * @param $params
+ *   $params as passed to print_mail_mail().
+ *
+ * @ingroup themeable
+ * @ingroup print_themeable
+ */
+function theme_print_mail_sendlink_plain($params) {
+  return $params['message'] .'\n\n'. $params['link'];
+}
+
+/**
+ * Theme function for the email sending just the link.
+ *
+ * Allows themes and modules to override the default sendlink HTML format.
+ *
+ * @param $params
+ *   $params as passed to print_mail_mail().
+ *
+ * @ingroup themeable
+ * @ingroup print_themeable
+ */
+function theme_print_mail_sendlink_html($params) {
+  return $params['message'] .'<br/><br/>'. l($params['title'], $params['link']);
+}
+
+/**
  * Form validation handler for print_mail_form().
  *
  * @see print_mail_form()
