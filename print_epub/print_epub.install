@@ -16,7 +16,7 @@ function print_epub_enable() {
   // Module weight
   db_update('system')
     ->fields(array(
-      'weight' => 3,
+      'weight' => 4,
     ))
     ->condition('type', 'module')
     ->condition('name', 'print_epub')
