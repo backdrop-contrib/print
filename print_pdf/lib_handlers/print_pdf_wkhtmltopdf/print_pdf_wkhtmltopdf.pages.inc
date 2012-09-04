@@ -73,7 +73,7 @@ function print_pdf_wkhtmltopdf_print_pdf_generate($html, $meta, $paper_size = NU
     return $pdf;
   }
   else {
-    drupal_set_message('Unable to generate PDF file.', 'error');
+    drupal_set_message(t('Unable to generate PDF file.'), 'error');
     drupal_goto($meta['url']);
     return NULL;
   }

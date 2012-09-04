@@ -89,7 +89,8 @@ function print_epub_controller() {
  * @param string $path
  *   path of the page to convert to EPUB
  * @param array $query
- *   (optional) array of key/value pairs as used in the url() function for the query
+ *   (optional) array of key/value pairs as used in the url() function for the
+ *   query
  * @param int $cid
  *   (optional) comment ID of the comment to render.
  * @param string $epub_filename

@@ -1,4 +1,12 @@
 <?php
+
+/**
+ * @file
+ * Custom Views integration join for the page counters
+ *
+ * @ingroup print
+ */
+
 class print_join_page_counter extends views_join {
   // PHP 4 doesn't call constructors of the base class automatically from a
   // constructor of a derived class. It is your responsibility to propagate

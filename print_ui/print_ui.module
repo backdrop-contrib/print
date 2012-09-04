@@ -386,7 +386,7 @@ function print_ui_form_alter(&$form, &$form_state, $form_id) {
 
         $form['print']['print_' . $link['format']] = array(
           '#type' => 'fieldset',
-          '#title' => $link['text'],
+          '#title' => check_plain($link['text']),
           '#collapsible' => TRUE,
         );
 

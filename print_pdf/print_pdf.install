@@ -201,8 +201,8 @@ function print_pdf_update_7202(&$sandbox) {
 }
 
 /**
-* Add Size and Orientation fields for per content type Size and Orientation
-*/
+ * Add Size and Orientation fields for per content type Size and Orientation
+ */
 function print_pdf_update_7203(&$sandbox) {
   $spec = array(
     'type' => 'varchar',

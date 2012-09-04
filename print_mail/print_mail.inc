@@ -62,7 +62,7 @@ function print_mail_form($form, &$form_state) {
  * @ingroup forms
  */
 function print_mail_form_for_path($form, &$form_state, $path, $query = NULL, $user = NULL) {
-  if($user === NULL) {
+  if ($user === NULL) {
     global $user;
   }
 
@@ -87,10 +87,10 @@ function print_mail_form_for_path($form, &$form_state, $path, $query = NULL, $us
   if ($print_mail_user_recipients_default) {
     $options = array();
     if (module_exists('realname')) {
-      $sql = "SELECT u.mail, r.realname AS name from {users} u LEFT JOIN {realname} r ON u.uid = r.uid WHERE u.uid != :uid ORDER BY name ASC";
+      $sql = "SELECT u.mail, r.realname AS name from {users} u LEFT JOIN {realname} r ON u.uid = r.uid WHERE u.uid <> :uid ORDER BY name ASC";
     }
     else {
-      $sql = "SELECT mail, name from {users} WHERE uid != :uid ORDER BY name ASC";
+      $sql = "SELECT mail, name from {users} WHERE uid <> :uid ORDER BY name ASC";
     }
     $recipients = db_query($sql, array(':uid' => drupal_anonymous_user()->uid));
     foreach ($recipients as $recipient) {
@@ -261,7 +261,7 @@ function theme_print_mail_form($variables) {
  * @ingroup print_themeable
  */
 function theme_print_mail_sendlink_plain($params) {
-  return $params['message'] .'\n\n'. $params['link'];
+  return $params['message'] . '\n\n' . $params['link'];
 }
 
 /**
@@ -276,7 +276,7 @@ function theme_print_mail_sendlink_plain($params) {
  * @ingroup print_themeable
  */
 function theme_print_mail_sendlink_html($params) {
-  return $params['message'] .'<br/><br/>'. l($params['title'], $params['link']);
+  return $params['message'] . '<br/><br/>' . l($params['title'], $params['link']);
 }
 
 /**

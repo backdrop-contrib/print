@@ -284,7 +284,7 @@ function _print_get_title($path) {
     if (!empty($menu_item['title'])) {
       return $menu_item['title'];
     }
-    elseif (substr($menu_item['page_callback'], 0, 6) == 'views_') {
+    elseif (drupal_substr($menu_item['page_callback'], 0, 6) == 'views_') {
       // It's a view, load the view to have access to the title
       $view = views_get_view($menu_item['page_arguments']['0']);
       return $view->get_title();

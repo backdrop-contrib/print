@@ -1,6 +1,13 @@
 <?php
 
 /**
+ * @file
+ * EPUB Version Views integration
+ *
+ * @ingroup print
+ */
+
+/**
  * Implements hook_views_data().
  */
 function print_epub_views_data() {
