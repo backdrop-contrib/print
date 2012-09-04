@@ -13,6 +13,7 @@ define('PRINT_MAIL_TEASER_DEFAULT_DEFAULT', 1);
 define('PRINT_MAIL_TEASER_CHOICE_DEFAULT', 0);
 define('PRINT_MAIL_SEND_OPTION_DEFAULT', 'sendpage');
 define('PRINT_MAIL_JOB_QUEUE_DEFAULT', 0);
+define('PRINT_MAIL_USER_RECIPIENTS_DEFAULT', 0);
 
 /**
  * Implements hook_print_link().
@@ -371,7 +372,7 @@ function print_mail_mollom_form_info($form_id) {
         'elements' => array(
           'fld_from_addr' => t('Sender email'),
           'fld_from_name' => t('Sender name'),
-          'txt_to_addrs' => t('Recipients'),
+          'txt_to' => t('Recipients'),
           'fld_subject' => t('Subject'),
           'fld_title' => t('Page to be sent'),
           'txt_message' => t('Your message'),
@@ -434,11 +435,12 @@ function print_mail_action_submit($from, $from_name, $to, $subject, $message, $n
 
   $form_state['values'] = array(
     'path' => 'node/' . $node->nid,
+    'query' => NULL,
     'cid' => NULL,
     'title' => $node->title,
     'fld_from_addr' => $from,
     'fld_from_name' => $from_name,
-    'txt_to_addrs' => $to,
+    'txt_to' => array('addrs' => $to),
     'fld_subject' => $subject,
     'txt_message' => $message,
     'chk_teaser' => FALSE,

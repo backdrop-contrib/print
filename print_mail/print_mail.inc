@@ -78,10 +78,25 @@ function print_mail_form_for_path($form, &$form_state, $path, $query = NULL, $us
 
   $print_mail_teaser_default = variable_get('print_mail_teaser_default', PRINT_MAIL_TEASER_DEFAULT_DEFAULT);
   $print_mail_teaser_choice = variable_get('print_mail_teaser_choice', PRINT_MAIL_TEASER_CHOICE_DEFAULT);
+  $print_mail_user_recipients_default = variable_get('print_mail_user_recipients', PRINT_MAIL_USER_RECIPIENTS_DEFAULT);
   $form = array();
 
   $cid = isset($_GET['comment']) ? (int)$_GET['comment'] : NULL;
   $title = _print_get_title($path);
+
+  if ($print_mail_user_recipients_default) {
+    $options = array();
+    if (module_exists('realname')) {
+      $sql = "SELECT u.mail, r.realname AS name from {users} u LEFT JOIN {realname} r ON u.uid = r.uid WHERE u.uid != :uid ORDER BY name ASC";
+    }
+    else {
+      $sql = "SELECT mail, name from {users} WHERE uid != :uid ORDER BY name ASC";
+    }
+    $recipients = db_query($sql, array(':uid' => drupal_anonymous_user()->uid));
+    foreach ($recipients as $recipient) {
+      $options[$recipient->mail] = $recipient->name;
+    }
+  }
 
   if (count($form_state['input']) == 0) {
     $nodepath = drupal_get_normal_path($path);
@@ -111,14 +126,26 @@ function print_mail_form_for_path($form, &$form_state, $path, $query = NULL, $us
     '#title' => t('Your name'),
     '#size' => 62,
   );
-  $form['txt_to_addrs'] = array(
+  $form['txt_to'] = array(
+    '#tree' => TRUE,
+  );
+  $form['txt_to']['addrs'] = array(
     '#type' => 'textarea',
     '#title' => t('Send to'),
     '#rows' => 3,
     '#resizable' => FALSE,
     '#description' => t('Enter multiple addresses separated by commas and/or different lines.'),
-    '#required' => TRUE,
+    '#required' => !$print_mail_user_recipients_default,
   );
+  if ($print_mail_user_recipients_default) {
+    $form['txt_to']['users'] = array(
+      '#type' => 'select',
+      '#title' => t('Send to users'),
+      '#multiple' => TRUE,
+      '#size' => 10,
+      '#options' => $options,
+    );
+  }
   $form['fld_subject'] = array(
     '#type' => 'textfield',
     '#title' => t('Subject'),
@@ -211,7 +238,7 @@ function theme_print_mail_form($variables) {
     switch ($key) {
       case 'fld_from_addr':
       case 'fld_from_name':
-      case 'txt_to_addrs':
+      case 'txt_to':
       case 'fld_subject':
       case 'fld_title':
         $tmp = str_replace('<label', '<label class ="printmail-label"', $tmp);
@@ -259,6 +286,8 @@ function theme_print_mail_sendlink_html($params) {
  * @ingroup forms
  */
 function print_mail_form_validate($form, &$form_state) {
+  $print_mail_user_recipients_default = variable_get('print_mail_user_recipients', PRINT_MAIL_USER_RECIPIENTS_DEFAULT);
+
   if (array_key_exists('cancel', $form_state['input'])) {
     form_set_error(NULL, '', TRUE);
     drupal_get_messages('error');
@@ -272,10 +301,22 @@ function print_mail_form_validate($form, &$form_state) {
     form_set_error('fld_from_addr', $test);
   }
 
-  // All new-lines are replaced by commas
-  $to_addrs = preg_replace('![\r|\n|,]+!', ',', trim($form_state['values']['txt_to_addrs']));
-  // Create an array from the string
-  $to_array = explode(',', $to_addrs);
+  $to_array = array();
+  if (!empty($form_state['values']['txt_to']['users'])) {
+    $to_array = array_values($form_state['values']['txt_to']['users']);
+  }
+
+  if (!empty($form_state['values']['txt_to']['addrs'])) {
+    // All new-lines are replaced by commas
+    $to_addrs = preg_replace('![\r|\n|,]+!', ',', trim($form_state['values']['txt_to']['addrs']));
+    // Create an array from the string
+    $to_array = array_merge($to_array, explode(',', $to_addrs));
+  }
+
+  if (empty($to_array) && $print_mail_user_recipients_default) {
+    form_set_error('txt_to', t('You must specify at least one email address or user as a recipient.'));
+  }
+
   // Verify each element of the array
   foreach ($to_array as $key => $address) {
     $address = trim($address);
@@ -289,14 +330,14 @@ function print_mail_form_validate($form, &$form_state) {
       $test = user_validate_mail($address);
     }
     if ($test) {
-      form_set_error('txt_to_addrs', $test);
+      form_set_error('txt_to', $test);
     }
   }
 
   $print_mail_hourly_threshold = variable_get('print_mail_hourly_threshold', PRINT_MAIL_HOURLY_THRESHOLD);
 
   if ((!user_access('send unlimited emails')) && (!flood_is_allowed('print_mail', $print_mail_hourly_threshold - count($to_array) + 1))) {
-    form_set_error('txt_to_addrs',  t('You cannot send more than %number messages per hour. Please reduce the number of recipients.', array('%number' => $print_mail_hourly_threshold)));
+    form_set_error('txt_to',  t('You cannot send more than %number messages per hour. Please reduce the number of recipients.', array('%number' => $print_mail_hourly_threshold)));
   }
 
   // In all fields, prevent insertion of custom headers
@@ -309,7 +350,7 @@ function print_mail_form_validate($form, &$form_state) {
   $form_state['values']['fld_from_addr'] = $from_addr;
   $form_state['values']['fld_from_name'] = trim($form_state['values']['fld_from_name']);
   // Re-create the string from the re-organized array
-  $form_state['values']['txt_to_addrs'] = implode(', ', $to_array);
+  $form_state['values']['txt_to']['addrs'] = implode(', ', $to_array);
 }
 
 /**
@@ -372,7 +413,7 @@ function print_mail_form_submit($form, &$form_state) {
         $queue = DrupalQueue::get('print_mail_send');
       }
 
-      $addresses = explode(', ', $form_state['values']['txt_to_addrs']);
+      $addresses = explode(', ', $form_state['values']['txt_to']['addrs']);
       foreach ($addresses as $to) {
         if ($use_job_queue) {
           // Use job queue to send mails during cron runs
@@ -389,7 +430,7 @@ function print_mail_form_submit($form, &$form_state) {
       }
       if ($ok) {
         $query = empty($form_state['values']['query']) ? '' : '?' . rawurldecode(drupal_http_build_query($form_state['values']['query']));
-        watchdog('print_mail', '%name [%from] sent %page to [%to]', array('%name' => $form_state['values']['fld_from_name'], '%from' => $form_state['values']['fld_from_addr'], '%page' => $form_state['values']['path'] . $query, '%to' => $form_state['values']['txt_to_addrs']));
+        watchdog('print_mail', '%name [%from] sent %page to [%to]', array('%name' => $form_state['values']['fld_from_name'], '%from' => $form_state['values']['fld_from_addr'], '%page' => $form_state['values']['path'] . $query, '%to' => $form_state['values']['txt_to']['addrs']));
         $site_name = variable_get('site_name', t('us'));
         drupal_set_message(check_plain(t('Thank you for spreading the word about !site.', array('!site' => $site_name))));
 

@@ -48,6 +48,13 @@ function print_mail_settings() {
     '#description' => t("If selected, the default choice will be to send only the node's teaser instead of the full content."),
   );
 
+  $form['settings']['print_mail_user_recipients'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable user list recipients'),
+    '#default_value' => variable_get('print_mail_user_recipients', PRINT_MAIL_USER_RECIPIENTS_DEFAULT),
+    '#description' => t("If selected, a user list will be included as possible email recipients."),
+  );
+
   $form['settings']['print_mail_teaser_choice'] = array(
     '#type' => 'checkbox',
     '#title' => t('Enable teaser/full mode choice'),
