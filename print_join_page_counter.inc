@@ -16,7 +16,7 @@ class print_join_page_counter extends views_join {
   }
 
   function build_join($select_query, $table, $view_query) {
-    $this->left_field = "CONCAT('node/', " . $this->left_table . '.' . $this->left_field . ')';
+    $this->left_field = "CONCAT('node/', $this->left_table.$this->left_field)";
     $this->left_table = NULL;
     parent::build_join($select_query, $table, $view_query);
   }
