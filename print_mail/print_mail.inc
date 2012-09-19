@@ -153,8 +153,8 @@ function print_mail_form_for_path($form, &$form_state, $path, $query = NULL, $us
     '#required' => TRUE,
   );
   if (!empty($title)) {
-    // To prevent useless translation strings, try to translate only node titles
-    if (drupal_substr($path, 0, 5) == 'node/') {
+    // To prevent useless translation strings, try to translate only non-node titles
+    if (drupal_substr($path, 0, 5) != 'node/') {
       $title = t($title);
     }
 
