@@ -35,7 +35,7 @@ function print_pdf_tcpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $p
     define('K_PATH_MAIN', dirname($_SERVER['SCRIPT_FILENAME']));
     define('K_PATH_URL', $base_url);
     define('K_PATH_FONTS', $pdf_tool_path . '/fonts/');
-    define('K_PATH_CACHE', drupal_realpath('public://print_pdf/print_pdf_tcpdf/cache/'));
+    define('K_PATH_CACHE', drupal_realpath('public://print_pdf/print_pdf_tcpdf/cache') . '/');
     define('K_PATH_IMAGES', '');
     define('K_BLANK_IMAGE', $pdf_tool_path . '/images/_blank.png');
     define('K_CELL_HEIGHT_RATIO', 1.25);
