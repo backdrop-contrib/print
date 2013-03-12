@@ -1,10 +1,6 @@
 name = "wkhtmltopdf library handler"
 description = "PDF generation library using wkhtmltopdf."
-core=7.x
+core = 7.x
 package = "Printer, email and PDF versions"
 dependencies[] = print_pdf
-files[] = print_pdf_wkhtmltopdf.module
-files[] = print_pdf_wkhtmltopdf.admin.inc
-files[] = print_pdf_wkhtmltopdf.pages.inc
-files[] = print_pdf_wkhtmltopdf.install
 configure = admin/config/user-interface/print/pdf/wkhtmltopdf
