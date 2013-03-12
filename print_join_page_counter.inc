@@ -11,7 +11,7 @@ class print_join_page_counter extends views_join {
   // PHP 4 doesn't call constructors of the base class automatically from a
   // constructor of a derived class. It is your responsibility to propagate
   // the call to constructors upstream where appropriate.
-  function construct($table, $left_table, $left_field, $field, $extra = array(), $type = 'LEFT') {
+  function construct($table = NULL, $left_table = NULL, $left_field = NULL, $field = NULL, $extra = array(), $type = 'LEFT') {
     parent::construct($table, $left_table, $left_field, $field, $extra, $type);
   }
 
