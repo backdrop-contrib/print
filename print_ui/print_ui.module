@@ -512,10 +512,10 @@ function theme_print_ui_format_link($vars) {
           $img = drupal_get_path('module', $module) . '/icons/' . $link['icon'];
           switch ($show_link) {
             case 2:
-              $text = theme('image', array('path' => $img, 'alt' => $link_text, 'title' => $link_text, 'attributes' => array('class' => array('print-icon'))));
+              $text = theme('image', array('path' => $img, 'width' => '16px', 'height' => '16px', 'alt' => $link_text, 'title' => $link_text, 'attributes' => array('class' => array('print-icon'))));
               break;
             case 3:
-              $text = theme('image', array('path' => $img, 'alt' => $link_text, 'title' => $link_text, 'attributes' => array('class' => array('print-icon', 'print-icon-margin')))) . $link_text;
+              $text = theme('image', array('path' => $img, 'width' => '16px', 'height' => '16px', 'alt' => $link_text, 'title' => $link_text, 'attributes' => array('class' => array('print-icon', 'print-icon-margin')))) . $link_text;
               break;
           }
           $html = TRUE;

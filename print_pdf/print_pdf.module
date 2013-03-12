@@ -27,7 +27,7 @@ function print_pdf_print_link() {
     'description' => t('Display a PDF version of this page.'),
     'path' => 'printpdf',
     'class' => 'print-pdf',
-    'icon' => 'pdf_icon.gif',
+    'icon' => 'pdf_icon.png',
     'module' => 'print_pdf',
   );
 }
