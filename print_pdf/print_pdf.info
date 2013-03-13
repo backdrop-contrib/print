@@ -1,3 +1,4 @@
+name = "PDF version"
 description = "Adds the capability to export pages as PDF."
 core = 7.x
 package = "Printer, email and PDF versions"
