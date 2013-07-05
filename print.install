@@ -160,6 +160,13 @@ function print_update_7000(&$sandbox) {
 }
 
 /**
+ * Enable the print UI module
+ */
+function print_update_7199(&$sandbox) {
+  module_enable(array('print_ui'), FALSE);
+}
+
+/**
  * Delete old variables
  */
 function print_update_7200(&$sandbox) {
