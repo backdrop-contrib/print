@@ -82,6 +82,9 @@ function print_pdf_tcpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $p
   $pdf = theme('print_pdf_tcpdf_footer', array('pdf' => $pdf, 'html' => $html, 'font' => $font));
   $pdf = theme('print_pdf_tcpdf_page', array('pdf' => $pdf));
 
+  // Enable third-party module to alter the pdf object, via hook_print_pdf_tcpdf_alter()
+  drupal_alter('print_pdf_tcpdf', $pdf, $html, $meta);
+
   // add a page
   $pdf->AddPage();
 
