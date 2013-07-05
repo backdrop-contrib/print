@@ -407,6 +407,9 @@ function print_mail_form_submit($form, &$form_state) {
       $pattern = '!<(a\s[^>]*?)>!is';
       $params['body'] = preg_replace_callback($pattern, '_print_rewrite_urls', $params['body']);
 
+      // Enable support for third-party modules to alter the e-mail before it's sent
+      drupal_alter('print_mail', $params, $to);
+
       $ok = FALSE;
       $use_job_queue = variable_get('print_mail_job_queue', PRINT_MAIL_JOB_QUEUE_DEFAULT);
       if ($use_job_queue) {
