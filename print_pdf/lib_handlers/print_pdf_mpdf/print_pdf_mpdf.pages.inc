@@ -53,7 +53,8 @@ function print_pdf_mpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $pa
   // No password is required to open the document
   // Owner has full rights using the password "MyPassword"
   // $mpdf->SetProtection(array('copy', 'print'), '', 'MyPassword');
-  $mpdf->SetProtection(array('copy', 'print', 'print-highres'), '', '');
+  // $mpdf->SetProtection(array('copy', 'print', 'print-highres'), '', '');
+  drupal_alter('print_pdf_mpdf', $mpdf, $html, $meta);
 
   $mpdf->WriteHTML($html);
 
