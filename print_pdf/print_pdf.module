@@ -213,22 +213,22 @@ function print_pdf_requirements($phase) {
           $function = $tool[0] . '_pdf_tool_version';
           if (function_exists($function)) {
             $version = $function($tool[1]);
-          }
 
-          if (isset($info['min_version']) && version_compare($version, $info['min_version'], '<')) {
-            $requirements['print_pdf_tool_version'] = array(
-              'title' => $t('Printer, email and PDF versions - PDF generation library'),
-              'value' => $t('Unsupported %lib version', array('%lib' => $info['name'])),
-              'description' => $t('The currently selected version of %lib (@version) is not supported. Please update to a !url.',
-                                  array('%lib' => $info['name'], '@version' => $version, '!url' => l($t('newer version'), $info['url']))),
-              'severity' => REQUIREMENT_ERROR,
-            );
-          }
-          else {
-            $requirements['print_pdf_tool_version'] = array(
-              'title' => $t('Printer, email and PDF versions - PDF generation library'),
-              'value' => $info['name'] . ' ' . $version,
-            );
+            if (isset($info['min_version']) && version_compare($version, $info['min_version'], '<')) {
+              $requirements['print_pdf_tool_version'] = array(
+                'title' => $t('Printer, email and PDF versions - PDF generation library'),
+                'value' => $t('Unsupported %lib version', array('%lib' => $info['name'])),
+                'description' => $t('The currently selected version of %lib (@version) is not supported. Please update to a !url.',
+                                    array('%lib' => $info['name'], '@version' => $version, '!url' => l($t('newer version'), $info['url']))),
+                'severity' => REQUIREMENT_ERROR,
+              );
+            }
+            else {
+              $requirements['print_pdf_tool_version'] = array(
+                'title' => $t('Printer, email and PDF versions - PDF generation library'),
+                'value' => $info['name'] . ' ' . $version,
+              );
+            }
           }
         }
 
