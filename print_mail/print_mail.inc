@@ -187,10 +187,6 @@ function print_mail_form_for_path($form, &$form_state, $path, $query = NULL, $us
     '#type' => 'submit',
     '#value' => t('Send email'),
   );
-  $form['btn_clear'] = array(
-    '#type' => 'markup',
-    '#markup' => '<input type="reset" name="clear" id="edit-btn-clear" value="' . t('Clear form') . '" class="form-submit" />',
-  );
   $form['btn_cancel'] = array(
     '#name' => 'cancel',
     '#type' => 'submit',
