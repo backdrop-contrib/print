@@ -13,7 +13,7 @@ class PrintTCPDF extends TCPDF {
   public $footer;
 
   // Page footer data
-  public function SetFooterData($arg = '') {
+  public function setFooterContent($arg = '') {
     $this->footer = $arg;
   }
 
