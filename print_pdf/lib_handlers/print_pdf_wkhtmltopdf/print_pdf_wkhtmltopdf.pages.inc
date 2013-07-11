@@ -70,7 +70,7 @@ function print_pdf_wkhtmltopdf_print_pdf_generate($html, $meta, $paper_size = NU
       if (empty($error)) {
         $error = 'No stderr output available.';
       }
-      watchdog('print_pdf', "wkhtmltopdf (returned $retval): $error");
+      watchdog('print_pdf', 'wkhtmltopdf [%cmd] (returned %ret): %error', array('%cmd' => $cmd, '%ret' => $retval, '%error' => $error));
     }
   }
 
