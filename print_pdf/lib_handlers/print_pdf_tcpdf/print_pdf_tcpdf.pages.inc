@@ -31,15 +31,15 @@ function print_pdf_tcpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $p
   if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
     $pdf_tool_path = realpath(dirname($pdf_tool[1]));
 
-    define('K_TCPDF_EXTERNAL_CONFIG', TRUE);
-    define('K_PATH_MAIN', dirname($_SERVER['SCRIPT_FILENAME']));
-    define('K_PATH_URL', $base_url);
-    define('K_PATH_FONTS', $pdf_tool_path . '/fonts/');
-    define('K_PATH_CACHE', drupal_realpath('public://print_pdf/print_pdf_tcpdf/cache') . '/');
-    define('K_PATH_IMAGES', '');
-    define('K_BLANK_IMAGE', $pdf_tool_path . '/images/_blank.png');
-    define('K_CELL_HEIGHT_RATIO', 1.25);
-    define('K_SMALL_RATIO', 2/3);
+    if (!defined('K_TCPDF_EXTERNAL_CONFIG')) define('K_TCPDF_EXTERNAL_CONFIG', TRUE);
+    if (!defined('K_PATH_MAIN')) define('K_PATH_MAIN', dirname($_SERVER['SCRIPT_FILENAME']));
+    if (!defined('K_PATH_URL')) define('K_PATH_URL', $base_url);
+    if (!defined('K_PATH_FONTS')) define('K_PATH_FONTS', $pdf_tool_path . '/fonts/');
+    if (!defined('K_PATH_CACHE')) define('K_PATH_CACHE', drupal_realpath('public://print_pdf/print_pdf_tcpdf/cache') . '/');
+    if (!defined('K_PATH_IMAGES')) define('K_PATH_IMAGES', '');
+    if (!defined('K_BLANK_IMAGE')) define('K_BLANK_IMAGE', $pdf_tool_path . '/images/_blank.png');
+    if (!defined('K_CELL_HEIGHT_RATIO')) define('K_CELL_HEIGHT_RATIO', 1.25);
+    if (!defined('K_SMALL_RATIO')) define('K_SMALL_RATIO', 2/3);
   }
 
   // Try to use local file access for image files

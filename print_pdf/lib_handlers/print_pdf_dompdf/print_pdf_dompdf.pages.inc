@@ -31,12 +31,12 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
     $unicode = variable_get('print_pdf_dompdf_unicode', PRINT_PDF_DOMPDF_UNICODE_DEFAULT);
     $font_subsetting = variable_get('print_pdf_dompdf_font_subsetting', PRINT_PDF_DOMPDF_FONT_SUBSETTING_DEFAULT);
 
-    define('DOMPDF_ENABLE_PHP', FALSE);
-    define('DOMPDF_ENABLE_REMOTE', TRUE);
-    define('DOMPDF_TEMP_DIR', file_directory_temp());
-    define('DOMPDF_UNICODE_ENABLED', $unicode);
-    define('DOMPDF_ENABLE_FONTSUBSETTING', $font_subsetting);
-    define('DOMPDF_FONT_CACHE', drupal_realpath('public://print_pdf/print_pdf_dompdf/fonts/'));
+    if (!defined('DOMPDF_ENABLE_PHP')) define('DOMPDF_ENABLE_PHP', FALSE);
+    if (!defined('DOMPDF_ENABLE_REMOTE')) define('DOMPDF_ENABLE_REMOTE', TRUE);
+    if (!defined('DOMPDF_TEMP_DIR')) define('DOMPDF_TEMP_DIR', file_directory_temp());
+    if (!defined('DOMPDF_UNICODE_ENABLED')) define('DOMPDF_UNICODE_ENABLED', $unicode);
+    if (!defined('DOMPDF_ENABLE_FONTSUBSETTING')) define('DOMPDF_ENABLE_FONTSUBSETTING', $font_subsetting);
+    if (!defined('DOMPDF_FONT_CACHE')) define('DOMPDF_FONT_CACHE', drupal_realpath('public://print_pdf/print_pdf_dompdf/fonts/'));
   }
 
   require_once(DRUPAL_ROOT . '/' . $pdf_tool[1]);
