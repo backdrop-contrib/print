@@ -27,7 +27,7 @@ function print_pdf_wkhtmltopdf_print_pdf_generate($html, $meta, $paper_size = NU
   $dpi = 96;
 
   if (!empty($wkhtmltopdf_options) && isset($meta['node'])) {
-    $wkhtmltopdf_options = token_replace($wkhtmltopdf_options, array('node' => $meta['node']));
+    $wkhtmltopdf_options = token_replace($wkhtmltopdf_options, array('node' => $meta['node']), array('clear' => TRUE));
   }
 
   $version = print_pdf_wkhtmltopdf_pdf_tool_version($pdf_tool[1]);
