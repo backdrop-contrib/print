@@ -234,15 +234,18 @@ function theme_print_pdf_tcpdf_content($vars) {
 function theme_print_pdf_tcpdf_footer($vars) {
   $pdf = $vars['pdf'];
   preg_match('!<div class="print-footer">(.*?)</div>!si', $vars['html'], $tpl_footer);
-  $footer = trim(preg_replace('!</?div[^>]*?>!i', '', $tpl_footer[1]));
 
-  // set footer font
-  $vars['font'][2] *= 0.8;
-  $pdf->setFooterFont($vars['font']);
-  // set footer margin
-  $pdf->SetFooterMargin(10);
-  // set footer data
-  $pdf->setFooterContent($footer);
+  if (isset($tpl_footer[1])) {
+    $footer = trim(preg_replace('!</?div[^>]*?>!i', '', $tpl_footer[1]));
+
+    // set footer font
+    $vars['font'][2] *= 0.8;
+    $pdf->setFooterFont($vars['font']);
+    // set footer margin
+    $pdf->SetFooterMargin(10);
+    // set footer data
+    $pdf->setFooterContent($footer);
+  }
 
   return $pdf;
 }

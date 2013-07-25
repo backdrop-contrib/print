@@ -115,36 +115,40 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
  */
 function theme_print_pdf_dompdf_footer($vars) {
   preg_match('!<div class="print-footer">(.*?)</div>!si', $vars['html'], $tpl_footer);
-  $html = str_replace($tpl_footer[0], '', $vars['html']);
+  if (isset($tpl_footer[1])) {
+    $html = str_replace($tpl_footer[0], '', $vars['html']);
 
-  $text = '<script type="text/php">
-    if (isset($pdf)) {
-      $font = Font_Metrics::get_font("verdana");;
-      $size = 10;
-      $color = array(0,0,0);
-      $text_height = Font_Metrics::get_font_height($font, $size);
+    $text = '<script type="text/php">
+      if (isset($pdf)) {
+        $font = Font_Metrics::get_font("verdana");;
+        $size = 10;
+        $color = array(0,0,0);
+        $text_height = Font_Metrics::get_font_height($font, $size);
 
-      $w = $pdf->get_width();
-      $h = $pdf->get_height();
+        $w = $pdf->get_width();
+        $h = $pdf->get_height();
 
-      $footer = $pdf->open_object();
+        $footer = $pdf->open_object();
 
-      // Draw a line along the bottom
-      $y = $h - 25;
-      $pdf->line(15, $y, $w - 15, $y, $color, 1);
+        // Draw a line along the bottom
+        $y = $h - 25;
+        $pdf->line(15, $y, $w - 15, $y, $color, 1);
 
-      $y += $text_height / 2;
-      $pdf->page_text(15, $y, \'' . addslashes(strip_tags($tpl_footer[1])) . '\', $font, $size, $color);
+        $y += $text_height / 2;
+        $pdf->page_text(15, $y, \'' . addslashes(strip_tags($tpl_footer[1])) . '\', $font, $size, $color);
 
-      $pdf->close_object();
-      $pdf->add_object($footer, "all");
+        $pdf->close_object();
+        $pdf->add_object($footer, "all");
 
-      // Center the text
-      $width = Font_Metrics::get_text_width("Page 1 of 2", $font, $size);
-      $pagenumtxt = t("Page !n of !total", array("!n" => "{PAGE_NUM}", "!total" => "{PAGE_COUNT}"));
-      $pdf->page_text($w - 15 - $width, $y, $pagenumtxt, $font, $size, $color);
-    }
-  </script>';
+        // Center the text
+        $width = Font_Metrics::get_text_width("Page 1 of 2", $font, $size);
+        $pagenumtxt = t("Page !n of !total", array("!n" => "{PAGE_NUM}", "!total" => "{PAGE_COUNT}"));
+        $pdf->page_text($w - 15 - $width, $y, $pagenumtxt, $font, $size, $color);
+      }
+    </script>';
 
-  return str_replace("<body>", "<body>" . $text, $html);
+    return str_replace("<body>", "<body>" . $text, $html);
+  } else {
+    return $vars['html'];
+  }
 }
