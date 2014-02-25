@@ -73,6 +73,7 @@ function print_pdf_tcpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $p
   $pdf->SetTitle(html_entity_decode($meta['title'], ENT_QUOTES, 'UTF-8'));
   $pdf->setPDFVersion('1.6');
   $pdf->setFontSubsetting(variable_get('print_pdf_font_subsetting', PRINT_PDF_TCPDF_FONT_SUBSETTING_DEFAULT));
+  $pdf->setTcpdfLink(false);
 
   if ($language->direction == LANGUAGE_RTL) {
     $pdf->setRTL(TRUE);
