@@ -14,7 +14,7 @@ class PrintTCPDF extends TCPDF {
 
   // Display invisible link at the bottom of all pages.
   public function setTcpdfLink($tcpdflink) {
-    $this->tcpdflink = $tcpflink;
+    $this->tcpdflink = $tcpdflink;
   }
 
   // Page footer data
