@@ -475,7 +475,7 @@ function _print_rewrite_urls($matches) {
           }
           // Because base href is the original page, change the link to
           // still be usable inside the print page
-          $matches[1] = str_replace($url, base_path() . $_GET['q'] . $url, $matches[1]);
+          $matches[1] = str_replace($url, check_plain(base_path() . $_GET['q'] . $url), $matches[1]);
         }
         else {
           // URL is relative, convert it into absolute URL
@@ -504,7 +504,7 @@ function _print_rewrite_urls($matches) {
     }
   }
 
-  return $ret;
+  return filter_xss_admin($ret);
 }
 
 /**
