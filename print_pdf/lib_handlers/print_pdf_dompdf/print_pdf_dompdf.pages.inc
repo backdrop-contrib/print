@@ -2,10 +2,10 @@
 
 /**
  * @file
- * Generates the PDF version using dompdf
+ * Generates the PDF version using dompdf.
  *
  * This file is included by the print_pdf_dompdf module and includes the
- * functions that interface with the dompdf library
+ * functions that interface with the dompdf library.
  *
  * @ingroup print
  */
@@ -23,7 +23,6 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
   if (empty($page_orientation)) {
     $page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
   }
-  $content_disposition = variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT);
   $images_via_file = variable_get('print_pdf_images_via_file', PRINT_PDF_IMAGES_VIA_FILE_DEFAULT);
   $unicode = TRUE;
 
@@ -31,27 +30,39 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
     $unicode = variable_get('print_pdf_dompdf_unicode', PRINT_PDF_DOMPDF_UNICODE_DEFAULT);
     $font_subsetting = variable_get('print_pdf_dompdf_font_subsetting', PRINT_PDF_DOMPDF_FONT_SUBSETTING_DEFAULT);
 
-    if (!defined('DOMPDF_ENABLE_PHP')) define('DOMPDF_ENABLE_PHP', FALSE);
-    if (!defined('DOMPDF_ENABLE_REMOTE')) define('DOMPDF_ENABLE_REMOTE', TRUE);
-    if (!defined('DOMPDF_TEMP_DIR')) define('DOMPDF_TEMP_DIR', file_directory_temp());
-    if (!defined('DOMPDF_UNICODE_ENABLED')) define('DOMPDF_UNICODE_ENABLED', $unicode);
-    if (!defined('DOMPDF_ENABLE_FONTSUBSETTING')) define('DOMPDF_ENABLE_FONTSUBSETTING', $font_subsetting);
-    if (!defined('DOMPDF_FONT_CACHE')) define('DOMPDF_FONT_CACHE', drupal_realpath('public://print_pdf/print_pdf_dompdf/fonts/'));
+    if (!defined('DOMPDF_ENABLE_PHP')) {
+      define('DOMPDF_ENABLE_PHP', FALSE);
+    }
+    if (!defined('DOMPDF_ENABLE_REMOTE')) {
+      define('DOMPDF_ENABLE_REMOTE', TRUE);
+    }
+    if (!defined('DOMPDF_TEMP_DIR')) {
+      define('DOMPDF_TEMP_DIR', file_directory_temp());
+    }
+    if (!defined('DOMPDF_UNICODE_ENABLED')) {
+      define('DOMPDF_UNICODE_ENABLED', $unicode);
+    }
+    if (!defined('DOMPDF_ENABLE_FONTSUBSETTING')) {
+      define('DOMPDF_ENABLE_FONTSUBSETTING', $font_subsetting);
+    }
+    if (!defined('DOMPDF_FONT_CACHE')) {
+      define('DOMPDF_FONT_CACHE', drupal_realpath('public://print_pdf/print_pdf_dompdf/fonts/'));
+    }
   }
 
-  require_once(DRUPAL_ROOT . '/' . $pdf_tool[1]);
+  require_once DRUPAL_ROOT . '/' . $pdf_tool[1];
   spl_autoload_register('DOMPDF_autoload');
 
-  // Try to use local file access for image files
+  // Try to use local file access for image files.
   $html = _print_access_images_via_file($html, $images_via_file);
 
-  // Spaces in img URLs must be replaced with %20, when using external access
+  // Spaces in img URLs must be replaced with %20, when using external access.
   if (!$images_via_file) {
     $pattern = '!<(img\s[^>]*?)>!is';
     $html = preg_replace_callback($pattern, '_print_replace_spaces', $html);
   }
 
-  // dompdf seems to have problems with something in system.css so let's not use it
+  // It seems dompdf has problems with something in system.css, don't use it.
   $html = preg_replace('!<link.*?modules/system/system.css.*?/>!', '', $html);
 
   $url_array = parse_url($meta['url']);
@@ -66,22 +77,26 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
   $dompdf->set_paper(drupal_strtolower($paper_size), $page_orientation);
   $dompdf->set_protocol($protocol);
 
-// dompdf can't handle footers cleanly, so disable the following
-//  $html = theme('print_pdf_dompdf_footer', array('html' => $html));
+  // It seems dompdf can't handle footers cleanly, so disable the following.
+  /*  $html = theme('print_pdf_dompdf_footer', array('html' => $html)); */
 
-  // If dompdf Unicode support is disabled, try to convert to ISO-8859-1 and then to HTML entities
+  // If dompdf Unicode support is disabled, try to convert to ISO-8859-1 and
+  // then to HTML entities.
   if (!$unicode) {
-    // Convert the euro sign to an HTML entity
+    // Convert the euro sign to an HTML entity.
     $html = str_replace('€', '&#0128;', $html);
 
-    // Convert from UTF-8 to ISO 8859-1 and then to HTML entities
+    // Convert from UTF-8 to ISO 8859-1 and then to HTML entities.
     if (function_exists('utf8_decode')) {
-    $html = utf8_decode($html);
+      $html = utf8_decode($html);
     }
-    // iconv fails silently when it encounters something that it doesn't know, so don't use it
-//    else if (function_exists('iconv')) {
-//      $html = iconv('UTF-8', 'ISO-8859-1', $html);
-//    }
+    // iconv fails silently when it encounters something that it doesn't know,
+    // so don't use it.
+    /*
+    else if (function_exists('iconv')) {
+      $html = iconv('UTF-8', 'ISO-8859-1', $html);
+    }
+     */
     elseif (function_exists('mb_convert_encoding')) {
       $html = mb_convert_encoding($html, 'ISO-8859-1', 'UTF-8');
     }
@@ -95,7 +110,7 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
     $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
   }
 
-  // Must get rid of tbody (dompdf goes into recursion)
+  // Must get rid of tbody (dompdf goes into recursion).
   $html = preg_replace('!<tbody[^>]*?>|</tbody>!i', '', $html);
 
   $dompdf->load_html($html);
@@ -105,11 +120,11 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
 }
 
 /**
- * Format the dompdf footer contents
+ * Format the dompdf footer contents.
  *
  * @param array $vars
  *   An associative array containing:
- *    - $html: contents of the body of the HTML from the original node
+ *    - $html: contents of the body of the HTML from the original node.
  *
  * @return string
  *   customized HTML text
@@ -152,7 +167,8 @@ function theme_print_pdf_dompdf_footer($vars) {
     </script>';
 
     return str_replace("<body>", "<body>" . $text, $html);
-  } else {
+  }
+  else {
     return $vars['html'];
   }
 }
