@@ -132,12 +132,12 @@ function print_preprocess_print(&$variables) {
   }
 
   $variables['page']['#show_messages'] = FALSE;
+  $variables['theme_hook_suggestions'] = array();
 
   // Stolen from theme() so that ALL preprocess functions are called.
   $hook = 'page';
   $info = $hooks[$hook];
   if (isset($info['preprocess functions']) || isset($info['process functions'])) {
-    $variables['theme_hook_suggestions'] = array();
     foreach (array('preprocess functions', 'process functions') as $phase) {
       if (!empty($info[$phase])) {
         foreach ($info[$phase] as $processor_function) {
@@ -201,7 +201,6 @@ function print_preprocess_print(&$variables) {
   $type = (isset($node->type)) ? $node->type : '';
   $nid = (isset($node->nid)) ? $node->nid : '';
 
-  $variables['theme_hook_suggestions'] = array();
   $variables['theme_hook_suggestions'][] = "print__node__{$type}";
   $variables['theme_hook_suggestions'][] = "print__node__{$type}__{$nid}";
   $variables['theme_hook_suggestions'][] = "print__{$format}";
