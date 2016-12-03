@@ -27,31 +27,53 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
   $unicode = TRUE;
 
   if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
-    $unicode = variable_get('print_pdf_dompdf_unicode', PRINT_PDF_DOMPDF_UNICODE_DEFAULT);
     $font_subsetting = variable_get('print_pdf_dompdf_font_subsetting', PRINT_PDF_DOMPDF_FONT_SUBSETTING_DEFAULT);
 
-    if (!defined('DOMPDF_ENABLE_PHP')) {
-      define('DOMPDF_ENABLE_PHP', FALSE);
+    if (version_compare($version, '0.7', '<')) {
+      $unicode = variable_get('print_pdf_dompdf_unicode', PRINT_PDF_DOMPDF_UNICODE_DEFAULT);
+
+      if (!defined('DOMPDF_ENABLE_PHP')) {
+        define('DOMPDF_ENABLE_PHP', FALSE);
+      }
+      if (!defined('DOMPDF_ENABLE_REMOTE')) {
+        define('DOMPDF_ENABLE_REMOTE', TRUE);
+      }
+      if (!defined('DOMPDF_TEMP_DIR')) {
+        define('DOMPDF_TEMP_DIR', file_directory_temp());
+      }
+      if (!defined('DOMPDF_UNICODE_ENABLED')) {
+        define('DOMPDF_UNICODE_ENABLED', $unicode);
+      }
+      if (!defined('DOMPDF_ENABLE_FONTSUBSETTING')) {
+        define('DOMPDF_ENABLE_FONTSUBSETTING', $font_subsetting);
+      }
+      if (!defined('DOMPDF_FONT_CACHE')) {
+        define('DOMPDF_FONT_CACHE', drupal_realpath('public://print_pdf/print_pdf_dompdf/fonts/'));
+      }
     }
-    if (!defined('DOMPDF_ENABLE_REMOTE')) {
-      define('DOMPDF_ENABLE_REMOTE', TRUE);
-    }
-    if (!defined('DOMPDF_TEMP_DIR')) {
-      define('DOMPDF_TEMP_DIR', file_directory_temp());
-    }
-    if (!defined('DOMPDF_UNICODE_ENABLED')) {
-      define('DOMPDF_UNICODE_ENABLED', $unicode);
-    }
-    if (!defined('DOMPDF_ENABLE_FONTSUBSETTING')) {
-      define('DOMPDF_ENABLE_FONTSUBSETTING', $font_subsetting);
-    }
-    if (!defined('DOMPDF_FONT_CACHE')) {
-      define('DOMPDF_FONT_CACHE', drupal_realpath('public://print_pdf/print_pdf_dompdf/fonts/'));
+    else {
+      $dompdf->set_option('enable_php', FALSE);
+      $dompdf->set_option('enable_remote', TRUE);
+      $dompdf->set_option('temp_dir', file_directory_temp());
+      $dompdf->set_option('enable_font_subsetting', $font_subsetting);
+      $dompdf->set_option('font_cache', drupal_realpath('public://print_pdf/print_pdf_dompdf/fonts/'));
     }
   }
 
-  require_once DRUPAL_ROOT . '/' . $pdf_tool[1];
-  spl_autoload_register('DOMPDF_autoload');
+  $version = print_pdf_dompdf_pdf_tool_version($pdf_tool[1]);
+  if (version_compare($version, '0.7', '<')) {
+    // Version of dompdf is 0.6.* or 0.5.*.
+    if (version_compare($version, '0.6', '<')) {
+      // Version of dompdf is 0.5.
+      spl_autoload_register('DOMPDF_autoload');
+    }
+    $dompdf = new DOMPDF();
+  }
+  else {
+    // Version of dompdf is >= 0.7.
+    require_once dirname($pdf_tool[1]) . '/../autoload.inc.php';
+    $dompdf = new \Dompdf\Dompdf();
+  }
 
   // Try to use local file access for image files.
   $html = _print_access_images_via_file($html, $images_via_file);
@@ -71,7 +93,6 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
   $host = $url_array['host'];
   $path = dirname($url_array['path']) . '/';
 
-  $dompdf = new DOMPDF();
   $dompdf->set_base_path($path);
   $dompdf->set_host($host);
   $dompdf->set_paper(drupal_strtolower($paper_size), $page_orientation);
