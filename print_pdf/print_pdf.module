@@ -7,7 +7,7 @@
  * @ingroup print
  */
 
-define('PRINT_PDF_PDF_TOOL_DEFAULT', 0);
+define('PRINT_PDF_PDF_TOOL_DEFAULT', FALSE);
 define('PRINT_PDF_CONTENT_DISPOSITION_DEFAULT', 2);
 define('PRINT_PDF_PAPER_SIZE_DEFAULT', 'A4');
 define('PRINT_PDF_PAGE_ORIENTATION_DEFAULT', 'portrait');
