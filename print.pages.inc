@@ -612,12 +612,12 @@ function _print_generate_node($nid, $format, $vid = NULL, $cid = NULL, $view_mod
   if (!$node) {
     // Node not found.
     drupal_not_found();
-    return FALSE;
+    drupal_exit();
   }
   elseif (!node_access('view', $node)) {
     // Access is denied.
     drupal_access_denied();
-    return FALSE;
+    drupal_exit();
   }
   drupal_set_title($node->title);
 
@@ -722,11 +722,11 @@ function _print_generate_path($path, $format) {
     switch ($node->content) {
       case MENU_NOT_FOUND:
         drupal_not_found();
-        return FALSE;
+        drupal_exit();
 
       case MENU_ACCESS_DENIED:
         drupal_access_denied();
-        return FALSE;
+        drupal_exit();
     }
   }
 
@@ -768,12 +768,12 @@ function _print_generate_book($nid, $format) {
   if (!$node) {
     // Node not found.
     drupal_not_found();
-    return FALSE;
+    drupal_exit();
   }
   elseif (!node_access('view', $node) || (!user_access('access printer-friendly version'))) {
     // Access is denied.
     drupal_access_denied();
-    return FALSE;
+    drupal_exit();
   }
 
   $tree = book_menu_subtree_data($node->book);
