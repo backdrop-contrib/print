@@ -87,12 +87,12 @@ function _print_access_images_via_file($html, $images_via_file) {
   $lang = (function_exists('language_negotiation_get_any') && language_negotiation_get_any('locale-url')) ? $language->language : '';
 
   // Always convert private to local paths.
-  $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?(?:${lang}/)?system/files/([^>]*?>)!is";
-  $replacement = '$1file://' . realpath(variable_get('file_private_path', '')) . '/$2';
+  $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?(?:${lang}/)?system/files/([^>\?]*)(?:\?itok=[a-zA-Z0-9\-_]{8})?([^>]*?>)!is";
+  $replacement = '$1file://' . realpath(variable_get('file_private_path', '')) . '/$2$3';
   $html = preg_replace($pattern, $replacement, $html);
   if ($images_via_file) {
-    $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?(?:${lang}/)?([^>]*?>)!is";
-    $replacement = '$1file://' . dirname($_SERVER['SCRIPT_FILENAME']) . '/$2';
+    $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?(?:${lang}/)?([^>\?]*)(?:\?itok=[a-zA-Z0-9\-_]{8})?([^>]*?>)!is";
+    $replacement = '$1file://' . dirname($_SERVER['SCRIPT_FILENAME']) . '/$2$3';
     $html = preg_replace($pattern, $replacement, $html);
   }
 
