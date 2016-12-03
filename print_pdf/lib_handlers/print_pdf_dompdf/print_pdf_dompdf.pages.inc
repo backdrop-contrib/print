@@ -57,6 +57,9 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
       // Version of dompdf is 0.5.
       spl_autoload_register('DOMPDF_autoload');
     }
+    // Earlier dompdf versions could generate xml errors. Tell libxml to
+    // hide them.
+    libxml_use_internal_errors(TRUE);
     $dompdf = new DOMPDF();
   }
   else {
