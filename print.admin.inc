@@ -19,7 +19,7 @@ function print_main_settings() {
   $print_css = variable_get('print_css', PRINT_CSS_DEFAULT);
   // Check that the stylesheet path is indeed valid and relative to base_path()
   if (!empty($print_css) && empty($_POST)) {
-    $css_path = dirname($_SERVER['SCRIPT_FILENAME']) . '/' . strtr($print_css, array(
+    $css_path = DRUPAL_ROOT . '/' . strtr($print_css, array(
       '%t' => drupal_get_path('theme', variable_get('theme_default', 'garland')),
     ));
     if (!is_file($css_path) || !is_readable($css_path)) {

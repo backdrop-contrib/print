@@ -92,7 +92,7 @@ function _print_access_images_via_file($html, $images_via_file) {
   $html = preg_replace($pattern, $replacement, $html);
   if ($images_via_file) {
     $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?(?:${lang}/)?([^>\?]*)(?:\?itok=[a-zA-Z0-9\-_]{8})?([^>]*?>)!is";
-    $replacement = '$1file://' . dirname($_SERVER['SCRIPT_FILENAME']) . '/$2$3';
+    $replacement = '$1file://' . DRUPAL_ROOT . '/$2$3';
     $html = preg_replace($pattern, $replacement, $html);
   }
 
