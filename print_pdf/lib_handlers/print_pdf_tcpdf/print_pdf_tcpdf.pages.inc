@@ -34,7 +34,7 @@ function print_pdf_tcpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $p
       define('K_TCPDF_EXTERNAL_CONFIG', TRUE);
     }
     if (!defined('K_PATH_MAIN')) {
-      define('K_PATH_MAIN', dirname($_SERVER['SCRIPT_FILENAME']));
+      define('K_PATH_MAIN', DRUPAL_ROOT);
     }
     if (!defined('K_PATH_URL')) {
       define('K_PATH_URL', $base_url);
@@ -159,7 +159,7 @@ function theme_print_pdf_tcpdf_header($vars) {
     $logo = $logo_url[1];
 
     // Make logo relative again.
-    $logo = preg_replace("!^$base_url(.*)!sm", dirname($_SERVER['SCRIPT_FILENAME']) . '$1', $logo);
+    $logo = preg_replace("!^$base_url(.*)!sm", DRUPAL_ROOT . '$1', $logo);
 
     if (!empty($logo)) {
       $size = getimagesize($logo);
