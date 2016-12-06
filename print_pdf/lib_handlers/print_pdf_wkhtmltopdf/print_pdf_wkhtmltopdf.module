@@ -42,6 +42,15 @@ function print_pdf_wkhtmltopdf_menu() {
 }
 
 /**
+ * Implements hook_flush_caches().
+ */
+function print_pdf_wkhtmltopdf_flush_caches() {
+  // Delete the cached version info during cache clear.
+  variable_del('print_pdf_wkhtmltopdf_version');
+  return array();
+}
+
+/**
  * Implements hook_pdf_tool_version().
  */
 function print_pdf_wkhtmltopdf_pdf_tool_version($pdf_tool, $reset = TRUE) {
