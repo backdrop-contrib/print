@@ -29,7 +29,7 @@ function print_pdf_wkhtmltopdf_print_pdf_generate($html, $meta, $paper_size = NU
     $wkhtmltopdf_options = token_replace($wkhtmltopdf_options, array('node' => $meta['node']), array('clear' => TRUE));
   }
 
-  $version = print_pdf_wkhtmltopdf_pdf_tool_version($pdf_tool[1]);
+  $version = print_pdf_wkhtmltopdf_pdf_tool_version($pdf_tool[1], FALSE);
 
   // 0.10.0 beta2 identifies itself as 0.9.9.
   if (version_compare($version, '0.9.9', '>=')) {

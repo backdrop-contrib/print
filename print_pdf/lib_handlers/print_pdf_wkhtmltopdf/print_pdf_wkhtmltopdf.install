@@ -12,6 +12,7 @@
  */
 function print_pdf_wkhtmltopdf_uninstall() {
   variable_del('print_pdf_wkhtmltopdf_options');
+  variable_del('print_pdf_wkhtmltopdf_version');
 }
 
 /**
@@ -21,7 +22,7 @@ function print_pdf_wkhtmltopdf_requirements($phase) {
   $requirements = array();
   $t = get_t();
   switch ($phase) {
-    // At runtime, make sure that a PDF generation tool is selected.
+    // On status report page, make sure that a PDF generation tool is selected.
     case 'runtime':
       $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
       if (!empty($print_pdf_pdf_tool)) {

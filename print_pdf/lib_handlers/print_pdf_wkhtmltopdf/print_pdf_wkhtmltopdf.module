@@ -8,6 +8,7 @@
  */
 
 define('PRINT_PDF_WKHTMLTOPDF_OPTIONS', "--footer-font-size 7 --footer-right '[page]'");
+define('PRINT_PDF_WKHTMLTOPDF_VERSION_DEFAULT', '');
 
 /**
  * Implements hook_pdf_tool_info().
@@ -43,24 +44,35 @@ function print_pdf_wkhtmltopdf_menu() {
 /**
  * Implements hook_pdf_tool_version().
  */
-function print_pdf_wkhtmltopdf_pdf_tool_version($pdf_tool) {
-  $descriptor = array(
-    0 => array('pipe', 'r'),
-    1 => array('pipe', 'w'),
-    2 => array('pipe', 'w'),
-  );
+function print_pdf_wkhtmltopdf_pdf_tool_version($pdf_tool, $reset = TRUE) {
+  $version = variable_get('print_pdf_wkhtmltopdf_version', PRINT_PDF_WKHTMLTOPDF_VERSION_DEFAULT);
 
-  $cmd = '"' . realpath($pdf_tool) . '" --version';
-  $process = proc_open($cmd, $descriptor, $pipes, NULL, NULL);
-  if (is_resource($process)) {
-    $content = stream_get_contents($pipes[1]);
-    preg_match('!.*?(\d+\.\d+\.\d+).*$!m', $content, $matches);
-    fclose($pipes[0]);
-    fclose($pipes[1]);
-    fclose($pipes[2]);
-    proc_close($process);
+  if ($reset || empty($version)) {
+    // Ask the version information from the executable.
+    $descriptor = array(
+      0 => array('pipe', 'r'),
+      1 => array('pipe', 'w'),
+      2 => array('pipe', 'w'),
+    );
 
-    return ($matches[1]);
+    $cmd = '"' . realpath($pdf_tool) . '" --version';
+    $process = proc_open($cmd, $descriptor, $pipes, NULL, NULL);
+    if (is_resource($process)) {
+      $content = stream_get_contents($pipes[1]);
+      preg_match('!.*?(\d+\.\d+\.\d+).*$!m', $content, $matches);
+      fclose($pipes[0]);
+      fclose($pipes[1]);
+      fclose($pipes[2]);
+      proc_close($process);
+
+      // Cache the results of this expensive operation.
+      variable_set('print_pdf_wkhtmltopdf_version', $matches[1]);
+      return ($matches[1]);
+    }
+  }
+  else {
+    // For performance sake, usually use the cached value.
+    return $version;
   }
 
   return 'unknown';
@@ -74,7 +86,7 @@ function print_pdf_wkhtmltopdf_print_pdf_available_libs_alter(&$pdf_tools) {
   $tools = _print_scan_libs('wkhtmltopdf', '!^wkhtmltopdf!');
 
   foreach ($tools as $tool) {
-    $version = print_pdf_wkhtmltopdf_pdf_tool_version($tool);
+    $version = print_pdf_wkhtmltopdf_pdf_tool_version($tool, TRUE);
 
     $pdf_tools['print_pdf_wkhtmltopdf|' . $tool] = 'wkhtmltopdf ' . $version . ' (' . $tool . ')';
   }
