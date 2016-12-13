@@ -101,10 +101,10 @@ function print_mail_form_for_path($form, &$form_state, $path, $query = NULL, $us
   $options = array();
   if ($print_mail_user_recipients_default) {
     if (module_exists('realname')) {
-      $sql = "SELECT u.mail, r.realname AS name from {users} u LEFT JOIN {realname} r ON u.uid = r.uid WHERE u.uid <> :uid ORDER BY name ASC";
+      $sql = "SELECT u.mail, r.realname AS name from {users} u LEFT JOIN {realname} r ON u.uid = r.uid WHERE u.uid <> :uid AND status = 1 ORDER BY name ASC";
     }
     else {
-      $sql = "SELECT mail, name from {users} WHERE uid <> :uid ORDER BY name ASC";
+      $sql = "SELECT mail, name from {users} WHERE uid <> :uid AND status = 1 ORDER BY name ASC";
     }
     $recipients = db_query($sql, array(':uid' => drupal_anonymous_user()->uid));
     foreach ($recipients as $recipient) {
