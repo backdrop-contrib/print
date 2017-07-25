@@ -734,6 +734,7 @@ function _print_generate_path($path, $format) {
   $node->title = drupal_get_title();
   $node->path = $path;
   $node->changed = REQUEST_TIME;
+  $node->type = '';
 
   // Delete any links area.
   $node->content = preg_replace('!\s*<div class="links">.*?</div>!sim', '', $node->content);
