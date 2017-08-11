@@ -23,7 +23,7 @@ function print_pdf_settings() {
     $link = print_pdf_print_link();
 
     $current_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
-    $pdf_tool_default = array_key_exists($current_pdf_tool, $pdf_tools) ? $current_pdf_tool : PRINT_PDF_PDF_TOOL_DEFAULT;
+    $pdf_tool_default = array_key_exists((string)$current_pdf_tool, $pdf_tools) ? $current_pdf_tool : PRINT_PDF_PDF_TOOL_DEFAULT;
 
     $form['settings'] = array(
       '#type' => 'fieldset',
