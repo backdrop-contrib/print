@@ -196,12 +196,16 @@ function print_mail_form_for_path($form, &$form_state, $path, $query = NULL, $us
     $form['chk_teaser'] = array('#type' => 'value', '#value' => $print_mail_teaser_default);
   }
 
-  $form['btn_submit'] = array(
+  $form['actions'] = array(
+    '#type' => 'actions',
+  );
+
+  $form['actions']['submit'] = array(
     '#name' => 'submit',
     '#type' => 'submit',
     '#value' => t('Send email'),
   );
-  $form['btn_cancel'] = array(
+  $form['actions']['cancel'] = array(
     '#name' => 'cancel',
     '#type' => 'submit',
     '#value' => t('Cancel'),
