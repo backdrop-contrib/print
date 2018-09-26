@@ -68,7 +68,9 @@ function print_pdf_mpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $pa
     $mpdf = new mPDF('UTF-8', $format);
   }
 
-  $mpdf->SetAuthor(strip_tags($meta['name']));
+  if (isset($meta['name'])) {
+    $mpdf->SetAuthor(strip_tags($meta['name']));
+  }
   $mpdf->SetCreator(variable_get('site_name', 'Drupal'));
   /*
   // Pulled from the HTML meta data
