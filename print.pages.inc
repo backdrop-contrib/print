@@ -195,7 +195,7 @@ function print_preprocess_print(&$variables) {
   if (variable_get('print_html_sendtoprinter', PRINT_HTML_SENDTOPRINTER_DEFAULT) && ($format == 'html')) {
     drupal_add_js('misc/drupal.js', array('weight' => JS_LIBRARY));
 
-    $window_close = (variable_get('print_html_new_window', PRINT_HTML_NEW_WINDOW_DEFAULT) && variable_get('print_html_windowclose', PRINT_HTML_WINDOWCLOSE_DEFAULT)) ? 'window.close();' : '';
+    $window_close = (variable_get('print_html_new_window', PRINT_HTML_NEW_WINDOW_DEFAULT) && variable_get('print_html_windowclose', PRINT_HTML_WINDOWCLOSE_DEFAULT)) ? 'setTimeout(function(){window.close();}, 1);' : '';
     $variables['sendtoprinter'] = '<script type="text/javascript">(function ($) { Drupal.behaviors.print = {attach: function() {$(window).load(function() {window.print();' . $window_close . '})}}})(jQuery);</script>';
   }
 
