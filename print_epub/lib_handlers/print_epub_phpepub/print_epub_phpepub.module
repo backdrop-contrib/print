@@ -17,8 +17,9 @@
  *   version number of the library
  */
 function _print_epub_phpepub_version($epub_tool) {
-  require_once DRUPAL_ROOT . '/' . $epub_tool;
-
+  if (file_exists(DRUPAL_ROOT . '/' . $epub_tool)) {
+    include_once DRUPAL_ROOT . '/' . $epub_tool;
+  }
   return EPub::VERSION;
 }
 
