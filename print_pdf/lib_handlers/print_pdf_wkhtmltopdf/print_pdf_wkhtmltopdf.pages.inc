@@ -53,7 +53,7 @@ function print_pdf_wkhtmltopdf_print_pdf_generate($html, $meta, $paper_size = NU
     1 => array('pipe', 'w'),
     2 => array('pipe', 'a'),
   );
-  $cmd = '"' . realpath($pdf_tool[1]) . "\" --page-size $paper_size --orientation $page_orientation --dpi $dpi $wkhtmltopdf_options - -";
+  $cmd = '"' . realpath($pdf_tool[1]) . "\" -q --page-size $paper_size --orientation $page_orientation --dpi $dpi $wkhtmltopdf_options - -";
 
   $process = proc_open($cmd, $descriptor, $pipes, NULL, NULL);
 
@@ -79,6 +79,9 @@ function print_pdf_wkhtmltopdf_print_pdf_generate($html, $meta, $paper_size = NU
   }
 
   if (!empty($pdf)) {
+    // Remove anything before actual PDF content.
+    $pdf = substr($pdf, strpos($pdf, '%PDF-'));
+
     return $pdf;
   }
   else {
