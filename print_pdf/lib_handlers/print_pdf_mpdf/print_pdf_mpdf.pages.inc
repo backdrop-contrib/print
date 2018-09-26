@@ -17,6 +17,9 @@ function print_pdf_mpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $pa
   module_load_include('inc', 'print', 'includes/print');
 
   $pdf_tool = explode('|', variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT));
+  // Version 7 of the mpdf library uses a composer autoloader.
+  // Also there no longer is way to truly detect the library version, so this seems like the best alternative.
+  $mpdf_version_7_plus = strpos($pdf_tool[1], 'autoload.php') !== FALSE;
   if (empty($paper_size)) {
     $paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
   }
@@ -25,12 +28,19 @@ function print_pdf_mpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $pa
   }
   $images_via_file = variable_get('print_pdf_images_via_file', PRINT_PDF_IMAGES_VIA_FILE_DEFAULT);
 
-  if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
-    if (!defined('_MPDF_TTFONTDATAPATH')) {
-      define('_MPDF_TTFONTDATAPATH', drupal_realpath('public://print_pdf/print_pdf_mpdf/ttfontdata/'));
-    }
-    if (!defined('_MPDF_TEMP_PATH')) {
-      define('_MPDF_TEMP_PATH', drupal_realpath('public://print_pdf/print_pdf_mpdf/tmp/'));
+  $config = array();
+  if ($mpdf_version_7_plus) {
+    $config['tempDir'] = drupal_realpath('public://print_pdf/print_pdf_mpdf/');
+  }
+  else {
+    // Deprecated since mpdf v7.x.
+    if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
+      if (!defined('_MPDF_TTFONTDATAPATH')) {
+        define('_MPDF_TTFONTDATAPATH', drupal_realpath('public://print_pdf/print_pdf_mpdf/ttfontdata/'));
+      }
+      if (!defined('_MPDF_TEMP_PATH')) {
+        define('_MPDF_TEMP_PATH', drupal_realpath('public://print_pdf/print_pdf_mpdf/tmp/'));
+      }
     }
   }
 
@@ -42,7 +52,14 @@ function print_pdf_mpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $pa
   $html = _print_access_images_via_file($html, $images_via_file);
 
   // Set document information.
-  $mpdf = new mPDF('UTF-8', $format);
+  if ($mpdf_version_7_plus) {
+    $config['mode'] = 'utf-8';
+    $config['format'] = $format;
+    $mpdf = new \Mpdf\Mpdf($config);
+  }
+  else {
+    $mpdf = new mPDF('UTF-8', $format);
+  }
 
   $mpdf->SetAuthor(strip_tags($meta['name']));
   $mpdf->SetCreator(variable_get('site_name', 'Drupal'));
