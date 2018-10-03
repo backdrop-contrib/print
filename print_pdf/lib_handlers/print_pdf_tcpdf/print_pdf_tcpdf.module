@@ -7,7 +7,7 @@
  * @ingroup print
  */
 
-define('PRINT_PDF_TCPDF_FONT_FAMILY_DEFAULT', 'dejavusans');
+define('PRINT_PDF_TCPDF_FONT_FAMILY_DEFAULT', '');
 define('PRINT_PDF_TCPDF_FONT_SIZE_DEFAULT', 10);
 define('PRINT_PDF_TCPDF_FONT_SUBSETTING_DEFAULT', FALSE);
 

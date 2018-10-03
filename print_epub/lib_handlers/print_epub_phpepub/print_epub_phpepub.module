@@ -19,8 +19,11 @@
 function _print_epub_phpepub_version($epub_tool) {
   if (file_exists(DRUPAL_ROOT . '/' . $epub_tool)) {
     include_once DRUPAL_ROOT . '/' . $epub_tool;
+
+    if (class_exists('EPub')) {
+      return EPub::VERSION;
+    }
   }
-  return EPub::VERSION;
 }
 
 /**
