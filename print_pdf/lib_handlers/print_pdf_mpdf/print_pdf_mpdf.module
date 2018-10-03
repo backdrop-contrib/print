@@ -66,16 +66,10 @@ function print_pdf_mpdf_print_pdf_available_libs_alter(&$pdf_tools) {
     $pdf_tools['print_pdf_mpdf|' . $tool] = 'mPDF (' . dirname($tool) . ')';
   }
 
-  if (module_exists('libraries')) {
-    $lib_path = libraries_get_path('mpdf');
-    $tool_path = $lib_path . '/vendor/autoload.php';
-    if (file_exists($tool_path)) {
-      $pdf_tools['print_pdf_mpdf|' . $tool_path] = 'mPDF (' . dirname($tool_path) . ')';
-    }
-  }
-  else {
-    $tools = _print_scan_libs('mpdf', '!^mpdf/vendor/autoload\.php$!');
-    foreach ($tools as $tool) {
+  // mPDF >= 7.0 uses a composer autoloader.
+  $tools = _print_scan_libs('mpdf', '!^autoload.php$!');
+  foreach ($tools as $tool) {
+    if (preg_match('!mpdf.*?/vendor/autoload.php$!', $tool)) {
       $pdf_tools['print_pdf_mpdf|' . $tool] = 'mPDF (' . dirname($tool) . ')';
     }
   }
