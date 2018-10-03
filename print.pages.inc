@@ -724,10 +724,12 @@ function _print_generate_path($path, $format) {
       case MENU_NOT_FOUND:
         drupal_not_found();
         drupal_exit();
+        break;
 
       case MENU_ACCESS_DENIED:
         drupal_access_denied();
         drupal_exit();
+        break;
     }
   }
 
