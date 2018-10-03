@@ -29,6 +29,9 @@ function print_pdf_wkhtmltopdf_print_pdf_generate($html, $meta, $paper_size = NU
     $wkhtmltopdf_options = token_replace($wkhtmltopdf_options, array('node' => $meta['node']), array('clear' => TRUE));
   }
 
+  // Prevent options that could result in execution of arbitrary commands.
+  $wkhtmltopdf_options = escapeshellcmd($wkhtmltopdf_options);
+
   $version = print_pdf_wkhtmltopdf_pdf_tool_version($pdf_tool[1], FALSE);
 
   // 0.10.0 beta2 identifies itself as 0.9.9.
@@ -45,7 +48,7 @@ function print_pdf_wkhtmltopdf_print_pdf_generate($html, $meta, $paper_size = NU
 
   // Use basic http authentication to fetch included CSS, etc.
   if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
-    $wkhtmltopdf_options .= ' --username ' . check_plain($_SERVER['PHP_AUTH_USER']) . ' --password ' . check_plain($_SERVER['PHP_AUTH_PW']);
+    $wkhtmltopdf_options .= ' --username ' . escapeshellarg($_SERVER['PHP_AUTH_USER']) . ' --password ' . escapeshellarg($_SERVER['PHP_AUTH_PW']);
   }
 
   $descriptor = array(
