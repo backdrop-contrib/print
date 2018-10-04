@@ -137,8 +137,6 @@ function print_pdf_generate_path($path, $query = NULL, $cid = NULL, $pdf_filenam
     $html = preg_replace_callback($pattern, '_print_rewrite_urls', $html);
     // And make anchor links relative again, to permit in-PDF navigation.
     $html = preg_replace("!${base_url}/" . $link['path'] . '/.*?#!', '#', $html);
-    // Remove all scripts due to security concerns.
-    $html = preg_replace('!<script(.*?)>(.*?)</script>!is', '', $html);
 
     $meta = array(
       'node' => $node,
