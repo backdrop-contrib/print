@@ -373,11 +373,12 @@ function print_pdf_cache_clean() {
  *   The scheme://path of the cache directory
  */
 function print_pdf_cache_dir() {
+  global $language_url;
   $scheme = 'private';
   if (!file_stream_wrapper_valid_scheme($scheme)) {
     $scheme = 'temporary';
   }
-  return $scheme . '://print_pdf/cache';
+  return $scheme . '://print_pdf/cache/' . $language_url->language;
 }
 
 /**
