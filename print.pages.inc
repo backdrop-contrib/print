@@ -376,7 +376,7 @@ function _print_robots_meta_generator() {
   }
 
   if (count($robots_meta) > 0) {
-    return '<meta name="robots" content=' . implode(', ', $robots_meta) . ' />';
+    return '<meta name="robots" content="' . implode(', ', $robots_meta) . '" />';
   }
   else {
     return '';
