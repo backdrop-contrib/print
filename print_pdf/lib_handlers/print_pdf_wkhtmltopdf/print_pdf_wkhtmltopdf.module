@@ -9,6 +9,7 @@
 
 define('PRINT_PDF_WKHTMLTOPDF_OPTIONS', "--footer-font-size 7 --footer-right '[page]'");
 define('PRINT_PDF_WKHTMLTOPDF_VERSION_DEFAULT', '');
+define('PRINT_PDF_WKHTMLTOPDF_USE_INPUT_FILE_DEFAULT', FALSE);
 
 /**
  * Implements hook_pdf_tool_info().
