@@ -388,7 +388,7 @@ function print_mail_form_validate($form, &$form_state) {
  * @ingroup forms
  */
 function print_mail_form_submit($form, &$form_state) {
-  if (!array_key_exists('cancel', $form_state['values'])) {
+  if (!array_key_exists('cancel', $form_state['input'])) {
     module_load_include('inc', 'print', 'print.pages');
     module_load_include('inc', 'print', 'includes/print');
 
