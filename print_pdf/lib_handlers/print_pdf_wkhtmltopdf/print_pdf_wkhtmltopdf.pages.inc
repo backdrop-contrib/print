@@ -29,8 +29,20 @@ function print_pdf_wkhtmltopdf_print_pdf_generate($html, $meta, $paper_size = NU
     $wkhtmltopdf_options = token_replace($wkhtmltopdf_options, array('node' => $meta['node']), array('clear' => TRUE));
   }
 
+  // Build array of single quoted parts, and the same escaped.
+  preg_match_all("!'.+?'!", $wkhtmltopdf_options, $matches);
+  $quoted = array();
+  foreach ($matches[0] as $match) {
+    $quoted[escapeshellcmd($match)] = $match;
+  }
+
   // Prevent options that could result in execution of arbitrary commands.
   $wkhtmltopdf_options = escapeshellcmd($wkhtmltopdf_options);
+
+  // Replace sections that were single quoted with original content.
+  foreach ($quoted as $search => $replace) {
+    $wkhtmltopdf_options = str_replace($search, $replace, $wkhtmltopdf_options);
+  }
 
   $version = print_pdf_wkhtmltopdf_pdf_tool_version($pdf_tool[1], FALSE);
 
