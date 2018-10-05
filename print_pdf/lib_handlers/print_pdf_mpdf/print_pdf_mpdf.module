@@ -70,7 +70,7 @@ function print_pdf_mpdf_print_pdf_available_libs_alter(&$pdf_tools) {
   $tools = _print_scan_libs('mpdf', '!^autoload.php$!');
   foreach ($tools as $tool) {
     if (preg_match('!mpdf.*?/vendor/autoload.php$!', $tool)) {
-      $pdf_tools['print_pdf_mpdf|' . $tool] = 'mPDF (' . dirname($tool) . ')';
+      $pdf_tools['print_pdf_mpdf|' . $tool] = 'mPDF (' . dirname(dirname($tool)) . ')';
     }
   }
 }
