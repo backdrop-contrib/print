@@ -192,7 +192,13 @@ function print_pdf_node_load($nodes, $types) {
   $size = 'print_' . $link['format'] . '_size';
   $orientation = 'print_' . $link['format'] . '_orientation';
 
-  $result = db_query('SELECT nid, size, orientation FROM {print_pdf_node_conf} WHERE nid IN (:nids)', array(':nids' => $ids))->fetchAllAssoc('nid');
+  try {
+    $result = db_query('SELECT nid, size, orientation FROM {print_pdf_node_conf} WHERE nid IN (:nids)', array(':nids' => $ids))->fetchAllAssoc('nid');
+  }
+  catch (PDOException $ex) {
+    // An exception may occur when a node is loaded before update 7203 runs.
+    $result = array();
+  }
 
   foreach ($nodes as $node) {
     $node->{$size} = (isset($result[$node->nid]) && !empty($result[$node->nid]->size)) ? $result[$node->nid]->size : variable_get($size . '_' . $node->type);
