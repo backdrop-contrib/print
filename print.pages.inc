@@ -543,7 +543,7 @@ function _print_rewrite_urls($matches) {
  *   otherwise.
  */
 function _print_friendly_urls($url = 0) {
-  static $urls = array();
+  $urls = &drupal_static(__FUNCTION__, array());
   if ($url !== 0) {
     $url_idx = array_search($url, $urls);
     if ($url_idx !== FALSE) {
