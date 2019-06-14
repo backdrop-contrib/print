@@ -16,6 +16,7 @@ define('PRINT_PDF_DOMPDF_FONT_SUBSETTING_DEFAULT', FALSE);
 function print_pdf_dompdf_pdf_tool_info() {
   return array(
     'name' => 'dompdf',
+    'min_version' => '0.8.2',
     'url' => 'https://github.com/dompdf/dompdf/releases/latest',
     'expand_css' => FALSE,
     'public_dirs' => array(
