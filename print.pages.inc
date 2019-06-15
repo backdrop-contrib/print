@@ -49,6 +49,9 @@ function print_controller_html() {
       ->expression('totalcount', 'totalcount + 1')
       ->execute();
   }
+  else {
+    drupal_exit();
+  }
 }
 
 /**
