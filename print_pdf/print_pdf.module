@@ -217,6 +217,10 @@ function print_pdf_node_insert($node) {
  * Implements hook_node_update().
  */
 function print_pdf_node_update($node) {
+  // If no global user object, the user_access call will fail.
+  if (!isset($GLOBALS['user']) || !is_object($GLOBALS['user'])) {
+    return;
+  }
   if (user_access('administer print') || user_access('node-specific print configuration')) {
     $link = print_pdf_print_link();
 
