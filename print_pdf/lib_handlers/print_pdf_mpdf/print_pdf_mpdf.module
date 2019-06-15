@@ -23,7 +23,8 @@ function print_pdf_mpdf_pdf_tool_info() {
   );
 
   $pdf_tool = explode('|', variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT));
-  if (!isset($pdf_tool[1]) || version_compare(print_pdf_mpdf_pdf_tool_version($pdf_tool[1]), '7.0.0', '<')) {
+  // Only for versions less than 7.0.0, without calling the version() function.
+  if (isset($pdf_tool[1]) && strpos($pdf_tool[1], 'mpdf.php')) {
     $info['tool_dirs'] = array(
       'graph_cache',
     );
