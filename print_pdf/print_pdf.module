@@ -243,6 +243,12 @@ function print_pdf_node_update($node) {
       ->execute();
   }
 
+  //For a book page, not only delete the PDF file for the page but also delete the caching PDF file for the entire book.
+  if (isset($node->book) && isset($node->book['bid'])) {
+    //Delete the book PDF file.
+    print_pdf_cache_delete($node->book['bid']);
+  }
+
   print_pdf_cache_delete($node->nid);
 }
 
