@@ -18,15 +18,20 @@ function print_pdf_tcpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $p
 
   module_load_include('inc', 'print', 'includes/print');
 
+  // TODO This variable was probably removed in Backdrop without replacement.
   $pdf_tool = explode('|', variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT));
   if (empty($paper_size)) {
+    // TODO This variable was probably removed in Backdrop without replacement.
     $paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
   }
   if (empty($page_orientation)) {
+    // TODO This variable was probably removed in Backdrop without replacement.
     $page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
   }
+  // TODO This variable was probably removed in Backdrop without replacement.
   $images_via_file = variable_get('print_pdf_images_via_file', PRINT_PDF_IMAGES_VIA_FILE_DEFAULT);
 
+  // TODO This variable was probably removed in Backdrop without replacement.
   if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
     $pdf_tool_path = realpath(dirname($pdf_tool[1]));
 
@@ -34,7 +39,7 @@ function print_pdf_tcpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $p
       define('K_TCPDF_EXTERNAL_CONFIG', TRUE);
     }
     if (!defined('K_PATH_MAIN')) {
-      define('K_PATH_MAIN', DRUPAL_ROOT);
+      define('K_PATH_MAIN', BACKDROP_ROOT);
     }
     if (!defined('K_PATH_URL')) {
       define('K_PATH_URL', $base_url);
@@ -43,7 +48,7 @@ function print_pdf_tcpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $p
       define('K_PATH_FONTS', $pdf_tool_path . '/fonts/');
     }
     if (!defined('K_PATH_CACHE')) {
-      define('K_PATH_CACHE', drupal_realpath('public://print_pdf/print_pdf_tcpdf/cache') . '/');
+      define('K_PATH_CACHE', backdrop_realpath('public://print_pdf/print_pdf_tcpdf/cache') . '/');
     }
     if (!defined('K_PATH_IMAGES')) {
       define('K_PATH_IMAGES', '');
@@ -64,12 +69,12 @@ function print_pdf_tcpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $p
 
   // Decode HTML entities in image filenames.
   $pattern = "!<img\s[^>]*?src\s*?=\s*?['\"]?{$base_url}[^>]*?>!is";
-  $html = preg_replace_callback($pattern, function ($matches) { return html_entity_decode($matches[0], ENT_QUOTES); }, $html);
+  $html = preg_replace_callback($pattern, ($matches){html_entity_decode($matches[0], ENT_QUOTES)}, $html);
   // Remove queries from the image URL.
   $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?{$base_url}[^>]*?)(?:%3F|\?)[^\s'\"]+([^>]*?>)!is";
   $html = preg_replace($pattern, '$1$2', $html);
 
-  $tool_path = DRUPAL_ROOT . '/' . $pdf_tool[1];
+  $tool_path = BACKDROP_ROOT . '/' . $pdf_tool[1];
   if (file_exists($tool_path)) {
     require_once $tool_path;
   }
@@ -79,12 +84,14 @@ function print_pdf_tcpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $p
   }
   module_load_include('inc', 'print_pdf_tcpdf', 'print_pdf_tcpdf.class');
 
+  // TODO This variable was probably removed in Backdrop without replacement.
+  // TODO This variable was probably removed in Backdrop without replacement.
   $font = array(
     check_plain(variable_get('print_pdf_font_family', PRINT_PDF_TCPDF_FONT_FAMILY_DEFAULT)),
     '',
     check_plain(variable_get('print_pdf_font_size', PRINT_PDF_TCPDF_FONT_SIZE_DEFAULT)),
   );
-  $orientation = drupal_strtoupper($page_orientation[0]);
+  $orientation = backdrop_strtoupper($page_orientation[0]);
 
   // Create new PDF document.
   $pdf = new PrintTCPDF($orientation, 'mm', $paper_size, TRUE);
@@ -93,9 +100,10 @@ function print_pdf_tcpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $p
   if (isset($meta['name'])) {
     $pdf->SetAuthor(strip_tags($meta['name']));
   }
-  $pdf->SetCreator(variable_get('site_name', 'Drupal'));
+  $pdf->SetCreator(config_get('system.performance', 'site_name'));
   $pdf->SetTitle(html_entity_decode($meta['title'], ENT_QUOTES, 'UTF-8'));
   $pdf->setPDFVersion('1.6');
+  // TODO This variable was probably removed in Backdrop without replacement.
   $pdf->setFontSubsetting(variable_get('print_pdf_font_subsetting', PRINT_PDF_TCPDF_FONT_SUBSETTING_DEFAULT));
   $pdf->setTcpdfLink(FALSE);
 
@@ -117,7 +125,7 @@ function print_pdf_tcpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $p
 
   // Enable third-party module to alter the pdf object, via
   // hook_print_pdf_tcpdf_alter().
-  drupal_alter('print_pdf_tcpdf', $pdf, $html, $meta);
+  backdrop_alter('print_pdf_tcpdf', $pdf, $html, $meta);
 
   // Add a page.
   $pdf->AddPage();
@@ -166,7 +174,7 @@ function theme_print_pdf_tcpdf_header($vars) {
     $logo = $logo_url[1];
 
     // Make logo relative again.
-    $logo = preg_replace("!^$base_url(.*)!sm", DRUPAL_ROOT . '$1', $logo);
+    $logo = preg_replace("!^$base_url(.*)!sm", BACKDROP_ROOT . '$1', $logo);
 
     if (!empty($logo)) {
       $size = getimagesize($logo);

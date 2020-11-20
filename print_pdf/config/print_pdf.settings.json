@@ -1,0 +1,16 @@
+{
+    "_config_name": "print_pdf.settings",
+    "print_pdf_pdf_tool": "PRINT_PDF_PDF_TOOL_DEFAULT",
+    "print_pdf_content_disposition": "PRINT_PDF_CONTENT_DISPOSITION_DEFAULT",
+    "print_pdf_paper_size": "PRINT_PDF_PAPER_SIZE_DEFAULT",
+    "print_pdf_page_orientation": "PRINT_PDF_PAGE_ORIENTATION_DEFAULT",
+    "print_pdf_cache_enabled": "PRINT_PDF_CACHE_ENABLED_DEFAULT",
+    "print_pdf_cache_lifetime": "PRINT_PDF_CACHE_LIFETIME_DEFAULT",
+    "print_pdf_images_via_file": "PRINT_PDF_IMAGES_VIA_FILE_DEFAULT",
+    "print_pdf_autoconfig": "PRINT_PDF_AUTOCONFIG_DEFAULT",
+    "print_pdf_filename": "PRINT_PDF_FILENAME_DEFAULT",
+    "print_pdf_display_sys_urllist": "PRINT_TYPE_SYS_URLLIST_DEFAULT",
+    "print_pdf_link_text_enabled": "PRINT_TYPE_LINK_TEXT_ENABLED_DEFAULT",
+    "print_pdf_link_text": "dynamic value in file /print/print_pdf/print_pdf.admin.inc line 144",
+    "print_pdf_link_pos": "dynamic value in file /print/print_pdf/print_pdf.install line 286"
+}

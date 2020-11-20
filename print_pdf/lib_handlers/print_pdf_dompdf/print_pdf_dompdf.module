@@ -46,9 +46,9 @@ function print_pdf_dompdf_menu() {
   $items['admin/config/user-interface/print/pdf/dompdf'] = array(
     'title' => 'dompdf',
     'description' => 'Configure the dompdf options.',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('print_pdf_dompdf_settings'),
-    'access arguments'  => array('administer print'),
+    'access arguments' => array('administer print'),
     'type' => MENU_LOCAL_TASK,
     'file' => 'print_pdf_dompdf.admin.inc',
   );
@@ -77,8 +77,8 @@ function print_pdf_dompdf_pdf_tool_version($pdf_tool) {
     }
   }
   else {
-    if (file_exists(DRUPAL_ROOT . '/' . $pdf_tool)) {
-      include_once DRUPAL_ROOT . '/' . $pdf_tool;
+    if (file_exists(BACKDROP_ROOT . '/' . $pdf_tool)) {
+      include_once BACKDROP_ROOT . '/' . $pdf_tool;
     }
 
     // Poor man's way to find dompdf version pre 0.7.

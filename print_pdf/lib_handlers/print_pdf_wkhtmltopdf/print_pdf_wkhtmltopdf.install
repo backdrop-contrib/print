@@ -11,9 +11,9 @@
  * Implements hook_uninstall().
  */
 function print_pdf_wkhtmltopdf_uninstall() {
-  variable_del('print_pdf_wkhtmltopdf_options');
-  variable_del('print_pdf_wkhtmltopdf_use_input_file');
-  variable_del('print_pdf_wkhtmltopdf_version');
+  config_clear('print_pdf_wkhtmltopdf.settings', 'print_pdf_wkhtmltopdf_options');
+  config_clear('print_pdf_wkhtmltopdf.settings', 'print_pdf_wkhtmltopdf_use_input_file');
+  config_clear('print_pdf_wkhtmltopdf.settings', 'print_pdf_wkhtmltopdf_version');
 }
 
 /**
@@ -25,12 +25,13 @@ function print_pdf_wkhtmltopdf_requirements($phase) {
   switch ($phase) {
     // On status report page, make sure that a PDF generation tool is selected.
     case 'runtime':
+      // TODO This variable was probably removed in Backdrop without replacement.
       $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
       if (!empty($print_pdf_pdf_tool)) {
         $tool = explode('|', $print_pdf_pdf_tool);
 
         if (is_file($tool[1]) && is_readable($tool[1])) {
-          if (drupal_substr(basename($tool[1], '.exe'), 0, 11) == 'wkhtmltopdf') {
+          if (backdrop_substr(basename($tool[1], '.exe'), 0, 11) == 'wkhtmltopdf') {
             if (function_exists('is_executable') && !is_executable($tool[1])) {
               $requirements['print_pdf_wkhtmltopdf'] = array(
                 'title' => $t('wkhtmltopdf library'),
@@ -45,4 +46,24 @@ function print_pdf_wkhtmltopdf_requirements($phase) {
       break;
   }
   return $requirements;
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function print_pdf_wkhtmltopdf_update_1000() {
+  $config = config('print_pdf_wkhtmltopdf.settings');
+  $config->set('print_pdf_wkhtmltopdf_options', update_variable_get('print_pdf_wkhtmltopdf_options', 'PRINT_PDF_WKHTMLTOPDF_OPTIONS'));
+  $config->set('print_pdf_wkhtmltopdf_use_input_file', update_variable_get('print_pdf_wkhtmltopdf_use_input_file', 'PRINT_PDF_WKHTMLTOPDF_USE_INPUT_FILE_DEFAULT'));
+  $config->set('print_pdf_wkhtmltopdf_version', update_variable_get('print_pdf_wkhtmltopdf_version', 'PRINT_PDF_WKHTMLTOPDF_VERSION_DEFAULT'));
+  update_variable_del('print_pdf_wkhtmltopdf_options');
+  update_variable_del('print_pdf_wkhtmltopdf_use_input_file');
+  update_variable_del('print_pdf_wkhtmltopdf_version');
+}
+
+/**
+ * Implements hook_install().
+ */
+function print_pdf_wkhtmltopdf_install() {
+  // Dynamically generated variable data was detected.
 }

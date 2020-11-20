@@ -16,6 +16,8 @@
  * @ingroup forms
  */
 function print_pdf_wkhtmltopdf_settings() {
+  $config = config('print_pdf_wkhtmltopdf.settings');
+  $form['#config'] = 'print_pdf_wkhtmltopdf.settings';
   $form['settings'] = array(
     '#type' => 'fieldset',
     '#title' => t('wkhtmltopdf options'),
@@ -26,14 +28,14 @@ function print_pdf_wkhtmltopdf_settings() {
     '#title' => t('wkhtmltopdf options'),
     '#size' => 60,
     '#maxlength' => 500,
-    '#default_value' => variable_get('print_pdf_wkhtmltopdf_options', PRINT_PDF_WKHTMLTOPDF_OPTIONS),
+    '#default_value' => $config->get('print_pdf_wkhtmltopdf_options'),
     '#description' => t('Set any additional options to be passed to the wkhtmltopdf executable. Tokens may be used in these options (see list below).'),
   );
 
   $form['settings']['print_pdf_wkhtmltopdf_use_input_file'] = array(
     '#type' => 'checkbox',
     '#title' => t('Use temporary input file'),
-    '#default_value' => variable_get('print_pdf_wkhtmltopdf_use_input_file', PRINT_PDF_WKHTMLTOPDF_USE_INPUT_FILE_DEFAULT),
+    '#default_value' => $config->get('print_pdf_wkhtmltopdf_use_input_file'),
     '#description' => t('If you experience trouble when generating a PDF try to enable this feature to adjust the input handling.'),
   );
 

@@ -34,7 +34,7 @@ function print_pdf_wkhtmltopdf_drush_pdf_libs_alter(&$pdf_libs) {
 function _print_pdf_wkhtmltopdf_drush_download_url() {
   $ret = FALSE;
 
-  switch (drupal_substr(php_uname('s'), 0, 3)) {
+  switch (backdrop_substr(php_uname('s'), 0, 3)) {
     case 'Lin':
       drush_log(dt('Please note that generic Linux builds are no longer being generated. See https://wkhtmltopdf.org/downloads.html.'), 'warning');
       $ret = (php_uname('m') == 'x86_64') ? WKHTMLTOPDF_LNX64_DOWNLOAD_URI : WKHTMLTOPDF_LNX32_DOWNLOAD_URI;

@@ -16,6 +16,8 @@
  * @ingroup forms
  */
 function print_pdf_dompdf_settings() {
+  $config = config('print_pdf_dompdf.settings');
+  $form['#config'] = 'print_pdf_dompdf.settings';
   $form['settings'] = array(
     '#type' => 'fieldset',
     '#title' => t('dompdf options'),
@@ -24,14 +26,14 @@ function print_pdf_dompdf_settings() {
   $form['settings']['print_pdf_dompdf_unicode'] = array(
     '#type' => 'checkbox',
     '#title' => t("Use dompdf's Unicode Mode"),
-    '#default_value' => variable_get('print_pdf_dompdf_unicode', PRINT_PDF_DOMPDF_UNICODE_DEFAULT),
+    '#default_value' => $config->get('print_pdf_dompdf_unicode'),
     '#description' => t("If enabled, dompdf's Unicode mode is used. If not, the module will attempt to convert some non-ASCII chars to ISO-8859-1.")
       . ' ' . t('For dompdf 0.7 and higher, Unicode Mode is fully supported and always active, so this option has no effect.'),
   );
   $form['settings']['print_pdf_dompdf_font_subsetting'] = array(
     '#type' => 'checkbox',
     '#title' => t('Enable font subsetting'),
-    '#default_value' => variable_get('print_pdf_dompdf_font_subsetting', PRINT_PDF_DOMPDF_FONT_SUBSETTING_DEFAULT),
+    '#default_value' => $config->get('print_pdf_dompdf_font_subsetting'),
     '#description' => t('Only embed those font characters that are actually used.  This can generate smaller PDF files but may significantly slow down processing.'),
   );
 

@@ -19,7 +19,7 @@
  *   An array of the filenames matching the provided mask.
  */
 function _print_scan_libs($lib, $mask) {
-  $tools = array_keys(file_scan_directory(drupal_get_path('module', 'print'), $mask));
+  $tools = array_keys(file_scan_directory(backdrop_get_path('module', 'print'), $mask));
   $tools = array_merge($tools, array_keys(file_scan_directory(PRINT_LIB_PATH, $mask)));
   if (module_exists('libraries')) {
     $tools = array_merge($tools, array_keys(file_scan_directory(libraries_get_path($lib), $mask)));
@@ -68,7 +68,7 @@ function _print_replace_spaces($matches) {
 /**
  * Convert image paths to the file:// protocol.
  *
- * In some Drupal setups, the use of the 'private' filesystem or Apache's
+ * In some Backdrop setups, the use of the 'private' filesystem or Apache's
  * configuration prevent access to the images of the page. This function
  * tries to circumnvent those problems by accessing files in the local
  * filesystem.
@@ -88,11 +88,11 @@ function _print_access_images_via_file($html, $images_via_file) {
 
   // Always convert private to local paths.
   $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?(?:${lang}/)?system/files/([^>\?]*)(?:\?itok=[a-zA-Z0-9\-_]{8})?([^>]*?>)!is";
-  $replacement = '$1file://' . realpath(variable_get('file_private_path', '')) . '/$2$3';
+  $replacement = '$1file://' . realpath(config_get('system.performance', 'file_private_path')) . '/$2$3';
   $html = preg_replace($pattern, $replacement, $html);
   if ($images_via_file) {
     $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?)${base_url}/(?:(?:index.php)?\?q=)?(?:${lang}/)?([^>\?]*)(?:\?itok=[a-zA-Z0-9\-_]{8})?([^>]*?>)!is";
-    $replacement = '$1file://' . DRUPAL_ROOT . '/$2$3';
+    $replacement = '$1file://' . BACKDROP_ROOT . '/$2$3';
     $html = preg_replace($pattern, $replacement, $html);
   }
 

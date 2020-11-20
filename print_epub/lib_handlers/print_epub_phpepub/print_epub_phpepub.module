@@ -17,12 +17,12 @@
  *   version number of the library
  */
 function _print_epub_phpepub_version($epub_tool) {
-  if (file_exists(DRUPAL_ROOT . '/' . $epub_tool)) {
-    include_once DRUPAL_ROOT . '/' . $epub_tool;
+  if (file_exists(BACKDROP_ROOT . '/' . $epub_tool)) {
+    include_once BACKDROP_ROOT . '/' . $epub_tool;
 
     $phpepub_version_4_plus = strpos($epub_tool, 'autoload.php') !== FALSE;
     if ($phpepub_version_4_plus) {
-      return \PHPePub\Core\EPub::VERSION;
+      return PHPePub Core EPub::VERSION;
     }
     else {
       if (class_exists('EPub')) {

@@ -24,7 +24,7 @@ function print_epub_drush_command() {
     ),
     'aliases' => array('epubdl'),
     // No site or config needed.
-    'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_ROOT,
+    'bootstrap' => DRUSH_BOOTSTRAP_BACKDROP_ROOT,
   );
 
   return $items;
@@ -55,8 +55,8 @@ function drush_print_epub_download($library) {
   $epub_libs = array();
   drush_command_invoke_all_ref('drush_epub_libs_alter', $epub_libs);
 
-  if (isset($library) && isset($epub_libs[drupal_strtolower($library)])) {
-    $func = $epub_libs[drupal_strtolower($library)]['callback'];
+  if (isset($library) && isset($epub_libs[backdrop_strtolower($library)])) {
+    $func = $epub_libs[backdrop_strtolower($library)]['callback'];
 
     $download_url = $func();
     if ($download_url) {

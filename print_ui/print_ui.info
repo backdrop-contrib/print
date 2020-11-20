@@ -1,6 +1,7 @@
 name = "Printer-friendly pages UI"
 description = "Manages the printer-friendly versions link display conditions. Without this module, those links are not displayed."
-core = 7.x
+backdrop = 1.x
+type = module
 package = "Printer, email and PDF versions"
 dependencies[] = print:print
 configure = admin/config/user-interface/print/ui

@@ -1,5 +1,6 @@
 name = "mPDF library handler"
 description = "PDF generation library using mPDF."
-core = 7.x
+backdrop = 1.x
+type = module
 package = "Printer, email and PDF versions"
 dependencies[] = print:print_pdf

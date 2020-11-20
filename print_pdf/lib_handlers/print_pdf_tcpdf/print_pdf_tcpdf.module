@@ -66,9 +66,9 @@ function print_pdf_tcpdf_menu() {
   $items['admin/config/user-interface/print/pdf/tcpdf'] = array(
     'title' => 'TCPDF',
     'description' => 'Configure the TCPDF options.',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('print_pdf_tcpdf_settings'),
-    'access arguments'  => array('administer print'),
+    'access arguments' => array('administer print'),
     'type' => MENU_LOCAL_TASK,
     'file' => 'print_pdf_tcpdf.admin.inc',
   );
@@ -80,12 +80,13 @@ function print_pdf_tcpdf_menu() {
  * Implements hook_pdf_tool_version().
  */
 function print_pdf_tcpdf_pdf_tool_version($pdf_tool) {
+  // TODO This variable was probably removed in Backdrop without replacement.
   if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
     // Prevent TCPDF default configs.
     define('K_TCPDF_EXTERNAL_CONFIG', TRUE);
   }
-  if (file_exists(DRUPAL_ROOT . '/' . $pdf_tool)) {
-    include_once DRUPAL_ROOT . '/' . $pdf_tool;
+  if (file_exists(BACKDROP_ROOT . '/' . $pdf_tool)) {
+    include_once BACKDROP_ROOT . '/' . $pdf_tool;
   }
 
   // Hide warnings, as some TCPDF constants may still be undefined.
@@ -117,4 +118,13 @@ function print_pdf_tcpdf_print_pdf_available_libs_alter(&$pdf_tools) {
   foreach ($tools as $tool) {
     $pdf_tools['print_pdf_tcpdf|' . $tool] = 'TCPDF (' . dirname($tool) . ')';
   }
+}
+
+/**
+ * Implements hook_autoload_info().
+ */
+function print_pdf_tcpdf_autoload_info() {
+  return array(
+    'PrintTCPDF' => 'print_pdf_tcpdf.class.inc',
+  );
 }

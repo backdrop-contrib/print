@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Displays Printer-friendly versions of Drupal pages.
+ * Displays Printer-friendly versions of Backdrop pages.
  *
  * @ingroup print
  */
@@ -75,7 +75,7 @@ function print_mail_menu() {
 
   $items[$link['path']] = array(
     'title' => 'Send by email',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('print_mail_form'),
     'access callback' => '_print_mail_access',
     'access arguments' => array('access send by email'),
@@ -88,9 +88,9 @@ function print_mail_menu() {
   $items['admin/config/user-interface/print/email'] = array(
     'title' => 'email',
     'description' => 'Configure the settings of the send by email functionality.',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('print_mail_settings'),
-    'access arguments'  => array('administer print'),
+    'access arguments' => array('administer print'),
     'weight' => 2,
     'type' => MENU_LOCAL_TASK,
     'file' => 'print_mail.admin.inc',
@@ -120,7 +120,7 @@ function print_mail_variable_info($options) {
  */
 function print_mail_block_info() {
   $block['print_mail-top']['info'] = t('Most emailed');
-  $block['print_mail-top']['cache'] = DRUPAL_CACHE_GLOBAL;
+  $block['print_mail-top']['cache'] = BACKDROP_CACHE_GLOBAL;
   return $block;
 }
 
@@ -177,10 +177,10 @@ function print_mail_cron_queue_info() {
  *   - language: Language object to use to compose the e-mail.
  *   - params: Optional parameters to build the e-mail.
  *   - from: Sets From to this value, if given.
- *   These are the input arguments of the drupal_mail() function.
+ *   These are the input arguments of the backdrop_mail() function.
  */
 function print_mail_send($data) {
-  drupal_mail($data['module'], $data['key'], $data['to'], $data['language'], $data['params'], $data['from']);
+  backdrop_mail($data['module'], $data['key'], $data['to'], $data['language'], $data['params'], $data['from']);
 }
 
 /**
@@ -266,9 +266,9 @@ function _print_mail_access($permission) {
       unset($parts[0]);
       $path = implode('/', $parts);
       if (ctype_digit($parts[1])) {
-        if (drupal_lookup_path('source', $path)) {
+        if (backdrop_lookup_path('source', $path)) {
           // This is a numeric alias.
-          $path = drupal_get_normal_path($path);
+          $path = backdrop_get_normal_path($path);
         }
         else {
           // Normal nid.
@@ -276,7 +276,7 @@ function _print_mail_access($permission) {
         }
       }
       else {
-        $path = drupal_get_normal_path($path);
+        $path = backdrop_get_normal_path($path);
       }
       // If the destination page is not accessible, don't show the form.
       if (!($router_item = menu_get_item($path)) || (!$router_item['access'])) {
@@ -376,7 +376,7 @@ function print_mail_mollom_form_info($form_id) {
 function print_mail_views_api() {
   return array(
     'api' => 2.0,
-    'path' => drupal_get_path('module', 'print_mail'),
+    'path' => backdrop_get_path('module', 'print_mail'),
   );
 }
 
@@ -391,17 +391,32 @@ function print_mail_rules_action_info() {
       'label' => t('Send node as HTML formatted email'),
       'group' => t('Send by email'),
       'parameter' => array(
-        'from'      => array('type' => 'text', 'label' => t('From email adress')),
-        'from_name' => array('type' => 'text', 'label' => t('From name')),
-        'to'        => array('type' => 'text', 'label' => t('Send email to')),
-        'subject'   => array('type' => 'text', 'label' => t('Subject')),
-        'message'   => array(
+        'from' => array(
+          'type' => 'text',
+          'label' => t('From email adress'),
+        ),
+        'from_name' => array(
+          'type' => 'text',
+          'label' => t('From name'),
+        ),
+        'to' => array(
+          'type' => 'text',
+          'label' => t('Send email to'),
+        ),
+        'subject' => array(
+          'type' => 'text',
+          'label' => t('Subject'),
+        ),
+        'message' => array(
           'type' => 'text',
           'label' => t('Message'),
           'description' => t('The message that should be displayed (optional).'),
           'optional' => TRUE,
         ),
-        'node'      => array('type' => 'node', 'label' => t('Content')),
+        'node' => array(
+          'type' => 'node',
+          'label' => t('Content'),
+        ),
       ),
     ),
   );

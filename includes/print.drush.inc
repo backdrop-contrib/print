@@ -16,7 +16,7 @@
 function _print_drush_download_lib($library, $url) {
   $path = drush_get_option('path');
   if (empty($path)) {
-    $path = drush_get_context('DRUSH_DRUPAL_ROOT') . '/sites/all/libraries/' . $library;
+    $path = drush_get_context('DRUSH_BACKDROP_ROOT') . '/sites/all/libraries/' . $library;
   }
 
   // Create the path if it does not exist.

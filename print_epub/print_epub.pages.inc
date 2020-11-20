@@ -20,7 +20,7 @@ module_load_include('inc', 'print', 'print.pages');
  * @see _print_epub_tcepub()
  */
 function print_epub_controller() {
-  // Disable caching for generated EPUBs, as Drupal doesn't ouput the proper
+  // Disable caching for generated EPUBs, as Backdrop doesn't ouput the proper
   // headers from the cache.
   $GLOBALS['conf']['cache'] = FALSE;
 
@@ -34,7 +34,7 @@ function print_epub_controller() {
 
   $node = NULL;
   if (!empty($path)) {
-    if ($alias = drupal_lookup_path('source', $path)) {
+    if ($alias = backdrop_lookup_path('source', $path)) {
       // Alias.
       $path_arr = explode('/', $alias);
       $node = node_load($path_arr[1]);
@@ -44,7 +44,7 @@ function print_epub_controller() {
       $node = node_load($args[0]);
     }
 
-    $epub_filename = variable_get('print_epub_filename', PRINT_EPUB_FILENAME_DEFAULT);
+    $epub_filename = config_get('print_epub.settings', 'print_epub_filename');
     if (!empty($epub_filename) && !empty($node)) {
       $epub_filename = token_replace($epub_filename, array('node' => $node), array('clear' => TRUE));
     }
@@ -64,29 +64,29 @@ function print_epub_controller() {
     $epub_filename = transliteration_clean_filename($epub_filename, language_default('language'));
   }
 
-  drupal_alter('print_epub_filename', $epub_filename, $path);
+  backdrop_alter('print_epub_filename', $epub_filename, $path);
 
   $epub = print_epub_generate_path($path, $query, $cid, $epub_filename . '.epub');
   if ($epub == NULL) {
-    drupal_goto($path);
+    backdrop_goto($path);
     exit;
   }
 
-  $nodepath = (isset($node->nid)) ? 'node/' . $node->nid : drupal_get_normal_path($path);
+  $nodepath = (isset($node->nid)) ? 'node/' . $node->nid : backdrop_get_normal_path($path);
   db_merge('print_epub_page_counter')
     ->key(array('path' => substr($nodepath, 0, 255)))
     ->fields(array(
-      'totalcount' => 1,
-      'timestamp' => REQUEST_TIME,
-    ))
+    'totalcount' => 1,
+    'timestamp' => REQUEST_TIME,
+  ))
     ->expression('totalcount', 'totalcount + 1')
     ->execute();
 
-  drupal_exit();
+  backdrop_exit();
 }
 
 /**
- * Gennerate a EPUB for a given Drupal path.
+ * Gennerate a EPUB for a given Backdrop path.
  *
  * @param string $path
  *   path of the page to convert to EPUB.
@@ -118,7 +118,7 @@ function print_epub_generate_path($path, $query = NULL, $cid = NULL, $epub_filen
 
     $meta = array(
       'node' => $node,
-      'url' => url(drupal_get_path_alias(empty($node->nid) ? $node->path : "node/$node->nid"), array('absolute' => TRUE)),
+      'url' => url(backdrop_get_path_alias(empty($node->nid) ? $node->path : "node/$node->nid"), array('absolute' => TRUE)),
     );
     if (isset($node->name)) {
       $meta['name'] = $node->name;

@@ -12,9 +12,14 @@
  */
 function print_install() {
   $t = get_t();
-  drupal_set_message($t('Printer-friendly Page settings are available under !link',
+  backdrop_set_message($t('Printer-friendly Page settings are available under !link',
     array('!link' => l($t('Administration > Configuration > User interface > Printer, email and PDF versions'), 'admin/config/user-interface/print'))
   ));
+  // Dynamically generated variable data was detected on the following lines.
+  // /print/print.admin.inc line 294
+  // /print/print.install line 199
+  // /print/print.pages.inc line 584
+  // /print/print.pages.inc line 587
 }
 
 /**
@@ -24,8 +29,8 @@ function print_enable() {
   // Module weight.
   db_update('system')
     ->fields(array(
-      'weight' => 0,
-    ))
+    'weight' => 0,
+  ))
     ->condition('type', 'module')
     ->condition('name', 'print')
     ->execute();
@@ -35,40 +40,41 @@ function print_enable() {
  * Implements hook_uninstall().
  */
 function print_uninstall() {
-  variable_del('print_comments');
-  variable_del('print_css');
-  variable_del('print_footer_options');
-  variable_del('print_footer_user');
-  variable_del('print_html_display_sys_urllist');
-  variable_del('print_html_link_text');
-  variable_del('print_html_link_text_enabled');
-  variable_del('print_html_new_window');
-  variable_del('print_html_sendtoprinter');
-  variable_del('print_html_windowclose');
-  variable_del('print_keep_theme_css');
-  variable_del('print_logo_options');
-  variable_del('print_logo_url');
-  variable_del('print_newwindow');
-  variable_del('print_robots_noarchive');
-  variable_del('print_robots_nofollow');
-  variable_del('print_robots_noindex');
-  variable_del('print_sourceurl_date');
-  variable_del('print_sourceurl_enabled');
-  variable_del('print_sourceurl_forcenode');
-  variable_del('print_urls');
-  variable_del('print_urls_anchors');
+  config_clear('print.settings', 'print_comments');
+  config_clear('print.settings', 'print_css');
+  config_clear('print.settings', 'print_footer_options');
+  config_clear('print.settings', 'print_footer_user');
+  config_clear('print.settings', 'print_html_display_sys_urllist');
+  config_clear('print.settings', 'print_html_link_text');
+  config_clear('print.settings', 'print_html_link_text_enabled');
+  config_clear('print.settings', 'print_html_new_window');
+  config_clear('print.settings', 'print_html_sendtoprinter');
+  config_clear('print.settings', 'print_html_windowclose');
+  config_clear('print.settings', 'print_keep_theme_css');
+  config_clear('print.settings', 'print_logo_options');
+  config_clear('print.settings', 'print_logo_url');
+  config_clear('print.settings', 'print_newwindow');
+  config_clear('print.settings', 'print_robots_noarchive');
+  config_clear('print.settings', 'print_robots_nofollow');
+  config_clear('print.settings', 'print_robots_noindex');
+  config_clear('print.settings', 'print_sourceurl_date');
+  config_clear('print.settings', 'print_sourceurl_enabled');
+  config_clear('print.settings', 'print_sourceurl_forcenode');
+  config_clear('print.settings', 'print_urls');
+  config_clear('print.settings', 'print_urls_anchors');
 
-  variable_del('print_html_book_link');
-  variable_del('print_html_link_class');
-  variable_del('print_html_link_pos');
-  variable_del('print_html_link_teaser');
-  variable_del('print_html_link_use_alias');
-  variable_del('print_html_show_link');
-  variable_del('print_html_sys_link_pages');
-  variable_del('print_html_sys_link_visibility');
+  config_clear('print.settings', 'print_html_book_link');
+  config_clear('print.settings', 'print_html_link_class');
+  config_clear('print.settings', 'print_html_link_pos');
+  config_clear('print.settings', 'print_html_link_teaser');
+  config_clear('print.settings', 'print_html_link_use_alias');
+  config_clear('print.settings', 'print_html_show_link');
+  config_clear('print.settings', 'print_html_sys_link_pages');
+  config_clear('print.settings', 'print_html_sys_link_visibility');
 
   $settings = db_query("SELECT name FROM {variable} WHERE name LIKE 'print\_html\_display\_%'");
   foreach ($settings as $variable) {
+    // TODO This variable was probably removed in Backdrop without replacement.
     variable_del($variable->name);
   }
 }
@@ -145,74 +151,83 @@ function print_schema() {
   return $schema;
 }
 
-/**
- * Remove hardcoded numeric deltas from all blocks.
- */
-function print_update_7000(&$sandbox) {
-  $renamed_deltas = array(
-    'print' => array(
-      '0' => 'print-links',
-      '1' => 'print-top',
-    ),
-  );
+// TODO The old hook_update_N functions cannot be applied to Backdrop.
+function print_update_7000(&$sandbox) { }
 
-  update_fix_d7_block_deltas($sandbox, $renamed_deltas, array());
+// TODO The old hook_update_N functions cannot be applied to Backdrop.
+function print_update_7199(&$sandbox) { }
+
+// TODO The old hook_update_N functions cannot be applied to Backdrop.
+function print_update_7200(&$sandbox) { }
+
+// TODO The old hook_update_N functions cannot be applied to Backdrop.
+function print_update_7202(&$sandbox) { }
+
+// TODO The old hook_update_N functions cannot be applied to Backdrop.
+function print_update_7203(&$sandbox) { }
+
+/**
+ * Implements hook_update_last_removed().
+ */
+function print_update_last_removed() {
+  return 7203;
 }
 
 /**
- * Enable the print UI module.
+ * Implements hook_update_N().
  */
-function print_update_7199(&$sandbox) {
-  module_enable(array('print_ui'), FALSE);
-}
-
-/**
- * Delete old variables.
- */
-function print_update_7200(&$sandbox) {
-  variable_del('print_settings');
-  variable_del('print_sourceurl_settings');
-  variable_del('print_html_settings');
-  variable_del('print_robot_settings');
-
-  variable_del('print_html_node_link_pages');
-  variable_del('print_html_node_link_visibility');
-
-  variable_del('print_text_links');
-  variable_del('print_text_published');
-  variable_del('print_text_retrieved');
-  variable_del('print_text_source_url');
-
-  $settings = db_query("SELECT name FROM {variable} WHERE name LIKE 'print\_display\_%'");
-  foreach ($settings as $variable) {
-    $name = $variable->name;
-
-    variable_set(str_replace('print_', 'print_html_', $name), variable_get($name));
-    variable_del($name);
-  }
-}
-
-/**
- * Enable block and help area links.
- */
-function print_update_7202(&$sandbox) {
-  $link_pos = variable_get('print_html_link_pos', drupal_json_decode('{ "link": "link", "block": "block", "help": "help" }'));
-  $link_pos['block'] = 'block';
-  $link_pos['help'] = 'help';
-  variable_set('print_html_link_pos', $link_pos);
-}
-
-/**
- * Increase size of the path field in the print_page_counter table.
- */
-function print_update_7203(&$sandbox) {
-  db_drop_primary_key('print_page_counter');
-  db_change_field('print_page_counter', 'path', 'path',
-    array(
-      'type' => 'varchar',
-      'length' => 255,
-      'not null' => TRUE,
-      'description' => 'Page path',
-    ),
-    array('primary key' => array('path')));
+function print_update_1000() {
+  $config = config('print.settings');
+  $config->set('print_css', update_variable_get('print_css', 'PRINT_CSS_DEFAULT'));
+  $config->set('print_keep_theme_css', update_variable_get('print_keep_theme_css', 'PRINT_KEEP_THEME_CSS_DEFAULT'));
+  $config->set('print_urls', update_variable_get('print_urls', 'PRINT_URLS_DEFAULT'));
+  $config->set('print_urls_anchors', update_variable_get('print_urls_anchors', 'PRINT_URLS_ANCHORS_DEFAULT'));
+  $config->set('print_comments', update_variable_get('print_comments', 'PRINT_COMMENTS_DEFAULT'));
+  $config->set('print_node_router', update_variable_get('print_node_router', 'FALSE'));
+  $config->set('print_newwindow', update_variable_get('print_newwindow', 'PRINT_NEWWINDOW_DEFAULT'));
+  $config->set('print_logo_options', update_variable_get('print_logo_options', 'PRINT_LOGO_OPTIONS_DEFAULT'));
+  $config->set('print_logo_url', update_variable_get('print_logo_url', 'PRINT_LOGO_URL_DEFAULT'));
+  $config->set('print_footer_options', update_variable_get('print_footer_options', 'PRINT_FOOTER_OPTIONS_DEFAULT'));
+  $config->set('print_footer_user', update_variable_get('print_footer_user', 'PRINT_FOOTER_USER_DEFAULT'));
+  $config->set('print_sourceurl_enabled', update_variable_get('print_sourceurl_enabled', 'PRINT_SOURCEURL_ENABLED_DEFAULT'));
+  $config->set('print_sourceurl_date', update_variable_get('print_sourceurl_date', 'PRINT_SOURCEURL_DATE_DEFAULT'));
+  $config->set('print_sourceurl_forcenode', update_variable_get('print_sourceurl_forcenode', 'PRINT_SOURCEURL_FORCENODE_DEFAULT'));
+  $config->set('print_html_new_window', update_variable_get('print_html_new_window', 'PRINT_HTML_NEW_WINDOW_DEFAULT'));
+  $config->set('print_html_sendtoprinter', update_variable_get('print_html_sendtoprinter', 'PRINT_HTML_SENDTOPRINTER_DEFAULT'));
+  $config->set('print_html_windowclose', update_variable_get('print_html_windowclose', 'PRINT_HTML_WINDOWCLOSE_DEFAULT'));
+  $config->set('print_html_display_sys_urllist', update_variable_get('print_html_display_sys_urllist', 'PRINT_TYPE_SYS_URLLIST_DEFAULT'));
+  $config->set('print_robots_noindex', update_variable_get('print_robots_noindex', 'PRINT_ROBOTS_NOINDEX_DEFAULT'));
+  $config->set('print_robots_nofollow', update_variable_get('print_robots_nofollow', 'PRINT_ROBOTS_NOFOLLOW_DEFAULT'));
+  $config->set('print_robots_noarchive', update_variable_get('print_robots_noarchive', 'PRINT_ROBOTS_NOARCHIVE_DEFAULT'));
+  $config->set('print_html_link_text_enabled', update_variable_get('print_html_link_text_enabled', 'PRINT_TYPE_LINK_TEXT_ENABLED_DEFAULT'));
+  $config->set('print_html_link_text', update_variable_get('print_html_link_text', 'dynamic value in file /print/print.admin.inc line 294'));
+  $config->set('print_html_link_pos', update_variable_get('print_html_link_pos', 'dynamic value in file /print/print.install line 199'));
+  $config->set('print_format_display_sys_urllist', update_variable_get('print_format_display_sys_urllist', 'dynamic variable in file /print/print.pages.inc line 584'));
+  $config->set('print_format_display_urllist_nodetype', update_variable_get('print_format_display_urllist_nodetype', 'dynamic variable in file /print/print.pages.inc line 587'));
+  update_variable_del('print_css');
+  update_variable_del('print_keep_theme_css');
+  update_variable_del('print_urls');
+  update_variable_del('print_urls_anchors');
+  update_variable_del('print_comments');
+  update_variable_del('print_node_router');
+  update_variable_del('print_newwindow');
+  update_variable_del('print_logo_options');
+  update_variable_del('print_logo_url');
+  update_variable_del('print_footer_options');
+  update_variable_del('print_footer_user');
+  update_variable_del('print_sourceurl_enabled');
+  update_variable_del('print_sourceurl_date');
+  update_variable_del('print_sourceurl_forcenode');
+  update_variable_del('print_html_new_window');
+  update_variable_del('print_html_sendtoprinter');
+  update_variable_del('print_html_windowclose');
+  update_variable_del('print_html_display_sys_urllist');
+  update_variable_del('print_robots_noindex');
+  update_variable_del('print_robots_nofollow');
+  update_variable_del('print_robots_noarchive');
+  update_variable_del('print_html_link_text_enabled');
+  update_variable_del('print_html_link_text');
+  update_variable_del('print_html_link_pos');
+  update_variable_del('print_format_display_sys_urllist');
+  update_variable_del('print_format_display_urllist_nodetype');
 }

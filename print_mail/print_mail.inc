@@ -31,14 +31,14 @@ function print_mail_form($form, &$form_state) {
     $ref = $_SERVER['HTTP_REFERER'];
     $path = preg_replace("!^$base_url/!", '', $ref);
     if (($path === $ref) || empty($path)) {
-      $path = variable_get('site_frontpage', 'node');
+      $path = config_get('system.performance', 'site_frontpage');
     }
-    drupal_goto($link['path'] . '/' . $path);
+    backdrop_goto($link['path'] . '/' . $path);
   }
   elseif (ctype_digit($path_arr[1])) {
-    if (drupal_lookup_path('source', $path)) {
+    if (backdrop_lookup_path('source', $path)) {
       // This is a numeric alias.
-      $path = drupal_get_normal_path($path);
+      $path = backdrop_get_normal_path($path);
     }
     else {
       // Normal nid.
@@ -46,7 +46,7 @@ function print_mail_form($form, &$form_state) {
     }
   }
   else {
-    $path = drupal_get_normal_path($path);
+    $path = backdrop_get_normal_path($path);
   }
 
   // Handle the query.
@@ -76,11 +76,12 @@ function print_mail_form($form, &$form_state) {
  * @ingroup forms
  */
 function print_mail_form_for_path($form, &$form_state, $path, $query = NULL, $user = NULL) {
+  $config = config('print_mail.settings');
   if ($user === NULL) {
     global $user;
   }
 
-  $print_mail_hourly_threshold = variable_get('print_mail_hourly_threshold', PRINT_MAIL_HOURLY_THRESHOLD);
+  $print_mail_hourly_threshold = $config->get('print_mail_hourly_threshold');
 
   if ((!user_access('send unlimited emails')) && (!flood_is_allowed('print_mail', $print_mail_hourly_threshold))) {
     $form['flood'] = array(
@@ -90,9 +91,9 @@ function print_mail_form_for_path($form, &$form_state, $path, $query = NULL, $us
     return $form;
   }
 
-  $print_mail_teaser_default = variable_get('print_mail_teaser_default', PRINT_MAIL_TEASER_DEFAULT_DEFAULT);
-  $print_mail_teaser_choice = variable_get('print_mail_teaser_choice', PRINT_MAIL_TEASER_CHOICE_DEFAULT);
-  $print_mail_user_recipients_default = variable_get('print_mail_user_recipients', PRINT_MAIL_USER_RECIPIENTS_DEFAULT);
+  $print_mail_teaser_default = $config->get('print_mail_teaser_default');
+  $print_mail_teaser_choice = $config->get('print_mail_teaser_choice');
+  $print_mail_user_recipients_default = $config->get('print_mail_user_recipients');
   $form = array();
 
   $cid = isset($_GET['comment']) ? (int) $_GET['comment'] : NULL;
@@ -106,28 +107,40 @@ function print_mail_form_for_path($form, &$form_state, $path, $query = NULL, $us
     else {
       $sql = "SELECT mail, name from {users} WHERE uid <> :uid AND status = 1 ORDER BY name ASC";
     }
-    $recipients = db_query($sql, array(':uid' => drupal_anonymous_user()->uid));
+    $recipients = db_query($sql, array(':uid' => backdrop_anonymous_user()->uid));
     foreach ($recipients as $recipient) {
       $options[$recipient->mail] = $recipient->name;
     }
   }
 
   if (count($form_state['input']) == 0) {
-    $nodepath = drupal_get_normal_path($path);
+    $nodepath = backdrop_get_normal_path($path);
     db_merge('print_mail_page_counter')
       ->key(array('path' => substr($nodepath, 0, 255)))
       ->fields(array(
-        'totalcount' => 1,
-        'timestamp' => REQUEST_TIME,
-      ))
+      'totalcount' => 1,
+      'timestamp' => REQUEST_TIME,
+    ))
       ->expression('totalcount', 'totalcount + 1')
       ->execute();
   }
 
-  $form['path'] = array('#type' => 'value', '#value' => $path);
-  $form['query'] = array('#type' => 'value', '#value' => $query);
-  $form['cid'] = array('#type' => 'value', '#value' => $cid);
-  $form['title'] = array('#type' => 'value', '#value' => $title);
+  $form['path'] = array(
+    '#type' => 'value',
+    '#value' => $path,
+  );
+  $form['query'] = array(
+    '#type' => 'value',
+    '#value' => $query,
+  );
+  $form['cid'] = array(
+    '#type' => 'value',
+    '#value' => $cid,
+  );
+  $form['title'] = array(
+    '#type' => 'value',
+    '#value' => $title,
+  );
 
   $form['fld_from_addr'] = array(
     '#type' => 'textfield',
@@ -168,7 +181,7 @@ function print_mail_form_for_path($form, &$form_state, $path, $query = NULL, $us
   );
   if (!empty($title)) {
     // To prevent useless translation strings, translate only non-node titles.
-    if (drupal_substr($path, 0, 5) != 'node/') {
+    if (backdrop_substr($path, 0, 5) != 'node/') {
       $title = t($title);
     }
 
@@ -193,7 +206,10 @@ function print_mail_form_for_path($form, &$form_state, $path, $query = NULL, $us
     );
   }
   else {
-    $form['chk_teaser'] = array('#type' => 'value', '#value' => $print_mail_teaser_default);
+    $form['chk_teaser'] = array(
+      '#type' => 'value',
+      '#value' => $print_mail_teaser_default,
+    );
   }
 
   $form['actions'] = array(
@@ -221,7 +237,7 @@ function print_mail_form_for_path($form, &$form_state, $path, $query = NULL, $us
   else {
     $user_name = t('Someone');
   }
-  $site_name = variable_get('site_name', t('an interesting site'));
+  $site_name = config_get('system.performance', 'site_name');
   $form['fld_subject']['#default_value'] = t('!user has sent you a message from !site', array(
     '!user' => $user_name,
     '!site' => $site_name,
@@ -252,10 +268,10 @@ function print_mail_form_for_path($form, &$form_state, $path, $query = NULL, $us
 function theme_print_mail_form($variables) {
   $form = $variables['form'];
 
-  drupal_add_css(drupal_get_path('module', 'print_mail') . '/css/print_mail.theme.css');
+  backdrop_add_css(backdrop_get_path('module', 'print_mail') . '/css/print_mail.theme.css');
   $content = '';
   foreach (element_children($form) as $key) {
-    $tmp = drupal_render($form[$key]);
+    $tmp = backdrop_render($form[$key]);
     switch ($key) {
       case 'fld_from_addr':
       case 'fld_from_name':
@@ -313,13 +329,14 @@ function theme_print_mail_sendlink_html($params) {
  * @ingroup forms
  */
 function print_mail_form_validate($form, &$form_state) {
-  $print_mail_user_recipients_default = variable_get('print_mail_user_recipients', PRINT_MAIL_USER_RECIPIENTS_DEFAULT);
+  $config = config('print_mail.settings');
+  $print_mail_user_recipients_default = $config->get('print_mail_user_recipients');
 
   if (array_key_exists('cancel', $form_state['input'])) {
     form_set_error(NULL, '', TRUE);
-    drupal_get_messages('error');
+    backdrop_get_messages('error');
 
-    drupal_goto(preg_replace('!^book/export/html/!', 'node/', $form_state['values']['path']), array('query' => $form_state['values']['query']));
+    backdrop_goto(preg_replace('!^book/export/html/!', 'node/', $form_state['values']['path']), array('query' => $form_state['values']['query']));
     return;
   }
   $from_addr = trim($form_state['values']['fld_from_addr']);
@@ -361,7 +378,7 @@ function print_mail_form_validate($form, &$form_state) {
     }
   }
 
-  $print_mail_hourly_threshold = variable_get('print_mail_hourly_threshold', PRINT_MAIL_HOURLY_THRESHOLD);
+  $print_mail_hourly_threshold = $config->get('print_mail_hourly_threshold');
 
   if ((!user_access('send unlimited emails')) && (!flood_is_allowed('print_mail', $print_mail_hourly_threshold - count($to_array) + 1))) {
     form_set_error('txt_to', t('You cannot send more than %number messages per hour. Please reduce the number of recipients.', array('%number' => $print_mail_hourly_threshold)));
@@ -369,7 +386,7 @@ function print_mail_form_validate($form, &$form_state) {
 
   // In all fields, prevent insertion of custom headers.
   foreach ($form_state['values'] as $key => $string) {
-    if ((drupal_substr($key, 0, 4) == 'fld_') && ((strpos($string, "\n") !== FALSE) || (strpos($string, "\r") !== FALSE))) {
+    if ((backdrop_substr($key, 0, 4) == 'fld_') && ((strpos($string, "\n") !== FALSE) || (strpos($string, "\r") !== FALSE))) {
       form_set_error($key, 'Found invalid character');
     }
   }
@@ -388,6 +405,7 @@ function print_mail_form_validate($form, &$form_state) {
  * @ingroup forms
  */
 function print_mail_form_submit($form, &$form_state) {
+  $config = config('print_mail.settings');
   if (!array_key_exists('cancel', $form_state['input'])) {
     module_load_include('inc', 'print', 'print.pages');
     module_load_include('inc', 'print', 'includes/print');
@@ -398,7 +416,7 @@ function print_mail_form_submit($form, &$form_state) {
     $node = print_controller($form_state['values']['path'], $link['format'], $cid, $view_mode);
 
     if ($node) {
-      $print_mail_send_option_default = variable_get('print_mail_send_option_default', PRINT_MAIL_SEND_OPTION_DEFAULT);
+      $print_mail_send_option_default = $config->get('print_mail_send_option_default');
 
       $params = array();
       $params['subject'] = $form_state['values']['fld_subject'];
@@ -416,7 +434,7 @@ function print_mail_form_submit($form, &$form_state) {
 
       // If using reply-to, move the From: info to the params array, so that it
       // is passed to hook_mail later.
-      if (variable_get('print_mail_use_reply_to', PRINT_MAIL_USE_REPLY_TO)) {
+      if ($config->get('print_mail_use_reply_to')) {
         $params['from'] = $from;
         $from = NULL;
       }
@@ -443,13 +461,13 @@ function print_mail_form_submit($form, &$form_state) {
 
       // Enable support for third-party modules to alter the e-mail before
       // being sent.
-      drupal_alter('print_mail', $params, $to);
+      backdrop_alter('print_mail', $params, $to);
 
       $ok = FALSE;
-      $use_job_queue = variable_get('print_mail_job_queue', PRINT_MAIL_JOB_QUEUE_DEFAULT);
+      $use_job_queue = $config->get('print_mail_job_queue');
       $queue = NULL;
       if ($use_job_queue) {
-        $queue = DrupalQueue::get('print_mail_send');
+        $queue = BackdropQueue::get('print_mail_send');
       }
 
       $addresses = explode(', ', $form_state['values']['txt_to']['addrs']);
@@ -467,8 +485,8 @@ function print_mail_form_submit($form, &$form_state) {
           ));
         }
         else {
-          // Send mail immediately using Drupal's mail handler.
-          $ret = drupal_mail('print_mail', $print_mail_send_option_default, $to, language_default(), $params, $from);
+          // Send mail immediately using Backdrop's mail handler.
+          $ret = backdrop_mail('print_mail', $print_mail_send_option_default, $to, language_default(), $params, $from);
         }
         if ($use_job_queue || $ret['result']) {
           flood_register_event('print_mail');
@@ -476,22 +494,22 @@ function print_mail_form_submit($form, &$form_state) {
         }
       }
       if ($ok) {
-        $query = empty($form_state['values']['query']) ? '' : '?' . rawurldecode(drupal_http_build_query($form_state['values']['query']));
+        $query = empty($form_state['values']['query']) ? '' : '?' . rawurldecode(backdrop_http_build_query($form_state['values']['query']));
         watchdog('print_mail', '%name [%from] sent %page to [%to]', array(
           '%name' => $form_state['values']['fld_from_name'],
           '%from' => $form_state['values']['fld_from_addr'],
           '%page' => $form_state['values']['path'] . $query,
           '%to' => $form_state['values']['txt_to']['addrs'],
         ));
-        $site_name = variable_get('site_name', t('us'));
-        drupal_set_message(check_plain(t('Thank you for spreading the word about !site.', array('!site' => $site_name))));
+        $site_name = config_get('system.performance', 'site_name');
+        backdrop_set_message(check_plain(t('Thank you for spreading the word about !site.', array('!site' => $site_name))));
 
-        $nodepath = drupal_get_normal_path($form_state['values']['path']);
+        $nodepath = backdrop_get_normal_path($form_state['values']['path']);
         db_update('print_mail_page_counter')
           ->fields(array(
-            'sentcount' => 1,
-            'sent_timestamp' => REQUEST_TIME,
-          ))
+          'sentcount' => 1,
+          'sent_timestamp' => REQUEST_TIME,
+        ))
           ->condition('path', $nodepath, '=')
           ->expression('sentcount', 'sentcount + :inc', array(':inc' => count($addresses)))
           ->execute();
@@ -500,7 +518,8 @@ function print_mail_form_submit($form, &$form_state) {
   }
 
   $form_state['redirect'] = array(
-    preg_replace('!^book/export/html/!', 'node/', $form_state['values']['path']), array(
+    preg_replace('!^book/export/html/!', 'node/', $form_state['values']['path']),
+    array(
       'query' => $form_state['values']['query'],
     ),
   );

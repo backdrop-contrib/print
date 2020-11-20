@@ -14,21 +14,27 @@
  * Implements hook_print_pdf_generate().
  */
 function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $page_orientation = NULL) {
+  $config = config('print_pdf_dompdf.settings');
   module_load_include('inc', 'print', 'includes/print');
 
+  // TODO This variable was probably removed in Backdrop without replacement.
   $pdf_tool = explode('|', variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT));
   if (empty($paper_size)) {
+    // TODO This variable was probably removed in Backdrop without replacement.
     $paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
   }
   if (empty($page_orientation)) {
+    // TODO This variable was probably removed in Backdrop without replacement.
     $page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
   }
+  // TODO This variable was probably removed in Backdrop without replacement.
   $images_via_file = variable_get('print_pdf_images_via_file', PRINT_PDF_IMAGES_VIA_FILE_DEFAULT);
   $unicode = TRUE;
 
+  // TODO This variable was probably removed in Backdrop without replacement.
   if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
-    $font_subsetting = variable_get('print_pdf_dompdf_font_subsetting', PRINT_PDF_DOMPDF_FONT_SUBSETTING_DEFAULT);
-    $unicode = variable_get('print_pdf_dompdf_unicode', PRINT_PDF_DOMPDF_UNICODE_DEFAULT);
+    $font_subsetting = $config->get('print_pdf_dompdf_font_subsetting');
+    $unicode = $config->get('print_pdf_dompdf_unicode');
 
     if (!defined('DOMPDF_ENABLE_PHP')) {
       define('DOMPDF_ENABLE_PHP', FALSE);
@@ -46,7 +52,7 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
       define('DOMPDF_ENABLE_FONTSUBSETTING', $font_subsetting);
     }
     if (!defined('DOMPDF_FONT_CACHE')) {
-      define('DOMPDF_FONT_CACHE', drupal_realpath('public://print_pdf/print_pdf_dompdf/fonts/'));
+      define('DOMPDF_FONT_CACHE', backdrop_realpath('public://print_pdf/print_pdf_dompdf/fonts/'));
     }
   }
 
@@ -73,15 +79,16 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
       throw new Exception("Configured PDF tool does not exist, unable to generate PDF.");
     }
 
-    $dompdf = new \Dompdf\Dompdf();
+    $dompdf = new Dompdf Dompdf();
     $unicode = TRUE;
 
+    // TODO This variable was probably removed in Backdrop without replacement.
     if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
       $dompdf->set_option('enable_php', FALSE);
       $dompdf->set_option('enable_remote', TRUE);
       $dompdf->set_option('temp_dir', file_directory_temp());
       $dompdf->set_option('enable_font_subsetting', $font_subsetting);
-      $dompdf->set_option('font_cache', drupal_realpath('public://print_pdf/print_pdf_dompdf/fonts/'));
+      $dompdf->set_option('font_cache', backdrop_realpath('public://print_pdf/print_pdf_dompdf/fonts/'));
     }
   }
 
@@ -107,7 +114,7 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
 
   $dompdf->set_base_path($path);
   $dompdf->set_host($host);
-  $dompdf->set_paper(drupal_strtolower($paper_size), $page_orientation);
+  $dompdf->set_paper(backdrop_strtolower($paper_size), $page_orientation);
   $dompdf->set_protocol($protocol);
 
   // It seems dompdf can't handle footers cleanly, so disable the following.
@@ -126,9 +133,9 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
     // iconv fails silently when it encounters something that it doesn't know,
     // so don't use it.
     /*
-    else if (function_exists('iconv')) {
-      $html = iconv('UTF-8', 'ISO-8859-1', $html);
-    }
+     else if (function_exists('iconv')) {
+     $html = iconv('UTF-8', 'ISO-8859-1', $html);
+     }
      */
     elseif (function_exists('mb_convert_encoding')) {
       $html = mb_convert_encoding($html, 'ISO-8859-1', 'UTF-8');

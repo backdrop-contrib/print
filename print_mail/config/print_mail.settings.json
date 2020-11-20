@@ -1,0 +1,14 @@
+{
+    "_config_name": "print_mail.settings",
+    "print_mail_hourly_threshold": "PRINT_MAIL_HOURLY_THRESHOLD",
+    "print_mail_use_reply_to": "PRINT_MAIL_USE_REPLY_TO",
+    "print_mail_teaser_default": "PRINT_MAIL_TEASER_DEFAULT_DEFAULT",
+    "print_mail_user_recipients": "PRINT_MAIL_USER_RECIPIENTS_DEFAULT",
+    "print_mail_teaser_choice": "PRINT_MAIL_TEASER_CHOICE_DEFAULT",
+    "print_mail_send_option_default": "PRINT_MAIL_SEND_OPTION_DEFAULT",
+    "print_mail_job_queue": "PRINT_MAIL_JOB_QUEUE_DEFAULT",
+    "print_mail_display_sys_urllist": "PRINT_TYPE_SYS_URLLIST_DEFAULT",
+    "print_mail_link_text_enabled": "PRINT_TYPE_LINK_TEXT_ENABLED_DEFAULT",
+    "print_mail_link_text": "dynamic value in file /print/print_mail/print_mail.admin.inc line 108",
+    "print_mail_link_pos": "dynamic value in file /print/print_mail/print_mail.install line 235"
+}

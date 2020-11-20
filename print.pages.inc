@@ -35,22 +35,22 @@ function print_controller_html() {
       'query' => $query,
       'format' => $link['format'],
     ));
-    drupal_add_http_header('Content-Type', 'text/html; charset=utf-8');
-    drupal_send_headers();
+    backdrop_add_http_header('Content-Type', 'text/html; charset=utf-8');
+    backdrop_send_headers();
     print $html;
 
-    $nodepath = (isset($node->nid)) ? 'node/' . $node->nid : drupal_get_normal_path($path);
+    $nodepath = (isset($node->nid)) ? 'node/' . $node->nid : backdrop_get_normal_path($path);
     db_merge('print_page_counter')
       ->key(array('path' => substr($nodepath, 0, 255)))
       ->fields(array(
-        'totalcount' => 1,
-        'timestamp' => REQUEST_TIME,
-      ))
+      'totalcount' => 1,
+      'timestamp' => REQUEST_TIME,
+    ))
       ->expression('totalcount', 'totalcount + 1')
       ->execute();
   }
   else {
-    drupal_exit();
+    backdrop_exit();
   }
 }
 
@@ -78,6 +78,7 @@ function print_controller_html() {
  * @see print_preprocess_print()
  */
 function print_controller($path, $format, $cid = NULL, $view_mode = PRINT_VIEW_MODE) {
+  $config = config('print.settings');
   if (empty($path)) {
     // If no path was provided, let's try to generate a page for the referer.
     global $base_url;
@@ -85,17 +86,17 @@ function print_controller($path, $format, $cid = NULL, $view_mode = PRINT_VIEW_M
     $ref = $_SERVER['HTTP_REFERER'];
     $path = preg_replace("!^$base_url/!", '', $ref);
     if (($path === $ref) || empty($path)) {
-      $path = variable_get('site_frontpage', 'node');
+      $path = config_get('system.performance', 'site_frontpage');
     }
   }
-  if ($alias = drupal_lookup_path('source', $path)) {
+  if ($alias = backdrop_lookup_path('source', $path)) {
     // Indirect call with print/alias
     // If there is a path alias with these arguments, generate a
     // printer-friendly version for it.
     $path = $alias;
   }
   $parts = explode('/', $path);
-  $node_router = variable_get('print_node_router', FALSE);
+  $node_router = $config->get('print_node_router');
   if (($parts[0] == 'node') && (count($parts) > 1) && ctype_digit($parts[1]) && !$node_router) {
     array_shift($parts);
     $path = implode('/', $parts);
@@ -125,13 +126,14 @@ function print_controller($path, $format, $cid = NULL, $view_mode = PRINT_VIEW_M
  * Implements hook_preprocess_HOOK().
  */
 function print_preprocess_print(&$variables) {
+  $config = config('print.settings');
   $node = $variables['node'];
   $format = $variables['format'];
-  $path = drupal_get_path_alias(empty($node->nid) ? $node->path : "node/$node->nid");
+  $path = backdrop_get_path_alias(empty($node->nid) ? $node->path : "node/$node->nid");
 
   static $hooks = NULL;
   if (!isset($hooks)) {
-    drupal_theme_initialize();
+    backdrop_theme_initialize();
     $hooks = theme_get_registry();
   }
 
@@ -156,22 +158,22 @@ function print_preprocess_print(&$variables) {
   }
 
   $logo_url = FALSE;
-  switch (variable_get('print_logo_options', PRINT_LOGO_OPTIONS_DEFAULT)) {
+  switch ($config->get('print_logo_options')) {
     // Theme logo.
     case 1:
       $logo_url = theme_get_setting('logo');
       break;
 
-    // User-specifed logo.
+      // User-specifed logo.
     case 2:
-      $logo_url = strip_tags(variable_get('print_logo_url', PRINT_LOGO_URL_DEFAULT));
+      $logo_url = strip_tags($config->get('print_logo_url'));
       break;
   }
   $logo_url = preg_replace('!^' . base_path() . '!', '', $logo_url);
 
   $variables['print_logo'] = $logo_url ? theme('image', array(
     'path' => $logo_url,
-    'alt' => variable_get('site_name', 'Drupal'),
+    'alt' => config_get('system.performance', 'site_name'),
     'attributes' => array(
       'class' => array('print-logo'),
       'id' => 'logo',
@@ -180,26 +182,26 @@ function print_preprocess_print(&$variables) {
 
   $variables['print_node'] = $node;
   $variables['content'] = $node->content;
-  $variables['scripts'] = drupal_get_js();
-  $variables['footer_scripts'] = drupal_get_js('footer');
-  $variables['sourceurl_enabled'] = variable_get('print_sourceurl_enabled', PRINT_SOURCEURL_ENABLED_DEFAULT);
+  $variables['scripts'] = backdrop_get_js();
+  $variables['footer_scripts'] = backdrop_get_js('footer');
+  $variables['sourceurl_enabled'] = $config->get('print_sourceurl_enabled');
   $variables['url'] = url($path, array('absolute' => TRUE, 'query' => $variables['query']));
-  $variables['source_url'] = url(variable_get('print_sourceurl_forcenode', PRINT_SOURCEURL_FORCENODE_DEFAULT) ? drupal_get_normal_path($path) : $path, array(
+  $variables['source_url'] = url($config->get('print_sourceurl_forcenode') ? backdrop_get_normal_path($path) : $path, array(
     'alias' => TRUE,
     'absolute' => TRUE,
     'query' => $variables['query'],
   ));
   $variables['cid'] = isset($node->cid) ? $node->cid : NULL;
   $variables['print_title'] = check_plain($node->title);
-  $variables['head'] = drupal_get_html_head();
+  $variables['head'] = backdrop_get_html_head();
   $variables['robots_meta'] = _print_robots_meta_generator();
   $variables['css'] = _print_css_generator($variables['expand_css']);
 
-  if (variable_get('print_html_sendtoprinter', PRINT_HTML_SENDTOPRINTER_DEFAULT) && ($format == 'html')) {
-    drupal_add_js('misc/drupal.js', array('group' => JS_LIBRARY));
+  if ($config->get('print_html_sendtoprinter') && ($format == 'html')) {
+    backdrop_add_js('misc/backdrop.js', array('group' => JS_LIBRARY));
 
-    $window_close = (variable_get('print_html_new_window', PRINT_HTML_NEW_WINDOW_DEFAULT) && variable_get('print_html_windowclose', PRINT_HTML_WINDOWCLOSE_DEFAULT)) ? 'setTimeout(function(){window.close();}, 1);' : '';
-    $variables['sendtoprinter'] = '<script type="text/javascript">(function ($) { Drupal.behaviors.print = {attach: function() {$(window).load(function() {window.print();' . $window_close . '})}}})(jQuery);</script>';
+    $window_close = ($config->get('print_html_new_window') && $config->get('print_html_windowclose')) ? 'setTimeout(function(){window.close();}, 1);' : '';
+    $variables['sendtoprinter'] = '<script type="text/javascript">(function ($) { Backdrop.behaviors.print = {attach: function() {$(window).load(function() {window.print();' . $window_close . '})}}})(jQuery);</script>';
   }
 
   $type = (isset($node->type)) ? $node->type : '';
@@ -227,7 +229,7 @@ function print_preprocess_print(&$variables) {
 function theme_print_published($vars) {
   global $base_url;
 
-  $published_site = variable_get('site_name', 0);
+  $published_site = config_get('system.performance', 'site_name');
   return $published_site ? t('Published on %site_name', array('%site_name' => $published_site)) . ' (' . l($base_url, $base_url) . ')' : '';
 }
 
@@ -250,7 +252,7 @@ function theme_print_breadcrumb($vars) {
 
   $path = empty($node->nid) ? $node->path : "node/$node->nid";
   menu_set_active_item($path);
-  $breadcrumb = drupal_get_breadcrumb();
+  $breadcrumb = backdrop_get_breadcrumb();
   if (!empty($breadcrumb)) {
     $breadcrumb[] = menu_get_active_title();
     menu_set_active_item($old_path);
@@ -275,18 +277,20 @@ function theme_print_breadcrumb($vars) {
  * @ingroup print_themeable
  */
 function theme_print_footer($vars) {
+  $config = config('print.settings');
   $footer = '';
 
-  switch (variable_get('print_footer_options', PRINT_FOOTER_OPTIONS_DEFAULT)) {
+  switch ($config->get('print_footer_options')) {
     // Theme footer.
     case 1:
       $footer_blocks = block_get_blocks_by_region('footer');
-      $footer = variable_get('site_footer', FALSE) . "\n" . drupal_render($footer_blocks);
+      // TODO This variable was probably removed in Backdrop without replacement.
+      $footer = variable_get('site_footer', FALSE) . "\n" . backdrop_render($footer_blocks);
       break;
 
-    // User-specified footer.
+      // User-specified footer.
     case 2:
-      $footer = variable_get('print_footer_user', PRINT_FOOTER_USER_DEFAULT);
+      $footer = $config->get('print_footer_user');
       break;
   }
   // Delete the contextual links.
@@ -312,7 +316,7 @@ function theme_print_footer($vars) {
  */
 function theme_print_sourceurl($vars) {
   global $base_url;
-  $sourceurl_date = variable_get('print_sourceurl_date', PRINT_SOURCEURL_DATE_DEFAULT);
+  $sourceurl_date = config_get('print.settings', 'print_sourceurl_date');
   $url = is_int($vars['cid']) ? $vars['url'] . '#comment-' . $vars['cid'] : $vars['url'];
 
   $output = '<strong>' . t('Source URL');
@@ -325,7 +329,7 @@ function theme_print_sourceurl($vars) {
     $output .= ')';
   }
   $new_url = explode($base_url, $url);
-  $output .= ':</strong>' ."<a href=".$new_url[1].">". $url . '</a>';
+  $output .= ':</strong>' . "<a href=" . $new_url[1] . ">" . $url . '</a>';
 
   return $output;
 }
@@ -352,9 +356,9 @@ function theme_print_url_list($vars) {
     $urls = _print_friendly_urls();
     $url_list = '';
     foreach ($urls as $key => $url) {
-      drupal_alter('print_url_list', $url);
+      backdrop_alter('print_url_list', $url);
       $new_url = explode($base_url, $url);
-      $url_list .= "<a href=".$new_url[1]." target='_blank'>". '[' . ($key + 1) . '] ' . check_plain($url) . "</a>\n";
+      $url_list .= "<a href=" . $new_url[1] . " target='_blank'>" . '[' . ($key + 1) . '] ' . check_plain($url) . "</a>\n";
     }
     if (!empty($url_list)) {
       return "<p><strong>" . t('Links') . "</strong><br />$url_list</p>";
@@ -370,15 +374,16 @@ function theme_print_url_list($vars) {
  *   meta robots tag
  */
 function _print_robots_meta_generator() {
+  $config = config('print.settings');
   $robots_meta = array();
 
-  if (variable_get('print_robots_noindex', PRINT_ROBOTS_NOINDEX_DEFAULT)) {
+  if ($config->get('print_robots_noindex')) {
     $robots_meta[] = 'noindex';
   }
-  if (variable_get('print_robots_nofollow', PRINT_ROBOTS_NOFOLLOW_DEFAULT)) {
+  if ($config->get('print_robots_nofollow')) {
     $robots_meta[] = 'nofollow';
   }
-  if (variable_get('print_robots_noarchive', PRINT_ROBOTS_NOARCHIVE_DEFAULT)) {
+  if ($config->get('print_robots_noarchive')) {
     $robots_meta[] = 'noarchive';
   }
 
@@ -401,20 +406,21 @@ function _print_robots_meta_generator() {
  *   applicable CSS
  */
 function _print_css_generator($expand = FALSE) {
-  $print_css = variable_get('print_css', PRINT_CSS_DEFAULT);
+  $config = config('print.settings');
+  $print_css = $config->get('print_css');
 
   if (!empty($print_css)) {
-    drupal_add_css(strtr($print_css, array('%t' => drupal_get_path('theme', variable_get('theme_default')))));
+    backdrop_add_css(strtr($print_css, array('%t' => backdrop_get_path('theme', config_get('system.performance', 'theme_default')))));
   }
   else {
-    drupal_add_css(drupal_get_path('module', 'print') . '/css/print.css');
+    backdrop_add_css(backdrop_get_path('module', 'print') . '/css/print.css');
   }
-  $drupal_css = drupal_add_css();
-  if (!variable_get('print_keep_theme_css', PRINT_KEEP_THEME_CSS_DEFAULT)) {
-    foreach ($drupal_css as $key => $css_file) {
+  $backdrop_css = backdrop_add_css();
+  if (!$config->get('print_keep_theme_css')) {
+    foreach ($backdrop_css as $key => $css_file) {
       if ($css_file['group'] == CSS_THEME) {
         // Unset the theme's CSS.
-        unset($drupal_css[$key]);
+        unset($backdrop_css[$key]);
       }
     }
   }
@@ -422,7 +428,7 @@ function _print_css_generator($expand = FALSE) {
   // Expand the CSS if requested.
   if ($expand) {
     $style = '';
-    $css_files = array_keys($drupal_css);
+    $css_files = array_keys($backdrop_css);
     foreach ($css_files as $filename) {
       if (file_exists($filename)) {
         $style .= file_get_contents($filename, TRUE);
@@ -431,7 +437,7 @@ function _print_css_generator($expand = FALSE) {
     return "<style type='text/css' media='all'>$style</style>\n";
   }
   else {
-    return drupal_get_css($drupal_css);
+    return backdrop_get_css($backdrop_css);
   }
 }
 
@@ -450,7 +456,7 @@ function _print_css_generator($expand = FALSE) {
 function _print_rewrite_urls($matches) {
   global $base_url, $base_root, $_print_urls;
 
-  $include_anchors = variable_get('print_urls_anchors', PRINT_URLS_ANCHORS_DEFAULT);
+  $include_anchors = config_get('print.settings', 'print_urls_anchors');
 
   // First, split the html into the different tag attributes.
   $pattern = '!\s*(\w+\s*=\s*"(?:\\\"|[^"])*")\s*|\s*(\w+\s*=\s*\'(?:\\\\\'|[^\'])*\')\s*|\s*(\w+\s*=\s*\w+)\s*|\s+!';
@@ -475,7 +481,7 @@ function _print_rewrite_urls($matches) {
         }
         // Printer-friendly URLs is on, so we need to make it absolute.
         $newurl = url($path, array(
-          'fragment' => drupal_substr($url, 1),
+          'fragment' => backdrop_substr($url, 1),
           'absolute' => TRUE,
         ));
       }
@@ -501,7 +507,7 @@ function _print_rewrite_urls($matches) {
             }
             // Printer-friendly URLs is on, so we need to make it absolute.
             $newurl = url($path, array(
-              'fragment' => drupal_substr($url, 1),
+              'fragment' => backdrop_substr($url, 1),
               'absolute' => TRUE,
             ));
           }
@@ -550,7 +556,7 @@ function _print_rewrite_urls($matches) {
  *   otherwise.
  */
 function _print_friendly_urls($url = 0) {
-  $urls = &drupal_static(__FUNCTION__, array());
+  $urls = &backdrop_static(__FUNCTION__, array());
   if ($url !== 0) {
     $url_idx = array_search($url, $urls);
     if ($url_idx !== FALSE) {
@@ -580,15 +586,16 @@ function _print_friendly_urls($url = 0) {
  *   TRUE if URL list should be displayed, FALSE otherwise
  */
 function _print_url_list_enabled($node, $format) {
+  $config = config('print.settings');
   if (!isset($node->type)) {
-    $node_urllist = variable_get('print_' . $format . '_display_sys_urllist', PRINT_TYPE_SYS_URLLIST_DEFAULT);
+    $node_urllist = $config->get('print_' . $format . '_display_sys_urllist');
   }
   else {
-    $node_urllist = isset($node->{'print_' . $format . '_display_urllist'}) ? $node->{'print_' . $format . '_display_urllist'} : variable_get('print_' . $format . '_display_urllist_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT);
+    $node_urllist = isset($node->{'print_' . $format . '_display_urllist'}) ? $node->{'print_' . $format . '_display_urllist'} : $config->get('print_' . $format . '_display_urllist_' . $node->type);
   }
 
   // Get value of Printer-friendly URLs setting.
-  return (variable_get('print_urls', PRINT_URLS_DEFAULT) && ($node_urllist));
+  return ($config->get('print_urls') && ($node_urllist));
 }
 
 /**
@@ -619,15 +626,15 @@ function _print_generate_node($nid, $format, $vid = NULL, $cid = NULL, $view_mod
   $node = node_load($nid, $vid);
   if (!$node) {
     // Node not found.
-    drupal_not_found();
-    drupal_exit();
+    backdrop_not_found();
+    backdrop_exit();
   }
   elseif (!node_access('view', $node)) {
     // Access is denied.
-    drupal_access_denied();
-    drupal_exit();
+    backdrop_access_denied();
+    backdrop_exit();
   }
-  drupal_set_title($node->title);
+  backdrop_set_title($node->title);
 
   $build = array();
   if ($cid === NULL) {
@@ -643,7 +650,7 @@ function _print_generate_node($nid, $format, $vid = NULL, $cid = NULL, $view_mod
   }
 
   if (function_exists('comment_node_page_additions') &&
-      (($cid != NULL) || (variable_get('print_comments', PRINT_COMMENTS_DEFAULT)))) {
+      (($cid != NULL) || (config_get('print.settings', 'print_comments')))) {
     // Print only the requested comment (or if $cid is NULL, all of them).
     $comments = comment_node_page_additions($node);
     if (!empty($comments)) {
@@ -672,7 +679,7 @@ function _print_generate_node($nid, $format, $vid = NULL, $cid = NULL, $view_mod
   );
 
   $type = 'node';
-  drupal_alter(array('node_view', 'entity_view'), $build, $type);
+  backdrop_alter(array('node_view', 'entity_view'), $build, $type);
 
   $content = render($build);
 
@@ -712,35 +719,35 @@ function _print_generate_path($path, $format) {
 
   // Handle node tabs, or cases where the 'node_router' option is enabled.
   $parts = explode('/', $path);
-  if (ctype_digit($parts[0]) && ((count($parts) > 1) || variable_get('print_node_router', FALSE))) {
+  if (ctype_digit($parts[0]) && ((count($parts) > 1) || config_get('print.settings', 'print_node_router'))) {
     $path = 'node/' . $path;
   }
 
-  $path = drupal_get_normal_path($path);
+  $path = backdrop_get_normal_path($path);
 
   menu_set_active_item($path);
   // Adapted from index.php.
   $node = new stdClass();
   $node->content = menu_execute_active_handler($path, FALSE);
   if (is_array($node->content)) {
-    $node->content = drupal_render($node->content);
+    $node->content = backdrop_render($node->content);
   }
 
   if (is_int($node->content)) {
     switch ($node->content) {
       case MENU_NOT_FOUND:
-        drupal_not_found();
-        drupal_exit();
+        backdrop_not_found();
+        backdrop_exit();
         break;
 
       case MENU_ACCESS_DENIED:
-        drupal_access_denied();
-        drupal_exit();
+        backdrop_access_denied();
+        backdrop_exit();
         break;
     }
   }
 
-  $node->title = drupal_get_title();
+  $node->title = backdrop_get_title();
   $node->path = $path;
   $node->changed = REQUEST_TIME;
   $node->type = '';
@@ -778,13 +785,13 @@ function _print_generate_book($nid, $format) {
   $node = node_load($nid);
   if (!$node) {
     // Node not found.
-    drupal_not_found();
-    drupal_exit();
+    backdrop_not_found();
+    backdrop_exit();
   }
   elseif (!node_access('view', $node) || (!user_access('access printer-friendly version'))) {
     // Access is denied.
-    drupal_access_denied();
-    drupal_exit();
+    backdrop_access_denied();
+    backdrop_exit();
   }
 
   $tree = book_menu_subtree_data($node->book);

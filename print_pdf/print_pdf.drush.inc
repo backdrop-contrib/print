@@ -24,7 +24,7 @@ function print_pdf_drush_command() {
     ),
     'aliases' => array('pdfdl'),
     // No site or config needed.
-    'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_ROOT,
+    'bootstrap' => DRUSH_BOOTSTRAP_BACKDROP_ROOT,
   );
 
   return $items;
@@ -55,8 +55,8 @@ function drush_print_pdf_download($library) {
   $pdf_libs = array();
   drush_command_invoke_all_ref('drush_pdf_libs_alter', $pdf_libs);
 
-  if (isset($library) && isset($pdf_libs[drupal_strtolower($library)])) {
-    $func = $pdf_libs[drupal_strtolower($library)]['callback'];
+  if (isset($library) && isset($pdf_libs[backdrop_strtolower($library)])) {
+    $func = $pdf_libs[backdrop_strtolower($library)]['callback'];
 
     $download_url = $func();
     if ($download_url) {

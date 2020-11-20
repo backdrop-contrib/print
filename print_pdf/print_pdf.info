@@ -1,6 +1,7 @@
 name = "PDF version"
 description = "Adds the capability to export pages as PDF. Requires a PDF library and the respective handler module."
-core = 7.x
+backdrop = 1.x
+type = module
 package = "Printer, email and PDF versions"
 dependencies[] = print:print
 configure = admin/config/user-interface/print/pdf

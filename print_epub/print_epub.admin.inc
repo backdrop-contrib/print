@@ -16,15 +16,17 @@
  * @ingroup forms
  */
 function print_epub_settings() {
+  $config = config('print_epub.settings');
   $epub_tools = array();
-  drupal_alter('print_epub_available_libs', $epub_tools);
+  backdrop_alter('print_epub_available_libs', $epub_tools);
 
   if (!empty($epub_tools)) {
     $link = print_epub_print_link();
 
-    $current_epub_tool = variable_get('print_epub_epub_tool', PRINT_EPUB_EPUB_TOOL_DEFAULT);
+    $current_epub_tool = $config->get('print_epub_epub_tool');
     $epub_tool_default = array_key_exists($current_epub_tool, $epub_tools) ? $current_epub_tool : PRINT_EPUB_EPUB_TOOL_DEFAULT;
 
+    $form['#config'] = 'print_epub.settings';
     $form['settings'] = array(
       '#type' => 'fieldset',
       '#title' => t('EPUB options'),
@@ -41,14 +43,14 @@ function print_epub_settings() {
     $form['settings']['print_epub_images_via_file'] = array(
       '#type' => 'checkbox',
       '#title' => t('Access images via local file access'),
-      '#default_value' => variable_get('print_epub_images_via_file', PRINT_EPUB_IMAGES_VIA_FILE_DEFAULT),
+      '#default_value' => $config->get('print_epub_images_via_file'),
       '#description' => t("Enabling this option will make the tool use local file access for image files. This option is not recommended to use in conjunction with modules like imagecache which generate the image after it's first accessed. However, it may be necessary in low-end hosting services where the web server is not allowed to open URLs and the user can't modify that configuration setting."),
     );
 
     $form['settings']['print_epub_filename'] = array(
       '#type' => 'textfield',
       '#title' => t('EPUB filename'),
-      '#default_value' => variable_get('print_epub_filename', PRINT_EPUB_FILENAME_DEFAULT),
+      '#default_value' => $config->get('print_epub_filename'),
       '#description' => t("If left empty the generated filename defaults to the node's path. Tokens may be used to build the filename (see following list). The .epub extension will be appended automatically."),
     );
     if (module_exists('token')) {
@@ -62,7 +64,7 @@ function print_epub_settings() {
     $form['settings']['print_epub_display_sys_urllist'] = array(
       '#type' => 'checkbox',
       '#title' => t('Printer-friendly URLs list in system pages'),
-      '#default_value' => variable_get('print_epub_display_sys_urllist', PRINT_TYPE_SYS_URLLIST_DEFAULT),
+      '#default_value' => $config->get('print_epub_display_sys_urllist'),
       '#description' => t('Enabling this option will display a list of printer-friendly destination URLs at the bottom of the page.'),
     );
 
@@ -75,18 +77,18 @@ function print_epub_settings() {
     $form['settings']['link_text']['print_epub_link_text_enabled'] = array(
       '#type' => 'checkbox',
       '#title' => t('Enable custom link text'),
-      '#default_value' => variable_get('print_epub_link_text_enabled', PRINT_TYPE_LINK_TEXT_ENABLED_DEFAULT),
+      '#default_value' => $config->get('print_epub_link_text_enabled'),
     );
     $form['settings']['link_text']['print_epub_link_text'] = array(
       '#type' => 'textfield',
-      '#default_value' => variable_get('print_epub_link_text', $link['text']),
+      '#default_value' => $config->get('print_epub_link_text'),
       '#description' => t('Text used in the link to the EPUB version.'),
     );
 
     $form['#validate'][] = '_print_epub_settings_validate';
   }
   else {
-    variable_set('print_epub_epub_tool', PRINT_EPUB_EPUB_TOOL_DEFAULT);
+    config_set('print_epub.settings', 'print_epub_epub_tool', PRINT_EPUB_EPUB_TOOL_DEFAULT);
 
     $form['settings'] = array(
       '#type' => 'markup',

@@ -20,7 +20,7 @@ module_load_include('inc', 'print', 'print.pages');
  * @see _print_pdf_tcpdf()
  */
 function print_pdf_controller() {
-  // Disable caching for generated PDFs, as Drupal doesn't output the proper
+  // Disable caching for generated PDFs, as Backdrop doesn't output the proper
   // headers from the cache.
   $GLOBALS['conf']['cache'] = FALSE;
 
@@ -34,7 +34,7 @@ function print_pdf_controller() {
 
   $node = NULL;
   if (!empty($path)) {
-    if ($alias = drupal_lookup_path('source', $path)) {
+    if ($alias = backdrop_lookup_path('source', $path)) {
       // Alias.
       $path_arr = explode('/', $alias);
       $node = node_load($path_arr[1]);
@@ -44,7 +44,7 @@ function print_pdf_controller() {
       $node = node_load($args[0]);
     }
 
-    $pdf_filename = variable_get('print_pdf_filename', PRINT_PDF_FILENAME_DEFAULT);
+    $pdf_filename = config_get('print_pdf.settings', 'print_pdf_filename');
     if (!empty($pdf_filename) && !empty($node)) {
       $pdf_filename = token_replace($pdf_filename, array('node' => $node), array('clear' => TRUE));
     }
@@ -64,29 +64,29 @@ function print_pdf_controller() {
     $pdf_filename = transliteration_clean_filename($pdf_filename, language_default('language'));
   }
 
-  drupal_alter('print_pdf_filename', $pdf_filename, $path);
+  backdrop_alter('print_pdf_filename', $pdf_filename, $path);
 
   $pdf = print_pdf_generate_path($path, $query, $cid, $pdf_filename . '.pdf');
   if ($pdf == NULL) {
-    drupal_goto($path);
+    backdrop_goto($path);
     exit;
   }
 
-  $nodepath = (isset($node->nid)) ? 'node/' . $node->nid : drupal_get_normal_path($path);
+  $nodepath = (isset($node->nid)) ? 'node/' . $node->nid : backdrop_get_normal_path($path);
   db_merge('print_pdf_page_counter')
     ->key(array('path' => substr($nodepath, 0, 255)))
     ->fields(array(
-      'totalcount' => 1,
-      'timestamp' => REQUEST_TIME,
-    ))
+    'totalcount' => 1,
+    'timestamp' => REQUEST_TIME,
+  ))
     ->expression('totalcount', 'totalcount + 1')
     ->execute();
 
-  drupal_exit();
+  backdrop_exit();
 }
 
 /**
- * Gennerate a PDF for a given Drupal path.
+ * Gennerate a PDF for a given Backdrop path.
  *
  * @param string $path
  *   path of the page to convert to PDF.
@@ -106,14 +106,15 @@ function print_pdf_controller() {
  * @see print_pdf_controller()
  */
 function print_pdf_generate_path($path, $query = NULL, $cid = NULL, $pdf_filename = NULL, $view_mode = PRINT_VIEW_MODE) {
+  $config = config('print_pdf.settings');
   global $base_url;
 
   $link = print_pdf_print_link();
   $node = print_controller($path, $link['format'], $cid, $view_mode);
   if ($node) {
     // Call the tool's hook_pdf_tool_info(), to see if CSS must be expanded.
-    $pdf_tool = explode('|', variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT));
-    $cache_enabled = variable_get('print_pdf_cache_enabled', PRINT_PDF_CACHE_ENABLED_DEFAULT);
+    $pdf_tool = explode('|', $config->get('print_pdf_pdf_tool'));
+    $cache_enabled = $config->get('print_pdf_cache_enabled');
 
     $function = $pdf_tool[0] . '_pdf_tool_info';
     $info = function_exists($function) ? $function() : array();
@@ -138,7 +139,7 @@ function print_pdf_generate_path($path, $query = NULL, $cid = NULL, $pdf_filenam
 
     $meta = array(
       'node' => $node,
-      'url' => url(drupal_get_path_alias(empty($node->nid) ? $node->path : "node/$node->nid"), array('absolute' => TRUE)),
+      'url' => url(backdrop_get_path_alias(empty($node->nid) ? $node->path : "node/$node->nid"), array('absolute' => TRUE)),
     );
     if (isset($node->name)) {
       $meta['name'] = $node->name;
@@ -155,7 +156,7 @@ function print_pdf_generate_path($path, $query = NULL, $cid = NULL, $pdf_filenam
     $cachefile = '';
     if ($cache_enabled && isset($node->nid)) {
       // See if the file exists in the cache.
-      $cachefile = drupal_realpath(print_pdf_cache_dir()) . '/' . $node->nid . '.pdf';
+      $cachefile = backdrop_realpath(print_pdf_cache_dir()) . '/' . $node->nid . '.pdf';
       if (is_readable($cachefile)) {
         // Get the PDF content from the cached file.
         $pdf = file_get_contents($cachefile);

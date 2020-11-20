@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Displays Printer-friendly versions of Drupal pages.
+ * Displays Printer-friendly versions of Backdrop pages.
  *
  * @ingroup print
  */
@@ -58,9 +58,9 @@ function print_epub_menu() {
   $items['admin/config/user-interface/print/epub'] = array(
     'title' => 'EPUB',
     'description' => 'Configure the settings of the EPUB generation functionality.',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('print_epub_settings'),
-    'access arguments'  => array('administer print'),
+    'access arguments' => array('administer print'),
     'weight' => 3,
     'type' => MENU_LOCAL_TASK,
     'file' => 'print_epub.admin.inc',
@@ -95,7 +95,7 @@ function print_epub_variable_info($options) {
  */
 function print_epub_block_info() {
   $block['print_epub-top']['info'] = t('Most EPUBed');
-  $block['print_epub-top']['cache'] = DRUPAL_CACHE_GLOBAL;
+  $block['print_epub-top']['cache'] = BACKDROP_CACHE_GLOBAL;
   return $block;
 }
 
@@ -164,6 +164,16 @@ function print_epub_insert_link($path = NULL, $node = NULL, $location = '') {
 }
 
 /**
+ * Implements hook_config_info().
+ */
+function print_epub_config_info() {
+  $prefixes['print_epub.settings'] = array(
+    'label' => t('Module name settings'),
+    'group' => t('Configuration'),
+  );
+}
+
+/**
  * Check if the link to the EPUB version is allowed depending on the settings.
  *
  * @param array $args
@@ -174,7 +184,7 @@ function print_epub_insert_link($path = NULL, $node = NULL, $location = '') {
  *   FALSE if not allowed, TRUE otherwise
  */
 function print_epub_link_allowed($args) {
-  $print_epub_epub_tool = variable_get('print_epub_epub_tool', PRINT_EPUB_EPUB_TOOL_DEFAULT);
+  $print_epub_epub_tool = config_get('print_epub.settings', 'print_epub_epub_tool');
 
   return (user_access('access EPUB version') && (!empty($print_epub_epub_tool)));
 }
@@ -201,7 +211,7 @@ function print_epub_link_allowed($args) {
  * @ingroup print_api
  */
 function print_epub_generate_html($html, $meta, $filename = NULL) {
-  $epub_tool = explode('|', variable_get('print_epub_epub_tool', PRINT_EPUB_EPUB_TOOL_DEFAULT));
+  $epub_tool = explode('|', config_get('print_epub.settings', 'print_epub_epub_tool'));
 
   module_load_include('inc', $epub_tool[0], $epub_tool[0] . '.pages');
 
@@ -219,6 +229,6 @@ function print_epub_generate_html($html, $meta, $filename = NULL) {
 function print_epub_views_api() {
   return array(
     'api' => 2.0,
-    'path' => drupal_get_path('module', 'print_epub'),
+    'path' => backdrop_get_path('module', 'print_epub'),
   );
 }

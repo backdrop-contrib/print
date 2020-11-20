@@ -14,14 +14,18 @@
  * Implements hook_print_pdf_generate().
  */
 function print_pdf_wkhtmltopdf_print_pdf_generate($html, $meta, $paper_size = NULL, $page_orientation = NULL) {
+  $config = config('print_pdf_wkhtmltopdf.settings');
+  // TODO This variable was probably removed in Backdrop without replacement.
   $pdf_tool = explode('|', variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT));
   if (empty($paper_size)) {
+    // TODO This variable was probably removed in Backdrop without replacement.
     $paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
   }
   if (empty($page_orientation)) {
+    // TODO This variable was probably removed in Backdrop without replacement.
     $page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
   }
-  $wkhtmltopdf_options = variable_get('print_pdf_wkhtmltopdf_options', PRINT_PDF_WKHTMLTOPDF_OPTIONS);
+  $wkhtmltopdf_options = $config->get('print_pdf_wkhtmltopdf_options');
 
   $dpi = 96;
 
@@ -54,7 +58,7 @@ function print_pdf_wkhtmltopdf_print_pdf_generate($html, $meta, $paper_size = NU
     $wkhtmltopdf_options = '--disallow-local-file-access ' . $wkhtmltopdf_options;
   }
   else {
-    drupal_goto($meta['url']);
+    backdrop_goto($meta['url']);
     exit;
   }
 
@@ -63,15 +67,15 @@ function print_pdf_wkhtmltopdf_print_pdf_generate($html, $meta, $paper_size = NU
     $wkhtmltopdf_options .= ' --username ' . escapeshellarg($_SERVER['PHP_AUTH_USER']) . ' --password ' . escapeshellarg($_SERVER['PHP_AUTH_PW']);
   }
 
-  $use_input_file = variable_get('print_pdf_wkhtmltopdf_use_input_file', PRINT_PDF_WKHTMLTOPDF_USE_INPUT_FILE_DEFAULT);
+  $use_input_file = $config->get('print_pdf_wkhtmltopdf_use_input_file');
   if ($use_input_file) {
-    $temp_html = file_unmanaged_save_data($html, drupal_tempnam('temporary://', 'c_html_') . '.html', FILE_EXISTS_RENAME);
+    $temp_html = file_unmanaged_save_data($html, backdrop_tempnam('temporary://', 'c_html_') . '.html', FILE_EXISTS_RENAME);
     if ($temp_html === FALSE) {
       watchdog('print_pdf', 'wkhtmltopdf: could not create temporary html file: %file', array('%file' => $temp_html));
-      drupal_goto($meta['url']);
+      backdrop_goto($meta['url']);
       return NULL;
     }
-    $html_input_parameter = drupal_realpath($temp_html);
+    $html_input_parameter = backdrop_realpath($temp_html);
   }
   else {
     $temp_html = '';
@@ -120,8 +124,8 @@ function print_pdf_wkhtmltopdf_print_pdf_generate($html, $meta, $paper_size = NU
     return $pdf;
   }
   else {
-    drupal_set_message(t('Unable to generate PDF file.'), 'error');
-    drupal_goto($meta['url']);
+    backdrop_set_message(t('Unable to generate PDF file.'), 'error');
+    backdrop_goto($meta['url']);
     return NULL;
   }
 }

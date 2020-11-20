@@ -18,10 +18,12 @@ function print_epub_phpepub_print_epub_generate($html, $meta, $filename = NULL) 
 
   module_load_include('inc', 'print', 'includes/print');
 
+  // TODO This variable was probably removed in Backdrop without replacement.
   $epub_tool = explode('|', variable_get('print_epub_epub_tool', PRINT_EPUB_EPUB_TOOL_DEFAULT));
+  // TODO This variable was probably removed in Backdrop without replacement.
   $images_via_file = variable_get('print_epub_images_via_file', PRINT_EPUB_IMAGES_VIA_FILE_DEFAULT);
 
-  $tool_path = DRUPAL_ROOT . '/' . $epub_tool[1];
+  $tool_path = BACKDROP_ROOT . '/' . $epub_tool[1];
   if (file_exists($tool_path)) {
     require_once $tool_path;
   }
@@ -36,7 +38,7 @@ function print_epub_phpepub_print_epub_generate($html, $meta, $filename = NULL) 
 
   // Set document information.
   if (version_compare($version, '4.0.0', '>=')) {
-    $epub = new \PHPePub\Core\EPub();
+    $epub = new PHPePub Core EPub();
   }
   else {
     $epub = new EPub();
@@ -48,7 +50,7 @@ function print_epub_phpepub_print_epub_generate($html, $meta, $filename = NULL) 
   if (isset($meta['name'])) {
     $epub->setAuthor(strip_tags($meta['name']), strip_tags($meta['name']));
   }
-  $epub->setPublisher(variable_get('site_name', 'Drupal'), $base_url);
+  $epub->setPublisher(config_get('system.performance', 'site_name'), $base_url);
   $epub->setSourceURL($meta['url']);
 
   @$epub->addChapter("Chapter", "epub.html", $html, FALSE);

@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Displays Printer-friendly versions of Drupal pages.
+ * Displays Printer-friendly versions of Backdrop pages.
  *
  * @ingroup print
  */
@@ -34,10 +34,20 @@ function print_pdf_print_link() {
 }
 
 /**
+ * Implements hook_config_info().
+ */
+function print_pdf_config_info() {
+  $prefixes['print_pdf.settings'] = array(
+    'label' => t('Module name settings'),
+    'group' => t('Configuration'),
+  );
+}
+
+/**
  * Implements hook_print_new_window_alter().
  */
 function print_pdf_print_new_window_alter(&$new_window, $format) {
-  $new_window = (variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT) == 1);
+  $new_window = (config_get('print_pdf.settings', 'print_pdf_content_disposition') == 1);
 }
 
 /**
@@ -56,8 +66,9 @@ function print_pdf_permission() {
  * Implements hook_init().
  */
 function print_pdf_init() {
-  if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
-    $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
+  $config = config('print_pdf.settings');
+  if ($config->get('print_pdf_autoconfig')) {
+    $print_pdf_pdf_tool = $config->get('print_pdf_pdf_tool');
     $tool = explode('|', $print_pdf_pdf_tool);
     $function = $tool[0] . '_pdf_tool_info';
     $info = function_exists($function) ? $function() : array();
@@ -65,7 +76,7 @@ function print_pdf_init() {
     if (isset($info['public_dirs'])) {
       foreach ($info['public_dirs'] as $dir) {
         $directory = 'public://print_pdf/' . $tool[0] . '/' . $dir;
-        /** @var DrupalLocalStreamWrapper $wrapper */
+        /** @var BackdropLocalStreamWrapper $wrapper */
         $wrapper = file_stream_wrapper_get_instance_by_uri($directory);
         $real_directory_path = $wrapper->getDirectoryPath() . "/" . file_uri_target($directory);
         $result = file_prepare_directory($real_directory_path, FILE_CREATE_DIRECTORY);
@@ -75,7 +86,7 @@ function print_pdf_init() {
       }
     }
   }
-  if (variable_get('print_pdf_cache_enabled', PRINT_PDF_CACHE_ENABLED_DEFAULT)) {
+  if ($config->get('print_pdf_cache_enabled')) {
     $directory = print_pdf_cache_dir();
     $wrapper = file_stream_wrapper_get_instance_by_uri($directory);
     $real_directory_path = $wrapper->getDirectoryPath() . "/" . file_uri_target($directory);
@@ -115,9 +126,9 @@ function print_pdf_menu() {
   $items['admin/config/user-interface/print/pdf'] = array(
     'title' => 'PDF',
     'description' => 'Configure the settings of the PDF generation functionality.',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('print_pdf_settings'),
-    'access arguments'  => array('administer print'),
+    'access arguments' => array('administer print'),
     'weight' => 3,
     'type' => MENU_LOCAL_TASK,
     'file' => 'print_pdf.admin.inc',
@@ -152,7 +163,7 @@ function print_pdf_variable_info($options) {
  */
 function print_pdf_block_info() {
   $block['print_pdf-top']['info'] = t('Most PDFd');
-  $block['print_pdf-top']['cache'] = DRUPAL_CACHE_GLOBAL;
+  $block['print_pdf-top']['cache'] = BACKDROP_CACHE_GLOBAL;
   return $block;
 }
 
@@ -201,7 +212,9 @@ function print_pdf_node_load($nodes, $types) {
   }
 
   foreach ($nodes as $node) {
+    // TODO This variable was probably removed in Backdrop without replacement.
     $node->{$size} = (isset($result[$node->nid]) && !empty($result[$node->nid]->size)) ? $result[$node->nid]->size : variable_get($size . '_' . $node->type);
+    // TODO This variable was probably removed in Backdrop without replacement.
     $node->{$orientation} = (isset($result[$node->nid]) && !empty($result[$node->nid]->orientation)) ? $result[$node->nid]->orientation : variable_get($orientation . '_' . $node->type);
   }
 }
@@ -228,18 +241,20 @@ function print_pdf_node_update($node) {
     $orientation = 'print_' . $link['format'] . '_orientation';
 
     if (!isset($node->{$size})) {
+      // TODO This variable was probably removed in Backdrop without replacement.
       $node->{$size} = variable_get($size . '_' . $node->type);
     }
     if (!isset($node->{$orientation})) {
+      // TODO This variable was probably removed in Backdrop without replacement.
       $node->{$orientation} = variable_get($orientation . '_' . $node->type);
     }
 
     db_merge('print_pdf_node_conf')
       ->key(array('nid' => $node->nid))
       ->fields(array(
-        'size' => $node->{$size},
-        'orientation' => $node->{$orientation},
-      ))
+      'size' => $node->{$size},
+      'orientation' => $node->{$orientation},
+    ))
       ->execute();
   }
 
@@ -294,12 +309,16 @@ function print_pdf_form_alter(&$form, &$form_state, $form_id) {
     );
 
     if ($form_id == 'node_type_form') {
+      // TODO This variable was probably removed in Backdrop without replacement.
       $form['print']['print_' . $link['format']][$size]['#default_value'] = variable_get($size . '_' . $form['#node_type']->type);
+      // TODO This variable was probably removed in Backdrop without replacement.
       $form['print']['print_' . $link['format']][$orientation]['#default_value'] = variable_get($orientation . '_' . $form['#node_type']->type);
     }
     else {
       $node = $form['#node'];
+      // TODO This variable was probably removed in Backdrop without replacement.
       $form['print']['print_' . $link['format']][$size]['#default_value'] = isset($node->{$size}) ? $node->{$size} : variable_get($size . '_' . $node->type);
+      // TODO This variable was probably removed in Backdrop without replacement.
       $form['print']['print_' . $link['format']][$orientation]['#default_value'] = isset($node->{$orientation}) ? $node->{$orientation} : variable_get($orientation . '_' . $node->type);
     }
   }
@@ -349,7 +368,7 @@ function print_pdf_insert_link($path = NULL, $node = NULL, $location = '') {
  *   FALSE if not allowed, TRUE otherwise
  */
 function print_pdf_link_allowed($args) {
-  $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
+  $print_pdf_pdf_tool = config_get('print_pdf.settings', 'print_pdf_pdf_tool');
 
   return (user_access('access PDF version') && (!empty($print_pdf_pdf_tool)));
 }
@@ -365,7 +384,7 @@ function print_pdf_cron() {
  * Removes pdf files for nodes/paths if they are older than the lifetime.
  */
 function print_pdf_cache_clean() {
-  $lifetime = variable_get('print_pdf_cache_lifetime', PRINT_PDF_CACHE_LIFETIME_DEFAULT);
+  $lifetime = config_get('print_pdf.settings', 'print_pdf_cache_lifetime');
 
   if ($lifetime > 0) {
     $files = file_scan_directory(print_pdf_cache_dir(), '!\d+\.pdf$!');
@@ -439,7 +458,7 @@ function print_pdf_dispose_content($pdf, $filename) {
   header('Cache-Control: private');
   header('Content-Type: application/pdf');
 
-  $content_disposition = variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT);
+  $content_disposition = config_get('print_pdf.settings', 'print_pdf_content_disposition');
   $attachment = ($content_disposition == 2) ? 'attachment' : 'inline';
 
   header("Content-Disposition: $attachment; filename=\"$filename\"");
@@ -476,7 +495,7 @@ function print_pdf_dispose_content($pdf, $filename) {
  * @ingroup print_api
  */
 function print_pdf_generate_html($html, $meta, $filename = NULL, $paper_size = NULL, $page_orientation = NULL) {
-  $pdf_tool = explode('|', variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT));
+  $pdf_tool = explode('|', config_get('print_pdf.settings', 'print_pdf_pdf_tool'));
 
   module_load_include('inc', $pdf_tool[0], $pdf_tool[0] . '.pages');
 
@@ -495,7 +514,7 @@ function print_pdf_generate_html($html, $meta, $filename = NULL, $paper_size = N
 function print_pdf_views_api() {
   return array(
     'api' => 2.0,
-    'path' => drupal_get_path('module', 'print_pdf'),
+    'path' => backdrop_get_path('module', 'print_pdf'),
   );
 }
 

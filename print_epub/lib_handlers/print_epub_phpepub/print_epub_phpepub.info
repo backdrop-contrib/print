@@ -1,5 +1,6 @@
 name = "PHPePub library handler"
 description = "EPUB generation library using PHPePub."
-core = 7.x
+backdrop = 1.x
+type = module
 package = "Printer, email and PDF versions"
 dependencies[] = print:print_epub
