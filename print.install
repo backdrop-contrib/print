@@ -15,11 +15,6 @@ function print_install() {
   backdrop_set_message($t('Printer-friendly Page settings are available under !link',
     array('!link' => l($t('Administration > Configuration > User interface > Printer, email and PDF versions'), 'admin/config/user-interface/print'))
   ));
-  // Dynamically generated variable data was detected on the following lines.
-  // /print/print.admin.inc line 294
-  // /print/print.install line 199
-  // /print/print.pages.inc line 584
-  // /print/print.pages.inc line 587
 }
 
 /**
@@ -151,21 +146,6 @@ function print_schema() {
   return $schema;
 }
 
-// TODO The old hook_update_N functions cannot be applied to Backdrop.
-function print_update_7000(&$sandbox) { }
-
-// TODO The old hook_update_N functions cannot be applied to Backdrop.
-function print_update_7199(&$sandbox) { }
-
-// TODO The old hook_update_N functions cannot be applied to Backdrop.
-function print_update_7200(&$sandbox) { }
-
-// TODO The old hook_update_N functions cannot be applied to Backdrop.
-function print_update_7202(&$sandbox) { }
-
-// TODO The old hook_update_N functions cannot be applied to Backdrop.
-function print_update_7203(&$sandbox) { }
-
 /**
  * Implements hook_update_last_removed().
  */
@@ -174,7 +154,7 @@ function print_update_last_removed() {
 }
 
 /**
- * Implements hook_update_N().
+ * Convert Drupal variables to config.
  */
 function print_update_1000() {
   $config = config('print.settings');
@@ -200,10 +180,10 @@ function print_update_1000() {
   $config->set('print_robots_nofollow', update_variable_get('print_robots_nofollow', 'PRINT_ROBOTS_NOFOLLOW_DEFAULT'));
   $config->set('print_robots_noarchive', update_variable_get('print_robots_noarchive', 'PRINT_ROBOTS_NOARCHIVE_DEFAULT'));
   $config->set('print_html_link_text_enabled', update_variable_get('print_html_link_text_enabled', 'PRINT_TYPE_LINK_TEXT_ENABLED_DEFAULT'));
-  $config->set('print_html_link_text', update_variable_get('print_html_link_text', 'dynamic value in file /print/print.admin.inc line 294'));
-  $config->set('print_html_link_pos', update_variable_get('print_html_link_pos', 'dynamic value in file /print/print.install line 199'));
-  $config->set('print_format_display_sys_urllist', update_variable_get('print_format_display_sys_urllist', 'dynamic variable in file /print/print.pages.inc line 584'));
-  $config->set('print_format_display_urllist_nodetype', update_variable_get('print_format_display_urllist_nodetype', 'dynamic variable in file /print/print.pages.inc line 587'));
+  $config->set('print_html_link_text', update_variable_get('print_html_link_text', 'Printer-friendly version'));
+  //$config->set('print_html_link_pos', update_variable_get('print_html_link_pos', 'dynamic value in file /print/print.install line 199'));
+  //$config->set('print_format_display_sys_urllist', update_variable_get('print_format_display_sys_urllist', 'dynamic variable in file /print/print.pages.inc line 584'));
+  //$config->set('print_format_display_urllist_nodetype', update_variable_get('print_format_display_urllist_nodetype', 'dynamic variable in file /print/print.pages.inc line 587'));
   update_variable_del('print_css');
   update_variable_del('print_keep_theme_css');
   update_variable_del('print_urls');
@@ -227,7 +207,7 @@ function print_update_1000() {
   update_variable_del('print_robots_noarchive');
   update_variable_del('print_html_link_text_enabled');
   update_variable_del('print_html_link_text');
-  update_variable_del('print_html_link_pos');
-  update_variable_del('print_format_display_sys_urllist');
-  update_variable_del('print_format_display_urllist_nodetype');
+  //update_variable_del('print_html_link_pos');
+  //update_variable_del('print_format_display_sys_urllist');
+  //update_variable_del('print_format_display_urllist_nodetype');
 }

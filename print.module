@@ -62,9 +62,10 @@ function print_print_link() {
  */
 function print_config_info() {
   $prefixes['print.settings'] = array(
-    'label' => t('Module name settings'),
+    'label' => t('Printer-friendly page settings'),
     'group' => t('Configuration'),
   );
+  return $prefixes;
 }
 
 /**

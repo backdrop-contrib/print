@@ -23,6 +23,15 @@ function print_pdf_wkhtmltopdf_settings() {
     '#title' => t('wkhtmltopdf options'),
   );
 
+  $form['settings']['print_pdf_wkhtmltopdf_path'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Path to wkhtmltopdf'),
+    '#size' => 60,
+    '#maxlength' => 500,
+    '#default_value' => $config->get('print_pdf_wkhtmltopdf_path'),
+    '#description' => t('Enter the path to the wkhtmltopdf executable.'),
+  );
+
   $form['settings']['print_pdf_wkhtmltopdf_options'] = array(
     '#type' => 'textfield',
     '#title' => t('wkhtmltopdf options'),
@@ -39,13 +48,11 @@ function print_pdf_wkhtmltopdf_settings() {
     '#description' => t('If you experience trouble when generating a PDF try to enable this feature to adjust the input handling.'),
   );
 
-  if (module_exists('token')) {
-    $form['settings']['print_pdf_filename_patterns'] = array(
-      '#theme' => 'token_tree',
-      '#token_types' => array('node'),
-      '#dialog' => TRUE,
-    );
-  }
+  $form['settings']['print_pdf_filename_patterns'] = array(
+    '#theme' => 'token_tree',
+    '#token_types' => array('node'),
+    '#dialog' => TRUE,
+  );
 
   return system_settings_form($form);
 }

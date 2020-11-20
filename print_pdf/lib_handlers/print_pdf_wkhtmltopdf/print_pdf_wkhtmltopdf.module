@@ -108,7 +108,11 @@ function print_pdf_wkhtmltopdf_print_pdf_available_libs_alter(&$pdf_tools) {
   $tools = _print_scan_libs('wkhtmltopdf', '!^wkhtmltopdf!');
 
   // See if there is a binary version of wkhtmltopdf available.
-  if (backdrop_substr(php_uname('s'), 0, 3) !== 'Win') {
+  $path = config_get('print_pdf_wkhtmltopdf.settings', 'print_pdf_wkhtmltopdf_path');
+  if ($path) {
+    $tools[] = $path;
+  }
+  elseif (backdrop_substr(php_uname('s'), 0, 3) !== 'Win') {
     exec('export PATH="$PATH:/usr/local/bin" ; which wkhtmltopdf', $binary_output, $binary_status);
     if (count($binary_output) > 0 && $binary_status == 0) {
       $tools[] = $binary_output[0];

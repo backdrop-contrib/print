@@ -60,10 +60,3 @@ function print_pdf_wkhtmltopdf_update_1000() {
   update_variable_del('print_pdf_wkhtmltopdf_use_input_file');
   update_variable_del('print_pdf_wkhtmltopdf_version');
 }
-
-/**
- * Implements hook_install().
- */
-function print_pdf_wkhtmltopdf_install() {
-  // Dynamically generated variable data was detected.
-}

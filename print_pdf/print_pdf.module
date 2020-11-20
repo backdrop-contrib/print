@@ -413,7 +413,7 @@ function print_pdf_cache_dir() {
   if (!file_stream_wrapper_valid_scheme($scheme)) {
     $scheme = 'temporary';
   }
-  return $scheme . '://print_pdf/cache/' . $language_url->language;
+  return $scheme . '://print_pdf/cache/' . $language_url->langcode;
 }
 
 /**

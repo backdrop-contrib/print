@@ -228,27 +228,6 @@ function print_pdf_requirements($phase) {
   return $requirements;
 }
 
-// TODO The old hook_update_N functions cannot be applied to Backdrop.
-function print_pdf_update_7000(&$sandbox) { }
-
-// TODO The old hook_update_N functions cannot be applied to Backdrop.
-function print_pdf_update_7200(&$sandbox) { }
-
-// TODO The old hook_update_N functions cannot be applied to Backdrop.
-function print_pdf_update_7201(&$sandbox) { }
-
-// TODO The old hook_update_N functions cannot be applied to Backdrop.
-function print_pdf_update_7202(&$sandbox) { }
-
-// TODO The old hook_update_N functions cannot be applied to Backdrop.
-function print_pdf_update_7203(&$sandbox) { }
-
-// TODO The old hook_update_N functions cannot be applied to Backdrop.
-function print_pdf_update_7204(&$sandbox) { }
-
-// TODO The old hook_update_N functions cannot be applied to Backdrop.
-function print_pdf_update_7205(&$sandbox) { }
-
 /**
  * Implements hook_update_last_removed().
  */
@@ -272,8 +251,8 @@ function print_pdf_update_1000() {
   $config->set('print_pdf_filename', update_variable_get('print_pdf_filename', 'PRINT_PDF_FILENAME_DEFAULT'));
   $config->set('print_pdf_display_sys_urllist', update_variable_get('print_pdf_display_sys_urllist', 'PRINT_TYPE_SYS_URLLIST_DEFAULT'));
   $config->set('print_pdf_link_text_enabled', update_variable_get('print_pdf_link_text_enabled', 'PRINT_TYPE_LINK_TEXT_ENABLED_DEFAULT'));
-  $config->set('print_pdf_link_text', update_variable_get('print_pdf_link_text', 'dynamic value in file /print/print_pdf/print_pdf.admin.inc line 144'));
-  $config->set('print_pdf_link_pos', update_variable_get('print_pdf_link_pos', 'dynamic value in file /print/print_pdf/print_pdf.install line 286'));
+  //$config->set('print_pdf_link_text', update_variable_get('print_pdf_link_text', 'dynamic value in file /print/print_pdf/print_pdf.admin.inc line 144'));
+  //$config->set('print_pdf_link_pos', update_variable_get('print_pdf_link_pos', 'dynamic value in file /print/print_pdf/print_pdf.install line 286'));
   update_variable_del('print_pdf_pdf_tool');
   update_variable_del('print_pdf_content_disposition');
   update_variable_del('print_pdf_paper_size');
@@ -285,15 +264,6 @@ function print_pdf_update_1000() {
   update_variable_del('print_pdf_filename');
   update_variable_del('print_pdf_display_sys_urllist');
   update_variable_del('print_pdf_link_text_enabled');
-  update_variable_del('print_pdf_link_text');
-  update_variable_del('print_pdf_link_pos');
-}
-
-/**
- * Implements hook_install().
- */
-function print_pdf_install() {
-  // Dynamically generated variable data was detected.
-  // /print/print_pdf/print_pdf.admin.inc line 144
-  // /print/print_pdf/print_pdf.install line 286
+  //update_variable_del('print_pdf_link_text');
+  //update_variable_del('print_pdf_link_pos');
 }

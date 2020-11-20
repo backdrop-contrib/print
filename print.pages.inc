@@ -284,8 +284,7 @@ function theme_print_footer($vars) {
     // Theme footer.
     case 1:
       $footer_blocks = block_get_blocks_by_region('footer');
-      // TODO This variable was probably removed in Backdrop without replacement.
-      $footer = variable_get('site_footer', FALSE) . "\n" . backdrop_render($footer_blocks);
+      $footer = backdrop_render($footer_blocks);
       break;
 
       // User-specified footer.
@@ -619,7 +618,7 @@ function _print_generate_node($nid, $format, $vid = NULL, $cid = NULL, $view_mod
   global $_print_urls;
 
   if (!isset($langcode)) {
-    $langcode = $GLOBALS['language_content']->language;
+    $langcode = $GLOBALS['language_content']->langcode;
   }
 
   // We can take a node id.
@@ -674,7 +673,7 @@ function _print_generate_node($nid, $format, $vid = NULL, $cid = NULL, $view_mod
     '#theme' => 'node',
     '#node' => $node,
     '#view_mode' => $view_mode,
-    '#language' => $langcode,
+    '#langcode' => $langcode,
     '#print_format' => $format,
   );
 
