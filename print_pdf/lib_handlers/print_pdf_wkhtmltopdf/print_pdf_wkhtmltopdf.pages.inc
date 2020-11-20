@@ -15,15 +15,13 @@
  */
 function print_pdf_wkhtmltopdf_print_pdf_generate($html, $meta, $paper_size = NULL, $page_orientation = NULL) {
   $config = config('print_pdf_wkhtmltopdf.settings');
-  // TODO This variable was probably removed in Backdrop without replacement.
-  $pdf_tool = explode('|', variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT));
+  $print_pdf_config = config('print_pdf.settings');
+  $pdf_tool = explode('|', $print_pdf_config->get('print_pdf_pdf_tool'));
   if (empty($paper_size)) {
-    // TODO This variable was probably removed in Backdrop without replacement.
-    $paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
+    $paper_size = $print_pdf_config->get('print_pdf_paper_size');
   }
   if (empty($page_orientation)) {
-    // TODO This variable was probably removed in Backdrop without replacement.
-    $page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
+    $page_orientation = $print_pdf_config->get('print_pdf_page_orientation');
   }
   $wkhtmltopdf_options = $config->get('print_pdf_wkhtmltopdf_options');
 
@@ -49,6 +47,7 @@ function print_pdf_wkhtmltopdf_print_pdf_generate($html, $meta, $paper_size = NU
   }
 
   $version = print_pdf_wkhtmltopdf_pdf_tool_version($pdf_tool[1], FALSE);
+  dpm($version);
 
   // 0.10.0 beta2 identifies itself as 0.9.9.
   if (version_compare($version, '0.9.9', '>=')) {
