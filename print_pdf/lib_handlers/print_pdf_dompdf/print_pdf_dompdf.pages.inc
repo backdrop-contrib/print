@@ -134,6 +134,7 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
       $html = mb_convert_encoding($html, 'ISO-8859-1', 'UTF-8');
     }
     elseif (function_exists('recode_string')) {
+      // phpcs:ignore.
       $html = recode_string('UTF-8..ISO_8859-1', $html);
     }
     $html = htmlspecialchars_decode(htmlentities($html, ENT_NOQUOTES, 'ISO-8859-1'), ENT_NOQUOTES);
