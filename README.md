@@ -5,6 +5,7 @@ of any node (where `nid` is the node id of content to render):
 
     * Web page printer-friendly version (at www.example.com/print/nid)
     * PDF version (at www.example.com/printpdf/nid)
+    * EPUB version (at www.example.com/printepub/nid)
     * Send by-email (at www.example.com/printmail/nid)
 
 A link is inserted in the each node (configurable in the content type
@@ -29,7 +30,7 @@ Bugs and Feature requests should be reported in the [Issue Queue](https://github
 ## Credits
 
 - Ported to Backdrop by [Laryn Kragt Bakker](https://github.com/laryn), [CEDC.org](https://CEDC.org).
-- Maintained for Drupal by [Cayenne](https://www.drupal.org/u/cayenne).
+- Maintained for Drupal by [jcnventura](https://www.drupal.org/u/jcnventura).
 - The print, pdf and mail icons are copyright Plone Foundation.
 
 ## License
