@@ -542,8 +542,7 @@ function theme_print_ui_format_link($vars) {
                 'path' => $img,
                 'width' => '16px',
                 'height' => '16px',
-                'alt' => $link_text,
-                'title' => $link_text,
+                'alt' => '',
                 'attributes' => array('class' => array('print-icon', 'print-icon-margin')),
               )) . $link_text;
               break;
