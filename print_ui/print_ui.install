@@ -20,3 +20,35 @@ function print_ui_enable() {
     ->condition('name', 'print_ui')
     ->execute();
 }
+
+/**
+ * Convert Drupal variables to config.
+ */
+function print_ui_update_1000() {
+  $config = config('print_ui.settings');
+  $formats = array(
+    'print',
+    'html',
+    'pdf',
+    'mail',
+  );
+  foreach ($formats as $format) {
+    $config->set('print_' . $format . '_link_pos', update_variable_get('print_' . $format . '_link_pos', ''));
+    update_variable_del('print_' . $format . '_link_pos');
+    $config->set('print_' . $format . '_link_teaser', update_variable_get('print_' . $format . '_link_teaser', ''));
+    update_variable_del('print_' . $format . '_link_teaser');
+    $config->set('print_' . $format . '_show_link', update_variable_get('print_' . $format . '_show_link', 1));
+    update_variable_del('print_' . $format . '_show_link');
+    $config->set('print_' . $format . '_link_use_alias', update_variable_get('print_' . $format . '_link_use_alias', 1));
+    update_variable_del('print_' . $format . '_link_use_alias');
+    $config->set('print_' . $format . '_link_class', update_variable_get('print_' . $format . '_link_class', ''));
+    update_variable_del('print_' . $format . '_link_class');
+    $config->set('print_' . $format . '_sys_link_visibility', update_variable_get('print_' . $format . '_sys_link_visibility', 0));
+    update_variable_del('print_' . $format . '_sys_link_visibility');
+    $config->set('print_' . $format . '_sys_link_pages', update_variable_get('print_' . $format . '_sys_link_pages', ''));
+    update_variable_del('print_' . $format . '_sys_link_pages');
+    $config->set('print_' . $format . '_book_link', update_variable_get('print_' . $format . '_book_link', 0));
+    update_variable_del('print_' . $format . '_book_link');
+  }
+  $config->save();
+}
