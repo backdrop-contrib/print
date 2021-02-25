@@ -1,0 +1,29 @@
+{
+    "_config_name": "print_ui.settings",
+    "print_html_link_pos": {
+        "link": "link",
+        "corner": 0,
+        "block": 0,
+        "help": 0
+    },
+    "print_html_link_teaser": 0,
+    "print_html_show_link": 1,
+    "print_html_link_use_alias": 0,
+    "print_html_link_class": "print-page",
+    "print_html_sys_link_visibility": 0,
+    "print_html_sys_link_pages": "",
+    "print_html_book_link": 1,
+    "print_print_link_pos": {
+        "link": "link",
+        "corner": 0,
+        "block": 0,
+        "help": 0
+    },
+    "print_print_link_teaser": 0,
+    "print_print_show_link": 1,
+    "print_print_link_use_alias": 0,
+    "print_print_link_class": "print-page",
+    "print_print_sys_link_visibility": 0,
+    "print_print_sys_link_pages": "",
+    "print_print_book_link": 1
+}

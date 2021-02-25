@@ -253,6 +253,13 @@ function print_html_settings() {
     '#default_value' => $config->get('print_html_display_sys_urllist'),
     '#description' => t('Enabling this option will display a list of printer-friendly destination URLs at the bottom of the page.'),
   );
+  
+  $form['settings']['print_html_link_text'] = array(
+    '#title' => t('Link text'),
+    '#type' => 'textfield',
+    '#default_value' => (!empty($config->get('print_html_link_text'))) ? $config->get('print_html_link_text') : t('Printer-friendly version'),
+    '#description' => t('Text used in the link to the printer-friendly version.'),
+  );
 
   $form['settings']['print_robots_settings'] = array(
     '#type' => 'fieldset',
@@ -280,23 +287,6 @@ function print_html_settings() {
     '#title' => t('Add noarchive'),
     '#default_value' => $config->get('print_robots_noarchive'),
     '#description' => t('Non-standard tag to instruct search engines to not show a "Cached" link for your printer-friendly pages. Recognized by Googlebot.'),
-  );
-
-  $form['settings']['link_text'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Custom link text'),
-    '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
-  );
-  $form['settings']['link_text']['print_html_link_text_enabled'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Enable custom link text'),
-    '#default_value' => $config->get('print_html_link_text_enabled'),
-  );
-  $form['settings']['link_text']['print_html_link_text'] = array(
-    '#type' => 'textfield',
-    '#default_value' => $config->get('print_html_link_text'),
-    '#description' => t('Text used in the link to the printer-friendly version.'),
   );
 
   return system_settings_form($form);

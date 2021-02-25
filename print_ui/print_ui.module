@@ -8,21 +8,21 @@
  *
  * @ingroup print
  */
-
-define('PRINT_UI_LINK_POS_DEFAULT', '{ "link": "link", "block": "block", "help": "help" }');
-define('PRINT_UI_LINK_TEASER_DEFAULT', 0);
-define('PRINT_UI_SHOW_LINK_DEFAULT', 1);
-define('PRINT_UI_SYS_LINK_VISIBILITY_DEFAULT', 1);
-define('PRINT_UI_SYS_LINK_PAGES_DEFAULT', '');
-define('PRINT_UI_LINK_USE_ALIAS_DEFAULT', 0);
-define('PRINT_UI_BOOK_LINK_DEFAULT', 1);
-
 define('PRINT_UI_ALLOW_NORMAL_LINK', 1);
 define('PRINT_UI_ALLOW_BOOK_LINK', 2);
 define('PRINT_UI_TYPE_FIELDS_WEIGHT', 30);
 
-define('PRINT_UI_TYPE_SHOW_LINK_DEFAULT', 1);
-define('PRINT_UI_TYPE_COMMENT_LINK_DEFAULT', 0);
+
+/**
+ * Implements hook_config_info().
+ */
+function print_ui_config_info() {
+  $prefixes['print_ui.settings'] = array(
+    'label' => t('Printer friendly UI settings'),
+    'group' => t('Configuration'),
+  );
+  return $prefixes;
+}
 
 /**
  * Implements hook_permission().
@@ -74,9 +74,11 @@ function print_ui_menu() {
  * Implements hook_block_info().
  */
 function print_ui_block_info() {
-  $block['print-links']['info'] = t('Printer, email and PDF versions');
-  $block['print-links']['cache'] = BACKDROP_CACHE_PER_PAGE;
-  return $block;
+  $blocks['print-links'] = array(
+    'info' => t('Printer, email and PDF versions'),
+    'cache' => BACKDROP_CACHE_PER_PAGE,
+  );
+  return $blocks;
 }
 
 /**
@@ -84,75 +86,42 @@ function print_ui_block_info() {
  */
 function print_ui_block_view($delta = '') {
   $block = array();
-
   switch ($delta) {
     case 'print-links':
-      $nid = preg_replace('!^node/!', '', $_GET['q']);
-      if (ctype_digit($nid)) {
-        $node = node_load($nid);
-        if (!node_access('view', $node)) {
-          // If the user doesn't have access to the node, don't show any links.
-          $block['content'] = '';
-          return array();
-        }
-      }
-      else {
-        $node = NULL;
-      }
-
-      $block['content'] = '';
-      foreach (module_implements('print_link') as $module) {
-        $function = $module . '_print_link';
-        if (function_exists($function)) {
-          $link = call_user_func_array($function, array());
-
-          // TODO This variable was probably removed in Backdrop without replacement.
-          $link_pos = variable_get('print_' . $link['format'] . '_link_pos', backdrop_json_decode(PRINT_UI_LINK_POS_DEFAULT));
-
-          if (!(empty($link_pos['block']))) {
-            $links = print_ui_insert_link($link, array('node' => $node, 'location' => 'block'));
-            if (!empty($links)) {
-              $block['content'] .= $links;
-            }
-          }
-        }
-      }
+      $block['subject'] = t('Printer, email and PDF versions');
+      $block['content'] = print_ui_block_content();
       break;
   }
   return $block;
 }
 
 /**
- * Implements hook_help().
+ * Generate block content.
  */
-function print_ui_help($path, $arg) {
-  $links = '';
-
-  if (($path !== 'node/%') && ($path !== 'node/%/revisions/%/view')) {
-    static $output = FALSE;
-
-    if ($output === FALSE) {
-      $output = TRUE;
-
-      foreach (module_implements('print_link') as $module) {
-        $function = $module . '_print_link';
-        if (function_exists($function)) {
-          $link = call_user_func_array($function, array());
-
-          // TODO This variable was probably removed in Backdrop without replacement.
-          $link_pos = variable_get('print_' . $link['format'] . '_link_pos', backdrop_json_decode(PRINT_UI_LINK_POS_DEFAULT));
-
-          if (!empty($link_pos['help'])) {
-            $links .= print_ui_insert_link($link, array('location' => 'help'));
-          }
-        }
-      }
-      if ($links) {
-        return "<span class='print-syslink'>$links</span>";
-      }
+function print_ui_block_content() {
+  $output = '';
+  $nid = preg_replace('!^node/!', '', $_GET['q']);
+  if (ctype_digit($nid)) {
+    $node = node_load($nid);
+    if (!node_access('view', $node)) {
+      // If the user doesn't have access to the node, don't show any links.
+      return;
     }
   }
-  return '';
+  else {
+    $node = NULL;
+  }
+  foreach (_print_ui_get_links('print_link') as $link) {
+      $link_pos = config_get('print_ui.settings', 'print_' . $link['format'] . '_link_pos');
+      
+      if (!(empty($link_pos['block']))) {
+        $links = print_ui_insert_link($link, array('node' => $node, 'location' => 'block'));
+        if (!empty($links)) {
+          $output .= $links;
+        }
+      }
+  }
+  return $output;
 }
 
 /**
@@ -160,13 +129,11 @@ function print_ui_help($path, $arg) {
  */
 function print_ui_node_view_alter(&$build) {
   if (isset($build['links']['book']['#links']['book_printer'])) {
-    // TODO This variable was probably removed in Backdrop without replacement.
-    $book_link = variable_get('print_html_book_link', PRINT_UI_BOOK_LINK_DEFAULT);
+    $book_link = config_get('print_ui.settings', 'print_html_book_link');
 
     if ($book_link) {
       $link = print_print_link();
-      // TODO This variable was probably removed in Backdrop without replacement.
-      $link_pos = variable_get('print_html_link_pos', backdrop_json_decode(PRINT_UI_LINK_POS_DEFAULT));
+      $link_pos = config_get('print_ui.settings', 'print_html_link_pos');
 
       if (!empty($link_pos['link'])) {
         $format = theme('print_ui_format_link', array('format' => 'html', 'location' => 'link'));
@@ -178,8 +145,7 @@ function print_ui_node_view_alter(&$build) {
             break;
 
           case 2:
-            // TODO This variable was probably removed in Backdrop without replacement.
-            $link_use_alias = variable_get('print_html_link_use_alias', PRINT_UI_LINK_USE_ALIAS_DEFAULT);
+            $link_use_alias = config_get('print_ui.settings', 'print_html_link_use_alias');
             $path = ($link_use_alias && ($alias = backdrop_lookup_path('alias', 'node/' . $build['#node']->nid))) ? $alias : $build['#node']->nid;
             break;
         }
@@ -204,87 +170,79 @@ function print_ui_node_view_alter(&$build) {
 function print_ui_node_view($node, $view_mode) {
   $corner_markup = '';
 
-  foreach (module_implements('print_link') as $module) {
-    $function = $module . '_print_link';
-    if (function_exists($function)) {
-      $link = call_user_func_array($function, array());
+  foreach (_print_ui_get_links('print_link') as $link) {
+    $link_pos = config_get('print_ui.settings', 'print_' . $link['format'] . '_link_pos');
+    $link_use_alias = config_get('print_ui.settings', 'print_' . $link['format'] . '_link_use_alias');
 
-      // TODO This variable was probably removed in Backdrop without replacement.
-      $link_pos = variable_get('print_' . $link['format'] . '_link_pos', backdrop_json_decode(PRINT_UI_LINK_POS_DEFAULT));
-      // TODO This variable was probably removed in Backdrop without replacement.
-      $link_use_alias = variable_get('print_' . $link['format'] . '_link_use_alias', PRINT_UI_LINK_USE_ALIAS_DEFAULT);
+    if (!preg_match('!^node/[\d]*/revisions/[\d]*/view$!', $_GET['q'])) {
+      // Not a revision, use node->nid to build the path.
+      $path = (($link_use_alias) && ($alias = backdrop_lookup_path('alias', 'node/' . $node->nid))) ? $alias : $node->nid;
+    }
+    else {
+      // This is a node revision, replace only the node component.
+      $path = preg_replace('!^node/!', '', $_GET['q']);
+    }
+    $path = $link['path'] . '/' . $path;
 
-      if (!preg_match('!^node/[\d]*/revisions/[\d]*/view$!', $_GET['q'])) {
-        // Not a revision, use node->nid to build the path.
-        $path = (($link_use_alias) && ($alias = backdrop_lookup_path('alias', 'node/' . $node->nid))) ? $alias : $node->nid;
-      }
-      else {
-        // This is a node revision, replace only the node component.
-        $path = preg_replace('!^node/!', '', $_GET['q']);
-      }
-      $path = $link['path'] . '/' . $path;
+    foreach (array('node', 'comment') as $type) {
+      $allowed_type = print_ui_link_allowed($link, array(
+        'type' => $type,
+        'node' => $node,
+        'view_mode' => $view_mode,
+      ));
+      if ($allowed_type) {
+        backdrop_add_css(backdrop_get_path('module', 'print_ui') . '/css/print_ui.theme.css');
+        $links = array();
+        $format = theme('print_ui_format_link', array('format' => $link['format'], 'location' => 'link'));
 
-      foreach (array('node', 'comment') as $type) {
-        $allowed_type = print_ui_link_allowed($link, array(
-          'type' => $type,
-          'node' => $node,
-          'view_mode' => $view_mode,
-        ));
-        if ($allowed_type) {
-          backdrop_add_css(backdrop_get_path('module', 'print_ui') . '/css/print_ui.theme.css');
-          $links = array();
-          $format = theme('print_ui_format_link', array('format' => $link['format'], 'location' => 'link'));
+        // Show book link.
+        if ($allowed_type === PRINT_UI_ALLOW_BOOK_LINK) {
+          $path = $link['path'] . '/book/export/html/' . $node->nid;
 
-          // Show book link.
-          if ($allowed_type === PRINT_UI_ALLOW_BOOK_LINK) {
-            $path = $link['path'] . '/book/export/html/' . $node->nid;
-
-            $links['book_' . $link['format']] = array(
-              'href' => $path,
-              'title' => $format['text'],
-              'attributes' => $format['attributes'],
-              'html' => $format['html'],
-            );
-          }
-          elseif ($allowed_type === PRINT_UI_ALLOW_NORMAL_LINK) {
-            $links['print_' . $link['format']] = array(
-              'href' => $path,
-              'title' => $format['text'],
-              'attributes' => $format['attributes'],
-              'html' => $format['html'],
-              'query' => _print_ui_query_string_encode($_GET, array('q')),
-            );
-          }
-
-          $link_content = array(
-            '#theme' => 'links',
-            '#links' => $links,
-            '#attributes' => array('class' => array('links', 'inline')),
+          $links['book_' . $link['format']] = array(
+            'href' => $path,
+            'title' => $format['text'],
+            'attributes' => $format['attributes'],
+            'html' => $format['html'],
           );
+        }
+        elseif ($allowed_type === PRINT_UI_ALLOW_NORMAL_LINK) {
+          $links['print_' . $link['format']] = array(
+            'href' => $path,
+            'title' => $format['text'],
+            'attributes' => $format['attributes'],
+            'html' => $format['html'],
+            'query' => _print_ui_query_string_encode($_GET, array('q')),
+          );
+        }
 
-          // If it's a node, and configured to show the link, but it's not the
-          // html version of a book then show it.
-          if (($type == 'node') && !empty($link_pos['link']) && !(isset($node->book) && ($link['format'] == 'html'))) {
-            $node->content['links']['print_' . $link['format']] = $link_content;
-          }
-          elseif (($type == 'comment') && isset($node->content['comments']['comments'])) {
-            foreach ($node->content['comments']['comments'] as $cid => $comment) {
-              if (is_numeric($cid)) {
-                $link_content['#links']['print_' . $link['format']]['query']['comment'] = $cid;
-                $node->content['comments']['comments'][$cid]['links']['print_' . $link['format']] = $link_content;
-              }
+        $link_content = array(
+          '#theme' => 'links',
+          '#links' => $links,
+          '#attributes' => array('class' => array('links', 'inline')),
+        );
+        // If it's a node, and configured to show the link, but it's not the
+        // html version of a book then show it.
+        if (($type == 'node') && !empty($link_pos['link']) && !(isset($node->book) && ($link['format'] == 'html'))) {
+          $node->content['links']['print_' . $link['format']] = $link_content;
+        }
+        elseif (($type == 'comment') && isset($node->content['comments']['comments'])) {
+          foreach ($node->content['comments']['comments'] as $cid => $comment) {
+            if (is_numeric($cid)) {
+              $link_content['#links']['print_' . $link['format']]['query']['comment'] = $cid;
+              $node->content['comments']['comments'][$cid]['links']['print_' . $link['format']] = $link_content;
             }
           }
         }
       }
+    }
 
-      if (!empty($link_pos['corner'])) {
-        $corner_markup .= print_ui_insert_link($link, array(
-          'node' => $node,
-          'path' => $path,
-          'location' => 'corner',
-        ));
-      }
+    if (!empty($link_pos['corner'])) {
+      $corner_markup .= print_ui_insert_link($link, array(
+        'node' => $node,
+        'path' => $path,
+        'location' => 'corner',
+      ));
     }
   }
 
@@ -308,25 +266,17 @@ function print_ui_node_load($nodes, $types) {
     $ids[] = $node->nid;
   }
 
-  foreach (module_implements('print_link') as $module) {
-    $function = $module . '_print_link';
-    if (function_exists($function)) {
-      $link = call_user_func_array($function, array());
+  foreach (_print_ui_get_links('print_link') as $link) {
+    $display = 'print_' . $link['format'] . '_display';
+    $display_comment = 'print_' . $link['format'] . '_display_comment';
+    $display_urllist = 'print_' . $link['format'] . '_display_urllist';
 
-      $display = 'print_' . $link['format'] . '_display';
-      $display_comment = 'print_' . $link['format'] . '_display_comment';
-      $display_urllist = 'print_' . $link['format'] . '_display_urllist';
+    $result = db_query('SELECT nid, link, comments, url_list FROM {' . $link['module'] . '_node_conf} WHERE nid IN (:nids)', array(':nids' => $ids))->fetchAllAssoc('nid');
 
-      $result = db_query('SELECT nid, link, comments, url_list FROM {' . $module . '_node_conf} WHERE nid IN (:nids)', array(':nids' => $ids))->fetchAllAssoc('nid');
-
-      foreach ($nodes as $node) {
-        // TODO This variable was probably removed in Backdrop without replacement.
-        $node->{$display} = isset($result[$node->nid]) ? intval($result[$node->nid]->link) : variable_get($display . '_' . $node->type, PRINT_UI_TYPE_SHOW_LINK_DEFAULT);
-        // TODO This variable was probably removed in Backdrop without replacement.
-        $node->{$display_comment} = isset($result[$node->nid]) ? intval($result[$node->nid]->comments) : variable_get($display_comment . '_' . $node->type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
-        // TODO This variable was probably removed in Backdrop without replacement.
-        $node->{$display_urllist} = isset($result[$node->nid]) ? intval($result[$node->nid]->url_list) : variable_get($display_urllist . '_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT);
-      }
+    foreach ($nodes as $node) {
+      $node->{$display} = isset($result[$node->nid]) ? intval($result[$node->nid]->link) : config_get('node.type.' . $node->type, 'settings.print.' . $display);
+      $node->{$display_comment} = isset($result[$node->nid]) ? intval($result[$node->nid]->comments) : config_get('node.type.' . $node->type, 'settings.print.' . $display_comment);
+      $node->{$display_urllist} = isset($result[$node->nid]) ? intval($result[$node->nid]->url_list) : config_get('node.type.' . $node->type, 'settings.print.' . $display_urllist);
     }
   }
 }
@@ -347,37 +297,28 @@ function print_ui_node_update($node) {
     return;
   }
   if (user_access('administer print') || user_access('node-specific print configuration')) {
-    foreach (module_implements('print_link') as $module) {
-      $function = $module . '_print_link';
-      if (function_exists($function)) {
-        $link = call_user_func_array($function, array());
+    foreach (_print_ui_get_links('print_link') as $link) {
+      $display = 'print_' . $link['format'] . '_display';
+      $display_comment = 'print_' . $link['format'] . '_display_comment';
+      $display_urllist = 'print_' . $link['format'] . '_display_urllist';
 
-        $display = 'print_' . $link['format'] . '_display';
-        $display_comment = 'print_' . $link['format'] . '_display_comment';
-        $display_urllist = 'print_' . $link['format'] . '_display_urllist';
-
-        if (!isset($node->{$display}) || $node->{$display} === NULL) {
-          // TODO This variable was probably removed in Backdrop without replacement.
-          $node->{$display} = variable_get($display . '_' . $node->type, PRINT_UI_TYPE_SHOW_LINK_DEFAULT);
-        }
-        if (!isset($node->{$display_comment}) || $node->{$display_comment} === NULL) {
-          // TODO This variable was probably removed in Backdrop without replacement.
-          $node->{$display_comment} = variable_get($display_comment . '_' . $node->type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
-        }
-        if (!isset($node->{$display_urllist}) || $node->{$display_urllist} === NULL) {
-          // TODO This variable was probably removed in Backdrop without replacement.
-          $node->{$display_urllist} = variable_get($display_urllist . '_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT);
-        }
-
-        db_merge($module . '_node_conf')
-          ->key(array('nid' => $node->nid))
-          ->fields(array(
-          'link' => $node->{$display},
-          'comments' => $node->{$display_comment},
-          'url_list' => $node->{$display_urllist},
-        ))
-          ->execute();
+      if (!isset($node->{$display}) || $node->{$display} === NULL) {
+        $node->{$display} = config_get('node.type.' .  $node->type, 'settings.print.' . $display);
       }
+      if (!isset($node->{$display_comment}) || $node->{$display_comment} === NULL) {
+        $node->{$display_comment} = config_get('node.type.' .  $node->type, 'settings.print.' . $display_comment);
+      }
+      if (!isset($node->{$display_urllist}) || $node->{$display_urllist} === NULL) {
+        $node->{$display_urllist} = config_get('node.type.' .  $node->type, 'settings.print.' . $display_urllist);
+      }
+      db_merge($link['module'] . '_node_conf')
+        ->key(array('nid' => $node->nid))
+        ->fields(array(
+        'link' => ($node->{$display}) ? $node->{$display} : 0,
+        'comments' => ($node->{$display_comment}) ? $node->{$display_comment} : 0,
+        'url_list' => ($node->{$display_urllist}) ? $node->{$display_urllist} : 0,
+      ))
+        ->execute();
     }
   }
 }
@@ -406,6 +347,7 @@ function print_ui_form_alter(&$form, &$form_state, $form_id) {
   // version link.
   if ((user_access('administer print') || user_access('node-specific print configuration')) &&
       (($form_id == 'node_type_form') || !empty($form['#node_edit_form']))) {
+    $config = config('node.type.' . $form['#node_type']->type);
     $form['print'] = array(
       '#type' => 'fieldset',
       '#title' => t('Printer, email and PDF versions'),
@@ -415,54 +357,94 @@ function print_ui_form_alter(&$form, &$form_state, $form_id) {
       '#group' => 'additional_settings',
     );
 
-    foreach (module_implements('print_link') as $module) {
-      $function = $module . '_print_link';
+    foreach (_print_ui_get_links('print_link') as $link) {
+      $form['print']['print_' . $link['format']] = array(
+        '#type' => 'fieldset',
+        '#title' => check_plain($link['text']),
+        '#collapsible' => TRUE,
+      );
+
+      $display = 'print_' . $link['format'] . '_display';
+      $display_comment = 'print_' . $link['format'] . '_display_comment';
+      $display_urllist = 'print_' . $link['format'] . '_display_urllist';
+
+      $form['print']['print_' . $link['format']][$display] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Show link'),
+      );
+      $form['print']['print_' . $link['format']][$display_comment] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Show link in individual comments'),
+      );
+      $form['print']['print_' . $link['format']][$display_urllist] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Show Printer-friendly URLs list'),
+      );
+
+      if ($form_id == 'node_type_form') {
+        $form['print']['print_' . $link['format']][$display]['#default_value'] = $config->get('settings.print.' . $display);
+        $form['print']['print_' . $link['format']][$display_comment]['#default_value'] = $config->get('settings.print.' . $display_comment);
+        $form['print']['print_' . $link['format']][$display_urllist]['#default_value'] = $config->get('settings.print.' . $display_urllist);
+      }
+      else {
+        $node = $form['#node'];
+        $form['print']['print_' . $link['format']][$display]['#default_value'] = isset($node->{$display}) ? $node->{$display} : $config->get('settings.print.' . $display);
+        $form['print']['print_' . $link['format']][$display_comment]['#default_value'] = isset($node->{$display_comment}) ? $node->{$display_comment} : $config->get('settings.print.' . $display_comment);
+        $form['print']['print_' . $link['format']][$display_urllist]['#default_value'] = isset($node->{$display_urllist}) ? $node->{$display_urllist} : $config->get('settings.print.' . $display_urllist);
+      }
+    }
+    $form['#submit'][] = 'print_ui_node_type_form_submit';
+  }
+}
+
+/**
+   * Submit handler for the Printer-friendly options on the Content Type edit form.
+   */
+function print_ui_node_type_form_submit($form, &$form_state) {
+  $nodetype = $form['#node_type']->type;
+  $config = config('node.type.' . $nodetype);
+  foreach (_print_ui_get_links('print_link') as $link) {
+    if (!empty($form_state['values']['print_' . $link['format'] . '_display'])) {
+      $config->set('settings.print.print_' . $link['format'] . '_display', $form_state['values']['print_' . $link['format'] . '_display']);
+    }
+    if (!empty($form_state['values']['print_' . $link['format'] . '_display_comment'])) {
+      $config->set('settings.print.print_' . $link['format'] . '_display_comment', $form_state['values']['print_' . $link['format'] . '_display_comment']);
+    }
+    if (!empty($form_state['values']['print_' . $link['format'] . '_display_urllist'])) {
+      $config->set('settings.print.print_' . $link['format'] . '_display_urllist', $form_state['values']['print_' . $link['format'] . '_display_urllist']);
+    }
+  }
+  $config->save();
+}
+
+/**
+  * Helper function to get all active links.
+  *
+  * @return array
+  *  An associative array generally containing:
+  *   - format: Machine-name of format
+  *   - text: User-facing label format
+  *   - description: User-facing description of format
+  *   - path: text to use in URLs
+  *   - class: class to add
+  *   - icon: Icon filename URL/path
+  *   - module: Module name of module providing this format
+  */
+function _print_ui_get_links($option = '') {
+  $links = array();
+  $valid_options = array(
+    'print_link',
+  );
+  if (in_array($option, $valid_options)) {
+    foreach (module_implements($option) as $module) {
+      $function = $module . '_' . $option;
       if (function_exists($function)) {
         $link = call_user_func_array($function, array());
-
-        $form['print']['print_' . $link['format']] = array(
-          '#type' => 'fieldset',
-          '#title' => check_plain($link['text']),
-          '#collapsible' => TRUE,
-        );
-
-        $display = 'print_' . $link['format'] . '_display';
-        $display_comment = 'print_' . $link['format'] . '_display_comment';
-        $display_urllist = 'print_' . $link['format'] . '_display_urllist';
-
-        $form['print']['print_' . $link['format']][$display] = array(
-          '#type' => 'checkbox',
-          '#title' => t('Show link'),
-        );
-        $form['print']['print_' . $link['format']][$display_comment] = array(
-          '#type' => 'checkbox',
-          '#title' => t('Show link in individual comments'),
-        );
-        $form['print']['print_' . $link['format']][$display_urllist] = array(
-          '#type' => 'checkbox',
-          '#title' => t('Show Printer-friendly URLs list'),
-        );
-
-        if ($form_id == 'node_type_form') {
-          // TODO This variable was probably removed in Backdrop without replacement.
-          $form['print']['print_' . $link['format']][$display]['#default_value'] = variable_get($display . '_' . $form['#node_type']->type, PRINT_UI_TYPE_SHOW_LINK_DEFAULT);
-          // TODO This variable was probably removed in Backdrop without replacement.
-          $form['print']['print_' . $link['format']][$display_comment]['#default_value'] = variable_get($display_comment . '_' . $form['#node_type']->type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
-          // TODO This variable was probably removed in Backdrop without replacement.
-          $form['print']['print_' . $link['format']][$display_urllist]['#default_value'] = variable_get($display_urllist . '_' . $form['#node_type']->type, PRINT_TYPE_URLLIST_DEFAULT);
-        }
-        else {
-          $node = $form['#node'];
-          // TODO This variable was probably removed in Backdrop without replacement.
-          $form['print']['print_' . $link['format']][$display]['#default_value'] = isset($node->{$display}) ? $node->{$display} : variable_get($display . '_' . $node->type, PRINT_UI_TYPE_SHOW_LINK_DEFAULT);
-          // TODO This variable was probably removed in Backdrop without replacement.
-          $form['print']['print_' . $link['format']][$display_comment]['#default_value'] = isset($node->{$display_comment}) ? $node->{$display_comment} : variable_get($display_comment . '_' . $node->type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
-          // TODO This variable was probably removed in Backdrop without replacement.
-          $form['print']['print_' . $link['format']][$display_urllist]['#default_value'] = isset($node->{$display_urllist}) ? $node->{$display_urllist} : variable_get($display_urllist . '_' . $node->type, PRINT_TYPE_URLLIST_DEFAULT);
-        }
+        $links[] = $link;
       }
     }
   }
+  return $links;
 }
 
 /**
@@ -485,10 +467,8 @@ function print_ui_form_alter(&$form, &$form_state, $form_id) {
  *     should not be indexed by search engine robots.
  */
 function _print_ui_fill_attributes($title = '', $class = '', $new_window = FALSE) {
-  // TODO This variable was probably removed in Backdrop without replacement.
-  $print_newwindow = variable_get('print_newwindow', PRINT_NEWWINDOW_DEFAULT);
-  // TODO This variable was probably removed in Backdrop without replacement.
-  $print_robots_noindex = variable_get('print_robots_noindex', PRINT_ROBOTS_NOINDEX_DEFAULT);
+  $print_newwindow = config_get('print_ui.settings', 'print_newwindow');
+  $print_robots_noindex = config_get('print_ui.settings', 'print_robots_noindex');
 
   $attributes = array();
   $attributes['title'] = $title;
@@ -528,31 +508,23 @@ function _print_ui_fill_attributes($title = '', $class = '', $new_window = FALSE
  * @ingroup print_themeable
  */
 function theme_print_ui_format_link($vars) {
-  $format = $vars['format'];
+  $varsformat = $vars['format'];
 
-  foreach (module_implements('print_link') as $module) {
-    $function = $module . '_print_link';
-    if (function_exists($function)) {
-      $link = call_user_func_array($function, array());
-
-      if ($link['format'] == $format) {
-        // TODO This variable was probably removed in Backdrop without replacement.
-        $link_class = variable_get('print_' . $link['format'] . '_link_class', $link['class']);
+  foreach (_print_ui_get_links('print_link') as $link) {
+      if ($link['format'] == $varsformat) {
+        $link_class = config_get('print_ui.settings', 'print_' . $link['format'] . '_link_class');
 
         $new_window = FALSE;
-        $func = $module . '_print_new_window_alter';
+        $func = $link['module'] . '_print_new_window_alter';
         if (function_exists($func)) {
           $func($new_window, $link['format']);
         }
 
-        // TODO This variable was probably removed in Backdrop without replacement.
-        $show_link = variable_get('print_' . $link['format'] . '_show_link', PRINT_UI_SHOW_LINK_DEFAULT);
-        // TODO This variable was probably removed in Backdrop without replacement.
-        $link_text = filter_xss(variable_get('print_' . $link['format'] . '_link_text', $link['text']));
-
+        $show_link = config_get('print_ui.settings', 'print_' . $link['format'] . '_show_link');
+        $link_text = filter_xss(config_get('print.settings', 'print_' . $link['format'] . '_link_text'));
         $text = '';
         if ($show_link >= 2) {
-          $img = backdrop_get_path('module', $module) . '/icons/' . $link['icon'];
+          $img = backdrop_get_path('module', $link['module']) . '/icons/' . $link['icon'];
           switch ($show_link) {
             case 2:
               $text = theme('image', array(
@@ -589,7 +561,6 @@ function theme_print_ui_format_link($vars) {
           'attributes' => _print_ui_fill_attributes($link['description'], strip_tags($link_class), $new_window),
         );
       }
-    }
   }
   return array();
 }
@@ -636,15 +607,13 @@ function print_ui_insert_link($link, $args = array()) {
     }
     $allowed_type = print_ui_link_allowed($link, array('path' => $path));
   }
-
   if ($allowed_type) {
     if ($nid !== NULL) {
       if ($allowed_type === PRINT_UI_ALLOW_BOOK_LINK) {
         $path = 'book/export/html/' . $nid;
       }
       else {
-        // TODO This variable was probably removed in Backdrop without replacement.
-        if (variable_get('print_' . $link['format'] . '_link_use_alias', PRINT_UI_LINK_USE_ALIAS_DEFAULT) && ($alias = backdrop_lookup_path('alias', $path))) {
+        if (config_get('print_ui.settings', 'print_' . $link['format'] . '_link_use_alias')) {
           $path = $alias;
         }
         else {
@@ -688,8 +657,7 @@ function print_ui_insert_link($link, $args = array()) {
 function print_ui_link_allowed($link, $args) {
   if (isset($args['view_mode'])) {
     $view_mode = $args['view_mode'];
-    // TODO This variable was probably removed in Backdrop without replacement.
-    if ((($view_mode == 'teaser') && !variable_get('print_' . $link['format'] . '_link_teaser', PRINT_UI_LINK_TEASER_DEFAULT))
+    if ((($view_mode == 'teaser') && !config_get('print_ui.settings', 'print_' . $link['format'] . '_link_teaser'))
        || !in_array($view_mode, array('full', 'teaser'))) {
       // If the teaser link is disabled.
       return FALSE;
@@ -723,8 +691,7 @@ function print_ui_link_allowed($link, $args) {
       if (!isset($res[$link['format']][$node->nid])) {
         $res[$link['format']][$node->nid] = db_query("SELECT comments FROM {" . $link['module'] . "_node_conf} WHERE nid = :nid", array(':nid' => $node->nid))->fetchField();
       }
-      // TODO This variable was probably removed in Backdrop without replacement.
-      $display_comment = ($res && ($res[$link['format']][$node->nid] !== FALSE)) ? $res[$link['format']][$node->nid] : variable_get('print_' . $link['format'] . '_display_comment_' . $node_type, PRINT_UI_TYPE_COMMENT_LINK_DEFAULT);
+      $display_comment = ($res && ($res[$link['format']][$node->nid] !== FALSE)) ? $res[$link['format']][$node->nid] : config_get('node.type.' . $node_type, 'settings.print.print_' . $link['format'] . '_display_comment');
       if ($display_comment) {
         return PRINT_UI_ALLOW_NORMAL_LINK;
       }
@@ -738,8 +705,7 @@ function print_ui_link_allowed($link, $args) {
       }
       elseif (isset($node->book)) {
         // Node is a book.
-        // TODO This variable was probably removed in Backdrop without replacement.
-        $book_link = variable_get('print_' . $link['format'] . '_book_link', PRINT_UI_BOOK_LINK_DEFAULT);
+        $book_link = config_get('print_ui.settings', 'print_' . $link['format'] . '_book_link');
         switch ($book_link) {
           case 1:
             if (user_access('access printer-friendly version')) {
@@ -758,10 +724,8 @@ function print_ui_link_allowed($link, $args) {
   }
   else {
     // 'System' page.
-    // TODO This variable was probably removed in Backdrop without replacement.
-    $sys_link_visibility = variable_get('print_' . $link['format'] . '_sys_link_visibility', PRINT_UI_SYS_LINK_VISIBILITY_DEFAULT);
-    // TODO This variable was probably removed in Backdrop without replacement.
-    $sys_link_pages = variable_get('print_' . $link['format'] . '_sys_link_pages', PRINT_UI_SYS_LINK_PAGES_DEFAULT);
+    $sys_link_visibility = config_get('print_ui.settings', 'print_' . $link['format'] . '_sys_link_visibility');
+    $sys_link_pages = config_get('print_ui.settings', 'print_' . $link['format'] . '_sys_link_pages');
 
     return _print_ui_page_match($sys_link_visibility, $_GET['q'], $sys_link_pages);
   }

@@ -1,5 +1,4 @@
-DESCRIPTION
------------
+# Printer, email and PDF versions
 
 This module allows you to generate the following printer-friendly versions
 of any node:
@@ -8,7 +7,7 @@ of any node:
     * PDF version (at www.example.com/printpdf/nid)
     * Send by-email (at www.example.com/printmail/nid)
 
-where nid is the node id of content to render.
+where `nid` is the node id of content to render.
 
 A link is inserted in the each node (configurable in the content type
 settings), that opens a version of the page with no sidebars, search boxes,
