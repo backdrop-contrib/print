@@ -85,6 +85,9 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
     }
   }
 
+  // Allow third-party modules to alter the dompdf object.
+  drupal_alter('print_pdf_dompdf', $dompdf);
+
   // Try to use local file access for image files.
   $html = _print_access_images_via_file($html, $images_via_file);
   // Remove all scripts due to security concerns.
