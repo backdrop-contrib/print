@@ -11,7 +11,7 @@
  * @ingroup print
  */
 
-$_print_urls = PRINT_URLS_DEFAULT;
+$_print_urls = config_get('print.settings', 'print_urls');
 
 /**
  * Generate an HTML version of the printer-friendly page.
@@ -351,7 +351,7 @@ function theme_print_url_list($vars) {
 
   // Display the collected links at the bottom of the page. Code once taken from
   // Kjartan Mannes' project.module.
-  if (!empty($_print_urls)) {
+  if ($_print_urls) {
     $urls = _print_friendly_urls();
     $url_list = '';
     foreach ($urls as $key => $url) {
@@ -497,7 +497,7 @@ function _print_rewrite_urls($matches) {
       else {
         if ($url[0] == '#') {
           // URL is an anchor tag.
-          if ($include_anchors && (!empty($_print_urls))) {
+          if ($include_anchors && ($_print_urls)) {
             $path = explode('/', $_GET['q']);
             unset($path[0]);
             $path = implode('/', $path);
@@ -536,7 +536,7 @@ function _print_rewrite_urls($matches) {
   $ret = '<' . $matches[1] . '>';
   if (count($matches) == 4) {
     $ret .= $matches[2] . $matches[3];
-    if ((!empty($_print_urls)) && (isset($newurl))) {
+    if (($_print_urls) && (isset($newurl))) {
       $ret .= ' <span class="print-footnote">[' . _print_friendly_urls(trim($newurl)) . ']</span>';
     }
   }
