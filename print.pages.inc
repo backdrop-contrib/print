@@ -190,7 +190,7 @@ function print_preprocess_print(&$variables) {
     'query' => $variables['query'],
   ));
   $variables['cid'] = isset($node->cid) ? $node->cid : NULL;
-  $variables['print_title'] = check_plain($node->title);
+  $variables['print_title'] = html_entity_decode(check_plain($node->title));
   $variables['head'] = drupal_get_html_head();
   $variables['robots_meta'] = _print_robots_meta_generator();
   $variables['css'] = _print_css_generator($variables['expand_css']);
