@@ -26,18 +26,6 @@ function print_pdf_dompdf_pdf_tool_info() {
 }
 
 /**
- * Implements hook_theme().
- */
-function print_pdf_dompdf_theme() {
-  return array(
-    'print_pdf_dompdf_footer' => array(
-      'variables' => array('html' => ''),
-      'file' => 'print_pdf_dompdf.pages.inc',
-    ),
-  );
-}
-
-/**
  * Implements hook_menu().
  */
 function print_pdf_dompdf_menu() {
