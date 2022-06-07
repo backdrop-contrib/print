@@ -24,7 +24,7 @@ function print_pdf_drush_command() {
     ),
     'aliases' => array('pdfdl'),
     // No site or config needed.
-    'bootstrap' => DRUSH_BOOTSTRAP_BACKDROP_ROOT,
+    'bootstrap' => BackdropBoot::BOOTSTRAP_ROOT,
   );
 
   return $items;

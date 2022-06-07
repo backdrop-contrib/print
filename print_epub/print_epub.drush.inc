@@ -24,7 +24,7 @@ function print_epub_drush_command() {
     ),
     'aliases' => array('epubdl'),
     // No site or config needed.
-    'bootstrap' => DRUSH_BOOTSTRAP_BACKDROP_ROOT,
+    'bootstrap' => BackdropBoot::BOOTSTRAP_ROOT,
   );
 
   return $items;
