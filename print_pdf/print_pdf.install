@@ -267,3 +267,10 @@ function print_pdf_update_1000() {
   //update_variable_del('print_pdf_link_text');
   //update_variable_del('print_pdf_link_pos');
 }
+
+/**
+ * Flush the PDF cache to remove possibly existing private data.
+ */
+function print_pdf_update_7206(&$sandbox) {
+  print_pdf_cache_delete();
+}

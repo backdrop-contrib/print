@@ -65,6 +65,9 @@ function print_pdf_wkhtmltopdf_print_pdf_generate($html, $meta, $paper_size = NU
     $wkhtmltopdf_options .= ' --username ' . escapeshellarg($_SERVER['PHP_AUTH_USER']) . ' --password ' . escapeshellarg($_SERVER['PHP_AUTH_PW']);
   }
 
+  // hook_print_pdf_wkhtmltopdf_alter().
+  backdrop_alter('print_pdf_wkhtmltopdf', $wkhtmltopdf_options, $html, $meta);
+
   $use_input_file = $config->get('print_pdf_wkhtmltopdf_use_input_file');
   if ($use_input_file) {
     $temp_html = file_unmanaged_save_data($html, backdrop_tempnam('temporary://', 'c_html_') . '.html', FILE_EXISTS_RENAME);
