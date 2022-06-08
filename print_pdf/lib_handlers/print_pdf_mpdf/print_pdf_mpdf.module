@@ -47,7 +47,7 @@ function print_pdf_mpdf_pdf_tool_version($pdf_tool) {
   // Version >= 7.0
   else {
     if (class_exists('\Mpdf\Mpdf')) {
-      $version = Mpdf Mpdf::VERSION;
+      $version = \Mpdf\Mpdf::VERSION;
       if (!empty($version)) {
         return $version;
       }
