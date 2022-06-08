@@ -11,6 +11,7 @@
  */
 
 define('PRINT_VIEW_MODE', 'print');
+define('PRINT_LIB_PATH', 'libraries');
 
 /**
  * Implements hook_print_link().
