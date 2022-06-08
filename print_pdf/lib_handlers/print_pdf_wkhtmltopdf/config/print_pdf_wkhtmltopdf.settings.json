@@ -1,6 +1,6 @@
 {
     "_config_name": "print_pdf_wkhtmltopdf.settings",
-    "print_pdf_wkhtmltopdf_options": "PRINT_PDF_WKHTMLTOPDF_OPTIONS",
-    "print_pdf_wkhtmltopdf_use_input_file": "PRINT_PDF_WKHTMLTOPDF_USE_INPUT_FILE_DEFAULT",
-    "print_pdf_wkhtmltopdf_version": "PRINT_PDF_WKHTMLTOPDF_VERSION_DEFAULT"
+    "print_pdf_wkhtmltopdf_options": "--footer-font-size 7 --footer-right '[page]'",
+    "print_pdf_wkhtmltopdf_use_input_file": 0,
+    "print_pdf_wkhtmltopdf_version": ""
 }

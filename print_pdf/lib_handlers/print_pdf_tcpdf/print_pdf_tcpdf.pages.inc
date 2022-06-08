@@ -18,21 +18,16 @@ function print_pdf_tcpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $p
 
   module_load_include('inc', 'print', 'includes/print');
 
-  // TODO This variable was probably removed in Backdrop without replacement.
-  $pdf_tool = explode('|', variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT));
+  $pdf_tool = explode('|', config_get('print_pdf.settings', 'print_pdf_pdf_tool'));
   if (empty($paper_size)) {
-    // TODO This variable was probably removed in Backdrop without replacement.
-    $paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
+    $paper_size = config_get('print_pdf.settings','print_pdf_paper_size');
   }
   if (empty($page_orientation)) {
-    // TODO This variable was probably removed in Backdrop without replacement.
-    $page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
+    $page_orientation = config_get('print_pdf.settings', 'print_pdf_page_orientation');
   }
-  // TODO This variable was probably removed in Backdrop without replacement.
-  $images_via_file = variable_get('print_pdf_images_via_file', PRINT_PDF_IMAGES_VIA_FILE_DEFAULT);
+  $images_via_file = config_get('print_pdf.settings', 'print_pdf_images_via_file');
 
-  // TODO This variable was probably removed in Backdrop without replacement.
-  if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
+  if (config_get('print_pdf.settings', 'print_pdf_autoconfig')) {
     $pdf_tool_path = realpath(dirname($pdf_tool[1]));
 
     if (!defined('K_TCPDF_EXTERNAL_CONFIG')) {
@@ -84,12 +79,10 @@ function print_pdf_tcpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $p
   }
   module_load_include('inc', 'print_pdf_tcpdf', 'print_pdf_tcpdf.class');
 
-  // TODO This variable was probably removed in Backdrop without replacement.
-  // TODO This variable was probably removed in Backdrop without replacement.
   $font = array(
-    check_plain(variable_get('print_pdf_font_family', PRINT_PDF_TCPDF_FONT_FAMILY_DEFAULT)),
+    check_plain(config_get('print_pdf.settings', 'print_pdf_font_family')),
     '',
-    check_plain(variable_get('print_pdf_font_size', PRINT_PDF_TCPDF_FONT_SIZE_DEFAULT)),
+    check_plain(config_get('print_pdf.settings', 'print_pdf_font_size')),
   );
   $orientation = backdrop_strtoupper($page_orientation[0]);
 
@@ -103,8 +96,7 @@ function print_pdf_tcpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $p
   $pdf->SetCreator(config_get('system.performance', 'site_name'));
   $pdf->SetTitle(html_entity_decode($meta['title'], ENT_QUOTES, 'UTF-8'));
   $pdf->setPDFVersion('1.6');
-  // TODO This variable was probably removed in Backdrop without replacement.
-  $pdf->setFontSubsetting(variable_get('print_pdf_font_subsetting', PRINT_PDF_TCPDF_FONT_SUBSETTING_DEFAULT));
+  $pdf->setFontSubsetting(config_get('print_pdf.settings', 'print_pdf_font_subsetting'));
   $pdf->setTcpdfLink(FALSE);
 
   if ($language->direction == LANGUAGE_RTL) {

@@ -1,7 +1,7 @@
 name = "Printer-friendly pages"
-description = "Generates a printer-friendly version of Drupal pages."
+description = "Generates a printer-friendly version of Backdrop pages."
 backdrop = 1.x
 type = module
 package = "Printer, email and PDF versions"
-dependencies[] = drupal:node
+dependencies[] = node
 configure = admin/config/user-interface/print

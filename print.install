@@ -137,6 +137,7 @@ function print_update_1000() {
   $config->set('print_robots_nofollow', update_variable_get('print_robots_nofollow', 1));
   $config->set('print_robots_noarchive', update_variable_get('print_robots_noarchive', 1));
   $config->set('print_html_link_text_enabled', update_variable_get('print_html_link_text_enabled', 0));
+  $config->set('print_html_link_pos', update_variable_get('print_html_link_pos', array('link' => 'link')));
   $config->set('print_html_link_text', update_variable_get('print_html_link_text', 'Printer-friendly version'));
   $config->set('print_format_display_sys_urllist', update_variable_get('print_format_display_sys_urllist', ''));
   $config->set('print_format_display_urllist_nodetype', update_variable_get('print_format_display_urllist_nodetype', ''));

@@ -60,37 +60,6 @@ function print_mail_disable() {
 }
 
 /**
- * Implements hook_uninstall().
- */
-function print_mail_uninstall() {
-  config_clear('print_mail.settings', 'print_mail_display_sys_urllist');
-  config_clear('print_mail.settings', 'print_mail_hourly_threshold');
-  config_clear('print_mail.settings', 'print_mail_job_queue');
-  config_clear('print_mail.settings', 'print_mail_link_text');
-  config_clear('print_mail.settings', 'print_mail_link_text_enabled');
-  config_clear('print_mail.settings', 'print_mail_send_option_default');
-  config_clear('print_mail.settings', 'print_mail_teaser_choice');
-  config_clear('print_mail.settings', 'print_mail_teaser_default');
-  config_clear('print_mail.settings', 'print_mail_use_reply_to');
-  config_clear('print_mail.settings', 'print_mail_user_recipients');
-
-  config_clear('print_mail.settings', 'print_mail_book_link');
-  config_clear('print_mail.settings', 'print_mail_link_class');
-  config_clear('print_mail.settings', 'print_mail_link_pos');
-  config_clear('print_mail.settings', 'print_mail_link_teaser');
-  config_clear('print_mail.settings', 'print_mail_link_use_alias');
-  config_clear('print_mail.settings', 'print_mail_show_link');
-  config_clear('print_mail.settings', 'print_mail_sys_link_pages');
-  config_clear('print_mail.settings', 'print_mail_sys_link_visibility');
-
-  $settings = db_query("SELECT name FROM {variable} WHERE name LIKE 'print\_mail\_display\_%'");
-  foreach ($settings as $variable) {
-    // TODO This variable was probably removed in Backdrop without replacement.
-    variable_del($variable->name);
-  }
-}
-
-/**
  * Implements hook_schema().
  */
 function print_mail_schema() {
@@ -177,24 +146,6 @@ function print_mail_schema() {
   return $schema;
 }
 
-// TODO The old hook_update_N functions cannot be applied to Backdrop.
-function print_mail_update_7000(&$sandbox) { }
-
-// TODO The old hook_update_N functions cannot be applied to Backdrop.
-function print_mail_update_7100(&$sandbox) { }
-
-// TODO The old hook_update_N functions cannot be applied to Backdrop.
-function print_mail_update_7101(&$sandbox) { }
-
-// TODO The old hook_update_N functions cannot be applied to Backdrop.
-function print_mail_update_7200(&$sandbox) { }
-
-// TODO The old hook_update_N functions cannot be applied to Backdrop.
-function print_mail_update_7202(&$sandbox) { }
-
-// TODO The old hook_update_N functions cannot be applied to Backdrop.
-function print_mail_update_7203(&$sandbox) { }
-
 /**
  * Implements hook_update_last_removed().
  */
@@ -207,17 +158,17 @@ function print_mail_update_last_removed() {
  */
 function print_mail_update_1000() {
   $config = config('print_mail.settings');
-  $config->set('print_mail_hourly_threshold', update_variable_get('print_mail_hourly_threshold', 'PRINT_MAIL_HOURLY_THRESHOLD'));
-  $config->set('print_mail_use_reply_to', update_variable_get('print_mail_use_reply_to', 'PRINT_MAIL_USE_REPLY_TO'));
-  $config->set('print_mail_teaser_default', update_variable_get('print_mail_teaser_default', 'PRINT_MAIL_TEASER_DEFAULT_DEFAULT'));
-  $config->set('print_mail_user_recipients', update_variable_get('print_mail_user_recipients', 'PRINT_MAIL_USER_RECIPIENTS_DEFAULT'));
-  $config->set('print_mail_teaser_choice', update_variable_get('print_mail_teaser_choice', 'PRINT_MAIL_TEASER_CHOICE_DEFAULT'));
-  $config->set('print_mail_send_option_default', update_variable_get('print_mail_send_option_default', 'PRINT_MAIL_SEND_OPTION_DEFAULT'));
-  $config->set('print_mail_job_queue', update_variable_get('print_mail_job_queue', 'PRINT_MAIL_JOB_QUEUE_DEFAULT'));
-  $config->set('print_mail_display_sys_urllist', update_variable_get('print_mail_display_sys_urllist', 'PRINT_TYPE_SYS_URLLIST_DEFAULT'));
-  $config->set('print_mail_link_text_enabled', update_variable_get('print_mail_link_text_enabled', 'PRINT_TYPE_LINK_TEXT_ENABLED_DEFAULT'));
-  $config->set('print_mail_link_text', update_variable_get('print_mail_link_text', 'dynamic value in file /print/print_mail/print_mail.admin.inc line 108'));
-  $config->set('print_mail_link_pos', update_variable_get('print_mail_link_pos', 'dynamic value in file /print/print_mail/print_mail.install line 235'));
+  $config->set('print_mail_hourly_threshold', update_variable_get('print_mail_hourly_threshold', PRINT_MAIL_HOURLY_THRESHOLD));
+  $config->set('print_mail_use_reply_to', update_variable_get('print_mail_use_reply_to', PRINT_MAIL_USE_REPLY_TO));
+  $config->set('print_mail_teaser_default', update_variable_get('print_mail_teaser_default', PRINT_MAIL_TEASER_DEFAULT_DEFAULT));
+  $config->set('print_mail_user_recipients', update_variable_get('print_mail_user_recipients', PRINT_MAIL_USER_RECIPIENTS_DEFAULT));
+  $config->set('print_mail_teaser_choice', update_variable_get('print_mail_teaser_choice', PRINT_MAIL_TEASER_CHOICE_DEFAULT));
+  $config->set('print_mail_send_option_default', update_variable_get('print_mail_send_option_default', PRINT_MAIL_SEND_OPTION_DEFAULT));
+  $config->set('print_mail_job_queue', update_variable_get('print_mail_job_queue', PRINT_MAIL_JOB_QUEUE_DEFAULT));
+  $config->set('print_mail_display_sys_urllist', update_variable_get('print_mail_display_sys_urllist', PRINT_TYPE_SYS_URLLIST_DEFAULT));
+  $config->set('print_mail_link_text_enabled', update_variable_get('print_mail_link_text_enabled', PRINT_TYPE_LINK_TEXT_ENABLED_DEFAULT));
+  $config->set('print_mail_link_text', update_variable_get('print_mail_link_text', 'Send by email'));
+  $config->set('print_mail_link_pos', update_variable_get('print_mail_link_pos', array('link' => 'link')));
   update_variable_del('print_mail_hourly_threshold');
   update_variable_del('print_mail_use_reply_to');
   update_variable_del('print_mail_teaser_default');
@@ -229,13 +180,4 @@ function print_mail_update_1000() {
   update_variable_del('print_mail_link_text_enabled');
   update_variable_del('print_mail_link_text');
   update_variable_del('print_mail_link_pos');
-}
-
-/**
- * Implements hook_install().
- */
-function print_mail_install() {
-  // Dynamically generated variable data was detected.
-  // /print/print_mail/print_mail.admin.inc line 108
-  // /print/print_mail/print_mail.install line 235
 }

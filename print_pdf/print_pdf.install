@@ -22,39 +22,6 @@ function print_pdf_enable() {
 }
 
 /**
- * Implements hook_uninstall().
- */
-function print_pdf_uninstall() {
-  config_clear('print_pdf.settings', 'print_pdf_autoconfig');
-  config_clear('print_pdf.settings', 'print_pdf_cache_enabled');
-  config_clear('print_pdf.settings', 'print_pdf_cache_lifetime');
-  config_clear('print_pdf.settings', 'print_pdf_content_disposition');
-  config_clear('print_pdf.settings', 'print_pdf_display_sys_urllist');
-  config_clear('print_pdf.settings', 'print_pdf_filename');
-  config_clear('print_pdf.settings', 'print_pdf_images_via_file');
-  config_clear('print_pdf.settings', 'print_pdf_link_text');
-  config_clear('print_pdf.settings', 'print_pdf_link_text_enabled');
-  config_clear('print_pdf.settings', 'print_pdf_page_orientation');
-  config_clear('print_pdf.settings', 'print_pdf_paper_size');
-  config_clear('print_pdf.settings', 'print_pdf_pdf_tool');
-
-  config_clear('print_pdf.settings', 'print_pdf_book_link');
-  config_clear('print_pdf.settings', 'print_pdf_link_class');
-  config_clear('print_pdf.settings', 'print_pdf_link_pos');
-  config_clear('print_pdf.settings', 'print_pdf_link_teaser');
-  config_clear('print_pdf.settings', 'print_pdf_link_use_alias');
-  config_clear('print_pdf.settings', 'print_pdf_show_link');
-  config_clear('print_pdf.settings', 'print_pdf_sys_link_pages');
-  config_clear('print_pdf.settings', 'print_pdf_sys_link_visibility');
-
-  $settings = db_query("SELECT name FROM {variable} WHERE name LIKE 'print\_pdf\_display\_%'");
-  foreach ($settings as $variable) {
-    // TODO This variable was probably removed in Backdrop without replacement.
-    variable_del($variable->name);
-  }
-}
-
-/**
  * Implements hook_schema().
  */
 function print_pdf_schema() {
@@ -162,7 +129,7 @@ function print_pdf_requirements($phase) {
         $info = function_exists($function) ? $function() : array();
 
         // Is the file there?
-        if (!is_file($tool[1]) || !is_readable($tool[1])) {
+        if (empty($tool[1]) || !is_file($tool[1]) || !is_readable($tool[1])) {
           $requirements['print_pdf_tool'] = array(
             'title' => $t('Printer, email and PDF versions - PDF generation library'),
             'value' => $t('File not found'),
@@ -240,19 +207,19 @@ function print_pdf_update_last_removed() {
  */
 function print_pdf_update_1000() {
   $config = config('print_pdf.settings');
-  $config->set('print_pdf_pdf_tool', update_variable_get('print_pdf_pdf_tool', 'PRINT_PDF_PDF_TOOL_DEFAULT'));
-  $config->set('print_pdf_content_disposition', update_variable_get('print_pdf_content_disposition', 'PRINT_PDF_CONTENT_DISPOSITION_DEFAULT'));
-  $config->set('print_pdf_paper_size', update_variable_get('print_pdf_paper_size', 'PRINT_PDF_PAPER_SIZE_DEFAULT'));
-  $config->set('print_pdf_page_orientation', update_variable_get('print_pdf_page_orientation', 'PRINT_PDF_PAGE_ORIENTATION_DEFAULT'));
-  $config->set('print_pdf_cache_enabled', update_variable_get('print_pdf_cache_enabled', 'PRINT_PDF_CACHE_ENABLED_DEFAULT'));
-  $config->set('print_pdf_cache_lifetime', update_variable_get('print_pdf_cache_lifetime', 'PRINT_PDF_CACHE_LIFETIME_DEFAULT'));
-  $config->set('print_pdf_images_via_file', update_variable_get('print_pdf_images_via_file', 'PRINT_PDF_IMAGES_VIA_FILE_DEFAULT'));
-  $config->set('print_pdf_autoconfig', update_variable_get('print_pdf_autoconfig', 'PRINT_PDF_AUTOCONFIG_DEFAULT'));
-  $config->set('print_pdf_filename', update_variable_get('print_pdf_filename', 'PRINT_PDF_FILENAME_DEFAULT'));
-  $config->set('print_pdf_display_sys_urllist', update_variable_get('print_pdf_display_sys_urllist', 'PRINT_TYPE_SYS_URLLIST_DEFAULT'));
-  $config->set('print_pdf_link_text_enabled', update_variable_get('print_pdf_link_text_enabled', 'PRINT_TYPE_LINK_TEXT_ENABLED_DEFAULT'));
-  //$config->set('print_pdf_link_text', update_variable_get('print_pdf_link_text', 'dynamic value in file /print/print_pdf/print_pdf.admin.inc line 144'));
-  //$config->set('print_pdf_link_pos', update_variable_get('print_pdf_link_pos', 'dynamic value in file /print/print_pdf/print_pdf.install line 286'));
+  $config->set('print_pdf_pdf_tool', update_variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT));
+  $config->set('print_pdf_content_disposition', update_variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT));
+  $config->set('print_pdf_paper_size', update_variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT));
+  $config->set('print_pdf_page_orientation', update_variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT));
+  $config->set('print_pdf_cache_enabled', update_variable_get('print_pdf_cache_enabled', PRINT_PDF_CACHE_ENABLED_DEFAULT));
+  $config->set('print_pdf_cache_lifetime', update_variable_get('print_pdf_cache_lifetime', PRINT_PDF_CACHE_LIFETIME_DEFAULT));
+  $config->set('print_pdf_images_via_file', update_variable_get('print_pdf_images_via_file', PRINT_PDF_IMAGES_VIA_FILE_DEFAULT));
+  $config->set('print_pdf_autoconfig', update_variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT));
+  $config->set('print_pdf_filename', update_variable_get('print_pdf_filename', PRINT_PDF_FILENAME_DEFAULT));
+  $config->set('print_pdf_display_sys_urllist', update_variable_get('print_pdf_display_sys_urllist', PRINT_TYPE_SYS_URLLIST_DEFAULT));
+  $config->set('print_pdf_link_text_enabled', update_variable_get('print_pdf_link_text_enabled', PRINT_TYPE_LINK_TEXT_ENABLED_DEFAULT));
+  $config->set('print_pdf_link_text', update_variable_get('print_pdf_link_text', 'PDF version'));
+  $config->set('print_pdf_link_pos', update_variable_get('print_pdf_link_pos', array('link' => 'link')));
   update_variable_del('print_pdf_pdf_tool');
   update_variable_del('print_pdf_content_disposition');
   update_variable_del('print_pdf_paper_size');
@@ -264,13 +231,13 @@ function print_pdf_update_1000() {
   update_variable_del('print_pdf_filename');
   update_variable_del('print_pdf_display_sys_urllist');
   update_variable_del('print_pdf_link_text_enabled');
-  //update_variable_del('print_pdf_link_text');
-  //update_variable_del('print_pdf_link_pos');
+  update_variable_del('print_pdf_link_text');
+  update_variable_del('print_pdf_link_pos');
 }
 
 /**
  * Flush the PDF cache to remove possibly existing private data.
  */
-function print_pdf_update_7206(&$sandbox) {
+function print_pdf_update_1200(&$sandbox) {
   print_pdf_cache_delete();
 }

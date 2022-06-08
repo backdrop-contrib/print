@@ -80,8 +80,7 @@ function print_pdf_tcpdf_menu() {
  * Implements hook_pdf_tool_version().
  */
 function print_pdf_tcpdf_pdf_tool_version($pdf_tool) {
-  // TODO This variable was probably removed in Backdrop without replacement.
-  if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
+  if (config_get('print_pdf.settings', 'print_pdf_autoconfig')) {
     // Prevent TCPDF default configs.
     define('K_TCPDF_EXTERNAL_CONFIG', TRUE);
   }

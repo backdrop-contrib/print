@@ -24,8 +24,7 @@ function print_pdf_dompdf_requirements($phase) {
   switch ($phase) {
     // On status report page, make sure that a PDF generation tool is selected.
     case 'runtime':
-      // TODO This variable was probably removed in Backdrop without replacement.
-      $print_pdf_pdf_tool = variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT);
+      $print_pdf_pdf_tool = config_get('print_pdf.settings', 'print_pdf_pdf_tool');
       $tool = explode('|', $print_pdf_pdf_tool);
       if (is_array($tool) && ($tool[0] === 'print_pdf_dompdf')) {
         $version = print_pdf_dompdf_pdf_tool_version($tool[1]);

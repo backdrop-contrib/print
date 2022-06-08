@@ -15,24 +15,20 @@
  */
 function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $page_orientation = NULL) {
   $config = config('print_pdf_dompdf.settings');
+  $print_pdf_config = config('print_pdf.settings');
   module_load_include('inc', 'print', 'includes/print');
 
-  // TODO This variable was probably removed in Backdrop without replacement.
-  $pdf_tool = explode('|', variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT));
+  $pdf_tool = explode('|', $print_pdf_config->get('print_pdf_pdf_tool'));
   if (empty($paper_size)) {
-    // TODO This variable was probably removed in Backdrop without replacement.
-    $paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
+    $paper_size = $print_pdf_config->get('print_pdf_paper_size');
   }
   if (empty($page_orientation)) {
-    // TODO This variable was probably removed in Backdrop without replacement.
-    $page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
+    $page_orientation = $print_pdf_config->get('print_pdf_page_orientation');
   }
-  // TODO This variable was probably removed in Backdrop without replacement.
-  $images_via_file = variable_get('print_pdf_images_via_file', PRINT_PDF_IMAGES_VIA_FILE_DEFAULT);
+  $images_via_file = $print_pdf_config->get('print_pdf_images_via_file');
   $unicode = TRUE;
 
-  // TODO This variable was probably removed in Backdrop without replacement.
-  if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
+  if ($print_pdf_config->get('print_pdf_autoconfig')) {
     $font_subsetting = $config->get('print_pdf_dompdf_font_subsetting');
     $unicode = $config->get('print_pdf_dompdf_unicode');
 
@@ -82,8 +78,7 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
     $dompdf = new Dompdf Dompdf();
     $unicode = TRUE;
 
-    // TODO This variable was probably removed in Backdrop without replacement.
-    if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
+    if ($print_pdf_config->get('print_pdf_autoconfig')) {
       $dompdf->set_option('enable_php', FALSE);
       $dompdf->set_option('enable_remote', TRUE);
       $dompdf->set_option('temp_dir', file_directory_temp());

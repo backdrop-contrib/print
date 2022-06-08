@@ -56,7 +56,7 @@ function hook_pdf_tool_info() {
  *   version number of the library
  */
 function hook_pdf_tool_version($pdf_tool) {
-  require_once DRUPAL_ROOT . '/' . $pdf_tool;
+  require_once BACKDROP_ROOT . '/' . $pdf_tool;
 
   return '1.0';
 }
@@ -103,7 +103,7 @@ function hook_print_pdf_generate($html, $meta, $paper_size = NULL, $page_orienta
  *   An associative array using as key the format 'module|path', and as value
  *   a string describing the discovered library, where:
  *   - module: the machine name of the module that handles this library.
- *   - path: the path where the library is installed, relative to DRUPAL_ROOT.
+ *   - path: the path where the library is installed, relative to BACKDROP_ROOT.
  *     If the recommended path is used, it begins with sites/all/libraries.
  *   As a recommendation, the value should contain in parantheses the path
  *   where the library was found, to allow the user to distinguish between

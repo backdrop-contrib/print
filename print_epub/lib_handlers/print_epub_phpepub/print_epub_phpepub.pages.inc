@@ -18,10 +18,8 @@ function print_epub_phpepub_print_epub_generate($html, $meta, $filename = NULL) 
 
   module_load_include('inc', 'print', 'includes/print');
 
-  // TODO This variable was probably removed in Backdrop without replacement.
-  $epub_tool = explode('|', variable_get('print_epub_epub_tool', PRINT_EPUB_EPUB_TOOL_DEFAULT));
-  // TODO This variable was probably removed in Backdrop without replacement.
-  $images_via_file = variable_get('print_epub_images_via_file', PRINT_EPUB_IMAGES_VIA_FILE_DEFAULT);
+  $epub_tool = explode('|', config_get('print_epub.settings', 'print_epub_epub_tool'));
+  $images_via_file = config_get('print_epub.settings', 'print_epub_images_via_file');
 
   $tool_path = BACKDROP_ROOT . '/' . $epub_tool[1];
   if (file_exists($tool_path)) {

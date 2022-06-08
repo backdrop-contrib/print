@@ -6,15 +6,3 @@
  *
  * @ingroup print
  */
-
-/**
- * Implements hook_uninstall().
- */
-function print_pdf_tcpdf_uninstall() {
-  // TODO This variable was probably removed in Backdrop without replacement.
-  variable_del('print_pdf_font_family');
-  // TODO This variable was probably removed in Backdrop without replacement.
-  variable_del('print_pdf_font_size');
-  // TODO This variable was probably removed in Backdrop without replacement.
-  variable_del('print_pdf_font_subsetting');
-}

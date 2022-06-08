@@ -40,12 +40,6 @@ function print_epub_uninstall() {
   config_clear('print_epub.settings', 'print_epub_show_link');
   config_clear('print_epub.settings', 'print_epub_sys_link_pages');
   config_clear('print_epub.settings', 'print_epub_sys_link_visibility');
-
-  $settings = db_query("SELECT name FROM {variable} WHERE name LIKE 'print\_epub\_display\_%'");
-  foreach ($settings as $variable) {
-    // TODO This variable was probably removed in Backdrop without replacement.
-    variable_del($variable->name);
-  }
 }
 
 
@@ -156,15 +150,6 @@ function print_epub_schema() {
   return $schema;
 }
 
-// TODO The old hook_update_N functions cannot be applied to Backdrop.
-function print_epub_update_7000(&$sandbox) { }
-
-// TODO The old hook_update_N functions cannot be applied to Backdrop.
-function print_epub_update_7202(&$sandbox) { }
-
-// TODO The old hook_update_N functions cannot be applied to Backdrop.
-function print_epub_update_7203(&$sandbox) { }
-
 /**
  * Implements hook_update_last_removed().
  */
@@ -177,13 +162,13 @@ function print_epub_update_last_removed() {
  */
 function print_epub_update_1000() {
   $config = config('print_epub.settings');
-  $config->set('print_epub_epub_tool', update_variable_get('print_epub_epub_tool', 'PRINT_EPUB_EPUB_TOOL_DEFAULT'));
-  $config->set('print_epub_images_via_file', update_variable_get('print_epub_images_via_file', 'PRINT_EPUB_IMAGES_VIA_FILE_DEFAULT'));
-  $config->set('print_epub_filename', update_variable_get('print_epub_filename', 'PRINT_EPUB_FILENAME_DEFAULT'));
-  $config->set('print_epub_display_sys_urllist', update_variable_get('print_epub_display_sys_urllist', 'PRINT_TYPE_SYS_URLLIST_DEFAULT'));
-  $config->set('print_epub_link_text_enabled', update_variable_get('print_epub_link_text_enabled', 'PRINT_TYPE_LINK_TEXT_ENABLED_DEFAULT'));
-  $config->set('print_epub_link_text', update_variable_get('print_epub_link_text', 'dynamic value in file /print/print_epub/print_epub.admin.inc line 82'));
-  $config->set('print_epub_link_pos', update_variable_get('print_epub_link_pos', 'dynamic value in file /print/print_epub/print_epub.install line 179'));
+  $config->set('print_epub_epub_tool', update_variable_get('print_epub_epub_tool', PRINT_EPUB_EPUB_TOOL_DEFAULT));
+  $config->set('print_epub_images_via_file', update_variable_get('print_epub_images_via_file', PRINT_EPUB_IMAGES_VIA_FILE_DEFAULT));
+  $config->set('print_epub_filename', update_variable_get('print_epub_filename', PRINT_EPUB_FILENAME_DEFAULT));
+  $config->set('print_epub_display_sys_urllist', update_variable_get('print_epub_display_sys_urllist', PRINT_TYPE_SYS_URLLIST_DEFAULT));
+  $config->set('print_epub_link_text_enabled', update_variable_get('print_epub_link_text_enabled', 0));
+  $config->set('print_epub_link_text', update_variable_get('print_epub_link_text', 'Epub version'));
+  $config->set('print_epub_link_pos', update_variable_get('print_epub_link_pos', array('link' => 'link')));
   update_variable_del('print_epub_epub_tool');
   update_variable_del('print_epub_images_via_file');
   update_variable_del('print_epub_filename');

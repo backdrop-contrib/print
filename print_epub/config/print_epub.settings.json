@@ -1,10 +1,15 @@
 {
     "_config_name": "print_epub.settings",
-    "print_epub_epub_tool": "PRINT_EPUB_EPUB_TOOL_DEFAULT",
-    "print_epub_images_via_file": "PRINT_EPUB_IMAGES_VIA_FILE_DEFAULT",
-    "print_epub_filename": "PRINT_EPUB_FILENAME_DEFAULT",
-    "print_epub_display_sys_urllist": "PRINT_TYPE_SYS_URLLIST_DEFAULT",
-    "print_epub_link_text_enabled": "PRINT_TYPE_LINK_TEXT_ENABLED_DEFAULT",
-    "print_epub_link_text": "dynamic value in file /print/print_epub/print_epub.admin.inc line 82",
-    "print_epub_link_pos": "dynamic value in file /print/print_epub/print_epub.install line 179"
+    "print_epub_epub_tool": 0,
+    "print_epub_images_via_file": 0,
+    "print_epub_filename": "[site:name] - [node:title] - [node:changed:custom:Y-m-d]",
+    "print_epub_display_sys_urllist": 1,
+    "print_epub_link_text_enabled": 0,
+    "print_epub_link_text": "Epub version",
+    "print_epub_link_pos": {
+        "link": "link",
+        "corner": 0,
+        "block": 0,
+        "help": 0
+    }
 }

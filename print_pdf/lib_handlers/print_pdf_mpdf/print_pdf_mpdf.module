@@ -22,8 +22,7 @@ function print_pdf_mpdf_pdf_tool_info() {
     ),
   );
 
-  // TODO This variable was probably removed in Backdrop without replacement.
-  $pdf_tool = explode('|', variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT));
+  $pdf_tool = explode('|', config_get('print_pdf.settings', 'print_pdf_pdf_tool'));
   // Only for versions less than 7.0.0, without calling the version() function.
   if (isset($pdf_tool[1]) && strpos($pdf_tool[1], 'mpdf.php')) {
     $info['tool_dirs'] = array(

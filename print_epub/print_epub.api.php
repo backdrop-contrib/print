@@ -55,7 +55,7 @@ function hook_print_epub_generate($html, $meta, $filename = NULL) {
  *   An associative array using as key the format 'module|path', and as value
  *   a string describing the discovered library, where:
  *   - module: the machine name of the module that handles this library.
- *   - path: the path where the library is installed, relative to DRUPAL_ROOT.
+ *   - path: the path where the library is installed, relative to BACKDROP_ROOT.
  *     If the recommended path is used, it begins with sites/all/libraries.
  *   As a recommendation, the value should contain in parantheses the path
  *   where the library was found, to allow the user to distinguish between

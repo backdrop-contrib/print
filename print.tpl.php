@@ -4,7 +4,7 @@
  * @file
  * Default theme implementation to display a printer-friendly version page.
  *
- * This file is akin to Drupal's page.tpl.php template. The contents being
+ * This file is akin to Backdrop's page.tpl.php template. The contents being
  * displayed are all included in the $content variable, while the rest of the
  * template focuses on positioning and theming the other page elements.
  *
@@ -36,7 +36,7 @@
  *   or as a system path, as configured by the user.
  * - $cid: comment ID of the node being displayed.
  * - $print_title: the title of the page.
- * - $head: HTML contents of the head tag, provided by drupal_get_html_head().
+ * - $head: HTML contents of the head tag, provided by backdrop_get_html_head().
  * - $robots_meta: meta tag with the configured robots directives.
  * - $css: the syle tags contaning the list of include directives or the full
  *   text of the files for inline CSS use.
@@ -66,7 +66,7 @@
  * @see page.tpl.php
  * @ingroup print
  */
- 
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"

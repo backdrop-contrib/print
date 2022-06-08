@@ -22,30 +22,27 @@ function print_pdf_tcpdf_settings() {
     '#title' => t('TCPDF options'),
   );
 
-  // TODO This variable was probably removed in Backdrop without replacement.
   $form['settings']['print_pdf_font_family'] = array(
     '#type' => 'textfield',
     '#title' => t('Font family'),
-    '#default_value' => variable_get('print_pdf_font_family', PRINT_PDF_TCPDF_FONT_FAMILY_DEFAULT),
+    '#default_value' => config_get('print_pdf.settings', 'print_pdf_font_family'),
     '#size' => 60,
     '#maxlength' => 250,
     '#description' => t('Set the font family to be used. Examples: %examples.', array('%examples' => 'helvetica, times, courier, dejavusans, dejavuserif, freesans, freeserif, freemono')) . '<br />' .
       t("CAUTION: TCPDF embeds the complete font in the generated PDF. If you're not using Unicode, then helvetica or times are safe choices that will keep the PDF small. Unicode fonts can increase the size of the PDF to the 1MB region."),
   );
-  // TODO This variable was probably removed in Backdrop without replacement.
   $form['settings']['print_pdf_font_size'] = array(
     '#type' => 'textfield',
     '#title' => t('Font size'),
-    '#default_value' => variable_get('print_pdf_font_size', PRINT_PDF_TCPDF_FONT_SIZE_DEFAULT),
+    '#default_value' => config_get('print_pdf.settings', 'print_pdf_font_size'),
     '#size' => 2,
     '#maxlength' => 3,
     '#description' => t('Set the font size to be used for normal text. This is the base value for the scaling applied to other text styles.'),
   );
-  // TODO This variable was probably removed in Backdrop without replacement.
   $form['settings']['print_pdf_font_subsetting'] = array(
     '#type' => 'checkbox',
     '#title' => t('Enable font subsetting'),
-    '#default_value' => variable_get('print_pdf_font_subsetting', PRINT_PDF_TCPDF_FONT_SUBSETTING_DEFAULT),
+    '#default_value' => config_get('print_pdf.settings', 'print_pdf_font_subsetting'),
     '#description' => t('Only embed those font characters that are actually used.  This can generate smaller PDF files but may significantly slow down processing.'),
   );
 

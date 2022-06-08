@@ -16,22 +16,18 @@
 function print_pdf_mpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $page_orientation = NULL) {
   module_load_include('inc', 'print', 'includes/print');
 
-  // TODO This variable was probably removed in Backdrop without replacement.
-  $pdf_tool = explode('|', variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT));
+  $pdf_tool = explode('|', config_get('print_pdf.settings', 'print_pdf_pdf_tool'));
   // Version 7 of the mpdf library uses a composer autoloader.
   // Also there no longer is way to truly detect the library version, so this
   // seems like the best alternative.
   $mpdf_version_7_plus = strpos($pdf_tool[1], 'autoload.php') !== FALSE;
   if (empty($paper_size)) {
-    // TODO This variable was probably removed in Backdrop without replacement.
-    $paper_size = variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT);
+    $paper_size = config_get('print_pdf.settings','print_pdf_paper_size');
   }
   if (empty($page_orientation)) {
-    // TODO This variable was probably removed in Backdrop without replacement.
-    $page_orientation = variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT);
+    $page_orientation = config_get('print_pdf.settings','print_pdf_page_orientation');
   }
-  // TODO This variable was probably removed in Backdrop without replacement.
-  $images_via_file = variable_get('print_pdf_images_via_file', PRINT_PDF_IMAGES_VIA_FILE_DEFAULT);
+  $images_via_file = config_get('print_pdf.settings','print_pdf_images_via_file');
 
   $config = array();
   if ($mpdf_version_7_plus) {
@@ -39,8 +35,7 @@ function print_pdf_mpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $pa
   }
   else {
     // Deprecated since mpdf v7.x.
-    // TODO This variable was probably removed in Backdrop without replacement.
-    if (variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT)) {
+    if (config_get('print_pdf.settings','print_pdf_autoconfig')) {
       if (!defined('_MPDF_TTFONTDATAPATH')) {
         define('_MPDF_TTFONTDATAPATH', backdrop_realpath('public://print_pdf/print_pdf_mpdf/ttfontdata/'));
       }
@@ -93,8 +88,7 @@ function print_pdf_mpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $pa
    */
   // Verify if footer is set and configured.
   preg_match('!<div class="print-footer">(.*?)</div>!si', $html, $tpl_footer);
-  // TODO This variable was probably removed in Backdrop without replacement.
-  if (!empty($tpl_footer[1]) && variable_get('print_footer_options', PRINT_FOOTER_OPTIONS_DEFAULT)) {
+  if (!empty($tpl_footer[1]) && config_get('print.settings', 'print_footer_options')) {
     $footer = trim(preg_replace('!</?div[^>]*?>!i', '', $tpl_footer[1]));
     // Remove footer from html because it's not in footer region of the page.
     $html = preg_replace('!<div class="print-footer">(.*?)</div>!si', '', $html);
