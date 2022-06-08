@@ -38,9 +38,10 @@ function print_pdf_print_link() {
  */
 function print_pdf_config_info() {
   $prefixes['print_pdf.settings'] = array(
-    'label' => t('Module name settings'),
+    'label' => t('Printer friendly PDF settings'),
     'group' => t('Configuration'),
   );
+  return $prefixes;
 }
 
 /**

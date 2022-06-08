@@ -56,9 +56,10 @@ function print_pdf_wkhtmltopdf_flush_caches() {
  */
 function print_pdf_wkhtmltopdf_config_info() {
   $prefixes['print_pdf_wkhtmltopdf.settings'] = array(
-    'label' => t('Module name settings'),
+    'label' => t('Printer friendly PDF wkhtmltopdf settings'),
     'group' => t('Configuration'),
   );
+  return $prefixes;
 }
 
 /**

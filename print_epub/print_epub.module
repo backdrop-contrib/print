@@ -168,9 +168,10 @@ function print_epub_insert_link($path = NULL, $node = NULL, $location = '') {
  */
 function print_epub_config_info() {
   $prefixes['print_epub.settings'] = array(
-    'label' => t('Module name settings'),
+    'label' => t('Printer friendly EPUB settings'),
     'group' => t('Configuration'),
   );
+  return $prefixes;
 }
 
 /**
