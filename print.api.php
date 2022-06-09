@@ -33,7 +33,6 @@
  *   - @link print_pdf.pages.inc PDF generation @endlink
  *   - @link print_pdf.admin.inc Settings form @endlink
  *   - @link print_pdf.install (Un)Install routines @endlink
- *   - @link print_pdf.drush.inc Drush commands @endlink
  *   - @link print_pdf.views.inc Views integration @endlink
  *   - PDF library handlers:
  *     - dompdf
@@ -41,37 +40,31 @@
  *       - @link print_pdf_dompdf.pages.inc PDF generation @endlink
  *       - @link print_pdf_dompdf.admin.inc Settings form @endlink
  *       - @link print_pdf_dompdf.install (Un)Install routines @endlink
- *       - @link print_pdf_dompdf.drush.inc Drush commands @endlink
  *     - mPDF
  *       - @link print_pdf_mpdf.module Module main file @endlink
  *       - @link print_pdf_mpdf.pages.inc PDF generation @endlink
- *       - @link print_pdf_mpdf.drush.inc Drush commands @endlink
  *     - TCPDF
  *       - @link print_pdf_tcpdf.module Module main file @endlink
  *       - @link print_pdf_tcpdf.pages.inc PDF generation @endlink
  *       - @link print_pdf_tcpdf.admin.inc Settings form @endlink
  *       - @link print_pdf_tcpdf.install (Un)Install routines @endlink
  *       - @link print_pdf_tcpdf.class.inc Auxiliary PHP5 class @endlink
- *       - @link print_pdf_tcpdf.drush.inc Drush commands @endlink
  *     - wkhtmltopdf
  *       - @link print_pdf_wkhtmltopdf.module Module main file @endlink
  *       - @link print_pdf_wkhtmltopdf.pages.inc PDF generation @endlink
  *       - @link print_pdf_wkhtmltopdf.admin.inc Settings form @endlink
  *       - @link print_pdf_wkhtmltopdf.install (Un)Install routines @endlink
- *       - @link print_pdf_wkhtmltopdf.drush.inc Drush commands @endlink
  * - EPUB version
  *   - @link print_epub.api.php API @endlink
  *   - @link print_epub.module Module main file @endlink
  *   - @link print_epub.pages.inc EPUB generation @endlink
  *   - @link print_epub.admin.inc Settings form @endlink
  *   - @link print_epub.install (Un)Install routines @endlink
- *   - @link print_epub.drush.inc Drush commands @endlink
  *   - @link print_epub.views.inc Views integration @endlink
  *   - EPUB library handlers:
  *     - phpepub
  *       - @link print_epub_phpepub.module Module main file @endlink
  *       - @link print_epub_phpepub.pages.inc EPUB generation @endlink
- *       - @link print_epub_phpepub.drush.inc Drush commands @endlink
  * - User Interface (Links)
  *   - @link print_ui.api.php API @endlink
  *   - @link print_ui.module Module main file @endlink
