@@ -216,8 +216,8 @@ function print_pdf_update_1000() {
   $config->set('print_pdf_images_via_file', update_variable_get('print_pdf_images_via_file', PRINT_PDF_IMAGES_VIA_FILE_DEFAULT));
   $config->set('print_pdf_autoconfig', update_variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT));
   $config->set('print_pdf_filename', update_variable_get('print_pdf_filename', PRINT_PDF_FILENAME_DEFAULT));
-  $config->set('print_pdf_display_sys_urllist', update_variable_get('print_pdf_display_sys_urllist', PRINT_TYPE_SYS_URLLIST_DEFAULT));
-  $config->set('print_pdf_link_text_enabled', update_variable_get('print_pdf_link_text_enabled', PRINT_TYPE_LINK_TEXT_ENABLED_DEFAULT));
+  $config->set('print_pdf_display_sys_urllist', update_variable_get('print_pdf_display_sys_urllist', 0));
+  $config->set('print_pdf_link_text_enabled', update_variable_get('print_pdf_link_text_enabled', 0));
   $config->set('print_pdf_link_text', update_variable_get('print_pdf_link_text', 'PDF version'));
   $config->set('print_pdf_link_pos', update_variable_get('print_pdf_link_pos', array('link' => 'link')));
   update_variable_del('print_pdf_pdf_tool');
