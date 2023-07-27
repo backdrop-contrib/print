@@ -162,9 +162,9 @@ function print_epub_update_last_removed() {
  */
 function print_epub_update_1000() {
   $config = config('print_epub.settings');
-  $config->set('print_epub_epub_tool', update_variable_get('print_epub_epub_tool', PRINT_EPUB_EPUB_TOOL_DEFAULT));
-  $config->set('print_epub_images_via_file', update_variable_get('print_epub_images_via_file', PRINT_EPUB_IMAGES_VIA_FILE_DEFAULT));
-  $config->set('print_epub_filename', update_variable_get('print_epub_filename', PRINT_EPUB_FILENAME_DEFAULT));
+  $config->set('print_epub_epub_tool', update_variable_get('print_epub_epub_tool', 0));
+  $config->set('print_epub_images_via_file', update_variable_get('print_epub_images_via_file', 0));
+  $config->set('print_epub_filename', update_variable_get('print_epub_filename', '[site:name] - [node:title] - [node:changed:custom:Y-m-d]'));
   $config->set('print_epub_display_sys_urllist', update_variable_get('print_epub_display_sys_urllist', 0));
   $config->set('print_epub_link_text_enabled', update_variable_get('print_epub_link_text_enabled', 0));
   $config->set('print_epub_link_text', update_variable_get('print_epub_link_text', 'Epub version'));
