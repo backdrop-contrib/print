@@ -207,15 +207,15 @@ function print_pdf_update_last_removed() {
  */
 function print_pdf_update_1000() {
   $config = config('print_pdf.settings');
-  $config->set('print_pdf_pdf_tool', update_variable_get('print_pdf_pdf_tool', PRINT_PDF_PDF_TOOL_DEFAULT));
-  $config->set('print_pdf_content_disposition', update_variable_get('print_pdf_content_disposition', PRINT_PDF_CONTENT_DISPOSITION_DEFAULT));
-  $config->set('print_pdf_paper_size', update_variable_get('print_pdf_paper_size', PRINT_PDF_PAPER_SIZE_DEFAULT));
-  $config->set('print_pdf_page_orientation', update_variable_get('print_pdf_page_orientation', PRINT_PDF_PAGE_ORIENTATION_DEFAULT));
-  $config->set('print_pdf_cache_enabled', update_variable_get('print_pdf_cache_enabled', PRINT_PDF_CACHE_ENABLED_DEFAULT));
-  $config->set('print_pdf_cache_lifetime', update_variable_get('print_pdf_cache_lifetime', PRINT_PDF_CACHE_LIFETIME_DEFAULT));
-  $config->set('print_pdf_images_via_file', update_variable_get('print_pdf_images_via_file', PRINT_PDF_IMAGES_VIA_FILE_DEFAULT));
-  $config->set('print_pdf_autoconfig', update_variable_get('print_pdf_autoconfig', PRINT_PDF_AUTOCONFIG_DEFAULT));
-  $config->set('print_pdf_filename', update_variable_get('print_pdf_filename', PRINT_PDF_FILENAME_DEFAULT));
+  $config->set('print_pdf_pdf_tool', update_variable_get('print_pdf_pdf_tool', false));
+  $config->set('print_pdf_content_disposition', update_variable_get('print_pdf_content_disposition', 2));
+  $config->set('print_pdf_paper_size', update_variable_get('print_pdf_paper_size', 'A4'));
+  $config->set('print_pdf_page_orientation', update_variable_get('print_pdf_page_orientation', 'portrait'));
+  $config->set('print_pdf_cache_enabled', update_variable_get('print_pdf_cache_enabled', 0));
+  $config->set('print_pdf_cache_lifetime', update_variable_get('print_pdf_cache_lifetime', 86400));
+  $config->set('print_pdf_images_via_file', update_variable_get('print_pdf_images_via_file', 0));
+  $config->set('print_pdf_autoconfig', update_variable_get('print_pdf_autoconfig', 1));
+  $config->set('print_pdf_filename', update_variable_get('print_pdf_filename', '[site:name] - [node:title] - [node:changed:custom:Y-m-d]'));
   $config->set('print_pdf_display_sys_urllist', update_variable_get('print_pdf_display_sys_urllist', 0));
   $config->set('print_pdf_link_text_enabled', update_variable_get('print_pdf_link_text_enabled', 0));
   $config->set('print_pdf_link_text', update_variable_get('print_pdf_link_text', 'PDF version'));
@@ -239,5 +239,6 @@ function print_pdf_update_1000() {
  * Flush the PDF cache to remove possibly existing private data.
  */
 function print_pdf_update_1200(&$sandbox) {
+  module_load_include('module', 'print_pdf', 'print_pdf');
   print_pdf_cache_delete();
 }

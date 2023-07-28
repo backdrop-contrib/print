@@ -158,13 +158,13 @@ function print_mail_update_last_removed() {
  */
 function print_mail_update_1000() {
   $config = config('print_mail.settings');
-  $config->set('print_mail_hourly_threshold', update_variable_get('print_mail_hourly_threshold', PRINT_MAIL_HOURLY_THRESHOLD));
-  $config->set('print_mail_use_reply_to', update_variable_get('print_mail_use_reply_to', PRINT_MAIL_USE_REPLY_TO));
-  $config->set('print_mail_teaser_default', update_variable_get('print_mail_teaser_default', PRINT_MAIL_TEASER_DEFAULT_DEFAULT));
-  $config->set('print_mail_user_recipients', update_variable_get('print_mail_user_recipients', PRINT_MAIL_USER_RECIPIENTS_DEFAULT));
-  $config->set('print_mail_teaser_choice', update_variable_get('print_mail_teaser_choice', PRINT_MAIL_TEASER_CHOICE_DEFAULT));
-  $config->set('print_mail_send_option_default', update_variable_get('print_mail_send_option_default', PRINT_MAIL_SEND_OPTION_DEFAULT));
-  $config->set('print_mail_job_queue', update_variable_get('print_mail_job_queue', PRINT_MAIL_JOB_QUEUE_DEFAULT));
+  $config->set('print_mail_hourly_threshold', update_variable_get('print_mail_hourly_threshold', 3));
+  $config->set('print_mail_use_reply_to', update_variable_get('print_mail_use_reply_to', TRUE));
+  $config->set('print_mail_teaser_default', update_variable_get('print_mail_teaser_default', 1));
+  $config->set('print_mail_user_recipients', update_variable_get('print_mail_user_recipients', 0));
+  $config->set('print_mail_teaser_choice', update_variable_get('print_mail_teaser_choice', 0));
+  $config->set('print_mail_send_option_default', update_variable_get('print_mail_send_option_default', 'sendpage'));
+  $config->set('print_mail_job_queue', update_variable_get('print_mail_job_queue', 0));
   $config->set('print_mail_display_sys_urllist', update_variable_get('print_mail_display_sys_urllist', 0));
   $config->set('print_mail_link_text_enabled', update_variable_get('print_mail_link_text_enabled', 0));
   $config->set('print_mail_link_text', update_variable_get('print_mail_link_text', 'Send by email'));
