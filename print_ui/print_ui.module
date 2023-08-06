@@ -113,7 +113,7 @@ function print_ui_block_content() {
   }
   foreach (_print_ui_get_links('print_link') as $link) {
       $link_pos = config_get('print_ui.settings', 'print_' . $link['format'] . '_link_pos');
-      
+
       if (!(empty($link_pos['block']))) {
         $links = print_ui_insert_link($link, array('node' => $node, 'location' => 'block'));
         if (!empty($links)) {
@@ -612,7 +612,7 @@ function print_ui_insert_link($link, $args = array()) {
         $path = 'book/export/html/' . $nid;
       }
       else {
-        if (config_get('print_ui.settings', 'print_' . $link['format'] . '_link_use_alias')) {
+        if (config_get('print_ui.settings', 'print_' . $link['format'] . '_link_use_alias') && ($alias = backdrop_lookup_path('alias', $path))) {
           $path = $alias;
         }
         else {
