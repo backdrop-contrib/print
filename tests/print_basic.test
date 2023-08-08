@@ -64,7 +64,7 @@ class PrintBasicTest extends BackdropWebTestCase {
     // loading.
     module_load_include('inc', 'print', 'print.pages');
 
-    variable_set('print_urls_anchors', 1);
+    config_set('print.settings', 'print_urls_anchors', 1);
 
     $_print_urls = TRUE;
 

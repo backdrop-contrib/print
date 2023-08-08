@@ -87,7 +87,7 @@ function hook_link_allowed($args) {
  */
 function hook_print_new_window_alter(&$new_window, $format) {
   if ($format == 'foo') {
-    $new_window = variable_get('print_foo_new_window', FALSE);
+    $new_window = config_get('print.settings', 'print_foo_new_window');
   }
 }
 
