@@ -173,7 +173,7 @@ function print_preprocess_print(&$variables) {
 
   $variables['print_logo'] = $logo_url ? theme('image', array(
     'path' => $logo_url,
-    'alt' => config_get('system.performance', 'site_name'),
+    'alt' => config_get('system.core', 'site_name'),
     'attributes' => array(
       'class' => array('print-logo'),
       'id' => 'logo',
