@@ -91,7 +91,7 @@ function _print_access_images_via_file($html, $images_via_file) {
   $image_tags = $dom->getElementsByTagName('img');
   foreach ($image_tags as $image_tag) {
     $image_relative_tag_src = str_replace($base_url, '', $image_tag->getAttribute('src'));
-    $file_private_path = variable_get('file_private_path', '');
+    $file_private_path = config_get('system.core', 'file_private_path');
     $is_private_file = (strpos($image_relative_tag_src, '/system/files') === 0);
 
     if ($is_private_file) {
@@ -124,7 +124,7 @@ function _print_access_images_via_file($html, $images_via_file) {
     }
     elseif ($images_via_file) {
       // Reconstruct public file URL.
-      $public_directory = variable_get('file_public_path', conf_path() . '/files');
+      $public_directory = config_get('system.core', 'file_public_path');
       if (strpos($image_relative_tag_src, '/' . $public_directory) === 0) {
         $image_src = str_replace('/' . $public_directory, 'public://', $image_relative_tag_src);
         // Prevent directory traversal.
