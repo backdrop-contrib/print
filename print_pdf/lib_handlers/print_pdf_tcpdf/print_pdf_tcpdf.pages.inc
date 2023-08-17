@@ -93,7 +93,7 @@ function print_pdf_tcpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $p
   if (isset($meta['name'])) {
     $pdf->SetAuthor(strip_tags($meta['name']));
   }
-  $pdf->SetCreator(config_get('system.performance', 'site_name'));
+  $pdf->SetCreator(config_get('system.core', 'site_name'));
   $pdf->SetTitle(html_entity_decode($meta['title'], ENT_QUOTES, 'UTF-8'));
   $pdf->setPDFVersion('1.6');
   $pdf->setFontSubsetting(config_get('print_pdf.settings', 'print_pdf_font_subsetting'));

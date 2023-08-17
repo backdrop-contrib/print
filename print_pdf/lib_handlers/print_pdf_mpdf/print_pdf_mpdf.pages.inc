@@ -72,7 +72,7 @@ function print_pdf_mpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $pa
   if (isset($meta['name'])) {
     $mpdf->SetAuthor(strip_tags($meta['name']));
   }
-  $mpdf->SetCreator(config_get('system.performance', 'site_name'));
+  $mpdf->SetCreator(config_get('system.core', 'site_name'));
   /*
    // Pulled from the HTML meta data
    $mpdf->SetTitle(html_entity_decode($meta['title'], ENT_QUOTES, 'UTF-8'));

@@ -86,7 +86,7 @@ function print_controller($path, $format, $cid = NULL, $view_mode = PRINT_VIEW_M
     $ref = $_SERVER['HTTP_REFERER'];
     $path = preg_replace("!^$base_url/!", '', $ref);
     if (($path === $ref) || empty($path)) {
-      $path = config_get('system.performance', 'site_frontpage');
+      $path = config_get('system.core', 'site_frontpage');
     }
   }
   if ($alias = backdrop_lookup_path('source', $path)) {
@@ -229,7 +229,7 @@ function print_preprocess_print(&$variables) {
 function theme_print_published($vars) {
   global $base_url;
 
-  $published_site = config_get('system.performance', 'site_name');
+  $published_site = config_get('system.core', 'site_name');
   return $published_site ? t('Published on %site_name', array('%site_name' => $published_site)) . ' (' . l($base_url, $base_url) . ')' : '';
 }
 
@@ -409,7 +409,7 @@ function _print_css_generator($expand = FALSE) {
   $print_css = $config->get('print_css');
 
   if (!empty($print_css)) {
-    backdrop_add_css(strtr($print_css, array('%t' => backdrop_get_path('theme', config_get('system.performance', 'theme_default')))));
+    backdrop_add_css(strtr($print_css, array('%t' => backdrop_get_path('theme', config_get('system.core', 'theme_default')))));
   }
   else {
     backdrop_add_css(backdrop_get_path('module', 'print') . '/css/print.css');
