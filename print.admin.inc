@@ -21,7 +21,7 @@ function print_main_settings() {
   // Check that the stylesheet path is indeed valid and relative to base_path()
   if (!empty($print_css) && empty($_POST)) {
     $css_path = BACKDROP_ROOT . '/' . strtr($print_css, array(
-      '%t' => backdrop_get_path('theme', config_get('system.performance', 'theme_default')),
+      '%t' => backdrop_get_path('theme', config_get('system.core', 'theme_default')),
     ));
     if (!is_file($css_path) || !is_readable($css_path)) {
       backdrop_set_message(t("File %file is not readable by the web server.", array('%file' => $css_path)), 'warning', FALSE);
@@ -42,7 +42,7 @@ function print_main_settings() {
     '#maxlength' => 250,
     '#description' => t('The path to your custom print cascading stylesheet, if any. The path provided must be relative to the base path. When none is specified, the default module CSS file is used.') . '<br />' .
       t('Macros: %t (path to theme: "%theme")', array(
-      '%theme' => backdrop_get_path('theme', config_get('system.performance', 'theme_default')),
+      '%theme' => backdrop_get_path('theme', config_get('system.core', 'theme_default')),
     )) . '<br />' .
       t('Requires the <em>Administer site configuration</em> permission.'),
     '#disabled' => !user_access('administer site configuration'),
@@ -253,7 +253,7 @@ function print_html_settings() {
     '#default_value' => $config->get('print_html_display_sys_urllist'),
     '#description' => t('Enabling this option will display a list of printer-friendly destination URLs at the bottom of the page.'),
   );
-  
+
   $form['settings']['print_html_link_text'] = array(
     '#title' => t('Link text'),
     '#type' => 'textfield',

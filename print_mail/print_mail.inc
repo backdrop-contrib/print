@@ -31,7 +31,7 @@ function print_mail_form($form, &$form_state) {
     $ref = $_SERVER['HTTP_REFERER'];
     $path = preg_replace("!^$base_url/!", '', $ref);
     if (($path === $ref) || empty($path)) {
-      $path = config_get('system.performance', 'site_frontpage');
+      $path = config_get('system.core', 'site_frontpage');
     }
     backdrop_goto($link['path'] . '/' . $path);
   }
@@ -237,7 +237,7 @@ function print_mail_form_for_path($form, &$form_state, $path, $query = NULL, $us
   else {
     $user_name = t('Someone');
   }
-  $site_name = config_get('system.performance', 'site_name');
+  $site_name = config_get('system.core', 'site_name');
   $form['fld_subject']['#default_value'] = t('!user has sent you a message from !site', array(
     '!user' => $user_name,
     '!site' => $site_name,
@@ -501,7 +501,7 @@ function print_mail_form_submit($form, &$form_state) {
           '%page' => $form_state['values']['path'] . $query,
           '%to' => $form_state['values']['txt_to']['addrs'],
         ));
-        $site_name = config_get('system.performance', 'site_name');
+        $site_name = config_get('system.core', 'site_name');
         backdrop_set_message(check_plain(t('Thank you for spreading the word about !site.', array('!site' => $site_name))));
 
         $nodepath = backdrop_get_normal_path($form_state['values']['path']);

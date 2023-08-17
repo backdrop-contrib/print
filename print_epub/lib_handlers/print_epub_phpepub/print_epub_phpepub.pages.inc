@@ -48,7 +48,7 @@ function print_epub_phpepub_print_epub_generate($html, $meta, $filename = NULL) 
   if (isset($meta['name'])) {
     $epub->setAuthor(strip_tags($meta['name']), strip_tags($meta['name']));
   }
-  $epub->setPublisher(config_get('system.performance', 'site_name'), $base_url);
+  $epub->setPublisher(config_get('system.core', 'site_name'), $base_url);
   $epub->setSourceURL($meta['url']);
 
   @$epub->addChapter("Chapter", "epub.html", $html, FALSE);
