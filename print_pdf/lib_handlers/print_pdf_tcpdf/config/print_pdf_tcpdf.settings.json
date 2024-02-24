@@ -1,0 +1,6 @@
+{
+    "_config_name": "print_pdf_tcpdf.settings",
+    "print_pdf_font_family": "helvetica",
+    "print_pdf_font_size": "12",
+    "print_pdf_font_subsetting": 0
+}

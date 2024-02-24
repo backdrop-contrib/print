@@ -64,7 +64,7 @@ function print_pdf_tcpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $p
 
   // Decode HTML entities in image filenames.
   $pattern = "!<img\s[^>]*?src\s*?=\s*?['\"]?{$base_url}[^>]*?>!is";
-  $html = preg_replace_callback($pattern, ($matches)[html_entity_decode($matches[0], ENT_QUOTES)], $html);
+  $html = preg_replace_callback($pattern, function ($matches) { return html_entity_decode($matches[0], ENT_QUOTES); }, $html);
   // Remove queries from the image URL.
   $pattern = "!(<img\s[^>]*?src\s*?=\s*?['\"]?{$base_url}[^>]*?)(?:%3F|\?)[^\s'\"]+([^>]*?>)!is";
   $html = preg_replace($pattern, '$1$2', $html);
@@ -80,9 +80,9 @@ function print_pdf_tcpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $p
   module_load_include('inc', 'print_pdf_tcpdf', 'print_pdf_tcpdf.class');
 
   $font = array(
-    check_plain(config_get('print_pdf.settings', 'print_pdf_font_family')),
+    check_plain(config_get('print_pdf_tcpdf.settings', 'print_pdf_font_family')),
     '',
-    check_plain(config_get('print_pdf.settings', 'print_pdf_font_size')),
+    check_plain(config_get('print_pdf_tcpdf.settings', 'print_pdf_font_size')),
   );
   $orientation = backdrop_strtoupper($page_orientation[0]);
 

@@ -114,6 +114,10 @@ function print_pdf_tcpdf_print_pdf_available_libs_alter(&$pdf_tools) {
   module_load_include('inc', 'print', 'includes/print');
   $tools = _print_scan_libs('tcpdf', '!^tcpdf.php$!');
 
+  if (module_exists('tcpdf')) {
+    $tools = array_merge($tools, array_keys(file_scan_directory(backdrop_get_path('module', 'tcpdf'), '!^tcpdf.php$!')));    
+  }
+
   foreach ($tools as $tool) {
     $pdf_tools['print_pdf_tcpdf|' . $tool] = 'TCPDF (' . dirname($tool) . ')';
   }
