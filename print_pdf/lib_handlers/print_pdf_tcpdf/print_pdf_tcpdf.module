@@ -30,6 +30,17 @@ function print_pdf_tcpdf_pdf_tool_info() {
 }
 
 /**
+ * Implements hook_config_info().
+ */
+function print_pdf_tcpdf_config_info() {
+  $prefixes['print_pdf_tcpdf.settings'] = array(
+    'label' => t('Printer-friendly PDF TCPDF settings'),
+    'group' => t('Configuration'),
+  );
+  return $prefixes;
+}
+
+/**
  * Implements hook_theme().
  */
 function print_pdf_tcpdf_theme() {
