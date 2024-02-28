@@ -521,7 +521,13 @@ function theme_print_ui_format_link($vars) {
         }
 
         $show_link = config_get('print_ui.settings', 'print_' . $link['format'] . '_show_link');
-        $link_text = filter_xss(config_get('print.settings', 'print_' . $link['format'] . '_link_text'));
+        $config_file = $varsformat == 'html' ? 'print.settings' : "print_$varsformat.settings";
+        $link_text = filter_xss(config_get($config_file, 'print_' . $link['format'] . '_link_text'));
+        // If a custom link text has not been specified, default to the text
+        // provided by the module.
+        if (empty($link_text)) {
+          $link_text = $link['text'];
+        }
         $text = '';
         if ($show_link >= 2) {
           $img = backdrop_get_path('module', $link['module']) . '/icons/' . $link['icon'];

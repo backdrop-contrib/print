@@ -25,7 +25,7 @@ function print_pdf_tcpdf_settings() {
   $form['settings']['print_pdf_font_family'] = array(
     '#type' => 'textfield',
     '#title' => t('Font family'),
-    '#default_value' => config_get('print_pdf.settings', 'print_pdf_font_family'),
+    '#default_value' => config_get('print_pdf_tcpdf.settings', 'print_pdf_font_family'),
     '#size' => 60,
     '#maxlength' => 250,
     '#description' => t('Set the font family to be used. Examples: %examples.', array('%examples' => 'helvetica, times, courier, dejavusans, dejavuserif, freesans, freeserif, freemono')) . '<br />' .
@@ -34,7 +34,7 @@ function print_pdf_tcpdf_settings() {
   $form['settings']['print_pdf_font_size'] = array(
     '#type' => 'textfield',
     '#title' => t('Font size'),
-    '#default_value' => config_get('print_pdf.settings', 'print_pdf_font_size'),
+    '#default_value' => config_get('print_pdf_tcpdf.settings', 'print_pdf_font_size'),
     '#size' => 2,
     '#maxlength' => 3,
     '#description' => t('Set the font size to be used for normal text. This is the base value for the scaling applied to other text styles.'),
@@ -42,7 +42,7 @@ function print_pdf_tcpdf_settings() {
   $form['settings']['print_pdf_font_subsetting'] = array(
     '#type' => 'checkbox',
     '#title' => t('Enable font subsetting'),
-    '#default_value' => config_get('print_pdf.settings', 'print_pdf_font_subsetting'),
+    '#default_value' => config_get('print_pdf_tcpdf.settings', 'print_pdf_font_subsetting'),
     '#description' => t('Only embed those font characters that are actually used.  This can generate smaller PDF files but may significantly slow down processing.'),
   );
 
