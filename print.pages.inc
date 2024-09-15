@@ -201,7 +201,7 @@ function print_preprocess_print(&$variables) {
     backdrop_add_js('core/misc/backdrop.js', array('group' => JS_LIBRARY));
 
     $window_close = ($config->get('print_html_new_window') && $config->get('print_html_windowclose')) ? 'setTimeout(function(){window.close();}, 1);' : '';
-    $variables['sendtoprinter'] = '<script type="text/javascript">(function ($) { Backdrop.behaviors.print = {attach: function() {$(window).load(function() {window.print();' . $window_close . '})}}})(jQuery);</script>';
+    $variables['sendtoprinter'] = '<script type="text/javascript">(function ($) { Backdrop.behaviors.print = {attach: function() {$(window).on("load", function() {window.print();' . $window_close . '})}}})(jQuery);</script>';
   }
 
   $type = (isset($node->type)) ? $node->type : '';
