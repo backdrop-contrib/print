@@ -22,12 +22,12 @@ function print_pdf_mpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $pa
   // seems like the best alternative.
   $mpdf_version_7_plus = strpos($pdf_tool[1], 'autoload.php') !== FALSE;
   if (empty($paper_size)) {
-    $paper_size = config_get('print_pdf.settings','print_pdf_paper_size');
+    $paper_size = config_get('print_pdf.settings', 'print_pdf_paper_size');
   }
   if (empty($page_orientation)) {
-    $page_orientation = config_get('print_pdf.settings','print_pdf_page_orientation');
+    $page_orientation = config_get('print_pdf.settings', 'print_pdf_page_orientation');
   }
-  $images_via_file = config_get('print_pdf.settings','print_pdf_images_via_file');
+  $images_via_file = config_get('print_pdf.settings', 'print_pdf_images_via_file');
 
   $config = array();
   if ($mpdf_version_7_plus) {
@@ -35,7 +35,7 @@ function print_pdf_mpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $pa
   }
   else {
     // Deprecated since mpdf v7.x.
-    if (config_get('print_pdf.settings','print_pdf_autoconfig')) {
+    if (config_get('print_pdf.settings', 'print_pdf_autoconfig')) {
       if (!defined('_MPDF_TTFONTDATAPATH')) {
         define('_MPDF_TTFONTDATAPATH', backdrop_realpath('public://print_pdf/print_pdf_mpdf/ttfontdata/'));
       }
@@ -63,7 +63,7 @@ function print_pdf_mpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $pa
   if ($mpdf_version_7_plus) {
     $config['mode'] = 'utf-8';
     $config['format'] = $format;
-    $mpdf = new Mpdf Mpdf($config);
+    $mpdf = new \Mpdf\Mpdf($config);
   }
   else {
     $mpdf = new mPDF('UTF-8', $format);
