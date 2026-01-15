@@ -284,9 +284,21 @@ function print_pdf_form_alter(&$form, &$form_state, $form_id) {
       (($form_id == 'node_type_form') || !empty($form['#node_edit_form']))) {
     $link = print_pdf_print_link();
 
-    $size = 'print_' . $link['format'] . '_size';
-    $orientation = 'print_' . $link['format'] . '_orientation';
+  if (!isset($form['print']['print_' . $link['format']])) {
+    $form['print']['print_' . $link['format']] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Print settings'),
+      '#group' => 'additional_settings',
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+      '#access' => user_access('administer print'),
+      '#attached' => array(
+        'js' => array(backdrop_get_path('module', 'print_pdf') . '/js/print_pdf.js'),
+      ),
+    );
+  }
 
+    $size = 'print_' . $link['format'] . '_size';
     $form['print']['print_' . $link['format']][$size] = array(
       '#type' => 'select',
       '#title' => t('Paper size'),
@@ -294,6 +306,7 @@ function print_pdf_form_alter(&$form, &$form_state, $form_id) {
       '#description' => t('Choose the paper size of the generated PDF.'),
     );
 
+    $orientation = 'print_' . $link['format'] . '_orientation';
     $form['print']['print_' . $link['format']][$orientation] = array(
       '#type' => 'select',
       '#title' => t('Page orientation'),
