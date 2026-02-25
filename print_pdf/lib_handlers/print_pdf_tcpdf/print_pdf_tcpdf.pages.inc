@@ -45,11 +45,20 @@ function print_pdf_tcpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $p
     if (!defined('K_PATH_CACHE')) {
       define('K_PATH_CACHE', backdrop_realpath('public://print_pdf/print_pdf_tcpdf/cache') . '/');
     }
+
+    $images_path = config_get('print_pdf_tcpdf.settings', 'print_pdf_tcpdf_images_path');
+    if (!empty($images_path)) {
+      $images_path = backdrop_realpath($images_path) . '/';
+    }
+    else {
+      $images_path = $pdf_tool_path . '/images/';
+    }
+
     if (!defined('K_PATH_IMAGES')) {
-      define('K_PATH_IMAGES', '');
+      define('K_PATH_IMAGES', $images_path);
     }
     if (!defined('K_BLANK_IMAGE')) {
-      define('K_BLANK_IMAGE', $pdf_tool_path . '/images/_blank.png');
+      define('K_BLANK_IMAGE', $images_path . '_blank.png');
     }
     if (!defined('K_CELL_HEIGHT_RATIO')) {
       define('K_CELL_HEIGHT_RATIO', 1.25);

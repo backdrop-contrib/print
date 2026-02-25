@@ -15,6 +15,8 @@ define('PRINT_PDF_TCPDF_FONT_SUBSETTING_DEFAULT', FALSE);
  * Implements hook_pdf_tool_info().
  */
 function print_pdf_tcpdf_pdf_tool_info() {
+  $images_path = config_get('print_pdf_tcpdf.settings', 'print_pdf_tcpdf_images_path');
+
   return array(
     'name' => 'TCPDF',
     'min_version' => '6.2.22',
@@ -22,8 +24,8 @@ function print_pdf_tcpdf_pdf_tool_info() {
     'expand_css' => TRUE,
     'public_dirs' => array(
       'cache',
-    ),
-    'tool_dirs' => array(
+    ) + ($images_path ? array('images') : array()),
+    'tool_dirs' => $images_path ? array() : array(
       'images',
     ),
   );
@@ -126,7 +128,7 @@ function print_pdf_tcpdf_print_pdf_available_libs_alter(&$pdf_tools) {
   $tools = _print_scan_libs('tcpdf', '!^tcpdf.php$!');
 
   if (module_exists('tcpdf')) {
-    $tools = array_merge($tools, array_keys(file_scan_directory(backdrop_get_path('module', 'tcpdf'), '!^tcpdf.php$!')));    
+    $tools = array_merge($tools, array_keys(file_scan_directory(backdrop_get_path('module', 'tcpdf'), '!^tcpdf.php$!')));
   }
 
   foreach ($tools as $tool) {

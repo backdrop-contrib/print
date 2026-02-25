@@ -46,6 +46,13 @@ function print_pdf_tcpdf_settings() {
     '#description' => t('Only embed those font characters that are actually used.  This can generate smaller PDF files but may significantly slow down processing.'),
   );
 
+  $form['settings']['print_pdf_tcpdf_images_path'] = array(
+    '#type' => 'textfield',
+    '#title' => t('TCPDF images directory'),
+    '#default_value' => config_get('print_pdf_tcpdf.settings', 'print_pdf_tcpdf_images_path'),
+    '#description' => t('Path to the TCPDF images directory (e.g. public://print_pdf_tcpdf/images).'),
+  );
+
   $form['#validate'][] = '_print_pdf_tcpdf_settings_validate';
 
   return system_settings_form($form);
