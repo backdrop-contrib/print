@@ -18,7 +18,7 @@ function print_pdf_dompdf_pdf_tool_info() {
     'name' => 'dompdf',
     'min_version' => '0.8.2',
     'url' => 'https://github.com/dompdf/dompdf/releases/latest',
-    'expand_css' => FALSE,
+    'expand_css' => config_get('print_pdf_dompdf.settings', 'print_pdf_dompdf_expand_css'),
     'public_dirs' => array(
       'fonts',
     ),
