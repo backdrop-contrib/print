@@ -67,6 +67,10 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
   else {
     // Version of dompdf is >= 0.7.
     $tool_path = dirname($pdf_tool[1]) . '/../autoload.inc.php';
+    if (!file_exists($tool_path)) {
+      // Check for the Composer-nested structure (vendor/dompdf/dompdf/src/Dompdf.php).
+      $tool_path = dirname($pdf_tool[1]) . '/../../../../autoload.inc.php';
+    }
     if (file_exists($tool_path)) {
       require_once $tool_path;
     }
@@ -75,7 +79,7 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
       throw new Exception("Configured PDF tool does not exist, unable to generate PDF.");
     }
 
-    $dompdf = new Dompdf Dompdf();
+    $dompdf = new \Dompdf\Dompdf();
     $unicode = TRUE;
 
     if ($print_pdf_config->get('print_pdf_autoconfig')) {
