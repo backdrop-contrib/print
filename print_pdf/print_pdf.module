@@ -41,6 +41,10 @@ function print_pdf_config_info() {
     'label' => t('Printer friendly PDF settings'),
     'group' => t('Configuration'),
   );
+  $prefixes['print_pdf_dompdf.settings'] = array(
+    'label' => t('Printer friendly DOMPDF settings'),
+    'group' => t('Configuration'),
+  );
   return $prefixes;
 }
 
