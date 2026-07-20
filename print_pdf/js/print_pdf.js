@@ -11,8 +11,6 @@ Backdrop.behaviors.printPdfSettingsSummary = {
     $context.find('fieldset#edit-print-pdf').backdropSetSummary(function () {
       var vals = [];
 
-      console.log($('select[name="print_pdf_size"]', context).val());
-
       if ($('select[name="print_pdf_size"]', context).val()) {
         vals.push('Size ' + Backdrop.checkPlain($('select[name="print_pdf_size"] option:selected').text()));
       }
