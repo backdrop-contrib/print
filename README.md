@@ -25,6 +25,7 @@ Bugs and Feature requests should be reported in the [Issue Queue](https://github
 ## Current Maintainers
 
  - [Laryn Kragt Bakker](https://github.com/laryn), [CEDC.org](https://CEDC.org)
+ - [Herb v/d Dool](https://github.com/herbdool)
  - Collaboration and co-maintainers are welcome.
 
 ## Credits
