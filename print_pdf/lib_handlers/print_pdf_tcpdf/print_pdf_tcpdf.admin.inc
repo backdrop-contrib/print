@@ -46,6 +46,13 @@ function print_pdf_tcpdf_settings() {
     '#description' => t('Only embed those font characters that are actually used.  This can generate smaller PDF files but may significantly slow down processing.'),
   );
 
+  $form['settings']['print_pdf_tcpdf_images_path'] = array(
+    '#type' => 'textfield',
+    '#title' => t('TCPDF images directory'),
+    '#default_value' => config_get('print_pdf_tcpdf.settings', 'print_pdf_tcpdf_images_path'),
+    '#description' => t('Path to the TCPDF images directory (e.g. public://print_pdf_tcpdf/images).'),
+  );
+
   $form['#validate'][] = '_print_pdf_tcpdf_settings_validate';
 
   return system_settings_form($form);
@@ -65,5 +72,13 @@ function print_pdf_tcpdf_settings() {
 function _print_pdf_tcpdf_settings_validate($form, &$form_state) {
   if ($form_state['values']['print_pdf_font_size'] < 1) {
     form_set_error('print_pdf_font_size', t("Font size must be at least 1."));
+  }
+
+  $images_path = $form_state['values']['print_pdf_tcpdf_images_path'];
+  if (!empty($images_path) && !is_dir($images_path)) {
+    form_set_error('print_pdf_tcpdf_images_path', t("Image path does not exist."));
+  }
+  elseif (!empty($images_path) && !is_writable($images_path)) {
+    form_set_error('print_pdf_tcpdf_images_path', t("Image path is not writable."));
   }
 }
