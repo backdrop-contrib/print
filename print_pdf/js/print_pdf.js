@@ -1,6 +1,6 @@
 /**
  * @file
- * Sets the summary for Content moderation on vertical tabs.
+ * Sets the summary for Print PDF on vertical tabs.
  */
 
 (function ($) {
