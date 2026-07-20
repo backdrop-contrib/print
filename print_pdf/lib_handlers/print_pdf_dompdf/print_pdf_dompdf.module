@@ -26,6 +26,17 @@ function print_pdf_dompdf_pdf_tool_info() {
 }
 
 /**
+ * Implements hook_config_info().
+ */
+function print_pdf_dompdf_config_info() {
+  $prefixes['print_pdf_dompdf.settings'] = array(
+    'label' => t('Printer-friendly PDF Dompdf settings'),
+    'group' => t('Configuration'),
+  );
+  return $prefixes;
+}
+
+/**
  * Implements hook_menu().
  */
 function print_pdf_dompdf_menu() {
