@@ -73,4 +73,12 @@ function _print_pdf_tcpdf_settings_validate($form, &$form_state) {
   if ($form_state['values']['print_pdf_font_size'] < 1) {
     form_set_error('print_pdf_font_size', t("Font size must be at least 1."));
   }
+
+  $images_path = $form_state['values']['print_pdf_tcpdf_images_path'];
+  if (!empty($images_path) && !is_dir($images_path)) {
+    form_set_error('print_pdf_tcpdf_images_path', t("Image path does not exist."));
+  }
+  elseif (!empty($images_path) && !is_writable($images_path)) {
+    form_set_error('print_pdf_tcpdf_images_path', t("Image path is not writable."));
+  }
 }
