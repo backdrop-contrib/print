@@ -157,7 +157,7 @@ function print_pdf_settings() {
 
     $form['settings'] = array(
       '#type' => 'markup',
-      '#markup' => '<p>' . t("No PDF generation tool found! Please download a supported PHP PDF generation tool. Check this module's INSTALL.txt for more details.") . '</p>',
+      '#markup' => '<p>' . t("No PDF generation tool found! Please download a supported PHP PDF generation tool. Check each sub-module's INSTALL.txt found in the <code>print_pdf/lib_handlers</code> directory of the Print module for more details.") . '</p>',
     );
   }
 

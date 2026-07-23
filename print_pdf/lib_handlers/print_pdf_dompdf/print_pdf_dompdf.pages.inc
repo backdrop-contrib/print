@@ -67,15 +67,24 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
   else {
     // Version of dompdf is >= 0.7.
     $tool_path = dirname($pdf_tool[1]) . '/../autoload.inc.php';
+    // Assuming it is installed via composer inside a directory that Print
+    // module scans, such as ./libraries.
+    $autoload_path = dirname($pdf_tool[1]) . '/../../../autoload.php';
+    $composer_path = dirname($pdf_tool[1]) . '/../../../composer';
     if (file_exists($tool_path)) {
       require_once $tool_path;
+    } elseif (module_exists('xautoload') && is_dir($composer_path)) {
+      xautoload()->adapter->composerDir($composer_path);
+    }
+    elseif (file_exists($autoload_path)) {
+      require_once $autoload_path;
     }
     else {
       watchdog('print_pdf', 'Configured PDF tool does not exist at path: %path', array('%path' => $tool_path), WATCHDOG_ERROR);
       throw new Exception("Configured PDF tool does not exist, unable to generate PDF.");
     }
 
-    $dompdf = new Dompdf\Dompdf();
+    $dompdf = new \Dompdf\Dompdf();
     $unicode = TRUE;
 
     if ($print_pdf_config->get('print_pdf_autoconfig')) {

@@ -57,10 +57,3 @@ function print_pdf_dompdf_update_1000() {
   update_variable_del('print_pdf_dompdf_font_subsetting');
   update_variable_del('print_pdf_dompdf_secure_06');
 }
-
-/**
- * Implements hook_install().
- */
-function print_pdf_dompdf_install() {
-  // Dynamically generated variable data was detected.
-}
