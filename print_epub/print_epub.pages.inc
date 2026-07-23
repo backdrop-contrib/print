@@ -34,7 +34,7 @@ function print_epub_controller() {
 
   $node = NULL;
   if (!empty($path)) {
-    if ($alias = backdrop_lookup_path('source', $path)) {
+    if ($alias = (string) backdrop_lookup_path('source', $path)) {
       // Alias.
       $path_arr = explode('/', $alias);
       $node = node_load($path_arr[1]);
@@ -61,7 +61,7 @@ function print_epub_controller() {
   }
 
   if (function_exists('transliteration_clean_filename')) {
-    $epub_filename = transliteration_clean_filename($epub_filename, language_default('language'));
+    $epub_filename = transliteration_clean_filename($epub_filename, language_default());
   }
 
   backdrop_alter('print_epub_filename', $epub_filename, $path);

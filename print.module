@@ -252,7 +252,7 @@ function print_entity_info_alter(&$info) {
  *   string with the page's title
  */
 function _print_get_title($path) {
-  $path = backdrop_get_normal_path($path);
+  $path = (string) backdrop_get_normal_path($path);
   $nid = preg_replace('!^node/!', '', $path);
   if (ctype_digit($nid)) {
     return db_query("SELECT title FROM {node} WHERE nid = :nid", array(':nid' => $nid))

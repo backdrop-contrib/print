@@ -79,7 +79,7 @@ function print_pdf_init() {
         $directory = 'public://print_pdf/' . $tool[0] . '/' . $dir;
         /** @var BackdropLocalStreamWrapper $wrapper */
         $wrapper = file_stream_wrapper_get_instance_by_uri($directory);
-        $real_directory_path = $wrapper->getDirectoryPath() . "/" . file_uri_target($directory);
+        $real_directory_path = $wrapper->getDirectoryPath() . "/" . (string) file_uri_target($directory);
         $result = file_prepare_directory($real_directory_path, FILE_CREATE_DIRECTORY);
         if (!$result) {
           watchdog('print_pdf', 'Failed to create directory "%dir" for %tool.', array('%dir' => $directory, '%tool' => $tool[0]), WATCHDOG_CRITICAL);
@@ -89,8 +89,9 @@ function print_pdf_init() {
   }
   if ($config->get('print_pdf_cache_enabled')) {
     $directory = print_pdf_cache_dir();
+    /** @var BackdropLocalStreamWrapper $wrapper */
     $wrapper = file_stream_wrapper_get_instance_by_uri($directory);
-    $real_directory_path = $wrapper->getDirectoryPath() . "/" . file_uri_target($directory);
+    $real_directory_path = $wrapper->getDirectoryPath() . "/" . (string) file_uri_target($directory);
     $result = file_prepare_directory($real_directory_path, FILE_MODIFY_PERMISSIONS | FILE_CREATE_DIRECTORY);
     if (!$result) {
       watchdog('print_pdf', 'Failed to create directory "%dir" for print_pdf cache.', array('%dir' => $directory), WATCHDOG_CRITICAL);

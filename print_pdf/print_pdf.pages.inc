@@ -34,7 +34,7 @@ function print_pdf_controller() {
 
   $node = NULL;
   if (!empty($path)) {
-    if ($alias = backdrop_lookup_path('source', $path)) {
+    if ($alias = (string) backdrop_lookup_path('source', $path)) {
       // Alias.
       $path_arr = explode('/', $alias);
       $node = node_load($path_arr[1]);
@@ -61,7 +61,7 @@ function print_pdf_controller() {
   }
 
   if (function_exists('transliteration_clean_filename')) {
-    $pdf_filename = transliteration_clean_filename($pdf_filename, language_default('language'));
+    $pdf_filename = transliteration_clean_filename($pdf_filename, language_default());
   }
 
   backdrop_alter('print_pdf_filename', $pdf_filename, $path);
@@ -135,7 +135,7 @@ function print_pdf_generate_path($path, $query = NULL, $cid = NULL, $pdf_filenam
     $pattern = '!<(a\s[^>]*?)>!is';
     $html = preg_replace_callback($pattern, '_print_rewrite_urls', $html);
     // And make anchor links relative again, to permit in-PDF navigation.
-    $html = preg_replace("!${base_url}/" . $link['path'] . '/.*?#!', '#', $html);
+    $html = preg_replace("!{$base_url}/" . $link['path'] . '/.*?#!', '#', $html);
 
     $meta = array(
       'node' => $node,

@@ -36,7 +36,7 @@ function print_epub_phpepub_print_epub_generate($html, $meta, $filename = NULL) 
 
   // Set document information.
   if (version_compare($version, '4.0.0', '>=')) {
-    $epub = new PHPePub Core EPub();
+    $epub = new PHPePub\Core\EPub();
   }
   else {
     $epub = new EPub();

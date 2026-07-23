@@ -651,7 +651,7 @@ function _print_generate_node($nid, $format, $vid = NULL, $cid = NULL, $view_mod
   if (function_exists('comment_node_page_additions') &&
       (($cid != NULL) || (config_get('print.settings', 'print_comments')))) {
     // Print only the requested comment (or if $cid is NULL, all of them).
-    $comments = comment_node_page_additions($node);
+    $comments = (array) comment_node_page_additions($node);
     if (!empty($comments)) {
       unset($comments['comment_form']);
       foreach ($comments['comments'] as $key => &$comment) {

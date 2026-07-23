@@ -136,7 +136,7 @@ function print_ui_node_view_alter(&$build) {
       $link_pos = config_get('print_ui.settings', 'print_html_link_pos');
 
       if (!empty($link_pos['link'])) {
-        $format = theme('print_ui_format_link', array('format' => 'html', 'location' => 'link'));
+        $format = (array) theme('print_ui_format_link', array('format' => 'html', 'location' => 'link'));
 
         $path = '';
         switch ($book_link) {
@@ -193,7 +193,7 @@ function print_ui_node_view($node, $view_mode) {
       if ($allowed_type) {
         backdrop_add_css(backdrop_get_path('module', 'print_ui') . '/css/print_ui.theme.css');
         $links = array();
-        $format = theme('print_ui_format_link', array('format' => $link['format'], 'location' => 'link'));
+        $format = (array) theme('print_ui_format_link', array('format' => $link['format'], 'location' => 'link'));
 
         // Show book link.
         if ($allowed_type === PRINT_UI_ALLOW_BOOK_LINK) {
@@ -512,7 +512,7 @@ function theme_print_ui_format_link($vars) {
 
   foreach (_print_ui_get_links('print_link') as $link) {
       if ($link['format'] == $varsformat) {
-        $link_class = config_get('print_ui.settings', 'print_' . $link['format'] . '_link_class');
+        $link_class = config_get('print_ui.settings', 'print_' . $link['format'] . '_link_class') ?? '';
 
         $new_window = FALSE;
         $func = $link['module'] . '_print_new_window_alter';
@@ -632,7 +632,7 @@ function print_ui_insert_link($link, $args = array()) {
       $query = NULL;
     }
     backdrop_add_css(backdrop_get_path('module', 'print_ui') . '/css/print_ui.theme.css');
-    $format = theme('print_ui_format_link', array('format' => $link['format'], 'location' => $location));
+    $format = (array) theme('print_ui_format_link', array('format' => $link['format'], 'location' => $location));
     return '<span class="print_' . $link['format'] . '">' . l($format['text'], $path, array(
       'attributes' => $format['attributes'],
       'query' => $query,
@@ -676,7 +676,7 @@ function print_ui_link_allowed($link, $args) {
     }
   }
   if (!empty($args['path'])) {
-    $nid = preg_replace('!^node/!', '', backdrop_get_normal_path($args['path']));
+    $nid = preg_replace('!^node/!', '', (string) backdrop_get_normal_path($args['path']));
     if (ctype_digit($nid)) {
       $args['node'] = node_load($nid);
     }

@@ -17,17 +17,6 @@ class PrintBasicTest extends BackdropWebTestCase {
   protected $getq;
 
   /**
-   * Implementation of getInfo().
-   */
-  public function getInfo() {
-    return array(
-      'name' => t('Printer, email and PDF versions tests'),
-      'description' => t('Unit tests for the print, print_mail and print_pdf modules.'),
-      'group' => t('Printer, email and PDF versions'),
-    );
-  }
-
-  /**
    * Implementation of setUp().
    */
   public function setUp() {

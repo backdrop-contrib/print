@@ -75,7 +75,7 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
       throw new Exception("Configured PDF tool does not exist, unable to generate PDF.");
     }
 
-    $dompdf = new Dompdf Dompdf();
+    $dompdf = new Dompdf\Dompdf();
     $unicode = TRUE;
 
     if ($print_pdf_config->get('print_pdf_autoconfig')) {
