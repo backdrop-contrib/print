@@ -20,7 +20,22 @@ function print_pdf_mpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $pa
   // Version 7 of the mpdf library uses a composer autoloader.
   // Also there no longer is way to truly detect the library version, so this
   // seems like the best alternative.
-  $mpdf_version_7_plus = strpos($pdf_tool[1], 'autoload.php') !== FALSE;
+  // Assuming it is installed via composer inside a directory that Print
+  // module scans. Print will always check ./libraries.
+  $autoload_path = dirname($pdf_tool[1]) . '/../../../autoload.php';
+  $composer_path = dirname($pdf_tool[1]) . '/../../../composer';
+  $mpdf_version_7_plus = FALSE;
+  switch (TRUE) {
+    case (file_exists($autoload_path)):
+      $mpdf_version_7_plus = TRUE;
+      break;
+    case (strpos($pdf_tool[1], 'autoload.php')):
+      $mpdf_version_7_plus = TRUE;
+      break;
+    case (module_exists('xautoload') && is_dir($composer_path)):
+      $mpdf_version_7_plus = TRUE;
+      break;
+  }
   if (empty($paper_size)) {
     $paper_size = config_get('print_pdf.settings', 'print_pdf_paper_size');
   }
@@ -46,10 +61,15 @@ function print_pdf_mpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $pa
   }
 
   $tool_path = BACKDROP_ROOT . '/' . $pdf_tool[1];
-  if (file_exists($tool_path)) {
+
+  if (module_exists('xautoload') && is_dir($composer_path)) {
+    xautoload()->adapter->composerDir($composer_path);
+  } elseif (file_exists($autoload_path)) {
+    require_once $autoload_path;
+
+  } elseif (file_exists($tool_path)) {
     require_once $tool_path;
-  }
-  else {
+  } else {
     watchdog('print_pdf', 'Configured PDF tool does not exist at path: %path', array('%path' => $tool_path), WATCHDOG_ERROR);
     throw new Exception("Configured PDF tool does not exist, unable to generate PDF.");
   }

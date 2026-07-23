@@ -2,7 +2,16 @@ mPDF support:
 
   The recommended version of this tool is 7.1.0 or newer since it is fully
   compatible with PHP 7.1, and security support has ended for all prior
-  versions of PHP as of December 31, 2018.
+  versions of PHP as of December 31, 2018. The latest version as of this writing
+  is 8.x.
+
+  Curren version:
+
+  1. Install with Composer. Print module will scan a `libraries` directory in the
+  web root.
+  2. To install: `composer require mpdf/mpdf` from the `libraries` directory.
+
+  Older version:
 
   1. Download mPDF from https://github.com/mpdf/mpdf/releases.
   2. Extract the contents of the downloaded package into one of the

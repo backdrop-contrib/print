@@ -62,7 +62,7 @@ function print_pdf_mpdf_pdf_tool_version($pdf_tool) {
  */
 function print_pdf_mpdf_print_pdf_available_libs_alter(&$pdf_tools) {
   module_load_include('inc', 'print', 'includes/print');
-  $tools = _print_scan_libs('mpdf', '!^mpdf.php$!');
+  $tools = _print_scan_libs('mpdf', '!^(mpdf.php|Mpdf.php)$!');
 
   foreach ($tools as $tool) {
     $pdf_tools['print_pdf_mpdf|' . $tool] = 'mPDF (' . dirname($tool) . ')';
