@@ -19,10 +19,10 @@
  *   An array of the filenames matching the provided mask.
  */
 function _print_scan_libs($lib, $mask) {
-  $tools = array_keys(file_scan_directory(backdrop_get_path('module', 'print'), $mask));
-  $tools = array_merge($tools, array_keys(file_scan_directory(PRINT_LIB_PATH, $mask)));
+  $tools = array_keys((array) file_scan_directory(backdrop_get_path('module', 'print'), $mask));
+  $tools = array_merge($tools, array_keys((array) file_scan_directory(PRINT_LIB_PATH, $mask)));
   if (module_exists('libraries')) {
-    $tools = array_merge($tools, array_keys(file_scan_directory(libraries_get_path($lib), $mask)));
+    $tools = array_merge($tools, array_keys((array) file_scan_directory(libraries_get_path($lib), $mask)));
   }
 
   return array_unique($tools);
@@ -104,7 +104,7 @@ function _print_access_images_via_file($html, $images_via_file) {
       if (strpos($image_uri, 'private://styles') === 0) {
         // This is a private image derivative. Find the original image to check
         // access.
-        $style_parts = explode('/', file_uri_target($image_uri));
+        $style_parts = explode('/', (string) file_uri_target($image_uri));
         // We strip the same args as image_style_deliver().
         $style_parts = array_slice($style_parts, 3);
         $original_target = implode('/', $style_parts);

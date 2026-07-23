@@ -35,7 +35,7 @@ function print_mail_requirements($phase) {
     // At runtime, make sure that a PDF generation tool is selected.
     case 'runtime':
       if (module_exists('mailsystem')) {
-        $mail_system = mailsystem_get();
+        $mail_system = (array) mailsystem_get();
         if (($mail_system['default-system'] != 'DefaultMailSystem') && (!isset($mail_system['print_mail']) || ($mail_system['print_mail'] != 'DefaultMailSystem'))) {
           $requirements['print_mail_mailsystem'] = array(
             'title' => $t('Printer, email and PDF versions - Send by email'),

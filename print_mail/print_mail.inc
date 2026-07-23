@@ -114,7 +114,7 @@ function print_mail_form_for_path($form, &$form_state, $path, $query = NULL, $us
   }
 
   if (count($form_state['input']) == 0) {
-    $nodepath = backdrop_get_normal_path($path);
+    $nodepath = (string) backdrop_get_normal_path($path);
     db_merge('print_mail_page_counter')
       ->key(array('path' => substr($nodepath, 0, 255)))
       ->fields(array(
@@ -340,7 +340,7 @@ function print_mail_form_validate($form, &$form_state) {
     return;
   }
   $from_addr = trim($form_state['values']['fld_from_addr']);
-  $test = user_validate_mail($from_addr);
+  $test = valid_email_address($from_addr);
   if ($test) {
     form_set_error('fld_from_addr', $test);
   }
@@ -366,12 +366,12 @@ function print_mail_form_validate($form, &$form_state) {
     $address = trim($address);
     if (preg_match('/(.*?) <(.*)>/s', $address, $matches)) {
       // Address is of the type User Name <user@domain.tld>.
-      $test = user_validate_mail($matches[2]);
+      $test = valid_email_address($matches[2]);
       $to_array[$key] = trim($matches[1]) . ' <' . $matches[2] . '>';
     }
     else {
       // Address must be user@domain.tld.
-      $test = user_validate_mail($address);
+      $test = valid_email_address($address);
     }
     if ($test) {
       form_set_error('txt_to', $test);

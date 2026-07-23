@@ -206,7 +206,7 @@ function _print_main_settings_validate($form, &$form_state) {
       $wrapper = file_stream_wrapper_get_instance_by_uri($filename);
 
       $form_state['values']['print_logo_options'] = 2;
-      $form_state['values']['print_logo_url'] = str_replace($base_root, '', $wrapper->getExternalUrl());
+      $form_state['values']['print_logo_url'] = str_replace($base_root, '', (string) $wrapper->getExternalUrl());
     }
   }
 }

@@ -15,8 +15,8 @@ navigation pages, etc.
 
 ## Installation and usage
 
- - Install this module using the [official Backdrop CMS instructions](https://backdropcms.org/guide/modules).
- - Use [the wiki](https://github.com/backdrop-contrib/print/issues) for reading and sharing usage notes.
+- Install this module using the [official Backdrop CMS instructions](https://backdropcms.org/guide/modules).
+- Use [the wiki](https://github.com/backdrop-contrib/print/issues) for reading and sharing usage notes.
 
 ## Issues
 
@@ -24,9 +24,9 @@ Bugs and Feature requests should be reported in the [Issue Queue](https://github
 
 ## Current Maintainers
 
- - [Laryn Kragt Bakker](https://github.com/laryn)
- - [Herb v/d Dool](https://github.com/herbdool)
- - Collaboration and co-maintainers are welcome.
+- [Laryn Kragt Bakker](https://github.com/laryn)
+- [Herb v/d Dool](https://github.com/herbdool)
+- Collaboration and co-maintainers are welcome.
 
 ## Credits
 

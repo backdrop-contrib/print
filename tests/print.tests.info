@@ -2,5 +2,5 @@
 name = Printer, email and PDF versions tests
 description = Unit tests for the print, print_mail and print_pdf modules.
 group = Printer, email and PDF versions
-file = tests/print_basic.test
+file = print_basic.test
 
