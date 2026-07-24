@@ -5,7 +5,7 @@ mPDF support:
   versions of PHP as of December 31, 2018. The latest version as of this writing
   is 8.x.
 
-  Curren version:
+  Current version:
 
   1. Install with Composer. Print module will scan a `libraries` directory in the
   web root.

@@ -24,18 +24,8 @@ function print_pdf_mpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $pa
   // module scans. Print will always check ./libraries.
   $autoload_path = dirname($pdf_tool[1]) . '/../../../autoload.php';
   $composer_path = dirname($pdf_tool[1]) . '/../../../composer';
-  $mpdf_version_7_plus = FALSE;
-  switch (TRUE) {
-    case (file_exists($autoload_path)):
-      $mpdf_version_7_plus = TRUE;
-      break;
-    case (strpos($pdf_tool[1], 'autoload.php')):
-      $mpdf_version_7_plus = TRUE;
-      break;
-    case (module_exists('xautoload') && is_dir($composer_path)):
-      $mpdf_version_7_plus = TRUE;
-      break;
-  }
+  $version = print_pdf_mpdf_pdf_tool_version($pdf_tool[1]);
+
   if (empty($paper_size)) {
     $paper_size = config_get('print_pdf.settings', 'print_pdf_paper_size');
   }
@@ -45,7 +35,7 @@ function print_pdf_mpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $pa
   $images_via_file = config_get('print_pdf.settings', 'print_pdf_images_via_file');
 
   $config = array();
-  if ($mpdf_version_7_plus) {
+  if (version_compare($version, '7', '>=')) {
     $config['tempDir'] = backdrop_realpath('public://print_pdf/print_pdf_mpdf/');
   }
   else {
@@ -80,7 +70,7 @@ function print_pdf_mpdf_print_pdf_generate($html, $meta, $paper_size = NULL, $pa
   $html = _print_access_images_via_file($html, $images_via_file);
 
   // Set document information.
-  if ($mpdf_version_7_plus) {
+  if (version_compare($version, '7', '>=')) {
     $config['mode'] = 'utf-8';
     $config['format'] = $format;
     $mpdf = new \Mpdf\Mpdf($config);

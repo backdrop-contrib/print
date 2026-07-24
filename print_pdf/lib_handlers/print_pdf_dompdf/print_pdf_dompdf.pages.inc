@@ -52,49 +52,32 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
     }
   }
 
-  $version = print_pdf_dompdf_pdf_tool_version($pdf_tool[1]);
-  if (version_compare($version, '0.7', '<')) {
-    // Version of dompdf is 0.6.* or 0.5.*.
-    if (version_compare($version, '0.6', '<')) {
-      // Version of dompdf is 0.5.
-      spl_autoload_register('DOMPDF_autoload');
-    }
-    // Earlier dompdf versions could generate xml errors. Tell libxml to
-    // hide them.
-    libxml_use_internal_errors(TRUE);
-    $dompdf = new DOMPDF();
+  $tool_path = dirname($pdf_tool[1]) . '/../autoload.inc.php';
+  // When installed via composer, or downloaded the zipfile that includes an
+  // autoload file inside a directory that Print module scans, such as
+  // ./libraries.
+  $autoload_path = dirname($pdf_tool[1]) . '/../../../autoload.php';
+  $composer_path = dirname($pdf_tool[1]) . '/../../../composer';
+  if (file_exists($tool_path)) {
+    require_once $tool_path;
+  } elseif (module_exists('xautoload') && is_dir($composer_path)) {
+    xautoload()->adapter->composerDir($composer_path);
+  } elseif (file_exists($autoload_path)) {
+    require_once $autoload_path;
+  } else {
+    watchdog('print_pdf', 'Configured PDF tool does not exist at path: %path', array('%path' => $tool_path), WATCHDOG_ERROR);
+    throw new Exception("Configured PDF tool does not exist, unable to generate PDF.");
   }
-  else {
-    // Version of dompdf is >= 0.7.
-    $tool_path = dirname($pdf_tool[1]) . '/../autoload.inc.php';
-    // Assuming it is installed via composer inside a directory that Print
-    // module scans, such as ./libraries.
-    $autoload_path = dirname($pdf_tool[1]) . '/../../../autoload.php';
-    $composer_path = dirname($pdf_tool[1]) . '/../../../composer';
-    if (file_exists($tool_path)) {
-      require_once $tool_path;
-    } elseif (module_exists('xautoload') && is_dir($composer_path)) {
-      xautoload()->adapter->composerDir($composer_path);
-    }
-    elseif (file_exists($autoload_path)) {
-      require_once $autoload_path;
-    }
-    else {
-      watchdog('print_pdf', 'Configured PDF tool does not exist at path: %path', array('%path' => $tool_path), WATCHDOG_ERROR);
-      throw new Exception("Configured PDF tool does not exist, unable to generate PDF.");
-    }
 
-    $dompdf = new \Dompdf\Dompdf();
-    $unicode = TRUE;
-
-    if ($print_pdf_config->get('print_pdf_autoconfig')) {
-      $dompdf->set_option('enable_php', FALSE);
-      $dompdf->set_option('enable_remote', TRUE);
-      $dompdf->set_option('temp_dir', file_directory_temp());
-      $dompdf->set_option('enable_font_subsetting', $font_subsetting);
-      $dompdf->set_option('font_cache', backdrop_realpath('public://print_pdf/print_pdf_dompdf/fonts/'));
-    }
+  $options = new \Dompdf\Options();
+  if ($print_pdf_config->get('print_pdf_autoconfig')) {
+    $options->set('isPhpEnabled', FALSE);
+    $options->set('isRemoteEnabled', TRUE);
+    $options->set('tempDir', file_directory_temp());
+    $options->set('isFontSubsettingEnabled', $font_subsetting);
+    $options->set('fontCache', backdrop_realpath('public://print_pdf/print_pdf_dompdf/fonts/'));
   }
+  $unicode = TRUE;
 
   // Allow third-party modules to alter the dompdf object.
   backdrop_alter('print_pdf_dompdf', $dompdf);
@@ -119,10 +102,12 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
   $host = $url_array['host'];
   $path = dirname($url_array['path']) . '/';
 
-  $dompdf->set_base_path($path);
-  $dompdf->set_host($host);
-  $dompdf->set_paper(backdrop_strtolower($paper_size), $page_orientation);
-  $dompdf->set_protocol($protocol);
+  $options->set('allowedRemoteHosts', [$host]);
+  $options->set('defaultPaperSize', backdrop_strtolower($paper_size));
+  $options->set('defaultPaperOrientation', $page_orientation);
+  $options->set('allowedProtocols', [$protocol]);
+  $dompdf = new \Dompdf\Dompdf($options);
+  $dompdf->setBasePath($path);
 
   // If dompdf Unicode support is disabled, try to convert to ISO-8859-1 and
   // then to HTML entities.
@@ -133,13 +118,11 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
     // Convert from UTF-8 to ISO 8859-1 and then to HTML entities.
     if (function_exists('utf8_decode')) {
       $html = utf8_decode($html);
-    }
-    elseif (function_exists('mb_convert_encoding')) {
+    } elseif (function_exists('mb_convert_encoding')) {
       $html = mb_convert_encoding($html, 'ISO-8859-1', 'UTF-8');
     }
     $html = htmlspecialchars_decode(htmlentities($html, ENT_NOQUOTES, 'ISO-8859-1'), ENT_NOQUOTES);
-  }
-  else {
+  } else {
     // Otherwise, ensure the content is properly formatted Unicode.
     $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
   }
@@ -147,8 +130,7 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
   // Must get rid of tbody (dompdf goes into recursion).
   $html = preg_replace('!<tbody[^>]*?>|</tbody>!i', '', $html);
 
-  $dompdf->load_html($html);
-
+  $dompdf->loadHtml($html);
   $dompdf->render();
   return $dompdf->output();
 }
