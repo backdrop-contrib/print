@@ -2,38 +2,32 @@ dompdf support:
   The dompdf tool produces results that are more faithful to the HTML
   printer-friendly page. Good support of CSS 2.1 and partially CSS3.
 
-  The recommended version of this tool is 0.8.2 or newer since it is fully
-  compatible with PHP 7.1, and security support has ended for all prior
-  versions of PHP as of December 31, 2018. The latest version as of this writing
-  is 3.x.
+  Use a version of this tool that is 0.8.2 or newer since it is fully
+  compatible with PHP 7.1, and this module no longer supports older versions.
+  The latest version as of this writing is 3.x.
 
-  Curren version:
+  Current version:
+
+  There are two approaches. Either install with Composer, or download the full
+  release zipfile with the version number in the filename.
+
+  Composer:
 
   1. Install with Composer. Print module will scan a `libraries` directory in the
   web root.
-  2. To install: `composer require dompdf/dompdf` from the `libraries` directory.
+  2. To install run: `composer require dompdf/dompdf` from the `libraries`
+  directory.
 
-  Older version:
+  Zipfile:
 
-  1. Download dompdf from https://github.com/dompdf/dompdf/releases. Make
-  sure to download the full release zipfile. If you download only a source
-  code file, you will also need to download and install the php-font-lib.
+  1. Download dompdf from https://github.com/dompdf/dompdf/releases. Make sure
+  to download the full release zipfile. Choose the highest version that will
+  work with your host.
   2. Extract the contents of the downloaded package into one of the
-  supported paths.
-  3. If upgrading from version 0.6 or older, visit the settings page on your
-  site at http://example.com/admin/config/user-interface/print/pdf and select
-  the new path for the "PDF generation tool" setting.
-  4. If using dompdf 0.6 or 0.5, check if dompdf_config.inc.php fits your
-  installation. In 99% of cases, no changes are necessary, so just try to use
-  it and only edit anything if the PDF generation fails.
-  5. If  using dompdf 0.6 or 0.5, delete the dompdf.php file as it contains a
-  security vulnerability. Delete also the index.php and www folder, as they are
-  not needed.
-  6. Grant write access to the lib/fonts directory for your webserver user.
-  7. If you're using dompdf 0.6, you can try to enable the Unicode support, but
-  you'll need to add some Unicode fonts. See
-  http://groups.google.com/group/dompdf/browse_thread/thread/9f7bc0162b04d5cf
-  for further info on this.
-  8. Review the recommendations for securing your dompdf installation at
+  supported paths, such as `libraries` in the webroot.
+
+  General steps:
+  1. Grant write access to the lib/fonts directory for your webserver user.
+  2. Review the recommendations for securing your dompdf installation at
   https://github.com/dompdf/dompdf/wiki/Securing-dompdf
-  9. Check https://dompdf.github.io/ for further information.
+  3. Check https://dompdf.github.io/ for further information.

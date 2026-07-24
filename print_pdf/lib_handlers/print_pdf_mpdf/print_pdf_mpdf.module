@@ -36,25 +36,34 @@ function print_pdf_mpdf_pdf_tool_info() {
  * Implements hook_pdf_tool_version().
  */
 function print_pdf_mpdf_pdf_tool_version($pdf_tool) {
-  if (file_exists(BACKDROP_ROOT . '/' . $pdf_tool)) {
-    include_once BACKDROP_ROOT . '/' . $pdf_tool;
-  }
+  $version = 'unknown';
 
-  // Version 5.x and 6.x
-  if (defined('mPDF_VERSION')) {
-    return mPDF_VERSION;
-  }
-  // Version >= 7.0
-  else {
+  // Version 7 of the mpdf library uses a composer autoloader.
+  // Also there no longer is way to truly detect the library version, so this
+  // seems like the best alternative.
+  // Assuming it is installed via composer inside a directory that Print
+  // module scans. Print will always check ./libraries.
+  $autoload_path = dirname($pdf_tool) . '/../../../autoload.php';
+  $composer_path = dirname($pdf_tool) . '/../../../composer';
+
+  if (file_exists($autoload_path) || (module_exists('xautoload') && is_dir($composer_path))) {
+    if (module_exists('xautoload') && is_dir($composer_path)) {
+      xautoload()->adapter->composerDir($composer_path);
+    } elseif (file_exists($autoload_path)) {
+      require_once $autoload_path;
+    }
+
     if (class_exists('\Mpdf\Mpdf')) {
       $version = \Mpdf\Mpdf::VERSION;
-      if (!empty($version)) {
-        return $version;
-      }
+    }
+  } elseif (file_exists(BACKDROP_ROOT . '/' . $pdf_tool)) {
+    include_once BACKDROP_ROOT . '/' . $pdf_tool;
+    if (defined('mPDF_VERSION')) {
+      $version = mPDF_VERSION;
     }
   }
 
-  return 'unknown';
+  return $version;
 }
 
 /**
