@@ -77,7 +77,6 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
     $options->set('isFontSubsettingEnabled', $font_subsetting);
     $options->set('fontCache', backdrop_realpath('public://print_pdf/print_pdf_dompdf/fonts/'));
   }
-  $unicode = TRUE;
 
   // Allow third-party modules to alter the dompdf object.
   backdrop_alter('print_pdf_dompdf', $dompdf);
@@ -116,15 +115,11 @@ function print_pdf_dompdf_print_pdf_generate($html, $meta, $paper_size = NULL, $
     $html = str_replace('€', '&#0128;', $html);
 
     // Convert from UTF-8 to ISO 8859-1 and then to HTML entities.
-    if (function_exists('utf8_decode')) {
-      $html = utf8_decode($html);
-    } elseif (function_exists('mb_convert_encoding')) {
-      $html = mb_convert_encoding($html, 'ISO-8859-1', 'UTF-8');
-    }
+    $html = iconv('UTF-8', 'ISO-8859-1', $html);
     $html = htmlspecialchars_decode(htmlentities($html, ENT_NOQUOTES, 'ISO-8859-1'), ENT_NOQUOTES);
   } else {
     // Otherwise, ensure the content is properly formatted Unicode.
-    $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
+    $html = htmlspecialchars_decode(htmlentities($html, ENT_NOQUOTES, 'UTF-8'), ENT_NOQUOTES);
   }
 
   // Must get rid of tbody (dompdf goes into recursion).
