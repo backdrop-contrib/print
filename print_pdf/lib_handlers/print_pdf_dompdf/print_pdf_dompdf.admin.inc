@@ -37,5 +37,12 @@ function print_pdf_dompdf_settings() {
     '#description' => t('Only embed those font characters that are actually used.  This can generate smaller PDF files but may significantly slow down processing.'),
   );
 
+  $form['settings']['print_pdf_dompdf_expand_css'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Expand CSS'),
+    '#default_value' => $config->get('print_pdf_dompdf_expand_css'),
+    '#description' => t('This option expands the CSS into inline styles. This is recommended for dompdf to better handle complex stylesheets.'),
+  );
+
   return system_settings_form($form);
 }
